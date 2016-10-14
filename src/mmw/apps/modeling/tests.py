@@ -1045,18 +1045,3 @@ class APIAccessTestCase(TestCase):
         scenario_id = str(response.data['id'])
 
         return scenario_id
-
-
-class NormalizeSingleRingPolygonTestCase(TestCase):
-
-    def setUp(self):
-        self.drawn_aoi = example_aois.valid_drawn_aoi
-        self.sq_km = example_aois.valid_sq_km
-
-    def test_valid_drawn_aoi_is_unmodified(self):
-        validated = tasks.parse_single_ring_multipolygon(self.drawn_aoi)
-        self.assertEqual(self.drawn_aoi, validated)
-
-    def test_valid_sq_km_aoi_is_unmodified(self):
-        validated = tasks.parse_single_ring_multipolygon(self.sq_km)
-        self.assertEqual(self.sq_km, validated)
