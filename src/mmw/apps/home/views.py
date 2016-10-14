@@ -128,7 +128,6 @@ def get_client_settings(request):
             EMBED_FLAG: request.session.get(EMBED_FLAG, False),
             'draw_tools': settings.DRAW_TOOLS,
             'map_controls': settings.MAP_CONTROLS,
-            'vizer_urls': settings.VIZER_URLS,
             'model_packages': get_model_packages(),
             'mapshed_max_area': settings.GWLFE_CONFIG['MaxAoIArea']
         }),
