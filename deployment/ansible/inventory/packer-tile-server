@@ -1,8 +1,0 @@
-[mmw-tiler]
-localhost ansible_user=ubuntu
-
-[tile-servers]
-mmw-tiler
-
-[packer:children]
-tile-servers

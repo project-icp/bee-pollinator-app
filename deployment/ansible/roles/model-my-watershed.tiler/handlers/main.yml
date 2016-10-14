@@ -1,3 +1,0 @@
----
-- name: Restart mmw-tiler
-  service: name=mmw-tiler state=restarted

@@ -5,7 +5,6 @@ from s3_vpc_endpoint import S3VPCEndpoint
 from private_hosted_zone import PrivateHostedZone
 from data_plane import DataPlane
 from application import Application
-from tiler import Tiler
 from tile_delivery_network import TileDeliveryNetwork
 from worker import Worker
 from public_hosted_zone import PublicHostedZone
@@ -59,15 +58,8 @@ def build_graph(mmw_config, aws_profile, **kwargs):
                            PrivateHostedZone=private_hosted_zone,
                            aws_profile=aws_profile)
 
-    tiler = Tiler(globalconfig=global_config, VPC=vpc, aws_profile=aws_profile,
-                  DataPlane=data_plane)
-    tile_delivery_network = TileDeliveryNetwork(globalconfig=global_config,
-                                                VPC=vpc,
-                                                PrivateHostedZone=private_hosted_zone,  # NOQA
-                                                aws_profile=aws_profile)
     application = Application(globalconfig=global_config, VPC=vpc,
                               DataPlane=data_plane,
-                              TileDeliveryNetwork=tile_delivery_network,
                               aws_profile=aws_profile)
     worker = Worker(globalconfig=global_config, VPC=vpc, DataPlane=data_plane,
                     aws_profile=aws_profile)
@@ -75,13 +67,13 @@ def build_graph(mmw_config, aws_profile, **kwargs):
                                           Application=application,
                                           aws_profile=aws_profile)
 
-    return s3_vpc_endpoint, data_plane, tiler, application, \
+    return s3_vpc_endpoint, data_plane, application, \
         worker, public_hosted_zone
 
 
 def build_stacks(mmw_config, aws_profile, **kwargs):
     """Trigger actual building of graphs"""
-    s3_vpc_endpoint_graph, data_plane_graph, tiler_graph, \
+    s3_vpc_endpoint_graph, data_plane_graph, \
         application_graph, worker_graph, \
         public_hosted_zone_graph = build_graph(mmw_config, aws_profile,
                                                **kwargs)
@@ -89,7 +81,6 @@ def build_stacks(mmw_config, aws_profile, **kwargs):
     data_plane_graph.go()
 
     if kwargs['stack_color'] is not None:
-        tiler_graph.go()
         application_graph.go()
         worker_graph.go()
 
