@@ -79,40 +79,6 @@ def project_clone(request, proj_id=None):
     return redirect('/project/{0}'.format(project.id))
 
 
-def get_layer_config(layerKeys):
-    """ Retrieves the configuration for the provided
-    layer types. layerKeys is an array of strings that
-    contains keys. Layers with these keys set to True
-    will be returned.
-    """
-    selected_layers = []
-
-    for layer in settings.LAYERS:
-        if all(key in layer for key in layerKeys):
-            # Populate the layer url for layers that we host
-            if 'url' not in layer and 'table_name' in layer:
-                layer['url'] = get_layer_url(layer)
-
-            # Add only the layers we want based on layerKey
-            selected_layers.append(layer)
-
-    return selected_layers
-
-
-def get_layer_url(layer):
-    """ For layers that are served off our tile server,
-    the URL depends on the environment. Therefore, we
-    get it dynamically from the settings file and populate
-    the layer config with the endpoint.
-    """
-    tiler_prefix = '//'
-    tiler_host = settings.TILER_HOST
-    tiler_postfix = '/{z}/{x}/{y}'
-    tiler_base = '%s%s' % (tiler_prefix, tiler_host)
-
-    return urljoin(tiler_base, layer['code'] + tiler_postfix)
-
-
 def get_model_packages():
     for model_package in settings.MODEL_PACKAGES:
         if model_package['name'] in settings.DISABLED_MODEL_PACKAGES:

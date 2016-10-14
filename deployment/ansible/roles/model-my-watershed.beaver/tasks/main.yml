@@ -9,7 +9,6 @@
     - gunicorn
     - nginx
     - spark-jobserver
-    - windshaft
   notify:
     - Restart Beaver
 
