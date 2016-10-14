@@ -60,7 +60,6 @@ describe('Core', function() {
 
                 settings.set('map_controls', [
                     'LayerAttribution',
-                    'LayerSelector',
                     'LocateMeButton',
                     'ZoomControl',
                 ]);
@@ -147,39 +146,6 @@ describe('Core', function() {
                 model.setDrawWithBarSize();
                 assert.isTrue($container.hasClass('map-container-top-1'));
                 assert.isTrue($container.hasClass('map-container-bottom-3'));
-
-                view.destroy();
-            });
-
-
-            it('creates a layer selector with the correct items', function() {
-                var baseLayers = [
-                    {
-                        'url': 'https://{s}.tiles.mapbox.com/v3/ctaylor.lg2deoc9/{z}/{x}/{y}.png',
-                        'default': true,
-                        'display': 'A',
-                        'basemap': true
-                    },
-                    {
-                        'url': 'https://{s}.tiles.mapbox.com/v3/examples.map-i86nkdio/{z}/{x}/{y}.png',
-                        'display': 'B',
-                        'basemap': true
-                    }
-                ];
-                settings.set('base_layers', baseLayers);
-
-                var model = new models.MapModel(),
-                    view = new views.MapView({
-                        model: model,
-                        el: sandboxSelector
-                    }),
-                    $layers = $('.leaflet-control-layers-base'),
-                    layerNames = $layers.find('span').map(function() {
-                        return $(this).text().trim();
-                    }).get();
-
-                assert.equal($layers.length, 2, 'Did not add layer selector');
-                assert.deepEqual(layerNames, _.pluck(baseLayers, 'display'));
 
                 view.destroy();
             });
