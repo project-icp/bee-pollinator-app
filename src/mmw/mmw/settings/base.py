@@ -12,7 +12,6 @@ from os import environ
 from os.path import abspath, basename, dirname, join, normpath
 from sys import path
 
-from layer_settings import LAYERS, VIZER_URLS, DRB_PERIMETER  # NOQA
 from gwlfe_settings import (GWLFE_DEFAULTS, GWLFE_CONFIG, SOIL_GROUP, # NOQA
                             SOILP, CURVE_NUMBER)  # NOQA
 
@@ -474,10 +473,6 @@ GEOP = {
     }
 }
 
-# TILER CONFIGURATION
-TILER_HOST = environ.get('MMW_TILER_HOST', 'localhost')
-# END TILER CONFIGURATION
-
 # UI CONFIGURATION
 
 DRAW_TOOLS = [
@@ -488,7 +483,6 @@ DRAW_TOOLS = [
 
 MAP_CONTROLS = [
     'LayerAttribution',
-    'LayerSelector',
     'LocateMeButton',
     'ZoomControl',
 ]
