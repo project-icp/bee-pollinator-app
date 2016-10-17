@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 
 
 class Project(models.Model):
+    # TODO Change this to the bee model package
     TR55 = 'tr-55'
     MODEL_PACKAGES = (
         (TR55, 'Site Storm Model'),

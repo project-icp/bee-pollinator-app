@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 from __future__ import division
 
 import json
-from urlparse import urljoin
 
 from django.http import Http404
 from django.shortcuts import render_to_response, get_object_or_404, redirect

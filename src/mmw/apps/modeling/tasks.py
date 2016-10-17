@@ -13,11 +13,8 @@ from celery import shared_task
 from apps.modeling.geoprocessing import histogram_start, histogram_finish, \
     data_to_survey, data_to_census, data_to_censuses
 
-from apps.modeling.calcs import (animal_population,
-                                 point_source_pollution,
-                                 catchment_water_quality)
-
-from tr55.model import simulate_day
+# TODO import the bee model
+# from tr55.model import simulate_day
 
 logger = logging.getLogger(__name__)
 
@@ -105,31 +102,6 @@ def histograms_to_censuses(incoming):
     return results
 
 
-@shared_task
-def analyze_animals(area_of_interest):
-    """
-    Given an area of interest, returns the animal population within it.
-    """
-    return {'survey': [animal_population(area_of_interest)]}
-
-
-@shared_task
-def analyze_pointsource(area_of_interest):
-    """
-    Given an area of interest, returns point sources of pollution within it.
-    """
-    return {'survey': [point_source_pollution(area_of_interest)]}
-
-
-@shared_task
-def analyze_catchment_water_quality(area_of_interest):
-    """
-    Given an area of interest in the DRB, returns catchment water quality data
-    within it.
-    """
-    return {'survey': [catchment_water_quality(area_of_interest)]}
-
-
 def aoi_resolution(area_of_interest):
     pairs = area_of_interest['coordinates'][0][0]
 
@@ -187,6 +159,7 @@ def format_runoff(model_output):
     return model_output
 
 
+# TODO Change this to something comparable for the bee model
 @shared_task
 def run_tr55(censuses, model_input, cached_aoi_census=None):
     """
@@ -200,7 +173,7 @@ def run_tr55(censuses, model_input, cached_aoi_census=None):
     census will be the first census in censuses, and everything
     else is a modification census.
     """
-
+    """
     # Get precipitation and cell resolution
     precip = get_precip(model_input)
 
@@ -289,6 +262,8 @@ def run_tr55(censuses, model_input, cached_aoi_census=None):
         'runoff': runoff,
         'quality': quality
     }
+    """
+    return None
 
 
 def get_precip(model_input):
