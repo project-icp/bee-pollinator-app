@@ -1,3 +1,6 @@
+// TODO Remove this file when done using the gwlfe modification flow as
+// an example for user input
+
 "use strict";
 
 var _ = require('lodash');

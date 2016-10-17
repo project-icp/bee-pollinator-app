@@ -1,5 +1,9 @@
 "use strict";
 
+/* There is no GWLFE model, but you'll find reference to it here
+*  as an example on how to make a modal with user input
+*/
+
 var $ = require('jquery'),
     _ = require('lodash'),
     Backbone = require('../../shim/backbone'),
@@ -411,38 +415,6 @@ var ConservationPracticeView = ModificationsView.extend({
     }
 });
 
-var GwlfeConservationPracticeView = ModificationsView.extend({
-    initialize: function(options) {
-        ModificationsView.prototype.initialize.apply(this, [options]);
-        this.model.set({
-            controlName: this.getControlName(),
-            controlDisplayName: 'Conservation Practice',
-            manualMode: true,
-            manualMod: null,
-            modRowGroups: [
-                {
-                    name: 'Rural',
-                    rows: [
-                        ['cover_crops', 'conservation_tillage', 'nutrient_management', 'waste_management_livestock'],
-                        ['waste_management_poultry', 'buffer_strips', 'streambank_fencing', 'streambank_stabilization']
-                    ]
-                },
-                {
-                    name: 'Urban',
-                    rows: [['urban_buffer_strips', 'urban_streambank_stabilization', 'water_retention', 'infiltration']]
-                }
-            ],
-            dataModel: gwlfeConfig.cleanDataModel(JSON.parse(App.currentProject.get('gis_data'))),
-            errorMessages: null,
-            infoMessages: null
-        });
-    },
-
-    getControlName: function() {
-        return 'gwlfe_conservation_practice';
-    }
-});
-
 var PrecipitationSynchronizer = (function() {
     var isEnabled = false,
         precipViews = [];
@@ -585,8 +557,6 @@ function getControlView(controlName) {
             return LandCoverView;
         case 'conservation_practice':
             return ConservationPracticeView;
-        case 'gwlfe_conservation_practice':
-            return GwlfeConservationPracticeView;
         case 'precipitation':
             return PrecipitationView;
     }
@@ -596,7 +566,6 @@ function getControlView(controlName) {
 module.exports = {
     LandCoverView: LandCoverView,
     ConservationPracticeView: ConservationPracticeView,
-    GwlfeConservationPracticeView: GwlfeConservationPracticeView,
     PrecipitationView: PrecipitationView,
     getControlView: getControlView,
     PrecipitationSynchronizer: PrecipitationSynchronizer

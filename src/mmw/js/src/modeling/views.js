@@ -9,7 +9,6 @@ var _ = require('lodash'),
     controls = require('./controls'),
     coreModels = require('../core/models'),
     coreViews = require('../core/views'),
-    gwlfeConfig = require('./gwlfeModificationConfig'),
     analyzeViews = require('../analyze/views.js'),
     analyzeModels = require('../analyze/models.js'),
     modalModels = require('../core/modals/models'),
@@ -26,11 +25,8 @@ var _ = require('lodash'),
     scenarioMenuItemTmpl = require('./templates/scenarioMenuItem.html'),
     projectMenuTmpl = require('./templates/projectMenu.html'),
     tr55ScenarioToolbarTabContentTmpl = require('./templates/tr55ScenarioToolbarTabContent.html'),
-    gwlfeScenarioToolbarTabContentTmpl = require('./templates/gwlfeScenarioToolbarTabContent.html'),
     tr55RunoffViews = require('./tr55/runoff/views.js'),
-    tr55QualityViews = require('./tr55/quality/views.js'),
-    gwlfeRunoffViews = require('./gwlfe/runoff/views.js'),
-    gwlfeQualityViews = require('./gwlfe/quality/views.js');
+    tr55QualityViews = require('./tr55/quality/views.js');
 
 var ENTER_KEYCODE = 13,
     ESCAPE_KEYCODE = 27;
@@ -316,23 +312,6 @@ var ScenarioTabPanelView = Marionette.ItemView.extend({
 
     modelEvents: {
         'change': 'render'
-    },
-
-    templateHelpers: function() {
-        var gis_data = this.model.getGisData().model_input,
-            gwlfe = App.currentProject.get('model_package') === models.GWLFE &&
-                    gis_data !== null &&
-                    gis_data !== '{}' &&
-                    gis_data !== '';
-
-        return {
-            gwlfe: gwlfe,
-            csrftoken: csrf.getToken(),
-            gis_data: gis_data,
-            cid: this.model.cid,
-            editable: isEditable(this.model),
-            is_new: this.model.isNew()
-        };
     },
 
     onRender: function() {
@@ -621,118 +600,13 @@ var Tr55ToolbarTabContentView = ToolbarTabContentView.extend({
     }
 });
 
-// The toolbar that contains the modification and input tools
-// for a scenario.
-var GwlfeToolbarTabContentView = ToolbarTabContentView.extend({
-    template: gwlfeScenarioToolbarTabContentTmpl,
-
-    model: models.ScenarioModel,
-
-    ui: {
-        thumb: '#gwlfe-modifications-bar .thumb',
-        deleteButton: '.delete-button',
-        closeButton: 'button.close'
-    },
-
-    events: {
-        'click @ui.thumb': 'onThumbClick',
-        'click @ui.deleteButton': 'deleteModification',
-        'click @ui.closeButton': 'closePopup'
-    },
-
-    modelEvents: _.defaults({
-        'change:activeModKey': 'render',
-        'change:modifications': 'render'
-    }, ToolbarTabContentView.prototype.modelEvents),
-
-    initialize: function(options) {
-        ToolbarTabContentView.prototype.initialize.apply(this, [options]);
-
-        var self = this;
-        function closePopupOnOutsideClick(e) {
-            var isTargetOutside = $(e.target).parents('#gwlfe-modifications-popup').length === 0;
-            if (self.model.get('activeModKey') && isTargetOutside) {
-                self.closePopup();
-            }
-        }
-
-        $(document).on('mouseup', function(e) {
-            closePopupOnOutsideClick(e);
-        });
-    },
-
-    setupTooltips: function() {
-        var options = this.model.get('activeModKey') ? 'destroy' : null;
-        $('#gwlfe-modifications-bar .thumb').tooltip(options);
-        $('#gwlfe-modifications-bar i').tooltip(options);
-    },
-
-    onRender: function() {
-        ToolbarTabContentView.prototype.onRender.apply(this);
-        this.setupTooltips();
-    },
-
-    onShow: function() {
-        this.setupTooltips();
-    },
-
-    closePopup: function() {
-        this.model.set('activeModKey', null);
-    },
-
-    getActiveMod: function() {
-        var activeModKey = this.model.get('activeModKey'),
-            modifications = this.model.get('modifications');
-        return activeModKey && modifications.where({modKey: activeModKey})[0];
-    },
-
-    deleteModification: function() {
-        var activeMod = this.getActiveMod(),
-            modifications = this.model.get('modifications');
-
-        if (activeMod) {
-            modifications.remove(activeMod);
-            this.closePopup();
-        }
-    },
-
-    onThumbClick: function(e) {
-        var modKey = $(e.currentTarget).data('value'),
-            thumbOffset = $(e.target).offset();
-
-        this.model.set('activeModKey', modKey);
-
-        $('#gwlfe-modifications-popup').offset({
-            top: thumbOffset.top - 50
-        });
-    },
-
-    templateHelpers: function() {
-        var activeMod = this.getActiveMod(),
-            modifications = this.model.get('modifications').toJSON();
-
-        activeMod = activeMod ? activeMod.toJSON() : null;
-
-        return {
-            modifications: modifications,
-            activeMod: activeMod,
-            displayNames: gwlfeConfig.displayNames
-        };
-    }
-});
-
 // The collection of modification and input toolbars for each
 // scenario.
 var ToolbarTabContentsView = Marionette.CollectionView.extend({
     collection: models.ScenariosCollection,
     className: 'tab-content',
     getChildView: function() {
-        var isGwlfe = App.currentProject.get('model_package') === 'gwlfe';
-        if (isGwlfe) {
-            return GwlfeToolbarTabContentView;
-        } else {
-            return Tr55ToolbarTabContentView;
-        }
+        return Tr55ToolbarTabContentView;
     },
     childViewOptions: function(model) {
         var controls = models.getControlsForModelPackage(
@@ -996,16 +870,6 @@ function getResultView(modelPackage, resultName) {
                     return tr55RunoffViews.ResultView;
                 case 'quality':
                     return tr55QualityViews.ResultView;
-                default:
-                    console.log('Result not supported.');
-            }
-            break;
-        case models.GWLFE:
-            switch(resultName) {
-                case 'runoff':
-                    return gwlfeRunoffViews.ResultView;
-                case 'quality':
-                    return gwlfeQualityViews.ResultView;
                 default:
                     console.log('Result not supported.');
             }

@@ -1,7 +1,0 @@
-<select class="form-control btn btn-small btn-primary">
-    {% for runoffVar in runoffVars %}
-        <option value="{{ runoffVar.name }}" {{ "selected" if runoffVar.name == activeVar }}>
-            {{ runoffVar.display }}
-        </option>
-    {% endfor %}
-</select>
