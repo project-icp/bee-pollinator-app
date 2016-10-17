@@ -113,7 +113,6 @@ JS_DEPS=(backbone
          iframe-phone
          ./js/shim/leaflet.utfgrid.js
          ./js/shim/marionette.transition-region.js
-         ./js/shim/shutterbug.js
          ./js/shim/highstock.js
          ./js/shim/nv.d3.js
          jquery

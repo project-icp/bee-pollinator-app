@@ -9,7 +9,6 @@ from django.shortcuts import redirect
 from django.contrib.auth.forms import PasswordResetForm
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.sites.shortcuts import get_current_site
-from django.conf import settings
 
 from registration.models import RegistrationProfile
 from registration.forms import RegistrationFormUniqueEmail
@@ -18,11 +17,6 @@ from registration.backends.default.views import RegistrationView
 from rest_framework import decorators, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-
-from apps.user.models import ItsiUser
-from apps.user.itsi import ItsiService
-
-EMBED_FLAG = settings.ITSI['embed_flag']
 
 
 @decorators.api_view(['POST', 'GET'])
@@ -41,7 +35,6 @@ def login(request):
                 response_data = {
                     'result': 'success',
                     'username': user.username,
-                    'itsi': ItsiUser.objects.filter(user_id=user.id).exists(),
                     'guest': False,
                     'id': user.id
                 }
@@ -67,7 +60,6 @@ def login(request):
             response_data = {
                 'result': 'success',
                 'username': user.username,
-                'itsi': ItsiUser.objects.filter(user_id=user.id).exists(),
                 'guest': False,
                 'id': user.id
             }
@@ -91,101 +83,12 @@ def logout(request):
     if request.is_ajax():
         response_data = {
             'result': 'success',
-            'itsi': False,
             'guest': True,
             'id': 0
         }
         return Response(data=response_data)
     else:
         return redirect('/')
-
-itsi = ItsiService()
-
-
-def itsi_login(request):
-    redirect_uri = '{0}?next={1}'.format(
-        request.build_absolute_uri(reverse(itsi_auth)),
-        request.GET.get('next', '/')
-    )
-    params = {'redirect_uri': redirect_uri}
-    auth_url = itsi.get_authorize_url(**params)
-
-    return redirect(auth_url)
-
-
-def itsi_auth(request):
-    code = request.GET.get('code', None)
-
-    # Basic validation
-    if code is None:
-        return redirect('/error/itsi')
-
-    try:
-        session = itsi.get_session_from_code(code)
-        itsi_user = session.get_user()
-    except:
-        # In case we are unable to reach ITSI and get an unexpected response
-        return redirect('/error/itsi')
-
-    user = authenticate(itsi_id=itsi_user['id'])
-    if user is not None and user.is_active:
-        auth_login(request, user)
-        return redirect(request.GET.get('next', '/'))
-    else:
-        return itsi_create_user(request, itsi_user)
-
-
-def itsi_create_user(request, itsi_user):
-    itsi_id = itsi_user['id']
-    itsi_username = itsi_user['extra']['username']
-    # Truncate names to 30 characters max
-    first_name = itsi_user['extra']['first_name'][:29]
-    last_name = itsi_user['extra']['last_name'][:29]
-
-    # If username already exists, append a number to it, and keep it below
-    # 31 characters
-    suffix = 0
-    midfix = '.itsi'
-    username = trim_to_valid_length(itsi_username, midfix)
-    while User.objects.filter(username=username).exists():
-        username = trim_to_valid_length(itsi_username,  midfix + suffix)
-        suffix += 1
-
-    # Create new user with given details and no email address or password
-    # since they will be authenticated using ITSI credentials
-    user = User.objects.create_user(
-        username,
-        email=None,
-        password=None,
-        first_name=first_name,
-        last_name=last_name,
-    )
-    user.save()
-
-    # Create corresponding itsi_user object that links to ITSI account
-    itsi_user = ItsiUser.objects.create_itsi_user(user, itsi_id)
-    itsi_user.save()
-
-    # Save embed mode state since we're going to lose the session upon
-    # logging in as a new user
-    itsi_embed = request.session.get(EMBED_FLAG, False)
-
-    # Authenticate and log new user in
-    user = authenticate(itsi_id=itsi_id)
-    auth_login(request, user)
-
-    # Re-set itsi_embed flag
-    request.session[EMBED_FLAG] = itsi_embed
-
-    return redirect(
-        '/sign-up/itsi/{0}/{1}/{2}?next={3}'
-        .format(
-            itsi_username,
-            first_name,
-            last_name,
-            request.GET.get('next', '/')
-        )
-    )
 
 
 def trim_to_valid_length(basename, suffix):

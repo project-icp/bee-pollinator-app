@@ -52,14 +52,6 @@ var ModelingController = {
                             project.get('scenarios').makeFirstScenarioActive();
                         }
 
-                        // If this project is an activity then the application's behavior changes.
-                        if (project.get('is_activity')) {
-                            settings.set('activityMode', true);
-                        }
-
-                        // Send URL to parent if in embed mode
-                        updateItsiFromEmbedMode();
-
                         setPageTitle();
                     });
                 })
@@ -72,86 +64,63 @@ var ModelingController = {
 
             App.state.set('current_page_title', 'Modeling');
         } else {
-            if (App.currentProject && settings.get('activityMode')) {
-                project = App.currentProject;
-                // Reset flag is set so clear off old project data.
-                if (project.get('needs_reset')) {
-                    itsiResetProject(project);
-                } else {
-                    initViews(project);
-                    if (!project.get('scenarios_events_initialized')) {
-                        initScenarioEvents(project);
-                        project.set('scenarios_events_initialized', true);
-                    }
-                    updateUrl();
+            var lock = $.Deferred();
+
+            if (!App.currentProject) {
+
+                project = reinstateProject(App.projectNumber, lock);
+
+                App.currentProject = project;
+                if (!App.projectNumber) {
+                    setupNewProjectScenarios(project);
                 }
             } else {
-                var lock = $.Deferred();
-
-                if (!App.currentProject) {
-
-                    project = reinstateProject(App.projectNumber, lock);
-
-                    App.currentProject = project;
-                    if (!App.projectNumber) {
-                        setupNewProjectScenarios(project);
-                    }
-                } else {
-                    project = App.currentProject;
-                    updateUrl();
-                    lock.resolve();
-                }
-
-                finishProjectSetup(project, lock);
+                project = App.currentProject;
+                updateUrl();
+                lock.resolve();
             }
-            setPageTitle();            
+
+            finishProjectSetup(project, lock);
+            setPageTitle();
         }
     },
 
     makeNewProject: function(modelPackage) {
         var project;
-        if (settings.get('itsi_embed')) {
-            project = App.currentProject;
-            project.set('model_package', modelPackage);
-            itsiResetProject(project);
-            App.getMapView().addSidebarToggleControl();
-            setPageTitle();
-        } else {
-            var lock = $.Deferred();
-            project = new models.ProjectModel({
-                name: 'Untitled Project',
-                created_at: Date.now(),
-                area_of_interest: App.map.get('areaOfInterest'),
-                area_of_interest_name: App.map.get('areaOfInterestName'),
-                model_package: modelPackage,
-                scenarios: new models.ScenariosCollection()
-            });
+        var lock = $.Deferred();
+        project = new models.ProjectModel({
+            name: 'Untitled Project',
+            created_at: Date.now(),
+            area_of_interest: App.map.get('areaOfInterest'),
+            area_of_interest_name: App.map.get('areaOfInterestName'),
+            model_package: modelPackage,
+            scenarios: new models.ScenariosCollection()
+        });
 
-            var analyzeTask = App.getAnalyzeCollection().findWhere({taskName:'analyze'});
+        var analyzeTask = App.getAnalyzeCollection().findWhere({taskName:'analyze'});
 
-            App.currentProject = project;
-            lock.resolve();
+        App.currentProject = project;
+        lock.resolve();
 
-            analyzeTask
-                .fetchAnalysisIfNeeded()
-                .done(function() {
-                    App.currentProject.set(
-                        'aoi_census',
-                        JSON.parse(
-                            App.getAnalyzeCollection()
-                                .findWhere({taskName:'analyze'})
-                                .get('result')
-                        ).census
-                    );
-                })
-                .fail(projectCleanUp);
+        analyzeTask
+            .fetchAnalysisIfNeeded()
+            .done(function() {
+                App.currentProject.set(
+                    'aoi_census',
+                    JSON.parse(
+                        App.getAnalyzeCollection()
+                            .findWhere({taskName:'analyze'})
+                            .get('result')
+                    ).census
+                );
+            })
+            .fail(projectCleanUp);
 
-            setupNewProjectScenarios(project);
-            finishProjectSetup(project, lock);
-            updateUrl();
-            App.getMapView().addSidebarToggleControl();
-            setPageTitle();
-        }
+        setupNewProjectScenarios(project);
+        finishProjectSetup(project, lock);
+        updateUrl();
+        App.getMapView().addSidebarToggleControl();
+        setPageTitle();
     },
 
     projectCleanUp: function() {
@@ -162,9 +131,7 @@ var ModelingController = {
         projectCleanUp();
     },
 
-    // Since we handle redirects after ITSI sign-up within Backbone,
-    // but project cloning is done only on server side, we redirect
-    // the project cloning route back to the server.
+    // Redirect the project cloning route back to the server.
     projectClone: function() {
         window.location.replace(window.location.href);
     },
@@ -206,50 +173,6 @@ var ModelingController = {
     }
 };
 
-function itsiResetProject(project) {
-    project.set({
-        'user_id': App.user.get('id'),
-        'area_of_interest': App.map.get('areaOfInterest'),
-        'area_of_interest_name': App.map.get('areaOfInterestName'),
-        'needs_reset': false
-    });
-
-    // Clear current scenarios and start over.
-    // Must convert to an array first to avoid conflicts with
-    // collection events that are disassociating the model during
-    // the loop.
-    var locks = [];
-    _.each(project.get('scenarios').toArray(), function(model) {
-        var $lock = $.Deferred();
-        locks.push($lock);
-        model.destroy({
-            success: function() {
-                $lock.resolve();
-            }
-        });
-    });
-
-    // When all models have been deleted...
-    $.when.apply($, locks).then(function() {
-        setupNewProjectScenarios(project);
-
-        // Don't reinitialize scenario events.
-        if (!project.get('scenarios_events_initialized')) {
-            initScenarioEvents(project);
-            project.set('scenarios_events_initialized', true);
-        }
-
-        // Make sure to save the new project id onto scenarios.
-        project.addIdsToScenarios();
-        // Save to ensure we capture AOI.
-        project.save();
-
-        // Now render.
-        initViews(project);
-        updateUrl();
-    });
-}
-
 function finishProjectSetup(project, lock) {
     lock.done(function() {
         project.on('change:id', updateUrl);
@@ -290,16 +213,9 @@ function projectCleanUp() {
     App.rootView.sidebarRegion.empty();
 }
 
-function updateItsiFromEmbedMode() {
-    if (settings.get('itsi_embed')) {
-        App.itsi.setLearnerUrl(Backbone.history.getFragment());
-    }
-}
-
 function updateUrl() {
     // Use replace: true, so that the back button will work as expected.
     router.navigate(App.currentProject.getReferenceUrl(), { replace: true });
-    updateItsiFromEmbedMode();
 }
 
 function updateScenario(scenario) {

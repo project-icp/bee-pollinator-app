@@ -31,12 +31,7 @@ var AnalyzeController = {
                     'area_of_interest_name': map.get('areaOfInterestName')
                 });
                 project
-                    .save()
-                    .done(function() {
-                        if (settings.get('itsi_embed')) {
-                            App.itsi.setLearnerUrl('project/' + project.id + '/draw');
-                        }
-                    });
+                    .save();
             }
         } else {
             // Multiple projects allowed in Regular Mode. Nullify current

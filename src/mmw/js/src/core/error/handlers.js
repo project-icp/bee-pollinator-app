@@ -1,18 +1,8 @@
 "use strict";
 
-var router = require('../../router').router,
-    App = require('../../app');
+var router = require('../../router').router;
 
 var ErrorHandlers = {
-    itsi: function() {
-        router.navigate('');
-        window.alert("We're sorry, but there was an error logging you in with your" +
-            " ITSI credentials. Please log in using another method or" +
-            " continue as a guest."
-        );
-        App.showLoginModal();
-    },
-
     generic: function(type) {
         router.navigate('');
         window.alert("We're sorry, but an error occurred in the application.");

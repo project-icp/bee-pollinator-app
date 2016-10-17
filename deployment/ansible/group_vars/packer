@@ -1,9 +1,6 @@
 ---
 django_settings_module: "mmw.settings.production"
 
-itsi_base_url: ""
-itsi_secret_key: ""
-
 postgresql_username: "modelmywatershed"
 postgresql_database: "modelmywatershed"
 

@@ -35,7 +35,7 @@ $ aws configure --profile mmw-stg
 Next, use the following command to bring up a local development environment:
 
 ```bash
-$ MMW_ITSI_SECRET_KEY="***" vagrant up
+$ vagrant up
 ```
 
 The application will now be running at [http://localhost:8000](http://localhost:8000).

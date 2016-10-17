@@ -4,7 +4,6 @@ var _ = require('lodash'),
     $ = require('jquery'),
     Marionette = require('../../shim/backbone.marionette'),
     App = require('../app'),
-    settings = require('../core/settings'),
     csrf = require('../core/csrf'),
     models = require('./models'),
     controls = require('./controls'),
@@ -104,7 +103,6 @@ var ProjectMenuView = Marionette.ItemView.extend({
         print: '#print-project',
         save: '#save-project',
         privacy: '#project-privacy',
-        itsiClone: '#itsi-clone'
     },
 
     events: {
@@ -114,15 +112,12 @@ var ProjectMenuView = Marionette.ItemView.extend({
         'click @ui.print': 'printProject',
         'click @ui.save': 'saveProjectOrLoginUser',
         'click @ui.privacy': 'setProjectPrivacy',
-        'click @ui.itsiClone': 'getItsiEmbedLink'
     },
 
     template: projectMenuTmpl,
 
     templateHelpers: function() {
         return {
-            itsi: App.user.get('itsi'),
-            itsi_embed: settings.get('itsi_embed'),
             editable: isEditable(this.model),
             is_new: this.model.isNew()
         };
@@ -239,23 +234,6 @@ var ProjectMenuView = Marionette.ItemView.extend({
             self.model.saveProjectAndScenarios();
         });
     },
-
-    getItsiEmbedLink: function() {
-        var self = this,
-            embedLink = window.location.origin +
-                '/project/' + App.currentProject.id + '/clone?itsi_embed=true',
-            modal = new modalViews.ShareView({
-                model: new modalModels.ShareModel({
-                    text: 'Embed Link',
-                    url: embedLink,
-                    guest: App.user.get('guest'),
-                    is_private: self.model.get('is_private')
-                }),
-                app: App
-            });
-
-        modal.render();
-    }
 });
 
 // The toolbar containing the scenario tabs,

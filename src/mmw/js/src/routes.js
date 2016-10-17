@@ -19,4 +19,3 @@ router.addRoute('project(/:projectId)/compare(/)', CompareController, 'compare')
 router.addRoute('projects(/)', ProjectsController, 'projects');
 router.addRoute('error(/:type)(/)', ErrorController, 'error');
 router.addRoute('sign-up(/)', SignUpController, 'signUp');
-router.addRoute('sign-up/itsi(/:username)(/:first_name)(/:last_name)(/)', SignUpController, 'itsiSignUp');

@@ -4,7 +4,6 @@ var Backbone = require('../../shim/backbone');
 
 var UserModel = Backbone.Model.extend({
     defaults: {
-        itsi: false,
         guest: true
     },
 
@@ -208,51 +207,10 @@ var ResendFormModel = ModalBaseModel.extend({
     }
 });
 
-var ItsiSignUpFormModel = ModalBaseModel.extend({
-    defaults: {
-        username: null,
-        first_name: null,
-        last_name: null,
-        next: '/'
-    },
-
-    url: '/user/itsi/sign_up',
-
-    validate: function(attrs) {
-        var errors = [];
-
-        if (!attrs.username) {
-            errors.push('Please enter a username');
-        }
-
-        if (!attrs.first_name) {
-            errors.push('Please enter a first name');
-        }
-
-        if (!attrs.last_name) {
-            errors.push('Please enter a last name');
-        }
-
-        if (errors.length) {
-            this.set({
-                'client_errors': errors,
-                'server_errors': null
-            });
-            return errors;
-        } else {
-            this.set({
-                'client_errors': null,
-                'server_errors': null
-            });
-        }
-    }
-});
-
 module.exports = {
     UserModel: UserModel,
     LoginFormModel: LoginFormModel,
     SignUpFormModel: SignUpFormModel,
     ResendFormModel: ResendFormModel,
-    ForgotFormModel: ForgotFormModel,
-    ItsiSignUpFormModel: ItsiSignUpFormModel
+    ForgotFormModel: ForgotFormModel
 };
