@@ -99,29 +99,7 @@ var ResultsView = Marionette.LayoutView.extend({
         }
 
         if (!modelPackage.disabled) {
-            if (settings.get('itsi_embed') && App.currentProject && !App.currentProject.get('needs_reset')) {
-                var currModelPackageName = App.currentProject.get('model_package');
-                if (modelPackageName === currModelPackageName) {
-                    // Go to existing project
-                    router.navigate(projectUrl, {trigger: true});
-                } else {
-                    var confirmNewProject = new modalViews.ConfirmView({
-                        model: new modalModels.ConfirmModel({
-                            question: 'If you change the model you will lose your current work.',
-                            confirmLabel: 'Switch Model',
-                            cancelLabel: 'Cancel',
-                            feedbackRequired: true
-                        }),
-                    });
-
-                    confirmNewProject.on('confirmation', function() {
-                        router.navigate(newProjectUrl, {trigger: true});
-                    });
-                    confirmNewProject.render();
-                }
-            } else {
-                router.navigate(newProjectUrl, {trigger: true});
-            }
+            router.navigate(newProjectUrl, {trigger: true});
         }
     },
 

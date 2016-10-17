@@ -10,8 +10,7 @@ var _ = require('underscore'),
     loginModalTmpl = require('./templates/loginModal.html'),
     signUpModalTmpl = require('./templates/signUpModal.html'),
     resendModalTmpl = require('./templates/resendModal.html'),
-    forgotModalTmpl = require('./templates/forgotModal.html'),
-    itsiSignUpModalTmpl = require('./templates/itsiSignUpModal.html');
+    forgotModalTmpl = require('./templates/forgotModal.html');
 
 var ENTER_KEYCODE = 13;
 
@@ -151,15 +150,13 @@ var LoginModalView = ModalBaseView.extend({
         password: '#password',
         signUp: '.sign-up',
         resend: '.resend',
-        forgot: '.forgot',
-        itsiLogin: '.itsi-login'
+        forgot: '.forgot'
     }, ModalBaseView.prototype.ui),
 
     events: _.defaults({
         'click @ui.signUp': 'signUp',
         'click @ui.resend': 'resend',
-        'click @ui.forgot': 'forgot',
-        'click @ui.itsiLogin': 'itsiLogin'
+        'click @ui.forgot': 'forgot'
     }, ModalBaseView.prototype.events),
 
     onModalShown: function() {
@@ -236,19 +233,6 @@ var LoginModalView = ModalBaseView.extend({
                 model: new models.ForgotFormModel({})
             }).render();
         });
-    },
-
-    // Login with ITSI
-    itsiLogin: function() {
-        if (this.getDisabledState(this.ui.itsiLogin) === true) {
-            return;
-        }
-
-        var loginURL = '/user/itsi/login?next=/' + Backbone.history.getFragment();
-        if (window.clientSettings.itsi_embed) {
-            loginURL = '/?itsi_embed=true&next=/' + Backbone.history.getFragment();
-        }
-        window.location.href = loginURL;
     }
 });
 
@@ -355,34 +339,9 @@ var ForgotModalView = ModalBaseView.extend({
     }
 });
 
-var ItsiSignUpModalView = ModalBaseView.extend({
-    template: itsiSignUpModalTmpl,
-
-    ui: _.defaults({}, ModalBaseView.prototype.ui),
-
-    onModalHidden: function() {
-        ModalBaseView.prototype.onModalHidden.apply(this, arguments);
-
-        var next = this.model.get('next');
-        if (next !== '/') {
-            // Must remove leading slash, add trailing slash
-            // otherwise Backbone.router.navigate does not function properly
-            if (next[0] === "/") {
-                next = next.substring(1);
-            }
-            if (next[next.length - 1] !== "/") {
-                next = next + "/";
-            }
-        }
-
-        router.navigate(next, { trigger: true });
-    }
-});
-
 module.exports = {
     LoginModalView: LoginModalView,
     SignUpModalView: SignUpModalView,
     ResendModalView: ResendModalView,
-    ForgotModalView: ForgotModalView,
-    ItsiSignUpModalView: ItsiSignUpModalView
+    ForgotModalView: ForgotModalView
 };

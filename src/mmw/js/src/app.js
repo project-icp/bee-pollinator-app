@@ -5,7 +5,6 @@ var $ = require('jquery'),
     views = require('./core/views'),
     models = require('./core/models'),
     settings = require('./core/settings'),
-    itsi = require('./core/itsiEmbed'),
     analyzeModels = require('./analyze/models'),
     userModels = require('./user/models'),
     userViews = require('./user/views');
@@ -15,15 +14,6 @@ var App = new Marionette.Application({
         this.restApi = new RestAPI();
         this.map = new models.MapModel();
         this.state = new models.AppStateModel();
-
-        // If in embed mode we are by default in activity mode.
-        var activityMode = settings.get('itsi_embed');
-        settings.set('activityMode', activityMode);
-
-        // Initialize embed interface if in activity mode
-        if (activityMode) {
-            this.itsi = new itsi.ItsiEmbed(this);
-        }
 
         // This view is intentionally not attached to any region.
         this._mapView = new views.MapView({

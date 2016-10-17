@@ -1,7 +1,6 @@
 "use strict";
 
 var defaultSettings = {
-    itsi_embed: false,
     draw_tools: [],
     map_controls: [],
     model_packages: []
