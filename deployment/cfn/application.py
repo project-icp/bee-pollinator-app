@@ -62,8 +62,6 @@ class Application(StackNode):
         'GreenTileServerDistributionEndpoint':
         ['global:GreenTileServerDistributionEndpoint',
             'TileDeliveryNetwork:GreenTileServerDistributionEndpoint'],
-        'ITSIBaseURL': ['global:ITSIBaseURL'],
-        'ITSISecretKey': ['global:ITSISecretKey'],
         'RollbarServerSideAccessToken':
         ['global:RollbarServerSideAccessToken'],
     }
@@ -197,16 +195,6 @@ class Application(StackNode):
             'GreenTileServerDistributionEndpoint', Type='String',
             Description='Endpoint for green tile CloudFront distribution'
         ), 'GreenTileServerDistributionEndpoint')
-
-        self.itsi_base_url = self.add_parameter(Parameter(
-            'ITSIBaseURL', Type='String',
-            Description='Base URL for ITSI portal'
-        ), 'ITSIBaseURL')
-
-        self.itsi_secret_key = self.add_parameter(Parameter(
-            'ITSISecretKey', Type='String', NoEcho=True,
-            Description='Secret key for ITSI portal integration'
-        ), 'ITSISecretKey')
 
         app_server_lb_security_group, \
             app_server_security_group = self.create_security_groups()
@@ -491,14 +479,7 @@ class Application(StackNode):
                 '    permissions: 0750\n',
                 '    owner: root:mmw\n',
                 '    content: ', self.get_input('RollbarServerSideAccessToken'), '\n',  # NOQA
-                '  - path: /etc/mmw.d/env/MMW_ITSI_BASE_URL\n',
-                '    permissions: 0750\n',
-                '    owner: root:mmw\n',
-                '    content: ', Ref(self.itsi_base_url), '\n',
-                '  - path: /etc/mmw.d/env/MMW_ITSI_SECRET_KEY\n',
-                '    permissions: 0750\n',
-                '    owner: root:mmw\n',
-                '    content: ', Ref(self.itsi_secret_key)]
+                ]
 
     def create_cloud_watch_resources(self, app_server_lb):
         self.add_resource(cw.Alarm(

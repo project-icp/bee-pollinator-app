@@ -12,8 +12,6 @@ graphite_web_port: "{{ apache_port }}"
 
 stack_color: "Black"
 
-itsi_client_id: "model-my-watershed"
-
 postgresql_username: mmw
 postgresql_password: mmw
 postgresql_database: mmw
