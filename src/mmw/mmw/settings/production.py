@@ -95,14 +95,12 @@ PRIVATE_AWS_STORAGE_URL_PROTOCOL = 'https:'
 # UI CONFIGURATION
 
 DRAW_TOOLS = [
-    'SelectArea',   # Boundary Selector
     'Draw',         # Custom Area or 1 Sq Km stamp
     'ResetDraw',
 ]
 
 MAP_CONTROLS = [
     'LayerAttribution',
-    'LayerSelector',
     'LocateMeButton',
     'ZoomControl',
 ]

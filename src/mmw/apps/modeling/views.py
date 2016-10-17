@@ -447,32 +447,6 @@ def _construct_tr55_job_chain(model_input, job_id):
 
 @decorators.api_view(['GET'])
 @decorators.permission_classes((AllowAny, ))
-def boundary_layer_detail(request, table_code, obj_id):
-    try:
-        layers = [layer for layer in settings.LAYERS
-                  if layer.get('code') == table_code and
-                  layer.get('boundary')]
-        table_name = layers[0]['table_name']
-        json_field = layers[0].get('json_field', 'geom')
-
-        query = 'SELECT {field} FROM {table} WHERE id = %s'.format(
-                field=json_field, table=table_name)
-    except (KeyError, IndexError):
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    with connection.cursor() as cursor:
-        cursor.execute(query, [int(obj_id)])
-        row = cursor.fetchone()
-
-        if row:
-            geojson = json.loads(GEOSGeometry(row[0]).geojson)
-            return Response(geojson)
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-@decorators.api_view(['GET'])
-@decorators.permission_classes((AllowAny, ))
 def drb_point_sources(request):
     query = '''
           SELECT ST_X(geom) as lon, ST_Y(geom) as lat, city, state, npdes_id,

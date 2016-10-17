@@ -11,7 +11,6 @@ var $ = require('jquery'),
 
 var App = new Marionette.Application({
     initialize: function() {
-        this.restApi = new RestAPI();
         this.map = new models.MapModel();
         this.state = new models.AppStateModel();
 
@@ -87,17 +86,5 @@ var App = new Marionette.Application({
         }).render();
     }
 });
-
-function RestAPI() {
-    return {
-        getPolygon: function(args) {
-            var url = '/api/modeling/boundary-layers/' + args.layerCode + '/' + args.shapeId;
-            return $.ajax({
-                'url': url,
-                'type': 'GET'
-            });
-        }
-    };
-}
 
 module.exports = App;

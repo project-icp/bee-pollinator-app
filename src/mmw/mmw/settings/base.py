@@ -463,7 +463,6 @@ GEOP = {
 # UI CONFIGURATION
 
 DRAW_TOOLS = [
-    'SelectArea',   # Boundary Selector
     'Draw',         # Custom Area or 1 Sq Km stamp
     'ResetDraw',
 ]

@@ -12,11 +12,8 @@ var $ = require('jquery'),
     router = require('../router').router,
     App = require('../app'),
     utils = require('./utils'),
-    models = require('./models'),
     coreUtils = require('../core/utils'),
     toolbarTmpl = require('./templates/toolbar.html'),
-    loadingTmpl = require('./templates/loading.html'),
-    selectTypeTmpl = require('./templates/selectType.html'),
     drawTmpl = require('./templates/draw.html'),
     resetDrawTmpl = require('./templates/reset.html'),
     settings = require('../core/settings');
@@ -88,7 +85,6 @@ var ToolbarView = Marionette.LayoutView.extend({
     className: 'draw-tools-container',
 
     regions: {
-        selectTypeRegion: '#select-area-region',
         drawRegion: '#draw-region',
         resetRegion: '#reset-draw-region'
     },
@@ -109,11 +105,6 @@ var ToolbarView = Marionette.LayoutView.extend({
 
     onShow: function() {
         var draw_tools = settings.get('draw_tools');
-        if (_.contains(draw_tools, 'SelectArea')) {
-            this.selectTypeRegion.show(new SelectAreaView({
-                model: this.model
-            }));
-        }
         if (_.contains(draw_tools, 'Draw')) {
             this.drawRegion.show(new DrawView({
                 model: this.model
@@ -125,120 +116,6 @@ var ToolbarView = Marionette.LayoutView.extend({
                 model: this.model,
             }));
         }
-    }
-});
-
-var SelectAreaView = Marionette.ItemView.extend({
-    $label: $('#boundary-label'),
-
-    ui: {
-        items: '[data-tile-url]',
-        button: '#predefined-shape',
-        helptextIcon: 'i.split'
-    },
-
-    events: {
-        'click @ui.items': 'onItemClicked'
-    },
-
-    modelEvents: {
-        'change': 'render',
-        'change:toolsEnabled': 'removeBoundaryLayer'
-    },
-
-    initialize: function() {
-        var map = App.getLeafletMap(),
-            ofg = this.model.get('outlineFeatureGroup'),
-            types = this.model.get('predefinedShapeTypes');
-
-        ofg.on('layerremove', _.bind(this.clearLabel, this));
-        coreUtils.zoomToggle(map, types, actOnUI, actOnLayer);
-    },
-
-    onRender: function() {
-        this.ui.helptextIcon.popover({
-            trigger: 'hover',
-            viewport: '.map-container'
-        });
-    },
-
-    onItemClicked: function(e) {
-        var $el = $(e.currentTarget),
-            tileUrl = $el.data('tile-url'),
-            layerCode = $el.data('layer-code'),
-            shortDisplay = $el.data('short-display'),
-            minZoom = $el.data('min-zoom');
-
-        if (!$el.hasClass('disabled')) {
-            clearAoiLayer();
-            this.changeOutlineLayer(tileUrl, layerCode, shortDisplay, minZoom);
-            e.preventDefault();
-        }
-    },
-
-    getTemplate: function() {
-        var types = this.model.get('predefinedShapeTypes');
-        return !types ? loadingTmpl : selectTypeTmpl;
-    },
-
-    changeOutlineLayer: function(tileUrl, layerCode, shortDisplay, minZoom) {
-        var self = this,
-            ofg = self.model.get('outlineFeatureGroup');
-
-        // Go about the business of adding the outline and UTFgrid layers.
-        if (tileUrl && layerCode !== undefined) {
-            var ol = new L.TileLayer(tileUrl + '.png', {minZoom: minZoom || 0}),
-                grid = new L.UtfGrid(tileUrl + '.grid.json',
-                                     {
-                                         minZoom: minZoom,
-                                         useJsonP: false,
-                                         resolution: 4,
-                                         maxRequests: 8
-                                     });
-
-            codeToLayer[layerCode] = ol;
-
-            grid.on('click', function(e) {
-                getShapeAndAnalyze(e, self.model, ofg, grid, layerCode, shortDisplay);
-            });
-
-            grid.on('mousemove', function(e) {
-                self.updateDisplayLabel(e.latlng, e.data.name);
-            });
-
-            clearBoundaryLayer(self.model);
-            ofg.addLayer(ol);
-            ofg.addLayer(grid);
-
-            ol.bringToFront();
-        }
-    },
-
-    removeBoundaryLayer: function() {
-        clearBoundaryLayer(this.model);
-    },
-
-    updateDisplayLabel: function(latLng, text) {
-        var pos = App.getLeafletMap().latLngToContainerPoint(latLng),
-            bufferDist = 10,
-            buffer = function(cursorPos) {
-                var newPt = _.clone(cursorPos);
-                _.forEach(newPt, function(val, key, pt) {
-                    pt[key] = val + bufferDist;
-                });
-
-                return newPt;
-            },
-            placement = buffer(pos);
-
-        this.$label
-            .text(text)
-            .css({ top: placement.y, left: placement.x})
-            .show();
-    },
-
-    clearLabel: function() {
-        this.$label.hide();
     }
 });
 
@@ -356,64 +233,6 @@ function makePointGeoJson(coords, props) {
     };
 }
 
-function getShapeAndAnalyze(e, model, ofg, grid, layerCode, layerName) {
-    // The shapeId might not be available at the time of the click
-    // because the UTF Grid layer might not be loaded yet, so
-    // we poll for it.
-    var pollInterval = 200,
-        maxPolls = 5,
-        pollCount = 0,
-        deferred = $.Deferred(),
-        shapeName = e.data && e.data.name ? e.data.name : null,
-        shapeId = e.data ? e.data.id : null;
-
-        if (shapeId) {
-            _getShapeAndAnalyze();
-        } else {
-            pollForShapeId();
-        }
-
-    function _getShapeAndAnalyze() {
-        App.restApi.getPolygon({
-            layerCode: layerCode,
-            shapeId: shapeId})
-            .then(validateShape)
-            .then(function(shape) {
-                addLayer(shape, shapeName, layerName);
-                clearBoundaryLayer(model);
-                navigateToAnalyze();
-                deferred.resolve();
-            }).fail(function() {
-                console.log('Shape endpoint failed');
-                deferred.reject();
-            }).always(function() {
-                model.enableTools();
-            });
-    }
-
-    function pollForShapeId() {
-        if (pollCount < maxPolls) {
-            var shapeData = grid._objectForEvent(e).data;
-            if (shapeData && shapeData.id) {
-                shapeId = shapeData.id;
-                _getShapeAndAnalyze();
-            } else {
-                window.setTimeout(pollForShapeId, pollInterval);
-                pollCount++;
-            }
-        } else {
-            L.popup()
-                .setLatLng(e.latlng)
-                .setContent('The region was not available. Please try clicking again.')
-                .openOn(App.getLeafletMap());
-            model.enableTools();
-            deferred.reject();
-        }
-    }
-
-    return deferred;
-}
-
 function clearAoiLayer() {
     var projectNumber = App.projectNumber,
         previousShape = App.map.get('areaOfInterest');
@@ -454,6 +273,5 @@ function navigateToAnalyze() {
 }
 
 module.exports = {
-    ToolbarView: ToolbarView,
-    getShapeAndAnalyze: getShapeAndAnalyze
+    ToolbarView: ToolbarView
 };
