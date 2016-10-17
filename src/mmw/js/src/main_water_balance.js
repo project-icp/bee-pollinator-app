@@ -3,7 +3,6 @@
 var $ = require('jquery'),
     _ = require('underscore'),
     R = require('retina.js'),
-    shutterbug = require('../shim/shutterbug'),
     modificationConfig = require('./core/modificationConfig.json'),
     wbm = require('./water_balance/models');
 
@@ -154,26 +153,9 @@ var initBootstrap = function() {
     });
 };
 
-var initShutterbug = function() {
-    var disableAnimation = function() {
-            $('#effect-precip').removeClass('animated fadeInDown');
-            $('#effect-evapo').removeClass('animated fadeInUp');
-            $('#effect-runoff').removeClass('animated fadeInRight');
-            $('#effect-infiltration').removeClass('animated fadeInDown');
-        };
-
-    // Disable animation before taking a screenshot since it
-    // causes the arrows not to render.
-    $(window).on('shutterbug-saycheese', disableAnimation);
-
-    // Enable screenshot functionality
-    shutterbug.enable('body');
-};
-
 $(function() {
     R.Retina.init(window);
     initBootstrap();
-    initShutterbug();
 
     $.ajax({
         type: 'GET',
