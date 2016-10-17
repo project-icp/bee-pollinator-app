@@ -21,7 +21,6 @@ Next, trigger a build using the "Build Now" link.
 Once the `release` job completes successfully, it should kick off two additional jobs:
 
 - http://civicci01.internal.azavea.com/view/mmw/job/model-my-watershed-packer-app-and-worker/
-- http://civicci01.internal.azavea.com/view/mmw/job/model-my-watershed-packer-tiler/
 
 Once those two jobs complete successfully, a `staging-deployment` job will be kicked off:
 
@@ -54,7 +53,7 @@ $ ./mmw_stack.py launch-stacks --aws-profile mmw-prd \
                                --stack-color blue
 ```
 
-This will launch a new `Tiler`, `Application`, and `Worker` stack namespaced by `stack-color`.
+This will launch a new Application`, and `Worker` stack namespaced by `stack-color`.
 
 ## Database Snapshot
 

@@ -30,28 +30,6 @@
             "associate_public_ip_address": true
         },
         {
-            "name": "mmw-tiler",
-            "type": "amazon-ebs",
-            "region": "{{user `aws_region`}}",
-            "availability_zone": "us-east-1a",
-            "source_ami": "{{user `aws_ubuntu_ami`}}",
-            "instance_type": "t2.large",
-            "ssh_username": "ubuntu",
-            "ami_name": "mmw-tiler-{{timestamp}}-{{user `version`}}",
-            "run_tags": {
-                "PackerBuilder": "amazon-ebs"
-            },
-            "tags": {
-                "Name": "mmw-tiler",
-                "Version": "{{user `version`}}",
-                "Branch": "{{user `branch`}}",
-                "Created": "{{ isotime }}",
-                "Service": "Tiler",
-                "Environment": "{{user `stack_type`}}"
-            },
-            "associate_public_ip_address": true
-        },
-        {
             "name": "mmw-worker",
             "type": "amazon-ebs",
             "region": "{{user `aws_region`}}",
@@ -126,18 +104,6 @@
             ],
             "only": [
                 "mmw-app"
-            ]
-        },
-        {
-            "type": "ansible-local",
-            "playbook_file": "ansible/tile-servers.yml",
-            "playbook_dir": "ansible",
-            "inventory_file": "ansible/inventory/packer-tile-server",
-            "extra_arguments": [
-                "--user 'ubuntu' --extra-vars 'tiler_deploy_branch={{user `version`}}'"
-            ],
-            "only": [
-                "mmw-tiler"
             ]
         },
         {

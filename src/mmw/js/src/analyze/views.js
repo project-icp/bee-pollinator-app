@@ -16,8 +16,6 @@ var $ = require('jquery'),
     coreUtils = require('../core/utils'),
     chart = require('../core/chart'),
     utils = require('../core/utils'),
-    pointSourceLayer = require('../core/pointSourceLayer'),
-    catchmentWaterQualityLayer = require('../core/catchmentWaterQualityLayer'),
     windowTmpl = require('./templates/window.html'),
     analyzeResultsTmpl = require('./templates/analyzeResults.html'),
     aoiHeaderTmpl = require('./templates/aoiHeader.html'),
@@ -417,55 +415,6 @@ var PointSourceTableView = Marionette.CompositeView.extend({
     ui: {
         'pointSourceTR': 'tr.point-source',
         'pointSourceId': '.point-source-id'
-    },
-
-    events: {
-        'click @ui.pointSourceId': 'panToPointSourceMarker',
-        'mouseout @ui.pointSourceId': 'removePointSourceMarker',
-        'mouseover @ui.pointSourceTR': 'addPointSourceMarkerToMap',
-        'mouseout @ui.pointSourceTR': 'removePointSourceMarker'
-    },
-
-    createPointSourceMarker: function(data) {
-        var latLng = L.latLng([data.lat, data.lng]);
-
-        this.marker = L.circleMarker(latLng, {
-            fillColor: "#ff7800",
-            weight: 0,
-            fillOpacity: 0.75
-        }).bindPopup(new pointSourceLayer.PointSourcePopupView({
-          model: new Backbone.Model(data)
-      }).render().el, { closeButton: false });
-    },
-
-    addPointSourceMarkerToMap: function(e) {
-        var data = $(e.currentTarget).find('.point-source-id').data(),
-            map = App.getLeafletMap();
-
-        this.createPointSourceMarker(data);
-
-        this.marker.addTo(map);
-    },
-
-    panToPointSourceMarker: function(e) {
-        var map = App.getLeafletMap();
-
-        if (!this.marker) {
-          var data = $(e.currentTarget).data();
-          this.createPointSourceMarker(data);
-        }
-
-        this.marker.addTo(map);
-        map.panTo(this.marker.getLatLng());
-        this.marker.openPopup();
-    },
-
-    removePointSourceMarker: function() {
-        var map = App.getLeafletMap();
-
-        if (this.marker) {
-            map.removeLayer(this.marker);
-        }
     }
 });
 
@@ -510,62 +459,6 @@ var CatchmentWaterQualityTableView = Marionette.CompositeView.extend({
     ui: {
         'catchmentWaterQualityTR': 'tr.catchment-water-quality',
         'catchmentWaterQualityId': '.catchment-water-quality-id'
-    },
-
-    events: {
-        'click @ui.catchmentWaterQualityId': 'panToCatchmentPolygon',
-        'mouseout @ui.catchmentWaterQualityId': 'removeCatchmentPolygon',
-        'mouseover @ui.catchmentWaterQualityTR': 'addCatchmentToMap',
-        'mouseout @ui.catchmentWaterQualityTR': 'removeCatchmentPolygon'
-    },
-
-    createCatchmentPolygon: function(data) {
-        var geom = utils.geomForIdInCatchmentWaterQualityCollection(this.collection.models,
-            'nord', data.nord);
-        var geoJson = {
-            "type": "Feature",
-            "geometry": JSON.parse(geom),
-        };
-        this.catchmentPolygon = L.geoJson(geoJson, {
-            style: {
-                fillColor: '#ff7800',
-                fillOpacity: 0.5
-            }
-        }).bindPopup(new catchmentWaterQualityLayer.CatchmentWaterQualityPopupView({
-          model: new Backbone.Model(data)
-      }).render().el, { closeButton: false });
-    },
-
-    addCatchmentToMap: function(e) {
-        var data = $(e.currentTarget).find('.catchment-water-quality-id').data(),
-            map = App.getLeafletMap();
-
-        this.createCatchmentPolygon(data);
-
-        this.catchmentPolygon.addTo(map);
-    },
-
-    panToCatchmentPolygon: function(e) {
-        var map = App.getLeafletMap();
-        var data = $(e.currentTarget).data();
-
-        if (!this.catchmentPolygon) {
-          this.createCatchmentPolygon(data);
-        }
-        var geom = utils.geomForIdInCatchmentWaterQualityCollection(this.collection.models,
-                    'nord', data.nord);
-        this.catchmentPolygon.addTo(map);
-        map.panInsideBounds(this.catchmentPolygon.getBounds());
-        var popUpLocationGeoJSON = utils.findCenterOfShapeIntersection(JSON.parse(geom), App.map.get('areaOfInterest'));
-        this.catchmentPolygon.openPopup(L.GeoJSON.coordsToLatLng(popUpLocationGeoJSON.geometry.coordinates));
-    },
-
-    removeCatchmentPolygon: function() {
-        var map = App.getLeafletMap();
-
-        if (this.catchmentPolygon) {
-            map.removeLayer(this.catchmentPolygon);
-        }
     }
 });
 

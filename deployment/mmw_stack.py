@@ -72,7 +72,7 @@ def main():
                                     parents=[common_parser])
     mmw_ami.add_argument('--machine-type', type=str,
                          nargs=argparse.ONE_OR_MORE,
-                         choices=['mmw-app', 'mmw-tiler', 'mmw-worker',
+                         choices=['mmw-app', mmw-worker',
                                   'mmw-monitoring'],
                          default=None, help='Machine type to create AMI')
     mmw_ami.set_defaults(func=create_ami)
@@ -83,7 +83,7 @@ def main():
                                           parents=[common_parser])
     mmw_prune_ami.add_argument('--machine-type', type=str, required=True,
                                nargs=argparse.ONE_OR_MORE,
-                               choices=['mmw-app', 'mmw-tiler', 'mmw-worker',
+                               choices=['mmw-app', 'mmw-worker',
                                         'mmw-monitoring'],
                                help='AMI type to prune')
     mmw_prune_ami.add_argument('--keep', type=int, default=10,

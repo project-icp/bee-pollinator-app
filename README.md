@@ -6,7 +6,6 @@ A combination of Vagrant 1.6+ and Ansible 1.8+ is used to setup the development 
 
 - `app`
 - `services`
-- `tiler`
 - `worker`
 
 The `app` virtual machine contains an instance of the Django application, `services` contains:
@@ -18,11 +17,6 @@ The `app` virtual machine contains an instance of the Django application, `servi
 - Kibana
 - Graphite
 - Statsite
-
-`tiler` contains:
-
-- Windshaft
-- Mapnik
 
 `worker` contains:
 
@@ -114,7 +108,6 @@ PostgreSQL             | 5432 | `psql -h localhost`
 pgweb                  | 5433 | [http://localhost:5433](http://localhost:5433)
 Redis                  | 6379 | `redis-cli -h localhost 6379`
 Testem                 | 7357 | [http://localhost:7357](http://localhost:7357)
-Tiler                  | 4000 | [http://localhost:4000](http://localhost:4000)
 Spark Job Server       | 8090 | [http://localhost:8090](http://localhost:8090)
 
 ### Caching

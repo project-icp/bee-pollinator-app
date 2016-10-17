@@ -11,7 +11,6 @@ LOGGER.setLevel(logging.INFO)
 MACHINE_TYPE_MAPPING = {
     'mmw-app': 'Application',
     'mmw-monitoring': 'Monitoring',
-    'mmw-tiler': 'Tiler',
     'mmw-worker': 'Worker',
 }
 
