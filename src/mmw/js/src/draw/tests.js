@@ -63,7 +63,7 @@ describe('Draw', function() {
             // will disable all drawing tools.
             assert.equal($el.find('.disabled').size(), 0);
             model.disableTools();
-            assert.equal($el.find('.disabled').size(), 3);
+            assert.equal($el.find('.disabled').size(), 1);
             model.enableTools();
             assert.equal($el.find('.disabled').size(), 0);
         });
