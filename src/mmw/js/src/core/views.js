@@ -212,7 +212,7 @@ var MapView = Marionette.ItemView.extend({
         this._leafletMap = map;
         this._areaOfInterestLayer = new L.FeatureGroup();
         this._modificationsLayer = new L.FeatureGroup();
-        this.baseLayers = this.buildLayers(settings.get('base_layers'));
+        // this.baseLayers = this.buildLayers(settings.get('base_layers'));
 
         if (!options.interactiveMode) {
             this.setMapToNonInteractive();
@@ -230,6 +230,7 @@ var MapView = Marionette.ItemView.extend({
         this.setMapEvents();
         this.setupGeoLocation(maxGeolocationAge);
 
+        /*
         var initialLayer = this.baseLayers[options.initialLayerName];
 
         if (initialLayer) {
@@ -238,6 +239,7 @@ var MapView = Marionette.ItemView.extend({
 
         map.addLayer(this._areaOfInterestLayer);
         map.addLayer(this._modificationsLayer);
+        */
     },
 
     setupGeoLocation: function(maxAge) {
