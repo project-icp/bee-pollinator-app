@@ -87,11 +87,8 @@ def get_model_packages():
 
 
 def get_client_settings(request):
-    EMBED_FLAG = settings.ITSI['embed_flag']
-
     client_settings = {
         'client_settings': json.dumps({
-            EMBED_FLAG: request.session.get(EMBED_FLAG, False),
             'draw_tools': settings.DRAW_TOOLS,
             'map_controls': settings.MAP_CONTROLS,
             'model_packages': get_model_packages(),
