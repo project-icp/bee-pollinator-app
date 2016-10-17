@@ -3,7 +3,7 @@
 </div>
 <div class="project-title">
     <h3 class="light">{{ name }}</h3>
-    {% if editable or is_new or itsi %}
+    {% if editable or is_new %}
         <div id="project-settings" class="dropdown pull-right">
             <button class="btn btn-sm btn-icon light dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
             <i class="fa fa-caret-down"></i>
@@ -20,10 +20,7 @@
                 {% if is_new %}
                     <li role="presentation"><a role="menuitem" tabindex="-1" id="save-project">Save</a></li>
                 {% endif %}
-                {% if itsi %}
-                    <li role="presentation"><a role="menuitem" tabindex="-1" id="itsi-clone">Embed in ITSI</a></li>
-                {% endif %}
-                {% if user and not itsi_embed %}
+                {% if user %}
                     <li role="separator" class="divider"></li>
                     <li role="presentation"><a role="menuitem" tabindex="-1" data-url="/projects/">My Projects</a></li>
                 {% endif %}
