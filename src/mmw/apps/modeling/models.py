@@ -9,10 +9,8 @@ from django.contrib.auth.models import User
 
 class Project(models.Model):
     TR55 = 'tr-55'
-    GWLFE = 'gwlfe'
     MODEL_PACKAGES = (
         (TR55, 'Site Storm Model'),
-        (GWLFE, 'Watershed Multi-Year Model'),
     )
 
     user = models.ForeignKey(User)
@@ -42,7 +40,7 @@ class Project(models.Model):
     gis_data = models.TextField(
         null=True,
         help_text='Serialized JSON representation of additional'
-                  ' data gathering steps, such as MapShed.')
+                  ' data gathering steps.')
 
     def __unicode__(self):
         return self.name
