@@ -25,8 +25,6 @@ var DrawController = {
                 model: toolbarModel
             });
 
-        toolbarModel.set('predefinedShapeTypes', settings.get('boundary_layers'));
-
         App.rootView.geocodeSearchRegion.show(geocodeSearch);
         App.rootView.drawToolsRegion.show(toolbarView);
 
