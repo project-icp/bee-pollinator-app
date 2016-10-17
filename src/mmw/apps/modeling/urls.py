@@ -29,10 +29,7 @@ urlpatterns = patterns(
     url(r'start/analyze/catchment-water-quality/$',
         views.start_analyze_catchment_water_quality,
         name='start_analyze_catchment_water_quality'),
-    url(r'start/mapshed/$', views.start_mapshed, name='start_mapshed'),
     url(r'jobs/' + uuid_regex, views.get_job, name='get_job'),
     url(r'start/tr55/$', views.start_tr55, name='start_tr55'),
-    url(r'start/gwlfe/$', views.start_gwlfe, name='start_gwlfe'),
-    url(r'export/gms/?$', views.export_gms, name='export_gms'),
     url(r'point-source/$', views.drb_point_sources, name='drb_point_sources'),
 )

@@ -92,7 +92,9 @@ def get_client_settings(request):
             'draw_tools': settings.DRAW_TOOLS,
             'map_controls': settings.MAP_CONTROLS,
             'model_packages': get_model_packages(),
-            'mapshed_max_area': settings.GWLFE_CONFIG['MaxAoIArea']
+            # TODO Remove/rename when we know if there are max area contraints
+            # for bee model
+            'mapshed_max_area': settings.DRAW_CONFIG['MaxAoIArea']
         }),
         'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY,
     }

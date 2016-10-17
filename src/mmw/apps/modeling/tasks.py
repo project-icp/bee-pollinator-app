@@ -5,10 +5,8 @@ from __future__ import absolute_import
 
 import logging
 import json
-import requests
 
 from math import sqrt
-from StringIO import StringIO
 
 from celery import shared_task
 
@@ -20,7 +18,6 @@ from apps.modeling.calcs import (animal_population,
                                  catchment_water_quality)
 
 from tr55.model import simulate_day
-from gwlfe import gwlfe, parser
 
 logger = logging.getLogger(__name__)
 
@@ -337,44 +334,3 @@ def build_tr55_modification_input(pieces, censuses):
         census.update(change)
 
     return censuses
-
-
-@shared_task
-def run_gwlfe(model_input, inputmod_hash):
-    """
-    Given a model_input resulting from a MapShed run, converts that dictionary
-    to an intermediate GMS file representation, which is then parsed by GWLF-E
-    to create the final data model z. We run GWLF-E on this final data model
-    and return the results.
-
-    This intermediate GMS file representation needs to be created because most
-    of GWLF-E logic is written to handle GMS files, and to support dictionaries
-    directly we would have to replicate all that logic. Thus, it is easier to
-    simply create a GMS file and have it read that.
-    """
-    output = to_gms_file(model_input)
-
-    reader = parser.GmsReader(output)
-    z = reader.read()
-
-    result = gwlfe.run(z)
-    result['inputmod_hash'] = inputmod_hash
-
-    return result
-
-
-def to_gms_file(mapshed_data):
-    """
-    Given a dictionary of MapShed data, uses GWLF-E to convert it to a GMS file
-    """
-    mapshed_areas = [round(a, 1) for a in mapshed_data['Area']]
-    mapshed_data['Area'] = mapshed_areas
-
-    pre_z = parser.DataModel(mapshed_data)
-    output = StringIO()
-    writer = parser.GmsWriter(output)
-    writer.write(pre_z)
-
-    output.seek(0)
-
-    return output

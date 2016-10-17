@@ -14,20 +14,15 @@ from rest_framework.permissions import (AllowAny,
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import now
 from django.conf import settings
-from django.db import connection
-from django.contrib.gis.geos import GEOSGeometry
-from django.http import HttpResponse
-from django.core.servers.basehttp import FileWrapper
 
 import celery
-from celery import chain, group
+from celery import chain
 
 from retry import retry
 
 from apps.core.models import Job
 from apps.core.tasks import save_job_error, save_job_result
 from apps.modeling import tasks
-from apps.modeling.mapshed.tasks import geop_tasks, collect_data, combine
 from apps.modeling.models import Project, Scenario
 from apps.modeling.serializers import (ProjectSerializer,
                                        ProjectListingSerializer,
@@ -160,163 +155,6 @@ def scenario(request, scen_id):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-@decorators.api_view(['POST'])
-@decorators.permission_classes((AllowAny, ))
-def start_gwlfe(request, format=None):
-    """
-    Starts a job to run GWLF-E.
-    """
-    user = request.user if request.user.is_authenticated() else None
-    created = now()
-    model_input = json.loads(request.POST['model_input'])
-    inputmod_hash = request.POST.get('inputmod_hash', '')
-    job = Job.objects.create(created_at=created, result='', error='',
-                             traceback='', user=user, status='started')
-
-    task_list = _initiate_gwlfe_job_chain(model_input, inputmod_hash, job.id)
-
-    job.uuid = task_list.id
-    job.save()
-
-    return Response(
-        {
-            'job': task_list.id,
-            'status': 'started',
-        }
-    )
-
-
-def _initiate_gwlfe_job_chain(model_input, inputmod_hash, job_id):
-    chain = (tasks.run_gwlfe.s(model_input, inputmod_hash)
-             .set(exchange=MAGIC_EXCHANGE, routing_key=choose_worker()) |
-             save_job_result.s(job_id, model_input)
-             .set(exchange=MAGIC_EXCHANGE, routing_key=choose_worker()))
-    errback = save_job_error.s(job_id).set(exchange=MAGIC_EXCHANGE,
-                                           routing_key=choose_worker())
-
-    return chain.apply_async(link_error=errback)
-
-
-@decorators.api_view(['POST'])
-@decorators.permission_classes((AllowAny, ))
-def start_mapshed(request, format=None):
-    """
-    Starts a MapShed job which gathers data from various sources which
-    eventually is input to start_gwlfe to model the watershed.
-    """
-    user = request.user if request.user.is_authenticated() else None
-    created = now()
-    mapshed_input = json.loads(request.POST['mapshed_input'])
-    job = Job.objects.create(created_at=created, result='', error='',
-                             traceback='', user=user, status='started')
-
-    task_list = _initiate_mapshed_job_chain(mapshed_input, job.id)
-
-    job.uuid = task_list.id
-    job.save()
-
-    return Response(
-        {
-            'job': task_list.id,
-            'status': 'started',
-        }
-    )
-
-
-def _initiate_mapshed_job_chain(mapshed_input, job_id):
-    errback = save_job_error.s(job_id).set(exchange=MAGIC_EXCHANGE,
-                                           routing_key=choose_worker())
-
-    geom = GEOSGeometry(json.dumps(mapshed_input['area_of_interest']),
-                        srid=4326)
-
-    chain = (group(geop_tasks(geom, errback, MAGIC_EXCHANGE, choose_worker)) |
-             combine.s().set(exchange=MAGIC_EXCHANGE,
-                             routing_key=choose_worker()) |
-             collect_data.s(geom.geojson).set(link_error=errback,
-                                              exchange=MAGIC_EXCHANGE,
-                                              routing_key=choose_worker()) |
-             save_job_result.s(job_id, mapshed_input)
-             .set(exchange=MAGIC_EXCHANGE, routing_key=choose_worker()))
-
-    return chain.apply_async(link_error=errback)
-
-
-@decorators.api_view(['POST'])
-@decorators.permission_classes((AllowAny, ))
-def export_gms(request, format=None):
-    mapshed_data = json.loads(request.POST.get('mapshed_data', '{}'))
-    filename = request.POST.get('filename', None)
-
-    if not mapshed_data or not filename:
-        return Response('Must specify mapshed_data and filename',
-                        status.HTTP_400_BAD_REQUEST)
-
-    gms_file = tasks.to_gms_file(mapshed_data)
-
-    response = HttpResponse(FileWrapper(gms_file), content_type='text/plain')
-    response['Content-Disposition'] = 'attachment; '\
-                                      'filename={}.gms'.format(filename)
-    return response
-
-
-@decorators.api_view(['POST'])
-@decorators.permission_classes((AllowAny, ))
-def start_analyze(request, format=None):
-    user = request.user if request.user.is_authenticated() else None
-    area_of_interest = request.POST['area_of_interest']
-    exchange = MAGIC_EXCHANGE
-    routing_key = choose_worker()
-
-    return start_celery_job([
-        tasks.start_histogram_job.s(area_of_interest)
-             .set(exchange=exchange, routing_key=routing_key),
-        tasks.get_histogram_job_results.s()
-             .set(exchange=exchange, routing_key=routing_key),
-        tasks.histogram_to_survey_census.s()
-             .set(exchange=exchange, routing_key=choose_worker())
-    ], area_of_interest, user)
-
-
-@decorators.api_view(['POST'])
-@decorators.permission_classes((AllowAny, ))
-def start_analyze_animals(request, format=None):
-    user = request.user if request.user.is_authenticated() else None
-    area_of_interest = request.POST['area_of_interest']
-    exchange = MAGIC_EXCHANGE
-
-    return start_celery_job([
-        tasks.analyze_animals.s(area_of_interest)
-             .set(exchange=exchange, routing_key=choose_worker())
-    ], area_of_interest, user)
-
-
-@decorators.api_view(['POST'])
-@decorators.permission_classes((AllowAny, ))
-def start_analyze_pointsource(request, format=None):
-    user = request.user if request.user.is_authenticated() else None
-    area_of_interest = request.POST['area_of_interest']
-    exchange = MAGIC_EXCHANGE
-
-    return start_celery_job([
-        tasks.analyze_pointsource.s(area_of_interest)
-             .set(exchange=exchange, routing_key=choose_worker())
-    ], area_of_interest, user)
-
-
-@decorators.api_view(['POST'])
-@decorators.permission_classes((AllowAny, ))
-def start_analyze_catchment_water_quality(request, format=None):
-    user = request.user if request.user.is_authenticated() else None
-    area_of_interest = request.POST['area_of_interest']
-    exchange = MAGIC_EXCHANGE
-
-    return start_celery_job([
-        tasks.analyze_catchment_water_quality.s(area_of_interest)
-             .set(exchange=exchange, routing_key=choose_worker())
-    ], area_of_interest, user)
-
-
 @decorators.api_view(['GET'])
 @decorators.permission_classes((AllowAny, ))
 def get_job(request, job_uuid, format=None):
@@ -443,46 +281,6 @@ def _construct_tr55_job_chain(model_input, job_id):
                      .set(exchange=exchange, routing_key=choose_worker()))
 
     return job_chain
-
-
-@decorators.api_view(['GET'])
-@decorators.permission_classes((AllowAny, ))
-def drb_point_sources(request):
-    query = '''
-          SELECT ST_X(geom) as lon, ST_Y(geom) as lat, city, state, npdes_id,
-                 mgd, kgn_yr, kgp_yr, facilityname
-          FROM ms_pointsource_drb
-          '''
-
-    point_source_results = {u'type': u'FeatureCollection', u'features': []}
-
-    with connection.cursor() as cursor:
-        cursor.execute(query)
-
-        point_source_array = [
-            {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': [row[0], row[1]],
-                },
-                'properties': {
-                    'city': row[2],
-                    'state': row[3],
-                    'npdes_id': row[4],
-                    'mgd': float(row[5]) if row[5] else None,
-                    'kgn_yr': float(row[6]) if row[6] else None,
-                    'kgp_yr': float(row[7]) if row[7] else None,
-                    'facilityname': row[8]
-                }
-
-            } for row in cursor.fetchall()
-        ]
-
-    point_source_results['features'] = point_source_array
-
-    return Response(json.dumps(point_source_results),
-                    headers={'Cache-Control': 'max-age: 604800'})
 
 
 def start_celery_job(task_list, job_input, user=None,

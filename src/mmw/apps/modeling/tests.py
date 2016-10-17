@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from __future__ import division
 
 from apps.core.models import Job
-from apps.modeling import example_aois, geoprocessing, tasks, views
+from apps.modeling import geoprocessing, views
 from django.contrib.auth.models import User
 
 from django.test import TestCase
