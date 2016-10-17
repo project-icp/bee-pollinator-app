@@ -579,7 +579,6 @@ var MapView = Marionette.ItemView.extend({
                     return drawUtils.polygonDefaults;
                 }});
             this._areaOfInterestLayer.addLayer(layer);
-            this.addAdditionalAoiShapes();
         }
     },
 
@@ -598,43 +597,9 @@ var MapView = Marionette.ItemView.extend({
                 applyMask(this._areaOfInterestLayer, layer);
                 this.model.set('maskLayerApplied', true);
                 this._leafletMap.fitBounds(layer.getBounds(), { reset: true });
-                this.addAdditionalAoiShapes();
             } catch (ex) {
                 console.log('Error adding Leaflet layer (invalid GeoJSON object)');
             }
-        }
-    },
-
-    addAdditionalAoiShapes: function() {
-        var self = this,
-            additionalShapes = this.model.get('areaOfInterestAdditionals');
-
-        if (additionalShapes) {
-            _.each(additionalShapes.features, function(geoJSONpoint) {
-                function createMarkerIcon(iconName) {
-                    return L.divIcon({
-                        className: 'marker-rwd marker-rwd-' + iconName,
-                        iconSize: [16,16]
-                    });
-                }
-
-                var newLayer = L.geoJson(geoJSONpoint, {
-                    pointToLayer: function(feature, latLngForPoint) {
-                        var customIcon = feature.properties.original ?
-                            createMarkerIcon('original-point') :
-                            createMarkerIcon('nearest-stream-point');
-                        return L.marker(latLngForPoint, { icon: customIcon });
-                    },
-                    onEachFeature: function(feature, layer) {
-                        var popupMessage = feature.properties.original ?
-                            "Original clicked outlet point" :
-                            "Outlet point snapped to nearest stream";
-                        layer.bindPopup(popupMessage);
-                    }
-                });
-
-                self._areaOfInterestLayer.addLayer(newLayer);
-            });
         }
     },
 
@@ -733,7 +698,7 @@ var MapView = Marionette.ItemView.extend({
 
     updateDrbLayerZoomLevel: function(e) {
         var layerMaxZoom = e.layer.options.maxZoom;
-        var adjSettings = 
+        var adjSettings =
             _.map(settings.get('stream_layers'),
                   function(o) {
                       if (o.code === 'drb_streams_v2') {

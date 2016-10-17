@@ -342,7 +342,7 @@ class Worker(StackNode):
         return ['#cloud-config\n',
                 '\n',
                 'mounts:\n',
-                '  - [xvdf, /opt/rwd-data, ext4, "defaults,nofail,discard", 0, 2]\n'  # NOQA
+                '  - [xvdf, ext4, "defaults,nofail,discard", 0, 2]\n'  # NOQA
                 '\n',
                 'write_files:\n',
                 '  - path: /etc/mmw.d/env/MMW_STACK_COLOR\n',

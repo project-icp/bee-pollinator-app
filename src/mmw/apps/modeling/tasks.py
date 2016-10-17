@@ -29,31 +29,6 @@ CM_PER_INCH = 2.54
 ACRES_PER_SQM = 0.000247105
 
 
-@shared_task
-def start_rwd_job(location, snapping):
-    """
-    Calls the Rapid Watershed Delineation endpoint
-    that is running in the Docker container, and returns
-    the response unless there is an out-of-watershed error
-    which raises an exception.
-    """
-    location = json.loads(location)
-    lat, lng = location
-    rwd_url = 'http://localhost:5000/rwd/%f/%f' % (lat, lng)
-
-    # The Webserver defaults to enable snapping, uses 1 (true) 0 (false)
-    if not snapping:
-        rwd_url += '?snapping=0'
-
-    logger.debug('rwd request: %s' % rwd_url)
-
-    response_json = requests.get(rwd_url).json()
-    if 'error' in response_json:
-        raise Exception(response_json['error'])
-
-    return response_json
-
-
 @shared_task(bind=True, default_retry_delay=1, max_retries=42)
 def start_histogram_job(self, json_polygon):
     """ Calls the histogram_start function to
@@ -65,9 +40,7 @@ def start_histogram_job(self, json_polygon):
     the results.
     """
 
-    # Normalize AOI to handle single-ring multipolygon
-    # inputs sent from RWD as well as shapes sent from the front-end
-    polygon = parse_single_ring_multipolygon(json.loads(json_polygon))
+    polygon = json.loads(json_polygon)
 
     return {
         'pixel_width': aoi_resolution(polygon),
@@ -160,23 +133,6 @@ def analyze_catchment_water_quality(area_of_interest):
     return {'survey': [catchment_water_quality(area_of_interest)]}
 
 
-def parse_single_ring_multipolygon(area_of_interest):
-    """
-    Given a multipolygon comprising just a single ring structured in a
-    five-dimensional array, remove one level of nesting and make the AOI's
-    coordinates a four-dimensional array. Otherwise, no op.
-    """
-
-    if type(area_of_interest['coordinates'][0][0][0][0]) is list:
-        multipolygon_shapes = area_of_interest['coordinates'][0]
-        if len(multipolygon_shapes) > 1:
-            raise Exception('Unable to parse multi-ring RWD multipolygon')
-        else:
-            area_of_interest['coordinates'] = multipolygon_shapes
-
-    return area_of_interest
-
-
 def aoi_resolution(area_of_interest):
     pairs = area_of_interest['coordinates'][0][0]
 
@@ -251,9 +207,7 @@ def run_tr55(censuses, model_input, cached_aoi_census=None):
     # Get precipitation and cell resolution
     precip = get_precip(model_input)
 
-    # Normalize AOI to handle single-ring multipolygon
-    # inputs sent from RWD as well as shapes sent from the front-end
-    aoi = parse_single_ring_multipolygon(model_input.get('area_of_interest'))
+    aoi = model_input.get('area_of_interest')
 
     width = aoi_resolution(aoi)
     resolution = width * width

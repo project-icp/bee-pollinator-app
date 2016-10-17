@@ -162,36 +162,6 @@ def scenario(request, scen_id):
 
 @decorators.api_view(['POST'])
 @decorators.permission_classes((AllowAny, ))
-def start_rwd(request, format=None):
-    """
-    Starts a job to run Rapid Watershed Delineation on a point-based location.
-    """
-    user = request.user if request.user.is_authenticated() else None
-    created = now()
-    location = request.POST['location']
-
-    # Parse out the JS style T/F to a boolean
-    snappingParam = request.POST['snappingOn']
-    snapping = True if snappingParam == 'true' else False
-
-    job = Job.objects.create(created_at=created, result='', error='',
-                             traceback='', user=user, status='started')
-
-    task_list = _initiate_rwd_job_chain(location, snapping, job.id)
-
-    job.uuid = task_list.id
-    job.save()
-
-    return Response(
-        {
-            'job': task_list.id,
-            'status': 'started',
-        }
-    )
-
-
-@decorators.api_view(['POST'])
-@decorators.permission_classes((AllowAny, ))
 def start_gwlfe(request, format=None):
     """
     Starts a job to run GWLF-E.
@@ -387,19 +357,6 @@ def choose_worker():
     workers = filter(predicate,
                      get_list_of_workers())
     return random.choice(workers)
-
-
-def _initiate_rwd_job_chain(location, snapping, job_id, testing=False):
-    exchange = MAGIC_EXCHANGE
-    routing_key = choose_worker()
-    errback = save_job_error.s(job_id).set(exchange=MAGIC_EXCHANGE,
-                                           routing_key=choose_worker())
-
-    return chain(tasks.start_rwd_job.s(location, snapping)
-                 .set(exchange=exchange, routing_key=routing_key),
-                 save_job_result.s(job_id, location)
-                 .set(exchange=exchange, routing_key=choose_worker())) \
-        .apply_async(link_error=errback)
 
 
 @decorators.api_view(['POST'])

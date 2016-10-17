@@ -1,3 +1,0 @@
----
-dependencies:
-  - { role: "model-my-watershed.docker" }
