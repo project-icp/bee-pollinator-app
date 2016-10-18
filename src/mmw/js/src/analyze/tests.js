@@ -65,11 +65,7 @@ function testAnalysisType(type) {
                 actualTableRows = $('table tbody td').map(function() {
                     return $(this).text().trim();
                 }).toArray();
-            console.log("expected rows => " + expectedTableRows);
-            console.log("actual rows => " + actualTableRows);
-
-            console.log("expected headers => " + expectedTableHeaders);
-            console.log("actual headers => " + actualTableHeaders);
+        
             assert.deepEqual(expectedTableHeaders, actualTableHeaders);
             assert.deepEqual(expectedTableRows, actualTableRows);
 
