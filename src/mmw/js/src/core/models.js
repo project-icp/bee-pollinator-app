@@ -224,27 +224,6 @@ var TaskMessageViewModel = Backbone.Model.extend({
     }
 });
 
-// A collection of data points, useful for tables.
-var LandUseCensusCollection = Backbone.Collection.extend({
-    comparator: 'nlcd'
-});
-
-var SoilCensusCollection = Backbone.Collection.extend({
-    comparator: 'code'
-});
-
-var AnimalCensusCollection = Backbone.Collection.extend({
-    comparator: 'type'
-});
-
-var PointSourceCensusCollection = Backbone.Collection.extend({
-    comparator: 'city'
-});
-
-var CatchmentWaterQualityCensusCollection = Backbone.Collection.extend({
-    comparator: 'nord'
-});
-
 var GeoModel = Backbone.Model.extend({
     M_IN_KM: 1000000,
 
@@ -296,11 +275,6 @@ module.exports = {
     MapModel: MapModel,
     TaskModel: TaskModel,
     TaskMessageViewModel: TaskMessageViewModel,
-    LandUseCensusCollection: LandUseCensusCollection,
-    SoilCensusCollection: SoilCensusCollection,
-    AnimalCensusCollection: AnimalCensusCollection,
-    PointSourceCensusCollection: PointSourceCensusCollection,
-    CatchmentWaterQualityCensusCollection: CatchmentWaterQualityCensusCollection,
     GeoModel: GeoModel,
     AreaOfInterestModel: AreaOfInterestModel,
     AppStateModel: AppStateModel
