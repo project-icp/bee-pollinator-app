@@ -3935,23 +3935,6 @@
         }
       }
     },
-    "turf-centroid": {
-      "version": "3.0.12",
-      "from": "turf-centroid@*",
-      "resolved": "https://registry.npmjs.org/turf-centroid/-/turf-centroid-3.0.12.tgz",
-      "dependencies": {
-        "turf-meta": {
-          "version": "3.0.12",
-          "from": "turf-meta@>=3.0.12 <4.0.0",
-          "resolved": "https://registry.npmjs.org/turf-meta/-/turf-meta-3.0.12.tgz"
-        },
-        "turf-helpers": {
-          "version": "3.0.12",
-          "from": "turf-helpers@>=3.0.12 <4.0.0",
-          "resolved": "https://registry.npmjs.org/turf-helpers/-/turf-helpers-3.0.12.tgz"
-        }
-      }
-    },
     "turf-destination": {
       "version": "1.2.1",
       "from": "https://registry.npmjs.org/turf-destination/-/turf-destination-1.2.1.tgz",

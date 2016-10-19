@@ -3,8 +3,7 @@
 var _ = require('underscore'),
     lodash = require('lodash'),
     md5 = require('blueimp-md5').md5,
-    intersect = require('turf-intersect'),
-    centroid = require('turf-centroid');
+    intersect = require('turf-intersect');
 
 var M2_IN_KM2 = 1000000;
 var noData = 'No Data';
@@ -282,29 +281,6 @@ var utils = {
 
             return l < r ? 1 : l > r ? -1 : 0;
         };
-    },
-
-    totalForPointSourceCollection: function(collection, key) {
-        return lodash.sum(lodash.map(collection, function(element) {
-            return element.attributes[key] || 0;
-        }));
-    },
-
-    totalForCatchmentWaterQualityCollection: function(collection, key, normalizerKey) {
-        return lodash.sum(lodash.map(collection, function(element) {
-            return element.attributes[key] / element.attributes[normalizerKey] || 0;
-        }));
-    },
-
-    geomForIdInCatchmentWaterQualityCollection: function(collection, key, id) {
-        return lodash.find(collection, function(element) {
-            return element.attributes[key] === id;
-        }).attributes['geom'] || null;
-    },
-
-    findCenterOfShapeIntersection: function(shapeOne, shapeTwo) {
-        var intersection = intersect(shapeOne, shapeTwo);
-        return centroid(intersection);
     },
 
     // A JavaScript implementation for when we can't use the Nunjucks filter
