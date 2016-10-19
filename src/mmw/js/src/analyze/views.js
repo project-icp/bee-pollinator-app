@@ -68,8 +68,9 @@ var ResultsView = Marionette.LayoutView.extend({
             landResults = _.find(analysisResults, function(element) {
                     return element.name === 'land';
             });
-
-        if (modelPackageName === 'gwlfe' && settings.get('mapshed_max_area')) {
+        // Removed Mapshed+GWLFE, kept max area constraints for reference
+        // incase bee model has similar constraints
+        if (settings.get('mapshed_max_area')) {
             var areaInSqKm = coreUtils.changeOfAreaUnits(aoiModel.get('area'),
                                                          aoiModel.get('units'),
                                                          'km<sup>2</sup>');

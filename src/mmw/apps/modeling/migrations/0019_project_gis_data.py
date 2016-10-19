@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='project',
             name='gis_data',
-            field=models.TextField(help_text='Serialized JSON representation of additional data gathering steps, such as MapShed.', null=True),
+            field=models.TextField(help_text='Serialized JSON representation of additional data gathering steps.', null=True),
         ),
     ]

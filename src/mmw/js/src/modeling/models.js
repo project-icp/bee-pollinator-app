@@ -11,8 +11,10 @@ var $ = require('jquery'),
     turfErase = require('turf-erase'),
     turfIntersect = require('turf-intersect');
 
+// TODO Remove these when done with fetchGisDataIfNeeded/user input model examples
 var MAPSHED = 'mapshed';
 var GWLFE = 'gwlfe';
+
 var TR55_TASK = 'tr55';
 var TR55_PACKAGE = 'tr-55';
 
@@ -55,20 +57,11 @@ var Tr55TaskModel = coreModels.TaskModel.extend({
     )
 });
 
+// TODO Remove when done changing fetchGisDataIfNeeded example
 var MapshedTaskModel = coreModels.TaskModel.extend({
     defaults: _.extend(
         {
             taskName: MAPSHED,
-            taskType: 'modeling'
-        },
-        coreModels.TaskModel.prototype.defaults
-    )
-});
-
-var GwlfeTaskModel = coreModels.TaskModel.extend({
-    defaults: _.extend(
-        {
-            taskName: GWLFE,
             taskType: 'modeling'
         },
         coreModels.TaskModel.prototype.defaults
@@ -83,7 +76,6 @@ var ResultModel = Backbone.Model.extend({
         result: null, // The actual result object
         polling: false, // True if currently polling
         active: false, // True if currently selected in Compare UI
-        activeVar: null // For GWLFE, the currently selected variable in the UI
     }
 });
 
@@ -133,7 +125,7 @@ var ProjectModel = Backbone.Model.extend({
         scenarios: null,                // ScenariosCollection
         user_id: 0,                     // User that created the project
         is_activity: false,             // Project that persists across routes
-        gis_data: null,                 // Additionally gathered data, such as MapShed for GWLF-E
+        gis_data: null,                 // Additionally gathered data
         needs_reset: false,             // Should we overwrite project data on next save?
         allow_save: true,               // Is allowed to save to the server - false in compare mode
         aoi_census: null                // JSON blob
@@ -313,6 +305,9 @@ var ProjectModel = Backbone.Model.extend({
     },
 
     /**
+     * Despite there not being any gwlfe model, I've left this
+     * for reference in case the bees need to fetch additional GIS Data:
+
      * If a project is of the GWLFE package, we trigger the mapshed GIS
      * data gathering chain, and poll for it to finish. Once it finishes,
      * we resolve the lock to indicate the project is ready for further
@@ -583,6 +578,8 @@ var ModificationsCollection = Backbone.Collection.extend({
     model: ModificationModel
 });
 
+// TODO Leaving for reference on how to add model with user input.
+// Remove when done using example...
 var GwlfeModificationModel = Backbone.Model.extend({
     defaults: {
         modKey: null,
@@ -867,7 +864,7 @@ var ScenarioModel = Backbone.Model.extend({
                         modification_hash: self.get('modification_hash')
                     })
                 };
-
+            // TODO Remove when done changing fetchGisDataIfNeeded example
             case GWLFE:
                 // Merge the values that came back from Mapshed with the values
                 // in the modifications from the user.
@@ -1020,17 +1017,7 @@ function getControlsForModelPackage(modelPackageName, options) {
                 new ModelPackageControlModel({ name: 'precipitation' })
             ]);
         }
-    } else if (modelPackageName === GWLFE) {
-        if (options && (options.compareMode ||
-                        options.is_current_conditions)) {
-            return new ModelPackageControlsCollection();
-        } else {
-            return new ModelPackageControlsCollection([
-                new ModelPackageControlModel({ name: 'gwlfe_conservation_practice' })
-            ]);
-        }
     }
-
     throw 'Model package not supported ' + modelPackageName;
 }
 
@@ -1038,8 +1025,7 @@ function createTaskModel(modelPackage) {
     switch (modelPackage) {
         case TR55_PACKAGE:
             return new Tr55TaskModel();
-        case GWLFE:
-            return new GwlfeTaskModel();
+        // TODO Remove when done changing fetchGisDataIfNeeded example
         case MAPSHED:
             return new MapshedTaskModel();
     }
@@ -1061,19 +1047,6 @@ function createTaskResultCollection(modelPackage) {
                     result: null
                 }
             ]);
-        case GWLFE:
-            return new ResultCollection([
-                {
-                    name: 'runoff',
-                    displayName: 'Hydrology',
-                    result: null
-                },
-                {
-                    name: 'quality',
-                    displayName: 'Water Quality',
-                    result: null
-                }
-            ]);
     }
     throw 'Model package not supported: ' + modelPackage;
 }
@@ -1087,13 +1060,12 @@ module.exports = {
     ModelPackageControlsCollection: ModelPackageControlsCollection,
     ModelPackageControlModel: ModelPackageControlModel,
     Tr55TaskModel: Tr55TaskModel,
-    GwlfeTaskModel: GwlfeTaskModel,
     TR55_TASK: TR55_TASK,
     TR55_PACKAGE: TR55_PACKAGE,
-    GWLFE: GWLFE,
     ProjectModel: ProjectModel,
     ProjectCollection: ProjectCollection,
     ModificationModel: ModificationModel,
+    // TODO Remove when done with user input modal example
     GwlfeModificationModel: GwlfeModificationModel,
     ModificationsCollection: ModificationsCollection,
     ScenarioModel: ScenarioModel,

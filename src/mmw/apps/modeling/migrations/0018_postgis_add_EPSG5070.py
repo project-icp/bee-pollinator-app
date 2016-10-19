@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('modeling', '0017_add_gwlfe'),
+        ('modeling', '0016_old_scenarios'),
     ]
 
     operations = [

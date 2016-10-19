@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 from __future__ import division
 
 import json
-from urlparse import urljoin
 
 from django.http import Http404
 from django.shortcuts import render_to_response, get_object_or_404, redirect
@@ -92,7 +91,9 @@ def get_client_settings(request):
             'draw_tools': settings.DRAW_TOOLS,
             'map_controls': settings.MAP_CONTROLS,
             'model_packages': get_model_packages(),
-            'mapshed_max_area': settings.GWLFE_CONFIG['MaxAoIArea']
+            # TODO Remove/rename when we know if there are max area contraints
+            # for bee model
+            'mapshed_max_area': settings.DRAW_CONFIG['MaxAoIArea']
         }),
         'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY,
     }

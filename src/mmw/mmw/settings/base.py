@@ -12,8 +12,6 @@ from os import environ
 from os.path import abspath, basename, dirname, join, normpath
 from sys import path
 
-from gwlfe_settings import (GWLFE_DEFAULTS, GWLFE_CONFIG, SOIL_GROUP, # NOQA
-                            SOILP, CURVE_NUMBER)  # NOQA
 
 # Normally you should not import ANYTHING from Django directly
 # into your settings, but ImproperlyConfigured is an exception.
@@ -117,8 +115,6 @@ BROKER_URL = 'redis://{0}:{1}/2'.format(
     environ.get('MMW_CACHE_PORT', 6379))
 
 CELERY_IMPORTS = ('celery.task.http',
-                  # Submodule task is not always autodiscovered
-                  'apps.modeling.mapshed.tasks',
                   )
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
@@ -356,7 +352,6 @@ GEOP = {
     'port': environ.get('MMW_GEOPROCESSING_PORT', '8090'),
     'args': {
         'SummaryJob': 'context=geoprocessing&appName=geoprocessing-%s&classPath=org.wikiwatershed.mmw.geoprocessing.SummaryJob' % environ.get('MMW_GEOPROCESSING_VERSION', '0.1.0'),  # NOQA
-        'MapshedJob': 'context=geoprocessing&appName=geoprocessing-%s&classPath=org.wikiwatershed.mmw.geoprocessing.MapshedJob' % environ.get('MMW_GEOPROCESSING_VERSION', '0.1.0'),  # NOQA
     },
     'json': {
         'nlcdSoilCensus': {
@@ -467,24 +462,22 @@ DRAW_TOOLS = [
     'ResetDraw',
 ]
 
+DRAW_CONFIG = {
+    'MaxAoIArea': 1000,  # Maximum allowed area in square kilometers
+}
+
 MAP_CONTROLS = [
     'LayerAttribution',
     'LocateMeButton',
     'ZoomControl',
 ]
 
-GWLFE = 'gwlfe'
 TR55_PACKAGE = 'tr-55'
 
 MODEL_PACKAGES = [
     {
         'name': TR55_PACKAGE,
         'display_name': 'Site Storm Model',
-        'description': '',
-    },
-    {
-        'name': GWLFE,
-        'display_name': 'Watershed Multi-Year Model',
         'description': '',
     },
 ]

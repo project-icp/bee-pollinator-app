@@ -8,7 +8,7 @@ usage="$(basename "$0") [-h] [-b] [-f] \n
 \n
 where: \n
     -h  show this help text\n
-    -b  load/reload mapshed data\n
+    -b  load/reload bee data\n
     -f  load/reload a specific file\n
 "
 
