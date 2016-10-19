@@ -229,16 +229,8 @@ var MapView = Marionette.ItemView.extend({
         this.setMapEvents();
         this.setupGeoLocation(maxGeolocationAge);
 
-        /*
-        var initialLayer = this.baseLayers[options.initialLayerName];
-
-        if (initialLayer) {
-            map.addLayer(initialLayer);
-        }
-
         map.addLayer(this._areaOfInterestLayer);
         map.addLayer(this._modificationsLayer);
-        */
     },
 
     setupGeoLocation: function(maxAge) {
