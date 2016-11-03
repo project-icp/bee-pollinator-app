@@ -1,0 +1,4 @@
+---
+dependencies:
+  - { role: "bee-pollinator.docker" }
+  - { role: "bee-pollinator.nginx" }

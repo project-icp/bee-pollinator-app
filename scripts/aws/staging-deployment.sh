@@ -2,12 +2,12 @@
 
 set -e
 
-if env | grep -q "MMW_DEPLOY_DEBUG"; then
+if env | grep -q "ICP_DEPLOY_DEBUG"; then
   set -x
 fi
 
 CURRENT_STACK_COLOR=$(aws cloudformation describe-stacks \
-  --profile "${MMW_AWS_PROFILE}" \
+  --profile "${ICP_AWS_PROFILE}" \
   --output text \
   | egrep "TAGS\s+StackColor" \
   | egrep "Blue|Green" \
@@ -32,18 +32,18 @@ fi
 pushd deployment
 
 # Attempt to launch a new stack & cutover DNS
-python mmw_stack.py launch-stacks \
-  --aws-profile "${MMW_AWS_PROFILE}" \
-  --mmw-profile "${MMW_PROFILE}" \
-  --mmw-config-path "${MMW_CONFIG_PATH}" \
+python icp_stack.py launch-stacks \
+  --aws-profile "${ICP_AWS_PROFILE}" \
+  --icp-profile "${ICP_PROFILE}" \
+  --icp-config-path "${ICP_CONFIG_PATH}" \
   --stack-color "${NEW_STACK_COLOR}" \
   --activate-dns
 
 # Remove old stack
-python mmw_stack.py remove-stacks \
-  --aws-profile "${MMW_AWS_PROFILE}" \
-  --mmw-profile "${MMW_PROFILE}" \
-  --mmw-config-path "${MMW_CONFIG_PATH}" \
+python icp_stack.py remove-stacks \
+  --aws-profile "${ICP_AWS_PROFILE}" \
+  --icp-profile "${ICP_PROFILE}" \
+  --icp-config-path "${ICP_CONFIG_PATH}" \
   --stack-color "${CURRENT_STACK_COLOR}" \
 
 curl -s https://api.rollbar.com/api/1/deploy/ \

@@ -64,7 +64,7 @@ class Worker(StackNode):
         'Region': 'us-east-1',
         'StackType': 'Staging',
         'StackColor': 'Green',
-        'KeyName': 'mmw-stg',
+        'KeyName': 'icp-stg',
         'IPAccess': ALLOW_ALL_CIDR,
         'WorkerInstanceType': 't2.micro',
         'WorkerInstanceProfile': 'WorkerInstanceProfile',
@@ -87,7 +87,7 @@ class Worker(StackNode):
         self.default_tags = tags
         self.region = self.get_input('Region')
 
-        self.add_description('Worker stack for MMW')
+        self.add_description('Worker stack for ICP')
 
         # Parameters
         self.color = self.add_parameter(Parameter(
@@ -197,7 +197,7 @@ class Worker(StackNode):
             worker_ami_id = self.get_input('WorkerAMI')
         except MKUnresolvableInputError:
             worker_ami_id = get_recent_ami(self.aws_profile,
-                                           'mmw-worker-*')
+                                           'icp-worker-*')
 
         return worker_ami_id
 
@@ -342,21 +342,21 @@ class Worker(StackNode):
         return ['#cloud-config\n',
                 '\n',
                 'write_files:\n',
-                '  - path: /etc/mmw.d/env/MMW_STACK_COLOR\n',
+                '  - path: /etc/icp.d/env/ICP_STACK_COLOR\n',
                 '    permissions: 0750\n',
-                '    owner: root:mmw\n',
+                '    owner: root:icp\n',
                 '    content: ', Ref(self.color), '\n',
-                '  - path: /etc/mmw.d/env/MMW_STACK_TYPE\n',
+                '  - path: /etc/icp.d/env/ICP_STACK_TYPE\n',
                 '    permissions: 0750\n',
-                '    owner: root:mmw\n',
+                '    owner: root:icp\n',
                 '    content: ', self.get_input('StackType'), '\n',
-                '  - path: /etc/mmw.d/env/MMW_DB_PASSWORD\n',
+                '  - path: /etc/icp.d/env/ICP_DB_PASSWORD\n',
                 '    permissions: 0750\n',
-                '    owner: root:mmw\n',
+                '    owner: root:icp\n',
                 '    content: ', Ref(self.rds_password), '\n',
-                '  - path: /etc/mmw.d/env/ROLLBAR_SERVER_SIDE_ACCESS_TOKEN\n',
+                '  - path: /etc/icp.d/env/ROLLBAR_SERVER_SIDE_ACCESS_TOKEN\n',
                 '    permissions: 0750\n',
-                '    owner: root:mmw\n',
+                '    owner: root:icp\n',
                 '    content: ', self.get_input('RollbarServerSideAccessToken')]  # NOQA
 
     def create_cloud_watch_resources(self, worker_auto_scaling_group):

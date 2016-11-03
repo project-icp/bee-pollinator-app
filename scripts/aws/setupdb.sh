@@ -13,7 +13,7 @@ where: \n
 "
 
 # HTTP accessible storage for initial app data
-FILE_HOST="https://s3.amazonaws.com/data.mmw.azavea.com"
+FILE_HOST="https://s3.amazonaws.com/data.icp.azavea.com"
 file_to_load=
 load_bee_data=false
 
@@ -33,18 +33,18 @@ while getopts ":hmf:" opt; do
 done
 
 # Export settings required to run psql non-interactively
-export PGHOST=$(cat /etc/mmw.d/env/MMW_DB_HOST)
-export PGDATABASE=$(cat /etc/mmw.d/env/MMW_DB_NAME)
-export PGUSER=$(cat /etc/mmw.d/env/MMW_DB_USER)
-export PGPASSWORD=$(cat /etc/mmw.d/env/MMW_DB_PASSWORD)
-export PUBLIC_HOSTED_ZONE_NAME=$(cat /etc/mmw.d/env/MMW_PUBLIC_HOSTED_ZONE_NAME)
+export PGHOST=$(cat /etc/icp.d/env/ICP_DB_HOST)
+export PGDATABASE=$(cat /etc/icp.d/env/ICP_DB_NAME)
+export PGUSER=$(cat /etc/icp.d/env/ICP_DB_USER)
+export PGPASSWORD=$(cat /etc/icp.d/env/ICP_DB_PASSWORD)
+export PUBLIC_HOSTED_ZONE_NAME=$(cat /etc/icp.d/env/ICP_PUBLIC_HOSTED_ZONE_NAME)
 
 # Ensure that the PostGIS extension exists
 psql -c "CREATE EXTENSION IF NOT EXISTS postgis;"
 psql -c "ALTER TABLE spatial_ref_sys OWNER TO ${PGUSER};"
 
 # Run migrations
-envdir /etc/mmw.d/env /opt/app/manage.py migrate
+envdir /etc/icp.d/env /opt/app/manage.py migrate
 
 function download_and_load {
     for f in "${FILES[@]}"; do

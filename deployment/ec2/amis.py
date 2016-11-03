@@ -4,14 +4,14 @@ import boto
 import logging
 
 
-LOGGER = logging.getLogger('mmw')
+LOGGER = logging.getLogger('icp')
 LOGGER.addHandler(logging.StreamHandler())
 LOGGER.setLevel(logging.INFO)
 
 MACHINE_TYPE_MAPPING = {
-    'mmw-app': 'Application',
-    'mmw-monitoring': 'Monitoring',
-    'mmw-worker': 'Worker',
+    'icp-app': 'Application',
+    'icp-monitoring': 'Monitoring',
+    'icp-worker': 'Worker',
 }
 
 
@@ -25,16 +25,16 @@ def _prune_ami(ami):
                 ami.block_device_mapping['/dev/sda1'].snapshot_id)
 
 
-def prune(mmw_config, machine_types, keep, aws_profile):
+def prune(icp_config, machine_types, keep, aws_profile):
     """Filter owned AMIs by machine type, environment, and count
 
     Args:
-      mmw_config (dict): Dict of configuration settings
+      icp_config (dict): Dict of configuration settings
       machine_types (list): list of machine types to prune
       keep (int): number of images of this machine type to keep
       aws_profile (str): aws profile name to use for authentication
     """
-    stack_type = mmw_config['StackType']
+    stack_type = icp_config['StackType']
 
     conn = boto.connect_ec2(profile_name=aws_profile)
     for machine_type in machine_types:

@@ -22,7 +22,7 @@ See [Create an IAM Instance Profile for Your Amazon EC2 Instances](http://docs.a
 Using the AWS CLI, create an AWS profile:
 
 ```bash
-$ aws configure --profile mmw-stg
+$ aws configure --profile icp-stg
 ```
 
 You will be prompted to enter your AWS credentials, along with a default region. These credentials will be used to authenticate calls to the AWS API when using Boto, Packer, and the AWS CLI.
@@ -33,15 +33,15 @@ A configuration file is required to launch the stack. An example file (`default.
 
 ## Launch and manage stacks
 
-Stack launching is managed with `mmw_stack.py`. This command provides an interface for automatically generating AMIs and launching Model My Watershed stacks.
+Stack launching is managed with `icp_stack.py`. This command provides an interface for automatically generating AMIs and launching Bee Pollinator stacks.
 
 ### Generating AMIs
 
-Before launching the Model My Watershed stack, AMIs for each service need to be generated:
+Before launching the Bee Pollinator stack, AMIs for each service need to be generated:
 
 ```bash
-$ ./mmw_stack.py create-ami --aws-profile mmw-stg --mmw-profile staging \
-                            --machine-type mmw-{app,monitoring,worker}
+$ ./icp_stack.py create-ami --aws-profile icp-stg --icp-profile staging \
+                            --machine-type icp-{app,monitoring,worker}
 ```
 
 ### Pruning AMIs
@@ -49,17 +49,17 @@ $ ./mmw_stack.py create-ami --aws-profile mmw-stg --mmw-profile staging \
 After creating several AMIs, older ones become stale and are no longer needed. To prune them use:
 
 ```bash
-$ ./mmw_stack.py prune-ami --aws-profile mmw-stg --mmw-profile staging \
-                           --keep 5 --machine-type mmw-{app,monitoring,worker}
+$ ./icp_stack.py prune-ami --aws-profile icp-stg --icp-profile staging \
+                           --keep 5 --machine-type icp-{app,monitoring,worker}
 ```
 
 ### Launching Stacks
 
-After successfully creating AMIs, you can launch a Model My Watershed stack with the `launch-stacks` subcommand. To view all options for the `launch-stacks` subcommand, you can use the `--help` option.
+After successfully creating AMIs, you can launch a Bee Pollinator stack with the `launch-stacks` subcommand. To view all options for the `launch-stacks` subcommand, you can use the `--help` option.
 
 Using the parameters set in `default.yml`, you can launch a full stack with the following command:
 
 ```bash
-$ ./mmw_stack.py launch-stacks --aws-profile mmw-stg --mmw-profile staging \
-                               --mmw-config-path default.yml
+$ ./icp_stack.py launch-stacks --aws-profile icp-stg --icp-profile staging \
+                               --icp-config-path default.yml
 ```

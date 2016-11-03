@@ -10,7 +10,7 @@ import urllib2
 import csv
 
 
-LOGGER = logging.getLogger('mmw')
+LOGGER = logging.getLogger('icp')
 
 UBUNTU_RELEASE_URL = 'http://cloud-images.ubuntu.com/query/trusty/server/released.current.txt'  # NOQA
 UBUNTU_RELEASE_FIELD_NAMES = ['version', 'version_type', 'release_status',
@@ -79,17 +79,17 @@ def get_git_branch():
     return subprocess.check_output(git_command).rstrip()
 
 
-def run_packer(mmw_config, machine_types, aws_profile):
+def run_packer(icp_config, machine_types, aws_profile):
     """Function to run packer
 
     Args:
-      mmw_config (dict): Dict of configuration settings
+      icp_config (dict): Dict of configuration settings
       machine_types (list): list of machine types to build
       aws_profile (str): aws profile name to use for authentication
     """
 
-    region = mmw_config['Region']
-    stack_type = mmw_config['StackType']
+    region = icp_config['Region']
+    stack_type = icp_config['StackType']
 
     # Get AWS credentials based on profile
     aws_dir = os.path.expanduser('~/.aws')
@@ -128,7 +128,7 @@ def run_packer(mmw_config, machine_types, aws_profile):
     if machine_types is not None:
         packer_command.extend(['-only', ','.join(machine_types)])
     else:
-        packer_command.extend(['-except', 'mmw-monitoring'])
+        packer_command.extend(['-except', 'icp-monitoring'])
 
     packer_command.append(packer_template_path)
 

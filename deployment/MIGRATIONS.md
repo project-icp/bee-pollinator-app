@@ -41,7 +41,7 @@ $ ssh-add -L
 ### SSH into Bastion
 
 ```bash
-$ ssh -A -l ubuntu monitoring.mmw.foo.com
+$ ssh -A -l ubuntu monitoring.icp.foo.com
 ```
 
 The `-A`  enables forwarding of the authentication agent connection so that the `.pem` file doesn't have to by copied to the bastion.
@@ -59,7 +59,7 @@ $ ssh 10.0.1.191
 After successfully connecting to an application server, run `setupdb.sh`:
 
 ```bash
-$ /opt/model-my-watershed/scripts/aws/setupdb.sh
+$ /opt/bee-pollinator/scripts/aws/setupdb.sh
 ```
 
 This script will:

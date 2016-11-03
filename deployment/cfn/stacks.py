@@ -15,19 +15,19 @@ import ConfigParser
 import sys
 
 
-def get_config(mmw_config_path, profile):
+def get_config(icp_config_path, profile):
     """Parses a configuration file
 
     Arguments
-    :param mmw_config_path: Path to the config file
+    :param icp_config_path: Path to the config file
     :param profile: Config profile to read
     """
-    mmw_config = ConfigParser.ConfigParser()
-    mmw_config.optionxform = str
-    mmw_config.read(mmw_config_path)
+    icp_config = ConfigParser.ConfigParser()
+    icp_config.optionxform = str
+    icp_config.read(icp_config_path)
 
     try:
-        section = mmw_config.items(profile)
+        section = icp_config.items(profile)
     except ConfigParser.NoSectionError:
         sys.stderr.write('There is no section [{}] in the configuration '
                          'file\n'.format(profile))
@@ -37,18 +37,18 @@ def get_config(mmw_config_path, profile):
     return {k: v.strip('"').strip("'") for k, v in section}
 
 
-def build_graph(mmw_config, aws_profile, **kwargs):
+def build_graph(icp_config, aws_profile, **kwargs):
     """
-    Builds graphs for all of the MMW stacks
+    Builds graphs for all of the ICP stacks
     Args:
-      mmw_config (dict): dictionary representation of `default.yml`
+      icp_config (dict): dictionary representation of `default.yml`
       aws_profile (str): name of AWS profile to use for authentication
     """
 
     if kwargs['stack_color'] is not None:
-        mmw_config['StackColor'] = kwargs['stack_color'].capitalize()
+        icp_config['StackColor'] = kwargs['stack_color'].capitalize()
 
-    global_config = GlobalConfigNode(**mmw_config)
+    global_config = GlobalConfigNode(**icp_config)
     vpc = VPC(globalconfig=global_config, aws_profile=aws_profile)
     s3_vpc_endpoint = S3VPCEndpoint(globalconfig=global_config, VPC=vpc,
                                     aws_profile=aws_profile)
@@ -71,11 +71,11 @@ def build_graph(mmw_config, aws_profile, **kwargs):
         worker, public_hosted_zone
 
 
-def build_stacks(mmw_config, aws_profile, **kwargs):
+def build_stacks(icp_config, aws_profile, **kwargs):
     """Trigger actual building of graphs"""
     s3_vpc_endpoint_graph, data_plane_graph, \
         application_graph, worker_graph, \
-        public_hosted_zone_graph = build_graph(mmw_config, aws_profile,
+        public_hosted_zone_graph = build_graph(icp_config, aws_profile,
                                                **kwargs)
     s3_vpc_endpoint_graph.go()
     data_plane_graph.go()
@@ -88,9 +88,9 @@ def build_stacks(mmw_config, aws_profile, **kwargs):
         public_hosted_zone_graph.go()
 
 
-def destroy_stacks(mmw_config, aws_profile, **kwargs):
+def destroy_stacks(icp_config, aws_profile, **kwargs):
     """Destroy stacks that are associated with stack_color"""
-    region = mmw_config['Region']
+    region = icp_config['Region']
     stack_color = kwargs['stack_color']
 
     cfn_conn = cfn.connect_to_region(region, profile_name=aws_profile)

@@ -1,8 +1,8 @@
-[mmw-app]
+[icp-app]
 localhost ansible_user=ubuntu
 
 [app-servers]
-mmw-app
+icp-app
 
 [packer:children]
 app-servers

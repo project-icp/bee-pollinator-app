@@ -13,7 +13,7 @@
       when: "['packer'] | is_in(group_names)"
 
   roles:
-    - { role: "model-my-watershed.app" }
+    - { role: "bee-pollinator.app" }
 
   post_tasks:
     - name: Revert change to /etc/hosts
