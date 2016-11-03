@@ -1,5 +1,5 @@
 ---
-django_settings_module: "mmw.settings.development"
+django_settings_module: "icp.settings.development"
 
 redis_bind_address: "0.0.0.0"
 
@@ -9,7 +9,7 @@ postgresql_hba_mapping:
   - { type: "host", database: "all", user: "all", address: "33.33.34.1/24", method: "md5" }
   - { type: "host", database: "all", user: "all", address: "10.0.2.0/24", method: "md5" }
 
-services_ip: "{{ lookup('env', 'MMW_SERVICES_IP') | default('33.33.34.30', true) }}"
+services_ip: "{{ lookup('env', 'ICP_SERVICES_IP') | default('33.33.34.30', true) }}"
 
 redis_host: "{{ services_ip }}"
 postgresql_host: "{{ services_ip }}"
@@ -23,6 +23,6 @@ celery_processes_per_worker: 1
 
 docker_options: "-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock --storage-driver=aufs"
 
-aws_profile: "mmw-stg"
+aws_profile: "icp-stg"
 
 stack_type: "Development"

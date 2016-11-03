@@ -42,7 +42,7 @@ class VPC(StackNode):
         'Tags': {},
         'Region': 'us-east-1',
         'StackType': 'Staging',
-        'KeyName': 'mmw-stg',
+        'KeyName': 'icp-stg',
         'AvailabilityZones': 'us-east-1b,us-east-1d',
         'NATInstanceType': 't2.micro',
     }
@@ -64,7 +64,7 @@ class VPC(StackNode):
         self.region = self.get_input('Region')
         self.availability_zones = get_availability_zones(self.aws_profile)
 
-        self.add_description('VPC stack for MMW')
+        self.add_description('VPC stack for ICP')
 
         # Parameters
         self.keyname = self.add_parameter(Parameter(
@@ -104,7 +104,7 @@ class VPC(StackNode):
         return nat_ami_id
 
     def create_vpc(self):
-        vpc_name = 'MMWVPC'
+        vpc_name = 'ICPVPC'
 
         self.vpc = self.create_resource(ec2.VPC(
             vpc_name,

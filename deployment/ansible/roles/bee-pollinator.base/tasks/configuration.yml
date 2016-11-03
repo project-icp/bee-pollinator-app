@@ -1,0 +1,31 @@
+---
+- name: Create service account for application
+  user: name=icp
+        system=yes
+        home=/var/lib/icp
+        shell=/bin/false
+        state=present
+
+- name: Add Ansible SSH user to the icp group
+  user: name="{{ ansible_user }}"
+        append=yes
+        group=icp
+        state=present
+
+- name: Create configuration file directory
+  file: path="{{ envdir_home }}"
+        owner=root
+        group=icp
+        mode=0750
+        state=directory
+
+- name: Configure base settings
+  copy: content="{{ item.value }}"
+        dest="{{ envdir_home }}/{{ item.key }}"
+        owner=root
+        group=icp
+        mode=0750
+  with_dict: "{{ envdir_config }}"
+  notify:
+    - Restart icp-app
+    - Restart Celery

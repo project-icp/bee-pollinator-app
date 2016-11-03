@@ -1,0 +1,26 @@
+---
+- name: Touch application log file if it does not exist
+  copy: content="" dest="{{ app_log }}" force=no
+
+- name: Set application log file permissions
+  file: path={{ app_log }}
+        owner=icp
+        group=icp
+        mode=0664
+
+- name: Configure application log rotation
+  template: src=logrotate-app.j2
+            dest=/etc/logrotate.d/icp-app
+
+- name: Touch Gunicorn log file if it does not exist
+  copy: content="" dest="{{ app_gunicorn_log }}" force=no
+
+- name: Set Gunicorn log file permissions
+  file: path={{ app_gunicorn_log }}
+        owner=icp
+        group=icp
+        mode=0664
+
+- name: Configure Gunicorn log rotation
+  template: src=logrotate-gunicorn.j2
+            dest=/etc/logrotate.d/icp-gunicorn

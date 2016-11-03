@@ -1,4 +1,4 @@
-# model-my-watershed
+# bee-pollinator
 
 ## Local Development
 
@@ -29,7 +29,7 @@ The `app` virtual machine contains an instance of the Django application, `servi
 First, ensure that you have a set of Amazon Web Services (AWS) credentials with access to Azavea's pre-processed NLCD data set. This setup generally needs to happen on the virtual machine host using the [AWS CLI](https://aws.amazon.com/cli/):
 
 ```bash
-$ aws configure --profile mmw-stg
+$ aws configure --profile icp-stg
 ```
 
 Next, use the following command to bring up a local development environment:
@@ -86,7 +86,7 @@ $ ./scripts/manage.sh test
 **Note**: If you get an error that resembles the following, try logging into the `app` virtual machine again for the group permissions changes to take effect:
 
 ```
-envdir: fatal: unable to switch to directory /etc/mmw.d/env: access denied
+envdir: fatal: unable to switch to directory /etc/icp.d/env: access denied
 ```
 
 ### Ports

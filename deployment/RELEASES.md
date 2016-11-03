@@ -11,8 +11,8 @@ $ git flow release publish X.Y.Z
 
 Once published, disable the `develop` job in Jenkins, and enable the `release` job:
 
-- http://civicci01.internal.azavea.com/view/mmw/job/model-my-watershed-develop/
-- http://civicci01.internal.azavea.com/view/mmw/job/model-my-watershed-release/
+- http://civicci01.internal.azavea.com/view/icp/job/bee-pollinator-develop/
+- http://civicci01.internal.azavea.com/view/icp/job/bee-pollinator-release/
 
 Next, trigger a build using the "Build Now" link.
 
@@ -20,13 +20,13 @@ Next, trigger a build using the "Build Now" link.
 
 Once the `release` job completes successfully, it should kick off two additional jobs:
 
-- http://civicci01.internal.azavea.com/view/mmw/job/model-my-watershed-packer-app-and-worker/
+- http://civicci01.internal.azavea.com/view/icp/job/bee-pollinator-packer-app-and-worker/
 
 Once those two jobs complete successfully, a `staging-deployment` job will be kicked off:
 
-- http://civicci01.internal.azavea.com/view/mmw/job/model-my-watershed-staging-deployment/
+- http://civicci01.internal.azavea.com/view/icp/job/bee-pollinator-staging-deployment/
 
-As that is happening, login to the Model my Watershed staging AWS account and locate the newly created AMIs within the AWS console under:
+As that is happening, login to the Bee Pollinator staging AWS account and locate the newly created AMIs within the AWS console under:
 
 > `EC2 > Images > AMIs`
 
@@ -34,22 +34,22 @@ If you cannot see columns for `Branch`, `Environment`, and `Service`, use the ge
 
 ## Release Testing
 
-After the `staging-deployment` job completes, `mmw-dev.azavea.com` should reflect the current release. Be sure to run any outstanding database migrations or data imports.
+After the `staging-deployment` job completes, `icp-dev.azavea.com` should reflect the current release. Be sure to run any outstanding database migrations or data imports.
 
 ## AMI Promotion
 
 Select one AMI for each `Service` built using the `release/X.Y.Z` branch. Once selected, use the `Permissions` tab to `Edit` the AMI and allow account ID `146471631080` execute privileges. In addition, use the `Tags` tab to `Add/Edit Tags` for the `Environment` key. Ensure that its value is changed from `Staging` to `Production`.
 
-To confirm, you can login to the Model my Watershed "production" account and see if the AMIs show up under the `Private images` filter.
+To confirm, you can login to the Bee Pollinator "production" account and see if the AMIs show up under the `Private images` filter.
 
 ## Dark Stack Launch
 
 Ensure that the `production` section of `default.yml` reflects the desired state of your new stack (instance types, instance counts, etc.). Then, launch a new stack using the opposite color that is currently deployed:
 
 ```bash
-$ ./mmw_stack.py launch-stacks --aws-profile mmw-prd \
-                               --mmw-config-path default.yml \
-                               --mmw-profile production \
+$ ./icp_stack.py launch-stacks --aws-profile icp-prd \
+                               --icp-config-path default.yml \
+                               --icp-profile production \
                                --stack-color blue
 ```
 
@@ -70,9 +70,9 @@ Using the newly created ELB endpoint, try to interact with the dark application 
 If everything looks good, use the following command to cut over DNS to the new ELB endpoint:
 
 ```bash
-$ ./mmw_stack.py launch-stacks --aws-profile mmw-prd \
-                               --mmw-config-path default.yml \
-                               --mmw-profile production \
+$ ./icp_stack.py launch-stacks --aws-profile icp-prd \
+                               --icp-config-path default.yml \
+                               --icp-profile production \
                                --stack-color blue \
                                --activate-dns
 ```
@@ -83,8 +83,8 @@ Within 60 seconds, `app.wikiwatershed.org` and `mmw.azavea.com` should reflect t
 
 Disable the `release` job in Jenkins, and enable the `develop` job:
 
-- http://civicci01.internal.azavea.com/view/mmw/job/model-my-watershed-develop/
-- http://civicci01.internal.azavea.com/view/mmw/job/model-my-watershed-release/
+- http://civicci01.internal.azavea.com/view/icp/job/bee-pollinator-develop/
+- http://civicci01.internal.azavea.com/view/icp/job/bee-pollinator-release/
 
 Execute the following commands to reconcile the release branch:
 
@@ -100,8 +100,8 @@ $ git push --tags
 Lastly, use the following command to remove the now dark stack:
 
 ```bash
-$ ./mmw_stack.py remove-stacks --aws-profile mmw-prd \
-                               --mmw-config-path default.yml \
-                               --mmw-profile production \
+$ ./icp_stack.py remove-stacks --aws-profile icp-prd \
+                               --icp-config-path default.yml \
+                               --icp-profile production \
                                --stack-color green
 ```

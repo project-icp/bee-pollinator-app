@@ -1,0 +1,20 @@
+---
+- name: Configure application
+  copy: content="{{ item.value }}"
+        dest="{{ envdir_home }}/{{ item.key }}"
+        owner=root
+        group=icp
+        mode=0750
+  with_dict: "{{ app_config }}"
+  notify:
+    - Restart icp-app
+
+- name: Configure Gunicorn settings
+  template: src=gunicorn.py.j2 dest=/etc/icp.d/gunicorn.py
+  notify:
+    - Restart icp-app
+
+- name: Configure service definition
+  template: src=upstart-app.conf.j2 dest=/etc/init/icp-app.conf
+  notify:
+    - Restart icp-app

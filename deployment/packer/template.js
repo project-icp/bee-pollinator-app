@@ -8,19 +8,19 @@
     },
     "builders": [
         {
-            "name": "mmw-app",
+            "name": "icp-app",
             "type": "amazon-ebs",
             "region": "{{user `aws_region`}}",
             "availability_zone": "us-east-1a",
             "source_ami": "{{user `aws_ubuntu_ami`}}",
             "instance_type": "t2.large",
             "ssh_username": "ubuntu",
-            "ami_name": "mmw-app-{{timestamp}}-{{user `version`}}",
+            "ami_name": "icp-app-{{timestamp}}-{{user `version`}}",
             "run_tags": {
                 "PackerBuilder": "amazon-ebs"
             },
             "tags": {
-                "Name": "mmw-app",
+                "Name": "icp-app",
                 "Version": "{{user `version`}}",
                 "Branch": "{{user `branch`}}",
                 "Created": "{{ isotime }}",
@@ -30,14 +30,14 @@
             "associate_public_ip_address": true
         },
         {
-            "name": "mmw-worker",
+            "name": "icp-worker",
             "type": "amazon-ebs",
             "region": "{{user `aws_region`}}",
             "availability_zone": "us-east-1a",
             "source_ami": "{{user `aws_ubuntu_ami`}}",
             "instance_type": "t2.large",
             "ssh_username": "ubuntu",
-            "ami_name": "mmw-worker-{{timestamp}}-{{user `version`}}",
+            "ami_name": "icp-worker-{{timestamp}}-{{user `version`}}",
             "ami_block_device_mappings": [
                 {
                     "device_name": "/dev/sdf",
@@ -50,7 +50,7 @@
                 "PackerBuilder": "amazon-ebs"
             },
             "tags": {
-                "Name": "mmw-worker",
+                "Name": "icp-worker",
                 "Version": "{{user `version`}}",
                 "Branch": "{{user `branch`}}",
                 "Created": "{{ isotime }}",
@@ -60,19 +60,19 @@
             "associate_public_ip_address": true
         },
         {
-            "name": "mmw-monitoring",
+            "name": "icp-monitoring",
             "type": "amazon-ebs",
             "region": "{{user `aws_region`}}",
             "availability_zone": "us-east-1a",
             "source_ami": "{{user `aws_ubuntu_ami`}}",
             "instance_type": "t2.large",
             "ssh_username": "ubuntu",
-            "ami_name": "mmw-monitoring-{{timestamp}}-{{user `version`}}",
+            "ami_name": "icp-monitoring-{{timestamp}}-{{user `version`}}",
             "run_tags": {
                 "PackerBuilder": "amazon-ebs"
             },
             "tags": {
-                "Name": "mmw-monitoring",
+                "Name": "icp-monitoring",
                 "Version": "{{user `version`}}",
                 "Branch": "{{user `branch`}}",
                 "Created": "{{ isotime }}",
@@ -103,7 +103,7 @@
                 "--user 'ubuntu' --extra-vars 'app_deploy_branch={{user `version`}}'"
             ],
             "only": [
-                "mmw-app"
+                "icp-app"
             ]
         },
         {
@@ -115,7 +115,7 @@
                 "--user 'ubuntu' --extra-vars 'app_deploy_branch={{user `version`}}'"
             ],
             "only": [
-                "mmw-worker"
+                "icp-worker"
             ]
         },
         {
@@ -127,7 +127,7 @@
                 "--user 'ubuntu'"
             ],
             "only": [
-                "mmw-monitoring"
+                "icp-monitoring"
             ]
         }
     ]

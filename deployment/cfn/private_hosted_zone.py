@@ -16,7 +16,7 @@ class PrivateHostedZone(CustomActionNode):
 
     DEFAULTS = {
         'Region': 'us-east-1',
-        'PrivateHostedZoneName': 'mmw.internal',
+        'PrivateHostedZoneName': 'icp.internal',
         'StackType': 'Staging',
     }
 

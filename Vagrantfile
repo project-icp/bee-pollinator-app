@@ -44,7 +44,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.define "services" do |services|
     services.vm.hostname = "services"
-    services.vm.network "private_network", ip: ENV.fetch("MMW_SERVICES_IP", "33.33.34.30")
+    services.vm.network "private_network", ip: ENV.fetch("ICP_SERVICES_IP", "33.33.34.30")
 
     # Graphite Web
     services.vm.network "forwarded_port", {
@@ -85,9 +85,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.define "worker" do |worker|
     worker.vm.hostname = "worker"
-    worker.vm.network "private_network", ip: ENV.fetch("MMW_WORKER_IP", "33.33.34.20")
+    worker.vm.network "private_network", ip: ENV.fetch("ICP_WORKER_IP", "33.33.34.20")
 
-    worker.vm.synced_folder "src/mmw", "/opt/app/"
+    worker.vm.synced_folder "src/icp", "/opt/app/"
 
     # Docker
     worker.vm.network "forwarded_port", {
@@ -115,13 +115,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.define "app" do |app|
     app.vm.hostname = "app"
-    app.vm.network "private_network", ip: ENV.fetch("MMW_APP_IP", "33.33.34.10")
+    app.vm.network "private_network", ip: ENV.fetch("ICP_APP_IP", "33.33.34.10")
 
     if Vagrant::Util::Platform.windows? || Vagrant::Util::Platform.cygwin?
-      app.vm.synced_folder "src/mmw", "/opt/app/", type: "rsync", rsync__exclude: ["node_modules/", "apps/"]
-      app.vm.synced_folder "src/mmw/apps", "/opt/app/apps"
+      app.vm.synced_folder "src/icp", "/opt/app/", type: "rsync", rsync__exclude: ["node_modules/", "apps/"]
+      app.vm.synced_folder "src/icp/apps", "/opt/app/apps"
     else
-      app.vm.synced_folder "src/mmw", "/opt/app/"
+      app.vm.synced_folder "src/icp", "/opt/app/"
     end
 
     # Django via Nginx/Gunicorn

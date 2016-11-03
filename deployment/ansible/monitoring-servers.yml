@@ -8,6 +8,6 @@
 
   roles:
     - { role: "azavea.ntp" }
-    - { role: "model-my-watershed.graphite", when: "['test'] | is_not_in(group_names)" }
-    - { role: "model-my-watershed.logstash", when: "['test'] | is_not_in(group_names)" }
+    - { role: "bee-pollinator.graphite", when: "['test'] | is_not_in(group_names)" }
+    - { role: "bee-pollinator.logstash", when: "['test'] | is_not_in(group_names)" }
     - { role: "azavea.kibana", when: "['test'] | is_not_in(group_names)" }

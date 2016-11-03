@@ -65,7 +65,7 @@ class DataPlane(StackNode):
         'Tags': {},
         'Region': 'us-east-1',
         'StackType': 'Staging',
-        'KeyName': 'mmw-stg',
+        'KeyName': 'icp-stg',
         'IPAccess': ALLOW_ALL_CIDR,
         'BastionHostInstanceType': 't2.medium',
         'RDSInstanceType': 'db.t2.micro',
@@ -86,7 +86,7 @@ class DataPlane(StackNode):
         self.default_tags = tags
         self.region = self.get_input('Region')
 
-        self.add_description('Data plane stack for MMW')
+        self.add_description('Data plane stack for ICP')
 
         # Parameters
         self.keyname = self.add_parameter(Parameter(
@@ -193,7 +193,7 @@ class DataPlane(StackNode):
             monitoring_ami_id = self.get_input('BastionHostAMI')
         except MKUnresolvableInputError:
             monitoring_ami_id = get_recent_ami(self.aws_profile,
-                                               'mmw-monitoring-*')
+                                               'icp-monitoring-*')
 
         return monitoring_ami_id
 

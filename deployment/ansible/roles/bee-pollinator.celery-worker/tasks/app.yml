@@ -1,0 +1,26 @@
+---
+- name: Ensure that source directories exist
+  file: path="{{ item }}"
+        owner="{{ ansible_user }}"
+        group=icp
+        mode=0755
+        state=directory
+  with_items:
+    - "{{ app_home }}"
+    - "/opt/bee-pollinator"
+
+- name: Clone application source
+  git: repo=https://github.com/project-icp/bee-pollinator.git
+       dest=/opt/bee-pollinator
+       version="{{ app_deploy_branch }}"
+  become: False
+
+- name: Synchronize Django application into app_home
+  synchronize: archive=no
+               checksum=yes
+               compress=no
+               recursive=yes
+               set_remote_user=no
+               src=/opt/bee-pollinator/src/icp/
+               dest="{{ app_home }}/"
+  become: False

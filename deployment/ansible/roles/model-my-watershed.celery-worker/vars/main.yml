@@ -1,3 +1,0 @@
-celery_dir: "{{ app_home }}"
-celery_app: "mmw.celery:app"
-celery_broker_url: "redis://{{ redis_host }}:{{ redis_port }}"

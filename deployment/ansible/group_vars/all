@@ -1,5 +1,5 @@
 ---
-django_test_database: "{{ lookup('env', 'MMW_TEST_DB_NAME') | default('test_mmw', true) }}"
+django_test_database: "{{ lookup('env', 'ICP_TEST_DB_NAME') | default('test_icp', true) }}"
 
 redis_port: 6379
 postgresql_port: 5432
@@ -12,9 +12,9 @@ graphite_web_port: "{{ apache_port }}"
 
 stack_color: "Black"
 
-postgresql_username: mmw
-postgresql_password: mmw
-postgresql_database: mmw
+postgresql_username: icp
+postgresql_password: icp
+postgresql_database: icp
 
 postgresql_version: "9.4"
 postgresql_package_version: "9.4.*.pgdg14.04+1"

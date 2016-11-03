@@ -1,3 +1,0 @@
----
-- name: Restart mmw-app
-  service: name=mmw-app state=restarted

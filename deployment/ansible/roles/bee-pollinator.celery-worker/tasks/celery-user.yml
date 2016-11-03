@@ -1,0 +1,12 @@
+---
+- name: Create service account for Celery
+  user: name=celery
+        system=yes
+        home=/var/lib/celery
+        state=present
+
+- name: Add Celery user to icp group
+  user: name=celery
+        append=yes
+        groups=icp
+        state=present

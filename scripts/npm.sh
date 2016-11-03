@@ -7,4 +7,4 @@ set -x
 
 ARGS=$*
 
-vagrant ssh app -c "cd /opt/app && envdir /etc/mmw.d/env npm $ARGS"
+vagrant ssh app -c "cd /opt/app && envdir /etc/icp.d/env npm $ARGS"
