@@ -231,6 +231,8 @@ var MapView = Marionette.ItemView.extend({
 
         map.addLayer(this._areaOfInterestLayer);
         map.addLayer(this._modificationsLayer);
+
+        map.addControl(new SidebarToggleControl());
     },
 
     setupGeoLocation: function(maxAge) {
