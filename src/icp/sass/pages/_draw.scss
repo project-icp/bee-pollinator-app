@@ -1,0 +1,11 @@
+#draw-window {
+  width: 485px;
+  padding: 15px;
+  position: absolute;
+  right: 0;
+  transition: all 200ms;
+
+  .hidden-sidebar & {
+    transform: translateX(100%);
+  }
+}

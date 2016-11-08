@@ -20,13 +20,10 @@ var DrawController = {
 
     draw: function() {
         var geocodeSearch = new geocoder.GeocoderView(),
-            toolbarModel = new models.ToolbarModel(),
-            toolbarView = new views.ToolbarView({
-                model: toolbarModel
-            });
+            drawWindow = new views.DrawWindow();
 
         App.rootView.geocodeSearchRegion.show(geocodeSearch);
-        App.rootView.drawToolsRegion.show(toolbarView);
+        App.rootView.sidebarRegion.show(drawWindow);
 
         enableSingleProjectModeIfActivity();
 

@@ -16,6 +16,7 @@ var $ = require('jquery'),
     toolbarTmpl = require('./templates/toolbar.html'),
     drawTmpl = require('./templates/draw.html'),
     resetDrawTmpl = require('./templates/reset.html'),
+    windowTmpl = require('./templates/window.html'),
     settings = require('../core/settings');
 
 var MAX_AREA = 112700; // About the size of a large state (in km^2)
@@ -272,6 +273,13 @@ function navigateToAnalyze() {
     router.navigate('analyze', { trigger: true });
 }
 
+var DrawWindow = Marionette.LayoutView.extend({
+    template: windowTmpl,
+
+    id: 'draw-window'
+});
+
 module.exports = {
+    DrawWindow: DrawWindow,
     ToolbarView: ToolbarView
 };
