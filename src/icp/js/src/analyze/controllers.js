@@ -49,8 +49,6 @@ var AnalyzeController = {
                 collection: viewModels
             });
 
-        App.state.set('current_page_title', 'Geospatial Analysis');
-
         App.rootView.sidebarRegion.show(analyzeResults);
     },
 

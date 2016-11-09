@@ -173,9 +173,7 @@ describe('Core', function() {
 
         describe('HeaderView', function() {
             it('shows the current page', function() {
-                var appState = new models.AppStateModel({
-                        current_page_title: 'Test Page'
-                    }),
+                var appState = new models.AppStateModel(),
                     header = new views.HeaderView({
                         model: App.user,
                         appState: appState

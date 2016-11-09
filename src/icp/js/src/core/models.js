@@ -265,11 +265,7 @@ var AreaOfInterestModel = GeoModel.extend({
     }, GeoModel.prototype.defaults)
 });
 
-var AppStateModel = Backbone.Model.extend({
-    defaults: {
-        current_page_title: 'Select Area of Interest'
-    }
-});
+var AppStateModel = Backbone.Model.extend();
 
 module.exports = {
     MapModel: MapModel,
