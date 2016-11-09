@@ -2,7 +2,6 @@
 
 var $ = require('jquery'),
     _ = require('lodash'),
-    Backbone = require('../../shim/backbone'),
     App = require('../app'),
     settings = require('../core/settings'),
     router = require('../router').router,
@@ -94,24 +93,8 @@ var ModelingController = {
             scenarios: new models.ScenariosCollection()
         });
 
-        var analyzeTask = App.getAnalyzeCollection().findWhere({taskName:'analyze'});
-
         App.currentProject = project;
         lock.resolve();
-
-        analyzeTask
-            .fetchAnalysisIfNeeded()
-            .done(function() {
-                App.currentProject.set(
-                    'aoi_census',
-                    JSON.parse(
-                        App.getAnalyzeCollection()
-                            .findWhere({taskName:'analyze'})
-                            .get('result')
-                    ).census
-                );
-            })
-            .fail(projectCleanUp);
 
         setupNewProjectScenarios(project);
         finishProjectSetup(project, lock);
