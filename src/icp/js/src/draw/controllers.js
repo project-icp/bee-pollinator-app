@@ -20,7 +20,9 @@ var DrawController = {
 
     draw: function() {
         var geocodeSearch = new geocoder.GeocoderView(),
-            drawWindow = new views.DrawWindow();
+            drawWindow = new views.DrawWindow({
+                model: new models.DrawWindowModel()
+            });
 
         App.rootView.geocodeSearchRegion.show(geocodeSearch);
         App.rootView.sidebarRegion.show(drawWindow);

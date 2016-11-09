@@ -276,7 +276,55 @@ function navigateToAnalyze() {
 var DrawWindow = Marionette.LayoutView.extend({
     template: windowTmpl,
 
-    id: 'draw-window'
+    id: 'draw-window',
+
+    ui: {
+        'start': '#start-drawing',
+        'cancel': '#cancel-drawing'
+    },
+
+    events: {
+        'click @ui.start': 'enableDrawArea',
+        'click @ui.cancel': 'resetDrawingState'
+    },
+
+    modelEvents: {
+        'change': 'render',
+    },
+
+    enableDrawArea: function() {
+        var self = this,
+            map = App.getLeafletMap(),
+            revertLayer = clearAoiLayer();
+
+        self.model.set({ isDrawing: true });
+        utils.drawPolygon(map)
+            .then(validateShape)
+            .then(function(shape) {
+                addLayer(shape);
+                self.model.set({
+                    isDrawing: false,
+                    isDrawn: true
+                });
+            }).fail(function() {
+                revertLayer();
+                self.model.set({
+                    isDrawing: false,
+                    isDrawn: false
+                });
+            });
+    },
+
+    resetDrawingState: function() {
+        this.model.set({
+            isDrawing: false,
+            isDrawn: false
+        });
+
+        utils.cancelDrawing(App.getLeafletMap());
+        clearAoiLayer();
+        clearBoundaryLayer(this.model);
+    }
 });
 
 module.exports = {
