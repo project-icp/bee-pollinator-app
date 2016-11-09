@@ -3,39 +3,41 @@
   position: relative;
   display: inline-block;
   background-color: $paper;
+  line-height: $height-md;
   border-radius: $radius-sm;
   border: 0!important;
-  font-size: 0.9rem;
+  box-shadow: 0 0 6px $black-74;
+  font-size: 0.7rem;
   width: 300px;
   height: 36px;
-  padding: 0 2.5rem;
-  color: $ui-primary;
+  padding: 0 1rem;
+  color: $black-54;
   background-color: $paper;
   margin-right: 0.6rem;
 
 
   &:hover {
-    color: $ui-primary;
     background-color: $ui-light;
+    box-shadow: 0 0 8px $black-74;
     border: 0!important;
   }
 
   &::-webkit-input-placeholder {
-    color: $ui-disabled;
+    color: $ui-secondary;
   }
 
   &:-moz-placeholder { /* Firefox 18- */
-    color:  $ui-disabled;
+    color: $ui-secondary;
     opacity: 1!important;
   }
 
   &::-moz-placeholder {  /* Firefox 19+ */
-    color:  $ui-disabled;
+    color: $ui-secondary;
     opacity: 1!important;
   }
 
   &:-ms-input-placeholder {
-    color: $ui-disabled;
+    color: $ui-secondary;
   }
 }
 
@@ -71,8 +73,8 @@
   /* active state */
   input:focus ~ label, input:valid ~ label    {
     top: -8px;
-    font-size: 0.8rem;
-    color: $ui-primary;
+    font-size: 0.6rem;
+    color: $active;
   }
 
   /* BOTTOM BARS ================================= */
@@ -88,7 +90,7 @@
     width: 0;
     bottom: 1px;
     position: absolute;
-    background: $ui-primary;
+    background: $active;
     transition: 0.2s ease all;
     -moz-transition: 0.2s ease all;
     -webkit-transition: 0.2s ease all;

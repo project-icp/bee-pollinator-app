@@ -13,7 +13,7 @@
 
 .btn-sm {
   border-radius: $radius-sm;
-  font-size: 0.8rem;
+  font-size: 0.6rem;
   padding: 0 0.7rem;
   line-height: $height-sm;
 }
@@ -21,46 +21,46 @@
 .btn-md {
   line-height: $height-md;
   border-radius: $radius-sm;
-  font-size: 1.0rem;
+  font-size: 0.7rem;
   padding: 0 1rem;
 }
 
 .btn-lg {
   line-height: $height-lg;
   border-radius: $radius-sm;
-  font-size: 1.2rem;
+  font-size: 0.7rem;
   padding: 0 1rem;
 }
 
 .btn-default {
-  color: $ui-primary;
+  color: $brand-primary;
   position: relative;
   display: inline-block;
   background-color: transparent;
   border: solid 1px transparent;
 
   &:hover, &:focus, &.focus {
-    color: $ui-primary;
+    color: $paper;
     background-color: $brand-primary;
     border: solid 1px transparent;
   }
 }
 
 .btn-primary {
-  color: $black-54;
+  color: $black-74;
   position: relative;
   display: inline-block;
-  background-color: $paper;
-  border: $paper;
+  background-color: $ui-light;
+  border: solid 1px darken($ui-light, 5%);
 
   i {
     color: $black-54;
   }
 
   &:hover, &:focus {
-    color: $ui-primary;
-    background-color: $ui-light !important;
-    border: $paper;
+    color: $black-74;
+    background-color: darken($ui-light, 5%);
+    border: solid 1px darken($ui-light, 10%);
   }
 
   //For precip control
@@ -71,14 +71,14 @@
 }
 
 .btn-active {
-  color: $ui-primary !important;
+  color: $paper !important;
   position: relative;
   display: inline-block;
   background-color: $brand-primary !important;
   border: darken($brand-primary, 5%);
 
   &:hover, &:focus {
-    color: $ui-primary!important;
+    color: $paper!important;
     background-color: darken($brand-primary, 5%);
     border: darken($brand-primary, 10%);
   }

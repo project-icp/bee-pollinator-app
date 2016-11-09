@@ -13,14 +13,13 @@ $paper-74: rgba(255,255,255,.74);
 $paper: #ffffff;
 
 //Custom Colors
-$ui-primary: #464648; /*Dark Grey*/
-$ui-secondary: #525659; /*Medium Grey*/
+$ui-primary: #273238; /*Dark Grey*/
+$ui-secondary: #394750; /*Medium Grey*/
 $ui-light: #eceff1; /*Light Grey*/
 $ui-grey: #787878 ; /* Output Tab Bar */
-$ui-disabled: #a4a4a4;
 $ui-danger: #e0412d; /*Errors*/
-$active: #478aaf ; /* Blue */
-$brand-primary: #f9cf2f; /* Honeycomb Yellow */
+$active: #51dec2; /*Bright*/
+$brand-primary: #389b9b; /*Teal*/
 $sky-blue: #bbe5f5; /*Sky*/
 $water: #49b8ea; /*Water*/
 $et: #c2d33c; /*Evapotranspiration*/
@@ -68,6 +67,6 @@ $soil-cd: #cc4c02;
 
 //Type
 $font-family: 'Roboto', helvetica, arial, sans-serif;
-$font-h1: 1.8rem;
-$font-h2: 1.5rem;
-$font-h3: 1.0rem;
+$font-h1: 1.5rem;
+$font-h2: 1rem;
+$font-h3: 0.7rem;

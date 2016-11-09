@@ -13,7 +13,6 @@
 {% endblock %}
 
 {% block form %}
-    <br>
     {{ field(username, 'username', 'Username') }}
     {{ field(password, 'password', 'Password', 'password') }}
 {% endblock %}
@@ -26,6 +25,6 @@
         Or continue as
     </div>
     <div class="row" id="guest-buttons">
-        <button type="button" class="btn btn-lg btn-block btn-primary" data-dismiss="modal" id="dismiss-button">Guest</button>
+        <button type="button" class="btn btn-lg btn-primary" data-dismiss="modal" id="dismiss-button">Guest</button>
     </div>
 {% endblock %}
