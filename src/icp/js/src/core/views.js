@@ -179,13 +179,19 @@ var MapView = Marionette.ItemView.extend({
     _googleMaps: (window.google ? window.google.maps : null),
 
     initialize: function(options) {
-        var map_controls = settings.get('map_controls');
+        var defaultLayer = _.findWhere(settings.get('base_layers'), function(layer) {
+                return layer.default === true;
+            }),
+            defaultLayerName = defaultLayer ? defaultLayer['display'] : 'Streets',
+            map_controls = settings.get('map_controls');
 
         _.defaults(options, {
             addZoomControl: _.contains(map_controls, 'ZoomControl'),
             addLocateMeButton: _.contains(map_controls, 'LocateMeButton'),
+            addLayerSelector: _.contains(map_controls, 'LayerSelector'),
             showLayerAttribution: _.contains(map_controls, 'LayerAttribution'),
             addSidebarToggle: _.contains(map_controls, 'SidebarToggle'),
+            initialLayerName: defaultLayerName,
             interactiveMode: true // True if clicking on map does stuff
         });
 
@@ -204,23 +210,45 @@ var MapView = Marionette.ItemView.extend({
         this._leafletMap = map;
         this._areaOfInterestLayer = new L.FeatureGroup();
         this._modificationsLayer = new L.FeatureGroup();
-        // this.baseLayers = this.buildLayers(settings.get('base_layers'));
+        this.baseLayers = this.buildLayers(settings.get('base_layers'));
 
         if (!options.interactiveMode) {
             this.setMapToNonInteractive();
         }
 
         if (options.addZoomControl) {
-            map.addControl(new L.Control.Zoom({position: 'topright'}));
+            map.addControl(new L.Control.Zoom({position: 'bottomright'}));
         }
 
         var maxGeolocationAge = 60000;
         if (options.addLocateMeButton) {
             addLocateMeButton(map, maxGeolocationAge);
         }
+       
+        if (options.addLayerSelector) {
+            var layerOptions = {
+                autoZIndex: false,
+                position: 'bottomleft',
+                collapsed: false
+            };
+
+            self.layerControl = new LayerControl(
+                self.baseLayers, self.overlayLayers, layerOptions
+            );
+
+            self.opacityControl = new OpacityControl(layerOptions);
+            self.layerControl.addTo(map);
+            self.opacityControl.addTo(map);
+        }
 
         this.setMapEvents();
         this.setupGeoLocation(maxGeolocationAge);
+
+        var initialLayer = this.baseLayers[options.initialLayerName] ||
+                            this.baseLayers[defaultLayerName];
+        if (initialLayer) {
+            map.addLayer(initialLayer);
+        }
 
         map.addLayer(this._areaOfInterestLayer);
         map.addLayer(this._modificationsLayer);
@@ -292,7 +320,6 @@ var MapView = Marionette.ItemView.extend({
 
         // The max available zoom level changes based on the active base layer
         this._leafletMap.on('baselayerchange', this.updateCurrentZoomLevel);
-        this._leafletMap.on('baselayerchange', this.updateDrbLayerZoomLevel);
 
         // Some Google layers have a dynamic max zoom that we need to handle.
         // Check that Google Maps API library is available before implementing
@@ -309,6 +336,92 @@ var MapView = Marionette.ItemView.extend({
             // Get the maximum zoom level for the initial location
             this.updateGoogleMaxZoom({ target: this._leafletMap });
         }
+    },
+    
+    buildLayers: function(layerConfig, map) {
+        var self = this,
+            layers = {};
+
+        _.each(layerConfig, function(layer) {
+            var leafletLayer;
+
+            // Check to see if the google api service has been loaded
+            // before creating a google layer
+            if (self._googleMaps && layer.type === 'google') {
+                leafletLayer = new L.Google(layer.googleType, {
+                    maxZoom: layer.maxZoom
+                });
+            } else if (!layer.empty) {
+                var tileUrl = (layer.url.match(/png/) === null ?
+                                layer.url + '.png' : layer.url),
+                    zIndex = determineZIndex(layer);
+
+                _.defaults(layer, {
+                    zIndex: zIndex,
+                    attribution: '',
+                    minZoom: 0});
+                leafletLayer = new L.TileLayer(tileUrl, layer);
+                if (layer.has_opacity_slider) {
+                    var slider = new OpacityControl({position: 'topright'});
+
+                    slider.setOpacityLayer(leafletLayer);
+                    leafletLayer.slider = slider;
+                }
+            } else {
+                leafletLayer = new L.TileLayer('', layer);
+            }
+
+            layers[layer['display']] = leafletLayer;
+        });
+
+        function determineZIndex(layer) {
+            // ZIndex rules to keep coverages under the boundary lines
+            //  basemaps: 0
+            //  overlay::raster: 1
+            //  overlay::vector: 2
+
+            if (!layer.overlay) {
+                return 0;
+            } else if (layer.raster) {
+                return 1;
+            } else {
+                return 2;
+            }
+        }
+
+        function actOnUI(datum, bool) {
+            var code = datum.code,
+                $el = $('#overlays-layer-list #' + code);
+            $el.attr('disabled', bool);
+            if (bool) {
+                $el.siblings('span').addClass('disabled');
+            } else {
+                $el.siblings('span').removeClass('disabled');
+            }
+        }
+
+        function actOnLayer(datum) {
+            var display = datum.display;
+            if (display) {
+                // Work-around to prevent after-image when zooming
+                // out.  Not worried about this when zooming in --
+                // actually it is desirable in that case.  Derived
+                // from https://github.com/Leaflet/Leaflet/issues/1905.
+                layers[display]._clearBgBuffer();
+            }
+        }
+
+        if (map) {
+            // Toggle UI entries in response to zoom changes and make
+            // sure that layers which are invisible due to their
+            // minZoom being larger than the current zoom level are
+            // cleared from the map.
+            coreUtils.zoomToggle(map, layerConfig, actOnUI, actOnLayer);
+
+            coreUtils.perimeterToggle(map, layerConfig, actOnUI, actOnLayer);
+        }
+
+        return layers;
     },
 
     getActiveBaseLayerName: function() {

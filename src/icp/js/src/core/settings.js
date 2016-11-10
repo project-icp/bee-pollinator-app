@@ -1,6 +1,7 @@
 "use strict";
 
 var defaultSettings = {
+    base_layers: {},
     draw_tools: [],
     map_controls: [],
     model_packages: []
