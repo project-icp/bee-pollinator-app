@@ -78,14 +78,6 @@ var HeaderView = Marionette.ItemView.extend({
         this.listenTo(this.appState, 'change', this.render);
     },
 
-    templateHelpers: function() {
-        var self = this;
-
-        return {
-            'current_page_title': self.appState.get('current_page_title')
-        };
-    },
-
     showLogin: function() {
         // Defer requiring app until needed as it is not defined when
         // core.views are initialized (they are required in app.js)
@@ -594,10 +586,7 @@ function applyMask(featureGroup, shapeLayer) {
         outerRing = getLatLngs(worldBounds),
         innerRings = getLatLngs(shapeLayer),
         polygonOptions = {
-            stroke: true,
-            color: '#fff',
-            weight: 3.5,
-            opacity: 1,
+            stroke: false,
             fill: true,
             fillColor: '#000',
             fillOpacity: 0.5,

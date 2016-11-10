@@ -5,8 +5,8 @@ var $ = require('jquery'),
     _ = require('lodash');
 
 var polygonDefaults = {
-        fillColor: '#E77471',
-        color: '#E77471'
+        fill: false,
+        color: '#f9cf2f'
     };
 
 function drawPolygon(map, drawOpts) {

@@ -8,8 +8,6 @@ var ProjectsController = {
         App.rootView.footerRegion.show(
             new views.ProjectsView()
         );
-
-        App.state.set('current_page_title', 'Projects');
     },
 
     projectsCleanUp: function() {

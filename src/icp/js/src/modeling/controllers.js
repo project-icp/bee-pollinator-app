@@ -60,8 +60,6 @@ var ModelingController = {
                     console.log("[ERROR] Could not load project.");
                     App.currentProject = null;
                 });
-
-            App.state.set('current_page_title', 'Modeling');
         } else {
             var lock = $.Deferred();
 
@@ -186,8 +184,6 @@ function setPageTitle() {
     var modelPackageName = App.currentProject.get('model_package'),
         modelPackages = settings.get('model_packages'),
         modelPackageDisplayName = _.find(modelPackages, {name: modelPackageName}).display_name;
-
-    App.state.set('current_page_title', modelPackageDisplayName);
 }
 
 function projectCleanUp() {
