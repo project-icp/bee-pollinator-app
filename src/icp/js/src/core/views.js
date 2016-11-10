@@ -39,7 +39,7 @@ var RootView = Marionette.LayoutView.extend({
             selector: '#sidebar-content'
         },
         footerRegion: '#footer',
-        toggleLayerRegion: '#toggle-layer-region',
+        toggleLayerRegion: '#toggle-layer-region'
     },
     events: {
         'transitionend @ui.mapContainer': 'onMapResized'
@@ -153,7 +153,6 @@ function addLocateMeButton(map, maxZoom, maxAge) {
     L.control.locate(locateOptions).addTo(map);
 }
 
-
 // This view houses a Leaflet instance. The map container element must exist
 // in the DOM before initializing.
 var MapView = Marionette.ItemView.extend({
@@ -260,6 +259,11 @@ var MapView = Marionette.ItemView.extend({
         if (options.addSidebarToggle) {
             map.addControl(new SidebarToggleControl());
         }
+
+        // wrap the zoom & sidebar toggle controls in one div for styling
+        $('.leaflet-bottom.leaflet-right>.leaflet-control-sidebar-toggle, \
+          .leaflet-bottom.leaflet-right>.leaflet-control-zoom')
+            .wrapAll('<div class="leaflet-bottom-right-controls"></div>');
     },
 
     setupGeoLocation: function(maxAge) {

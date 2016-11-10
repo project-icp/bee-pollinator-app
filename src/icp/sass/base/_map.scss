@@ -136,32 +136,26 @@
 .leaflet-control-layers,
 .leaflet-popup {
   font-family: $font-family !important;
-  background-color: rgba(0,0,0,0) !important;
   box-shadow: 0 0px 0px rgba(0,0,0,0);
 }
 
 .leaflet-control-opacity,
 .leaflet-control-layers {
-  background-color: $paper-54;
+  background-color: $clear;
   color: black;
   text-decoration: none;
   text-align: center;
-  div > a {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-  }
-  div > a:hover {
+  div > a, div > a:hover {
     display: flex;
     flex-direction: row;
     width: 100%;
   }
 }
 
-.regular-text {
-  color: black;
-  text-decoration: none;
-  align-self: center;
+.leaflet-bottom-right-controls {
+  display: flex;
+  flex-direction: row-reverse;
+  float: right;
 }
 
 .leaflet-control-zoom {
@@ -174,16 +168,15 @@
   flex-direction: row;
 }
 
-.leaflet-control-zoom-in {
-  border-top-left-radius: 0px !important;
-  border-top-right-radius: 0px !important;
-  border-bottom-left-radius: 0px !important;
-  border-bottom-right-radius: 0px !important;
+.leaflet-control a {
+  border-radius: 0 !important;
 }
 
-.leaflet-control-zoom-out {
-  border-top-left-radius: 0px !important;
-  border-top-right-radius: 0px !important;
-  border-bottom-left-radius: 0px !important;
-  border-bottom-right-radius: 0px !important;
+.leaflet-bar a, .leaflet-bar a:hover {
+  border-bottom: none;
+  border-right: 1px solid #ccc;
+}
+
+.leaflet-bar a:first-child {
+  border-right: none;
 }
