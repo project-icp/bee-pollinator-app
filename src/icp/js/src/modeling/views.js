@@ -9,8 +9,6 @@ var _ = require('lodash'),
     controls = require('./controls'),
     coreModels = require('../core/models'),
     coreViews = require('../core/views'),
-    analyzeViews = require('../analyze/views.js'),
-    analyzeModels = require('../analyze/models.js'),
     modalModels = require('../core/modals/models'),
     modalViews = require('../core/modals/views'),
     resultsWindowTmpl = require('./templates/resultsWindow.html'),
@@ -631,7 +629,6 @@ var ResultsView = Marionette.LayoutView.extend({
     template: resultsWindowTmpl,
 
     regions: {
-        analyzeRegion: '#analyze-tab-contents',
         modelingRegion: '#modeling-tab-contents'
     },
 
@@ -650,8 +647,6 @@ var ResultsView = Marionette.LayoutView.extend({
 
     onShow: function() {
         var self = this,
-            analyzeCollection = App.getAnalyzeCollection(),
-            analyzeViewModels = analyzeModels.createAnalyzeResultViewModelCollection(analyzeCollection),
             tmvModel = new coreModels.TaskMessageViewModel(),
             errorHandler = function(err) {
                 if (err && err.timeout) {
@@ -664,10 +659,6 @@ var ResultsView = Marionette.LayoutView.extend({
                 }
                 self.modelingRegion.show(new coreViews.TaskMessageView({ model: tmvModel }));
             };
-
-        this.analyzeRegion.show(new analyzeViews.AnalyzeWindow({
-            collection: analyzeViewModels
-        }));
 
         tmvModel.setWorking('Gathering Data');
         self.modelingRegion.show(new coreViews.TaskMessageView({ model: tmvModel }));

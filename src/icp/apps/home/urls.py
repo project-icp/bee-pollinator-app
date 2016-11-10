@@ -20,7 +20,6 @@ urlpatterns = patterns(
         project, name='project'),
     url(r'^project/compare/$', project, name='project'),
     url(r'^project/(?P<proj_id>[0-9]+)/compare/$', project, name='project'),
-    url(r'^analyze$', home_page, name='analyze'),
     url(r'^error', home_page, name='error'),
     url(r'^sign-up', home_page, name='sign_up'),
 )

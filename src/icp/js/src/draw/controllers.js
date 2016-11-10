@@ -28,28 +28,11 @@ var DrawController = {
         App.rootView.sidebarRegion.show(drawWindow);
 
         enableSingleProjectModeIfActivity();
-
-        if (App.map.get('areaOfInterest')) {
-            var aoiView = new coreViews.AreaOfInterestView({
-                    id: 'aoi-header-wrapper',
-                    App: App,
-                    model: new coreModels.AreaOfInterestModel({
-                        can_go_back: false,
-                        next_label: 'Analyze',
-                        url: 'analyze',
-                        shape: App.map.get('areaOfInterest'),
-                        place: App.map.get('areaOfInterestName')
-                    })
-            });
-
-            App.rootView.footerRegion.show(aoiView);
-            App.map.setDrawWithBarSize(true);
-        }
     },
 
     drawCleanUp: function() {
         App.rootView.geocodeSearchRegion.empty();
-        App.rootView.drawToolsRegion.empty();
+        App.rootView.sidebarRegion.empty();
         App.rootView.footerRegion.empty();
     }
 };
