@@ -66,7 +66,7 @@ var MapModel = Backbone.Model.extend({
     },
 
     setDrawSize: function(fit) {
-        this._setSizeOptions({ single: true }, { min: true }, fit);
+        this.setNoHeaderSidebarSize(fit);
     },
 
     setDrawWithBarSize: function(fit) {

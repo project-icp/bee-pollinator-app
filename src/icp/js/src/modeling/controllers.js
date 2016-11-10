@@ -15,7 +15,6 @@ var ModelingController = {
             router.navigate('', { trigger: true });
             return false;
         }
-        App.getMapView().addSidebarToggleControl();
     },
 
     project: function(projectId, scenarioParam) {
@@ -119,7 +118,6 @@ var ModelingController = {
         setupNewProjectScenarios(project);
         finishProjectSetup(project, lock);
         updateUrl();
-        App.getMapView().addSidebarToggleControl();
         setPageTitle();
     },
 
@@ -207,7 +205,6 @@ function projectCleanUp() {
         App.projectNumber = scenarios.at(0).get('project');
     }
 
-    App.getMapView().removeSidebarToggleControl();
     App.getMapView().updateModifications(null);
     App.rootView.subHeaderRegion.empty();
     App.rootView.sidebarRegion.empty();

@@ -19,6 +19,14 @@ var ToolbarModel = Backbone.Model.extend({
     }
 });
 
+var DrawWindowModel = Backbone.Model.extend({
+    defaults: {
+        isDrawing: false,
+        isDrawn: false
+    }
+});
+
 module.exports = {
+    DrawWindowModel: DrawWindowModel,
     ToolbarModel: ToolbarModel,
 };
