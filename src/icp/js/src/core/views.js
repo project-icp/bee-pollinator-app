@@ -16,6 +16,8 @@ var L = require('leaflet'),
     modalModels = require('./modals/models'),
     modalViews = require('./modals/views'),
     settings = require('./settings'),
+    LayerControl = require('./layerControl'),
+    OpacityControl = require('./opacityControl'),
     SidebarToggleControl = require('./sidebarToggleControl');
 
 require('leaflet.locatecontrol');
@@ -36,7 +38,8 @@ var RootView = Marionette.LayoutView.extend({
             regionClass: TransitionRegion,
             selector: '#sidebar-content'
         },
-        footerRegion: '#footer'
+        footerRegion: '#footer',
+        toggleLayerRegion: '#toggle-layer-region',
     },
     events: {
         'transitionend @ui.mapContainer': 'onMapResized'
@@ -149,6 +152,7 @@ function addLocateMeButton(map, maxZoom, maxAge) {
 
     L.control.locate(locateOptions).addTo(map);
 }
+
 
 // This view houses a Leaflet instance. The map container element must exist
 // in the DOM before initializing.
