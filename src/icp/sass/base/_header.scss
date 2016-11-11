@@ -266,14 +266,19 @@ header {
     }
 
     .controls {
-      // Precipitation slider
-      .precipitation {
+      // Number of hives input
+      .hives {
         // Undo bootstrap input[type="range"] syling
+        label {
+            font-size: 1.0rem;
+            color: $ui-primary;
+            vertical-align: middle;
+            margin-left: 1rem;
+        }
         input {
           display: inline-block;
           width: 120px;
           margin: 0 0.7rem;
-          padding: 0;
           vertical-align: bottom;
         }
       }

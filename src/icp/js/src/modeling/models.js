@@ -36,7 +36,7 @@ var ModelPackageControlModel = Backbone.Model.extend({
     // modification control.
     isInputControl: function() {
         return _.contains([
-            'precipitation'
+            'numberofhives'
         ], this.get('name'));
     }
 });
@@ -616,8 +616,8 @@ var ScenarioModel = Backbone.Model.extend({
             defaultMods = {
                inputs: [
                    {
-                       name: 'precipitation',
-                       value: 0.984252 // equal to 2.5 cm.
+                       name: 'numberofhives',
+                       value: 0.0
                    }
                ]
            };
@@ -1008,13 +1008,13 @@ function getControlsForModelPackage(modelPackageName, options) {
         if (options && (options.compareMode ||
                         options.is_current_conditions)) {
             return new ModelPackageControlsCollection([
-                new ModelPackageControlModel({ name: 'precipitation' })
+                new ModelPackageControlModel({ name: 'landcover' })
             ]);
         } else {
             return new ModelPackageControlsCollection([
                 new ModelPackageControlModel({ name: 'landcover' }),
                 new ModelPackageControlModel({ name: 'conservation_practice' }),
-                new ModelPackageControlModel({ name: 'precipitation' })
+                new ModelPackageControlModel({ name: 'numberofhives' })
             ]);
         }
     }

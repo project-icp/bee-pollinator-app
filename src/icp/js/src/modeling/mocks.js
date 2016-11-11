@@ -37,7 +37,7 @@ var scenarios = {
         "inputs": [
             {
                 "area": "0",
-                "name": "precipitation",
+                "name": "numberofhives",
                 "shape": null,
                 "type": "",
                 "units": "m<sup>2</sup>",
