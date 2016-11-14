@@ -24,10 +24,6 @@ server {
     alias {{ app_static_root }}favicon.png;
   }
 
-  location = /micro/ {
-    return 301 https://micro.$host;
-  }
-
   location /static/ {
     {% if ['packer'] | is_in(group_names) -%}
     etag on;

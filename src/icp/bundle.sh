@@ -17,7 +17,6 @@ STATIC_FONTS_DIR="${DJANGO_STATIC_ROOT}fonts/"
 
 BROWSERIFY="$BIN/browserify"
 ENTRY_JS_FILES="./js/src/main.js"
-ENTRY_JS_FILES_WATER_BALANCE="./js/src/main_water_balance.js"
 
 NUNJUCKS_TRANSFORM="-t [ nunjucksify --extension='.html' ]"
 MINIFY_PLUGIN="-p [ minifyify --no-map ]"
@@ -150,16 +149,6 @@ do
     BROWSERIFY_TEST_REQ+="-r $DEP "
 done
 
-# TODO: Combine with original vendor bundle.
-JS_DEPS_WATER_BALANCE=(jquery bootstrap bootstrap-select retina.js)
-BROWSERIFY_EXT_WATER_BALANCE=""
-BROWSERIFY_REQ_WATER_BALANCE=""
-for DEP in "${JS_DEPS_WATER_BALANCE[@]}"
-do
-    BROWSERIFY_EXT_WATER_BALANCE+="-x $DEP "
-    BROWSERIFY_REQ_WATER_BALANCE+="-r $DEP "
-done
-
 VENDOR_COMMAND=""
 if [ -n "$BUILD_VENDOR_BUNDLE" ]; then
     VENDOR_COMMAND="
@@ -170,9 +159,7 @@ if [ -n "$BUILD_VENDOR_BUNDLE" ]; then
         $BROWSERIFY $BROWSERIFY_REQ \
             -o ${STATIC_JS_DIR}vendor.js $EXTRA_ARGS &
         $BROWSERIFY $BROWSERIFY_REQ $BROWSERIFY_TEST_REQ \
-            -o ${STATIC_JS_DIR}test.vendor.js $EXTRA_ARGS &
-        $BROWSERIFY $BROWSERIFY_REQ_WATER_BALANCE \
-            -o ${STATIC_JS_DIR}vendor_water_balance.js $EXTRA_ARGS &"
+            -o ${STATIC_JS_DIR}test.vendor.js $EXTRA_ARGS &"
 fi
 
 TEST_COMMAND=""
@@ -185,9 +172,7 @@ fi
 VAGRANT_COMMAND="$TEST_COMMAND $VENDOR_COMMAND
     $NODE_SASS $ENTRY_SASS_FILE -o ${STATIC_CSS_DIR} &
     $BROWSERIFY $ENTRY_JS_FILES $BROWSERIFY_EXT $NUNJUCKS_TRANSFORM \
-        -o ${STATIC_JS_DIR}main.js $EXTRA_ARGS &
-    $BROWSERIFY $ENTRY_JS_FILES_WATER_BALANCE $BROWSERIFY_EXT_WATER_BALANCE $NUNJUCKS_TRANSFORM \
-        -o ${STATIC_JS_DIR}main_water_balance.js $EXTRA_ARGS"
+        -o ${STATIC_JS_DIR}main.js $EXTRA_ARGS &"
 
 # Ensure static asset folders exist.
 mkdir -p \

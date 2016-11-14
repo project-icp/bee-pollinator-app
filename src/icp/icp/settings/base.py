@@ -312,7 +312,6 @@ LOCAL_APPS = (
     'apps.modeling',
     'apps.home',
     'apps.geocode',
-    'apps.water_balance',
     'apps.user'
 )
 
