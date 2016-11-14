@@ -44,6 +44,14 @@
     background-color: $brand-primary;
     border: solid 1px transparent;
   }
+
+  &:disabled {
+      background-color: transparent;
+  }
+
+  &.inverted {
+      color: $active;
+  }
 }
 
 .btn-primary {

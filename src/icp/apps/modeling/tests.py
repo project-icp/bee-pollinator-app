@@ -287,7 +287,7 @@ class TaskRunnerTestCase(TestCase):
         self.model_input = {
             'inputs': [
                 {
-                    'name': 'precipitation',
+                    'name': 'numberofhives',
                     'value': 1.2
                 }
             ],
@@ -407,7 +407,7 @@ class TaskRunnerTestCase(TestCase):
             chain(job_chain).apply_async()
 
         self.assertEqual(str(context.exception),
-                         'No precipitation value defined',
+                         'No number of hives value defined',
                          'Unexpected exception occurred')
 
     def test_tr55_chain_doesnt_generate_censuses_if_they_exist(self):

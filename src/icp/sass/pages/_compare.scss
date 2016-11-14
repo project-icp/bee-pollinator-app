@@ -135,36 +135,6 @@
                   }
                 }
               }
-
-              .controls-region {
-                .controls {
-                  .precipitation {
-                    .btn-primary {
-                      z-index: 10;
-                      padding: 0;
-                      margin-top: 10px;
-                      width: 100%;
-
-                      label {
-                        display: table;
-                        width: 100%;
-
-                        span {
-                          display: table-cell;
-                          width: 10%;
-                          white-space: nowrap;
-                          padding: 5px;
-                        }
-                        input {
-                          display: table-cell;
-                          width: 100%;
-                          vertical-align: bottom;
-                        }
-                      }
-                    }
-                  }
-                }
-              }
             }
           }
 

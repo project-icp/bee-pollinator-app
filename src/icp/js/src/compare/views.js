@@ -8,14 +8,12 @@ var _ = require('lodash'),
     coreViews = require('../core/views'),
     modelingModels = require('../modeling/models'),
     modelingViews = require('../modeling/views'),
-    modelingControls = require('../modeling/controls'),
     modConfigUtils = require('../modeling/modificationConfigUtils'),
     compareWindowTmpl = require('./templates/compareWindow.html'),
     compareScenariosTmpl = require('./templates/compareScenarios.html'),
     compareScenarioTmpl = require('./templates/compareScenario.html'),
     compareModelingTmpl = require('./templates/compareModeling.html'),
-    compareModificationsTmpl = require('./templates/compareModifications.html'),
-    synchronizer = modelingControls.PrecipitationSynchronizer;
+    compareModificationsTmpl = require('./templates/compareModifications.html');
 
 var CompareWindow = Marionette.LayoutView.extend({
     //model: modelingModels.ProjectModel,
@@ -89,7 +87,6 @@ var CompareWindow = Marionette.LayoutView.extend({
             model: this.model,
             collection: this.model.get('scenarios')
          }));
-        synchronizer.sync();
     }
 });
 
@@ -181,7 +178,6 @@ var CompareModelingView = Marionette.LayoutView.extend({
 
     regions: {
         resultRegion: '.result-region',
-        controlsRegion: '.controls-region'
     },
 
     ui: {
@@ -241,24 +237,8 @@ var CompareModelingView = Marionette.LayoutView.extend({
         }));
     },
 
-    showControls: function() {
-        var controls = modelingModels.getControlsForModelPackage(
-            this.projectModel.get('model_package'),
-            {compareMode: true}
-        );
-
-        // TODO this needs to be generalized if we want the compare view
-        // to work with GWLF-E
-        this.controlsRegion.show(new modelingViews.Tr55ToolbarTabContentView({
-            model: this.model,
-            collection: controls,
-            compareMode: true
-        }));
-    },
-
     onShow: function() {
         this.showResult();
-        this.showControls();
     }
 });
 

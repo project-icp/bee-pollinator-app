@@ -14,7 +14,6 @@ var $ = require('jquery'),
     models = require('./models'),
     modificationConfigUtils = require('./modificationConfigUtils'),
     gwlfeConfig = require('./gwlfeModificationConfig'),
-    precipitationTmpl = require('./templates/controls/precipitation.html'),
     manualEntryTmpl = require('./templates/controls/manualEntry.html'),
     userInputTmpl = require('./templates/controls/userInput.html'),
     inputInfoTmpl = require('./templates/controls/inputInfo.html'),
@@ -35,7 +34,8 @@ var ControlView = Marionette.LayoutView.extend({
         this.mergeOptions(options, [
             'controlModel',
             'addModification',
-            'addOrReplaceInput'
+            'addOrReplaceInput',
+            'numberofhives'
         ]);
     },
 
@@ -415,139 +415,32 @@ var ConservationPracticeView = ModificationsView.extend({
     }
 });
 
-var PrecipitationSynchronizer = (function() {
-    var isEnabled = false,
-        precipViews = [];
+var NumberOfHivesView = ControlView.extend({
+    template: userInputTmpl,
 
-    // Add a view to the list of views to be kept syncrhonized
-    function add(precipView) {
-        if (isEnabled) {
-            precipViews.push(precipView);
-        }
-    }
-
-    // Remove a view from the list
-    function remove(precipView) {
-        if (isEnabled) {
-            precipViews = _.without(precipViews, precipView);
-        }
-    }
-
-    // Turn synchronization on
-    function on() {
-        precipViews = [];
-        isEnabled = true;
-    }
-
-    // Turn synchronization off
-    function off() {
-        isEnabled = false;
-        precipViews = [];
-    }
-
-    // Synchronize the group to the given slider
-    function syncTo(precipView) {
-        if (isEnabled) {
-            var value = precipView.ui.slider.val();
-
-            isEnabled = false;
-
-            precipViews.forEach(function(otherPrecipView) {
-                var otherValue = otherPrecipView.ui.slider.val();
-                if (otherValue !== value) {
-                    otherPrecipView.ui.slider.val(value);
-                    otherPrecipView.onSliderChanged();
-                }
-            });
-
-            isEnabled = true;
-        }
-    }
-
-    // Synchronize the group to the first slider
-    function sync() {
-        if (precipViews.length > 0) {
-            syncTo(precipViews[0]);
-        }
-    }
-
-    return {
-        add: add,
-        remove: remove,
-        on: on,
-        off: off,
-        sync: sync,
-        syncTo: syncTo
-    };
-})();
-
-var PrecipitationView = ControlView.extend({
-    template: precipitationTmpl,
-
-    ui: {
-        slider: 'input',
-        displayValue: '.value'
-    },
+    ui: { input: 'input' },
 
     events: {
-        'input @ui.slider': 'onSliderDragged',
-        'change @ui.slider': 'onSliderChanged'
+        'change @ui.input': 'onInputChange',
     },
 
-    getControlName: function() {
-        return 'precipitation';
-    },
-
-    getDisplayValue: function(value) {
-        return value.toFixed(2) + ' cm';
-    },
-
-    onSliderDragged: function() {
-        // Preview slider value while dragging.
-        var value = parseFloat(this.ui.slider.val());
-
-        this.ui.slider.attr('value', value);
-        this.ui.displayValue.text(this.getDisplayValue(value));
-    },
-
-    onSliderChanged: function() {
-        var value = parseFloat(this.ui.slider.val()),
-            // Model expects Imperial inputs.
-            imperialValue = coreUtils.convertToImperial(value, 'cm'),
+    onInputChange: function() {
+        var value = parseInt(this.ui.input.val()),
             modification = new models.ModificationModel({
                 name: this.getControlName(),
-                value: imperialValue
-            });
-
-        // Update values for IE which doesn't trigger onSliderDragged. Will
-        // effectively noop on other browsers, since the same values were
-        // already set by onSliderDragged.
-        this.ui.slider.attr('value', value);
-        this.ui.displayValue.text(this.getDisplayValue(value));
-
-        PrecipitationSynchronizer.syncTo(this);
-
+                value: value
+        });
         this.addOrReplaceInput(modification);
     },
 
-    onAttach: function() {
-        PrecipitationSynchronizer.add(this);
+    templateHelpers: function() {
+        return {
+            displayName: 'Value'
+        };
     },
 
-    onBeforeDestroy: function() {
-        PrecipitationSynchronizer.remove(this);
-    },
-
-    onRender: function() {
-        var model = this.controlModel,
-            value = model && model.get('value') || 0;
-
-        // Model values are stored in Imperial and need to be displayed as
-        // metric.
-        value = coreUtils.convertToMetric(value, 'in');
-        this.ui.slider.val(value);
-        this.ui.slider.attr('value', value);
-        this.ui.displayValue.text(this.getDisplayValue(value));
+    getControlName: function() {
+        return 'numberofhives';
     }
 });
 
@@ -557,8 +450,8 @@ function getControlView(controlName) {
             return LandCoverView;
         case 'conservation_practice':
             return ConservationPracticeView;
-        case 'precipitation':
-            return PrecipitationView;
+        case 'numberofhives':
+            return NumberOfHivesView;
     }
     throw 'Control not implemented: ' +  controlName;
 }
@@ -566,7 +459,6 @@ function getControlView(controlName) {
 module.exports = {
     LandCoverView: LandCoverView,
     ConservationPracticeView: ConservationPracticeView,
-    PrecipitationView: PrecipitationView,
+    NumberOfHivesView: NumberOfHivesView,
     getControlView: getControlView,
-    PrecipitationSynchronizer: PrecipitationSynchronizer
 };

@@ -214,8 +214,8 @@ describe('Modeling', function() {
                                'Should have shown landcover control');
                 assert.equal($('#sandbox .controls .conservation_practice').length, 1,
                                'Should have shown conservation practices control');
-                assert.equal($('#sandbox .controls .precipitation').length, 1,
-                               'Should have shown precipitation control');
+                assert.equal($('#sandbox .controls .hives').length, 1,
+                               'Should have shown number of hives control');
             });
 
             it('only shows input tools if user does not own project', function() {
@@ -226,8 +226,8 @@ describe('Modeling', function() {
                                'Should not have shown landcover control');
                 assert.equal($('#sandbox .controls .conservation_practice').length, 0,
                                'Should not have shown conservation practices control');
-                assert.equal($('#sandbox .controls .precipitation').length, 1,
-                               'Should have shown precipitation control');
+                assert.equal($('#sandbox .controls .hives').length, 1,
+                               'Should have shown hives control');
             });
         });
 
@@ -585,8 +585,6 @@ describe('Modeling', function() {
                 it('it sets attributes correctly', function() {
                     assert.equal(this.model.get('user_id'), App.user.get('id'),
                                  'user_id should equal the one in App');
-                    assert.equal(this.model.get('inputs').at(0).get('name'),
-                                 'precipitation', 'First input should be precipitation');
                     assert.deepEqual(this.model.get('modifications').toJSON(),
                                      new models.ModificationsCollection(mocks.scenarios.sample.modifications).toJSON(),
                                      'Should set modifications from argument to initialize');
@@ -596,6 +594,8 @@ describe('Modeling', function() {
                     assert.deepEqual(this.model.get('results').toJSON(),
                                      App.currentProject.createTaskResultCollection().toJSON(),
                                      'Should have set results from App.currentProject');
+                     assert.equal(this.model.get('inputs').pop().get('name'),
+                                  'numberofhives', 'Last input should be number of hives');
                 });
 
                 it('sets hashes', function() {
