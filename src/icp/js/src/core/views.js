@@ -185,6 +185,7 @@ var MapView = Marionette.ItemView.extend({
             addZoomControl: _.contains(map_controls, 'ZoomControl'),
             addLocateMeButton: _.contains(map_controls, 'LocateMeButton'),
             showLayerAttribution: _.contains(map_controls, 'LayerAttribution'),
+            addSidebarToggle: _.contains(map_controls, 'SidebarToggle'),
             interactiveMode: true // True if clicking on map does stuff
         });
 
@@ -224,7 +225,9 @@ var MapView = Marionette.ItemView.extend({
         map.addLayer(this._areaOfInterestLayer);
         map.addLayer(this._modificationsLayer);
 
-        map.addControl(new SidebarToggleControl());
+        if (options.addSidebarToggle) {
+            map.addControl(new SidebarToggleControl());
+        }
     },
 
     setupGeoLocation: function(maxAge) {
@@ -565,18 +568,6 @@ var MapView = Marionette.ItemView.extend({
                 });
             }
         });
-    },
-
-    addSidebarToggleControl: function() {
-        this._sidebarToggleControl = new SidebarToggleControl();
-        this._leafletMap.addControl(this._sidebarToggleControl);
-    },
-
-    removeSidebarToggleControl: function() {
-        if (this._sidebarToggleControl) {
-            this._leafletMap.removeControl(this._sidebarToggleControl);
-            delete this._sidebarToggleControl;
-        }
     }
 });
 
