@@ -312,6 +312,15 @@ var ScenarioTabPanelView = Marionette.ItemView.extend({
         'change': 'render'
     },
 
+    templateHelpers: function() {
+        return {
+            csrftoken: csrf.getToken(),
+            cid: this.model.cid,
+            editable: isEditable(this.model),
+            is_new: this.model.isNew()
+        };
+    },
+
     onRender: function() {
         this.$el.toggleClass('active', this.model.get('active'));
     },
