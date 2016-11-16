@@ -469,7 +469,6 @@ DRAW_CONFIG = {
 MAP_CONTROLS = [
     'LayerAttribution',
     'LayerSelector',
-    'LocateMeButton',
     'ZoomControl',
     'SidebarToggle'
 ]
