@@ -99,8 +99,9 @@
 }
 
 .layer-control-button-container a {
-    float: right;
+    float: left;
 }
+
 
 .leaflet-control {
   .leaflet-control-stream {
@@ -135,4 +136,47 @@
 .leaflet-control-layers,
 .leaflet-popup {
   font-family: $font-family !important;
+  box-shadow: 0 0px 0px rgba(0,0,0,0);
+}
+
+.leaflet-control-opacity,
+.leaflet-control-layers {
+  background-color: $clear;
+  color: black;
+  text-decoration: none;
+  text-align: center;
+  div > a, div > a:hover {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+}
+
+.leaflet-bottom-right-controls {
+  display: flex;
+  flex-direction: row-reverse;
+  float: right;
+}
+
+.leaflet-control-zoom {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.leaflet-bottom.leaflet-left {
+  display: flex;
+  flex-direction: row;
+}
+
+.leaflet-control a {
+  border-radius: 0 !important;
+}
+
+.leaflet-bar a, .leaflet-bar a:hover {
+  border-bottom: none;
+  border-right: 1px solid #ccc;
+}
+
+.leaflet-bar a:first-child {
+  border-right: none;
 }
