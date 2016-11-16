@@ -469,6 +469,7 @@ MAP_CONTROLS = [
     'LayerAttribution',
     'LocateMeButton',
     'ZoomControl',
+    'SidebarToggle'
 ]
 
 TR55_PACKAGE = 'tr-55'

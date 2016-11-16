@@ -103,6 +103,7 @@ MAP_CONTROLS = [
     'LayerAttribution',
     'LocateMeButton',
     'ZoomControl',
+    'SidebarToggle'
 ]
 
 DISABLED_MODEL_PACKAGES = []
