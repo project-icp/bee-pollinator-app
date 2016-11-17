@@ -208,7 +208,10 @@ SECRET_KEY = get_env_setting('DJANGO_SECRET_KEY')
 # SITE CONFIGURATION
 # Hosts/domain names that are valid for this site
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '.internal.azavea.com',
+    'localhost',
+]
 # END SITE CONFIGURATION
 
 
