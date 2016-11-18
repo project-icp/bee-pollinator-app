@@ -181,6 +181,11 @@ var MapView = Marionette.ItemView.extend({
     // Google Maps API library is loaded asynchronously via an inline script tag
     _googleMaps: (window.google ? window.google.maps : null),
 
+    _centeredBounds: [
+        [24.2, -126.4],
+        [49.8, -66.0]
+    ],
+
     initialize: function(options) {
         var defaultLayer = _.findWhere(settings.get('base_layers'), function(layer) {
                 return layer.default === true;
@@ -205,10 +210,7 @@ var MapView = Marionette.ItemView.extend({
             });
 
         // Center the map on the U.S.
-        map.fitBounds([
-            [24.2, -126.4],
-            [49.8, -66.0]
-        ]);
+        map.fitBounds(this._centeredBounds);
 
         this._leafletMap = map;
         this._areaOfInterestLayer = new L.FeatureGroup();
@@ -264,6 +266,15 @@ var MapView = Marionette.ItemView.extend({
         $('.leaflet-bottom.leaflet-right>.leaflet-control-sidebar-toggle, \
           .leaflet-bottom.leaflet-right>.leaflet-control-zoom')
             .wrapAll('<div class="leaflet-bottom-right-controls"></div>');
+    },
+
+    clearMapState: function() {
+        var self = this;
+        self._leafletMap.fitBounds(self._centeredBounds);
+        self.updateModifications(null);
+        self.model.set('areaOfInterest', null);
+        self.model.set('areaOfInterestName', '');
+        self.model.set('previousAreaOfInterest', null);
     },
 
     setupGeoLocation: function(maxAge) {

@@ -103,11 +103,11 @@ var ModelingController = {
     },
 
     projectCleanUp: function() {
-        projectCleanUp();
+        projectCleanUp(true);
     },
 
     makeNewProjectCleanUp: function() {
-        projectCleanUp();
+        projectCleanUp(true);
     },
 
     // Redirect the project cloning route back to the server.
@@ -169,7 +169,7 @@ function setPageTitle() {
         modelPackageDisplayName = _.find(modelPackages, {name: modelPackageName}).display_name;
 }
 
-function projectCleanUp() {
+function projectCleanUp(shouldClearMapState) {
     if (App.currentProject) {
         var scenarios = App.currentProject.get('scenarios');
 
@@ -184,9 +184,12 @@ function projectCleanUp() {
         App.projectNumber = scenarios.at(0).get('project');
     }
 
-    App.getMapView().updateModifications(null);
     App.rootView.subHeaderRegion.empty();
     App.rootView.sidebarRegion.empty();
+
+    if (shouldClearMapState) {
+        App.getMapView().clearMapState();
+    }
 }
 
 function updateUrl() {
