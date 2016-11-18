@@ -21,8 +21,6 @@ The `app` virtual machine contains an instance of the Django application, `servi
 `worker` contains:
 
 - Celery
-- Docker
-- Spark Job Server (container)
 
 ### Getting Started
 
@@ -32,7 +30,11 @@ First, ensure that you have a set of Amazon Web Services (AWS) credentials with 
 $ aws configure --profile icp-stg
 ```
 
-Next, use the following command to bring up a local development environment:
+Next, ensure you have the CDL raster data available to the worker machine.  This can be done, on your host:
+* Create the file at `/opt/icp-crop-data/cdl_5070.tif`, or
+* Add the `cdl_5070.tif` file at a directory of your choosing, and set an environment variable `ICP_DATA_DIR` to it. 
+
+Then, use the following command to bring up a local development environment:
 
 ```bash
 $ vagrant up
@@ -102,7 +104,6 @@ PostgreSQL             | 5432 | `psql -h localhost`
 pgweb                  | 5433 | [http://localhost:5433](http://localhost:5433)
 Redis                  | 6379 | `redis-cli -h localhost 6379`
 Testem                 | 7357 | [http://localhost:7357](http://localhost:7357)
-Spark Job Server       | 8090 | [http://localhost:8090](http://localhost:8090)
 
 ### Caching
 

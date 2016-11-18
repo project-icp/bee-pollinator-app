@@ -89,19 +89,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     worker.vm.synced_folder "src/icp", "/opt/app/"
 
-    # Docker
-    worker.vm.network "forwarded_port", {
-      guest: 2375,
-      host: 2375
-    }.merge(VAGRANT_NETWORK_OPTIONS)
-    # SJS
-    worker.vm.network "forwarded_port", {
-      guest: 8090,
-      host: 8090
-    }.merge(VAGRANT_NETWORK_OPTIONS)
-
     worker.vm.provider "virtualbox" do |v|
       v.memory = 2048
+    end
+
+    if ENV["VAGRANT_ENV"].nil? || ENV["VAGRANT_ENV"] != "TEST"
+      data_dir = ENV['ICP_DATA_DIR'] || "/opt/icp-crop-data"
+      worker.vm.synced_folder data_dir, "/opt/icp-crop-data"
     end
 
     worker.vm.provision "ansible" do |ansible|
