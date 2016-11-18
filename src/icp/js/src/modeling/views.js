@@ -724,7 +724,7 @@ var ResultsView = Marionette.LayoutView.extend({
 
         // Change map to full size first so there isn't empty space when
         // results window animates out
-        App.map.setDoubleHeaderSmallFooterSize(fit);
+        App.map.setNoHeaderSidebarSize(fit);
 
         this.$el.animate({ width: '0px' }, 200, function() {
             self.trigger('animateOut');
