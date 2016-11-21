@@ -19,7 +19,6 @@ var CompareController = {
             }
 
             setupProjectCopy(aoi_census);
-            addForestCoverScenario(aoi_census);
             showCompareWindow();
         } else if (projectId) {
             App.currentProject = new modelingModels.ProjectModel({
@@ -35,7 +34,6 @@ var CompareController = {
                 .fetch()
                 .done(function() {
                     setupProjectCopy(aoi_census);
-                    addForestCoverScenario(aoi_census);
                     showCompareWindow();
                 });
         }
@@ -110,30 +108,6 @@ function copyProject(project, aoi_census) {
         scenarios: scenariosCopy,
         allow_save: false
     });
-}
-
-// Adds special 100% Forest Cover Scenario for the Compare View
-function addForestCoverScenario(aoi_census) {
-    var project = App.currentProject,
-        forestCoverScenario = new modelingModels.ScenarioModel({}),
-        currentConditions = project.get('scenarios').findWhere({ is_current_conditions: true });
-
-    forestCoverScenario.set({
-        name: '100% Forest Cover',
-        is_current_conditions: false,
-        is_pre_columbian: true,
-        modifications: currentConditions.get('modifications'),
-        modification_hash: currentConditions.get('modification_hash'),
-        results: new modelingModels.ResultCollection(currentConditions.get('results').toJSON()),
-        inputs: new modelingModels.ModificationsCollection(currentConditions.get('inputs').toJSON()),
-        inputmod_hash: currentConditions.get('inputmod_hash'),
-        allow_save: false
-    });
-    if (aoi_census) {
-        forestCoverScenario.set('aoi_census', aoi_census);
-    }
-    forestCoverScenario.get('inputs').on('add', _.debounce(_.bind(forestCoverScenario.fetchResults, forestCoverScenario), 500));
-    project.get('scenarios').add(forestCoverScenario, { at: 0 });
 }
 
 function saveAfterLogin(user, guest) {
