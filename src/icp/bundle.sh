@@ -82,6 +82,7 @@ if [ -n "$LIST_DEPS" ]; then
 fi
 
 COPY_IMAGES_COMMAND="cp -r \
+    ./img/* \
     ./node_modules/leaflet/dist/images/* \
     ./node_modules/leaflet-draw/dist/images/* \
     $STATIC_IMAGES_DIR"
@@ -172,7 +173,7 @@ fi
 VAGRANT_COMMAND="$TEST_COMMAND $VENDOR_COMMAND
     $NODE_SASS $ENTRY_SASS_FILE -o ${STATIC_CSS_DIR} &
     $BROWSERIFY $ENTRY_JS_FILES $BROWSERIFY_EXT $NUNJUCKS_TRANSFORM \
-        -o ${STATIC_JS_DIR}main.js $EXTRA_ARGS &"
+        -o ${STATIC_JS_DIR}main.js $EXTRA_ARGS"
 
 # Ensure static asset folders exist.
 mkdir -p \

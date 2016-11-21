@@ -8,7 +8,8 @@ var router = require('./router').router,
     ErrorController = require('./core/error/controllers').ErrorController,
     SignUpController = require('./user/controllers').SignUpController;
 
-router.addRoute(/^/, DrawController, 'draw');
+router.addRoute(/^/, DrawController, 'splash');
+router.addRoute('draw(/)', DrawController, 'draw');
 router.addRoute('project/new/:modelPackage(/)', ModelingController, 'makeNewProject');
 router.addRoute('project(/:projectId)(/scenario/:scenarioId)(/)', ModelingController, 'project');
 router.addRoute('project/:projectId/clone(/)', ModelingController, 'projectClone');
