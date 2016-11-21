@@ -11,12 +11,7 @@ var App = require('../app'),
 
 
 var DrawController = {
-    drawPrepare: function() {
-        App.map.revertMaskLayer();
-        if (!App.map.get('areaOfInterest')) {
-            App.map.setDrawSize(true);
-        }
-    },
+    drawPrepare: prepareView,
 
     draw: function() {
         var geocodeSearch = new geocoder.GeocoderView(),
@@ -34,8 +29,22 @@ var DrawController = {
         App.rootView.geocodeSearchRegion.empty();
         App.rootView.sidebarRegion.empty();
         App.rootView.footerRegion.empty();
+    },
+
+    splashPrepare: prepareView,
+
+    splash: function() {
+        App.rootView.geocodeSearchRegion.show(new geocoder.GeocoderView());
+        App.rootView.sidebarRegion.show(new views.SplashWindow());
     }
 };
+
+function prepareView() {
+    App.map.revertMaskLayer();
+    if (!App.map.get('areaOfInterest')) {
+        App.map.setDrawSize(true);
+    }
+}
 
 /**
  * If we are in embed mode then the project is an activity and we want to keep

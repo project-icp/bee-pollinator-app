@@ -138,6 +138,7 @@ var SplashWindow = Marionette.ItemView.extend({
     },
 
     moveToDraw: function() {
+        router.navigate('/draw', { trigger: true });
     },
 });
 
