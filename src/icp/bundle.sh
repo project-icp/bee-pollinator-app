@@ -82,6 +82,7 @@ if [ -n "$LIST_DEPS" ]; then
 fi
 
 COPY_IMAGES_COMMAND="cp -r \
+    ./img/* \
     ./node_modules/leaflet/dist/images/* \
     ./node_modules/leaflet-draw/dist/images/* \
     $STATIC_IMAGES_DIR"
