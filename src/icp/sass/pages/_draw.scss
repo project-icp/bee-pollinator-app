@@ -1,4 +1,4 @@
-#draw-window {
+#splash-window, #draw-window {
   width: 485px;
   padding: 15px;
   position: absolute;
@@ -9,7 +9,11 @@
     transform: translateX(100%);
   }
 
-  p {
+  h2, p {
       padding: 15px 0;
+  }
+
+  img {
+      width: 100%;
   }
 }

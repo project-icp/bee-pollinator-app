@@ -13,6 +13,7 @@ var $ = require('jquery'),
     App = require('../app'),
     utils = require('./utils'),
     coreUtils = require('../core/utils'),
+    splashTmpl = require('./templates/splash.html'),
     toolbarTmpl = require('./templates/toolbar.html'),
     drawTmpl = require('./templates/draw.html'),
     resetDrawTmpl = require('./templates/reset.html'),
@@ -123,6 +124,23 @@ function addLayer(shape, name, label) {
     });
 }
 
+var SplashWindow = Marionette.ItemView.extend({
+    template: splashTmpl,
+
+    id: 'splash-window',
+
+    ui: {
+        'start': '#get-started',
+    },
+
+    events: {
+        'click @ui.start': 'moveToDraw',
+    },
+
+    moveToDraw: function() {
+    },
+});
+
 var DrawWindow = Marionette.LayoutView.extend({
     template: windowTmpl,
 
@@ -179,4 +197,5 @@ var DrawWindow = Marionette.LayoutView.extend({
 
 module.exports = {
     DrawWindow: DrawWindow,
+    SplashWindow: SplashWindow,
 };
