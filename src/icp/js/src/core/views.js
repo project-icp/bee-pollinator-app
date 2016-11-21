@@ -187,19 +187,14 @@ var MapView = Marionette.ItemView.extend({
     ],
 
     initialize: function(options) {
-        var defaultLayer = _.findWhere(settings.get('base_layers'), function(layer) {
-                return layer.default === true;
-            }),
-            defaultLayerName = defaultLayer ? defaultLayer['display'] : 'Streets',
-            map_controls = settings.get('map_controls');
+        var mapControls = settings.get('map_controls');
 
         _.defaults(options, {
-            addZoomControl: _.contains(map_controls, 'ZoomControl'),
-            addLocateMeButton: _.contains(map_controls, 'LocateMeButton'),
-            addLayerSelector: _.contains(map_controls, 'LayerSelector'),
-            showLayerAttribution: _.contains(map_controls, 'LayerAttribution'),
-            addSidebarToggle: _.contains(map_controls, 'SidebarToggle'),
-            initialLayerName: defaultLayerName,
+            addZoomControl: _.contains(mapControls, 'ZoomControl'),
+            addLocateMeButton: _.contains(mapControls, 'LocateMeButton'),
+            addLayerSelector: _.contains(mapControls, 'LayerSelector'),
+            showLayerAttribution: _.contains(mapControls, 'LayerAttribution'),
+            addSidebarToggle: _.contains(mapControls, 'SidebarToggle'),
             interactiveMode: true // True if clicking on map does stuff
         });
 
@@ -229,7 +224,7 @@ var MapView = Marionette.ItemView.extend({
         if (options.addLocateMeButton) {
             addLocateMeButton(map, maxGeolocationAge);
         }
-       
+
         if (options.addLayerSelector) {
             var layerOptions = {
                 autoZIndex: false,
@@ -237,9 +232,10 @@ var MapView = Marionette.ItemView.extend({
                 collapsed: false
             };
 
-            self.layerControl = new LayerControl(
-                self.baseLayers, self.overlayLayers, layerOptions
-            );
+            self.layerControl = new LayerControl({
+                layers: this.baseLayers,
+                initialLayer: this.baseLayers.satellite
+            });
 
             self.opacityControl = new OpacityControl(layerOptions);
             self.layerControl.addTo(map);
@@ -248,12 +244,6 @@ var MapView = Marionette.ItemView.extend({
 
         this.setMapEvents();
         this.setupGeoLocation(maxGeolocationAge);
-
-        var initialLayer = this.baseLayers[options.initialLayerName] ||
-                            this.baseLayers[defaultLayerName];
-        if (initialLayer) {
-            map.addLayer(initialLayer);
-        }
 
         map.addLayer(this._areaOfInterestLayer);
         map.addLayer(this._modificationsLayer);
@@ -380,6 +370,7 @@ var MapView = Marionette.ItemView.extend({
                     attribution: '',
                     minZoom: 0});
                 leafletLayer = new L.TileLayer(tileUrl, layer);
+
                 if (layer.has_opacity_slider) {
                     var slider = new OpacityControl({position: 'topright'});
 

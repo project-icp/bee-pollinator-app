@@ -12,8 +12,6 @@ from os import environ
 from os.path import abspath, basename, dirname, join, normpath
 from sys import path
 
-from layer_settings import LAYERS
-
 # Normally you should not import ANYTHING from Django directly
 # into your settings, but ImproperlyConfigured is an exception.
 from django.core.exceptions import ImproperlyConfigured
@@ -350,115 +348,19 @@ OMGEO_SETTINGS = [[
 
 
 # Geoprocessing Settings
-GEOP = {
-    'host': environ.get('ICP_GEOPROCESSING_HOST', 'localhost'),
-    'port': environ.get('ICP_GEOPROCESSING_PORT', '8090'),
-    'args': {
-        'SummaryJob': 'context=geoprocessing&appName=geoprocessing-%s&classPath=org.wikiwatershed.mmw.geoprocessing.SummaryJob' % environ.get('MMW_GEOPROCESSING_VERSION', '0.1.0'),  # NOQA
-    },
-    'json': {
-        'nlcdSoilCensus': {
-            'input': {
-                'geometry': None,
-                'tileCRS': 'ConusAlbers',
-                'polyCRS': 'LatLng',
-                'nlcdLayer': 'nlcd-2011-30m-epsg5070-0.10.0',
-                'soilLayer': 'ssurgo-hydro-groups-30m-epsg5070-0.10.0',
-                'zoom': 0
-            },
-        },
-        'nlcd_streams': {
-            'input': {
-                'polygon': [],
-                'polygonCRS': 'LatLng',
-                'vector': [],
-                'vectorCRS': 'LatLng',
-                'rasters': [
-                    'nlcd-2011-30m-epsg5070-0.10.0'
-                ],
-                'rasterCRS': 'ConusAlbers',
-                'operationType': 'RasterLinesJoin',
-                'zoom': 0
-            }
-        },
-        'nlcd_soils': {
-            'input': {
-                'polygon': [],
-                'polygonCRS': 'LatLng',
-                'rasters': [
-                    'nlcd-2011-30m-epsg5070-0.10.0',
-                    'ssurgo-hydro-groups-30m-epsg5070-0.10.0',
-                    'us-ssugro-texture-id-30m-epsg5070'
-                ],
-                'rasterCRS': 'ConusAlbers',
-                'operationType': 'RasterGroupedCount',
-                'zoom': 0
-            }
-        },
-        'gwn': {
-            'input': {
-                'polygon': [],
-                'polygonCRS': 'LatLng',
-                'rasters': [
-                    'us-groundwater-nitrogen-30m-epsg5070'
-                ],
-                'rasterCRS': 'ConusAlbers',
-                'operationType': 'RasterGroupedCount',
-                'zoom': 0
-            }
-        },
-        'avg_awc': {
-            'input': {
-                'polygon': [],
-                'targetRaster': 'us-ssugro-aws100-30m-epsg5070',
-                'rasters': [],
-                'rasterCRS': 'ConusAlbers',
-                'polygonCRS': 'LatLng',
-                'operationType': 'RasterGroupedAverage',
-                'zoom': 0
-            }
-        },
-        'nlcd_slope': {
-            'input': {
-                'polygon': [],
-                'polygonCRS': 'LatLng',
-                'rasters': [
-                    'nlcd-2011-30m-epsg5070-0.10.0',
-                    'us-percent-slope-30m-epsg5070',
-                ],
-                'rasterCRS': 'ConusAlbers',
-                'operationType': 'RasterGroupedCount',
-                'zoom': 0
-            }
-        },
-        'slope': {
-            'input': {
-                'polygon': [],
-                'polygonCRS': 'LatLng',
-                'rasters': [],
-                'targetRaster': 'us-percent-slope-30m-epsg5070',
-                'rasterCRS': 'ConusAlbers',
-                'operationType': 'RasterGroupedAverage',
-                'zoom': 0
-            }
-        },
-        'nlcd_kfactor': {
-            'input': {
-                'polygon': [],
-                'polygonCRS': 'LatLng',
-                'rasters': [
-                    'nlcd-2011-30m-epsg5070-0.10.0'
-                ],
-                'targetRaster': 'us-ssugro-kfactor-30m-epsg5070',
-                'rasterCRS': 'ConusAlbers',
-                'operationType': 'RasterGroupedAverage',
-                'zoom': 0
-            }
-        }
-    }
-}
+GEOP = {}
 
 # UI CONFIGURATION
+BASEMAPS = [
+    {
+        'display': 'street',
+        'url': 'https://server.arcgisonline.com/arcgis/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}'  # noqa
+    },
+    {
+        'display': 'satellite',
+        'url': 'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'  # noqa
+    },
+]
 
 DRAW_TOOLS = [
     'Draw',         # Custom Area or 1 Sq Km stamp
