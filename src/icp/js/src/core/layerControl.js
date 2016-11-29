@@ -74,7 +74,7 @@ var LayerControlButtonView = Marionette.ItemView.extend({
     templateHelpers: function() {
         return {
             currentBasemap: this.satelliteVisible ? "Streets" : "Satellite",
-            lyr_img: this.satelliteVisible ? "http://placehold.it/25/1a7422/000000" : "http://placehold.it/25/572412/000000",
+            lyr_img: this.satelliteVisible ?  "/static/images/street_thumb.png" : "/static/images/satellite_thumb.png",
         };
     }
 });

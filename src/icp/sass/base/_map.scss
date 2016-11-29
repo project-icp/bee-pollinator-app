@@ -175,6 +175,25 @@
 .leaflet-bar a, .leaflet-bar a:hover {
   border-bottom: none;
   border-right: 1px solid #ccc;
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+  i, span {
+      color: $ui-primary;
+      line-height: 30px;
+      vertical-align: middle;
+      text-align: center;
+  }
+  i {
+      margin-left: auto;
+  }
+  span {
+      margin: auto;
+  }
+  img {
+      float: left;
+      padding: 2px;
+  }
 }
 
 .leaflet-bar a:first-child {
