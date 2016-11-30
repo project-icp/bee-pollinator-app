@@ -35,7 +35,7 @@ var OpacityControlView = Marionette.ItemView.extend({
     events: {
         'click @ui.controlToggle': 'toggle'
     },
-    
+
     toggle: function() {
         if (this.hasBeenToggled) {
         } else {
@@ -47,7 +47,7 @@ var OpacityControlView = Marionette.ItemView.extend({
     templateHelpers: function() {
         return {
             layerName: "CDL Layer",
-            lyr_img: this.hasBeenToggled ? "http://placehold.it/25/000000/000000" : "http://placehold.it/25/ffff00/000000",
+            iconClass: this.hasBeenToggled ? "fa fa-eye-slash" : "fa fa-eye",
         };
     }
 });
