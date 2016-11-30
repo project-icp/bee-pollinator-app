@@ -362,6 +362,11 @@ BASEMAPS = [
     },
 ]
 
+OVERLAY = {
+    'url': 'https://{s}.tiles.azavea.com/nlcd/{z}/{x}/{y}.png',
+    'maxNativeZoom': 13
+}
+
 DRAW_TOOLS = [
     'Draw',         # Custom Area or 1 Sq Km stamp
     'ResetDraw',

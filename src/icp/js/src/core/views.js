@@ -17,7 +17,7 @@ var L = require('leaflet'),
     modalViews = require('./modals/views'),
     settings = require('./settings'),
     LayerControl = require('./layerControl'),
-    OpacityControl = require('./opacityControl'),
+    OverlayControl = require('./overlayControl'),
     SidebarToggleControl = require('./sidebarToggleControl');
 
 require('leaflet.locatecontrol');
@@ -226,20 +226,22 @@ var MapView = Marionette.ItemView.extend({
         }
 
         if (options.addLayerSelector) {
-            var layerOptions = {
-                autoZIndex: false,
-                position: 'bottomleft',
-                collapsed: false
-            };
 
             self.layerControl = new LayerControl({
                 layers: this.baseLayers,
                 initialLayer: this.baseLayers.satellite
             });
 
-            self.opacityControl = new OpacityControl(layerOptions);
+            var overlayInfo = settings.get('overlay_layer'),
+                overlayLayer = new L.TileLayer(overlayInfo.url, { 
+                    maxNativeZoom: overlayInfo.maxNativeZoom 
+                });
+
+            self.overlayControl = new OverlayControl({
+                layer: overlayLayer
+            });
             self.layerControl.addTo(map);
-            self.opacityControl.addTo(map);
+            self.overlayControl.addTo(map);
         }
 
         this.setMapEvents();
