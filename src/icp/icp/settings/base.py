@@ -302,9 +302,9 @@ REST_FRAMEWORK = {
 ACCOUNT_ACTIVATION_DAYS = 7  # One-week activation window.
 
 # Add custom authentication classes
-AUTHENTICATION_BACKENDS = (
+AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
-)
+]
 
 # END THIRD-PARTY CONFIGURATION
 
