@@ -302,9 +302,9 @@ REST_FRAMEWORK = {
 ACCOUNT_ACTIVATION_DAYS = 7  # One-week activation window.
 
 # Add custom authentication classes
-AUTHENTICATION_BACKENDS = (
+AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
-)
+]
 
 # END THIRD-PARTY CONFIGURATION
 
@@ -361,6 +361,11 @@ BASEMAPS = [
         'url': 'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'  # noqa
     },
 ]
+
+OVERLAY = {
+    'url': 'https://{s}.tiles.azavea.com/nlcd/{z}/{x}/{y}.png',
+    'maxNativeZoom': 13
+}
 
 DRAW_TOOLS = [
     'Draw',         # Custom Area or 1 Sq Km stamp

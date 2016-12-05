@@ -435,7 +435,7 @@ var NumberOfHivesView = ControlView.extend({
 
     templateHelpers: function() {
         return {
-            displayName: 'Value'
+            displayName: 'Managed hives per acre'
         };
     },
 

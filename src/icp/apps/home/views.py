@@ -104,6 +104,7 @@ def get_client_settings(request):
     client_settings = {
         'client_settings': json.dumps({
             'base_layers': settings.BASEMAPS,
+            'overlay_layer': settings.OVERLAY,
             'draw_tools': settings.DRAW_TOOLS,
             'map_controls': settings.MAP_CONTROLS,
             'model_packages': get_model_packages(),
