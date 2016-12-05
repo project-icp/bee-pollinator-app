@@ -15,3 +15,6 @@
 - name: Create model data path
   file: path="{{ model_data_path }}"
         state=directory
+
+- name: Install pollinator model
+  command: python setup.py build --build-base=/tmp install chdir="{{ app_home }}/pollinator"
