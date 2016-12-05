@@ -383,16 +383,4 @@ MAP_CONTROLS = [
     'SidebarToggle'
 ]
 
-TR55_PACKAGE = 'tr-55'
-
-MODEL_PACKAGES = [
-    {
-        'name': TR55_PACKAGE,
-        'display_name': 'Site Storm Model',
-        'description': '',
-    },
-]
-
-DISABLED_MODEL_PACKAGES = []
-
 # END UI CONFIGURATION

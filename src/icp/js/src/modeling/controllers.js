@@ -50,7 +50,6 @@ var ModelingController = {
                             project.get('scenarios').makeFirstScenarioActive();
                         }
 
-                        setPageTitle();
                     });
                 })
                 .fail(function() {
@@ -77,7 +76,6 @@ var ModelingController = {
             }
 
             finishProjectSetup(project, lock);
-            setPageTitle();
         }
     },
 
@@ -99,7 +97,6 @@ var ModelingController = {
         setupNewProjectScenarios(project);
         finishProjectSetup(project, lock);
         updateUrl();
-        setPageTitle();
     },
 
     projectCleanUp: function() {
@@ -140,8 +137,6 @@ var ModelingController = {
                 if (project.get('is_activity')) {
                     settings.set('activityMode', true);
                 }
-
-                setPageTitle();
             })
             .fail(function() {
                 App.currentProject = null;
@@ -161,12 +156,6 @@ function finishProjectSetup(project, lock) {
             updateUrl();
         }
     });
-}
-
-function setPageTitle() {
-    var modelPackageName = App.currentProject.get('model_package'),
-        modelPackages = settings.get('model_packages'),
-        modelPackageDisplayName = _.find(modelPackages, {name: modelPackageName}).display_name;
 }
 
 function projectCleanUp(shouldClearMapState) {
@@ -250,7 +239,6 @@ function reinstateProject(number, lock) {
                 'areaOfInterest': project.get('area_of_interest'),
                 'areaOfInterestName': project.get('area_of_interest_name')
             });
-            setPageTitle();
             lock.resolve();
         });
 

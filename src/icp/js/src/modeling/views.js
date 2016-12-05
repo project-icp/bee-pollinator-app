@@ -63,12 +63,10 @@ var ModelingHeaderView = Marionette.LayoutView.extend({
         }));
 
         this.toolbarRegion.empty();
-        App.currentProject.fetchGisDataIfNeeded().done(function() {
-            self.toolbarRegion.show(new ToolbarTabContentsView({
-                collection: self.model.get('scenarios'),
-                model_package: self.model.get('model_package')
-            }));
-        });
+        self.toolbarRegion.show(new ToolbarTabContentsView({
+            collection: self.model.get('scenarios'),
+            model_package: self.model.get('model_package')
+        }));
     },
 
     onShow: function() {
@@ -245,7 +243,7 @@ var ScenariosView = Marionette.LayoutView.extend({
         // Check the first scenario in the collection as a proxy for the
         // entire collection.
         var scenario = this.collection.first(),
-            showCompare = App.currentProject.get('model_package') === models.TR55_PACKAGE,
+            showCompare = App.currentProject.get('model_package') === models.YIELD_PACKAGE,
             compareUrl = this.projectModel.getCompareUrl();
 
         return {
@@ -650,7 +648,6 @@ var ResultsView = Marionette.LayoutView.extend({
             this.lock = options.lock;
         }
 
-        this.fetchGisDataPromise = this.model.fetchGisDataIfNeeded();
         this.fetchResultsPromise = this.model.fetchResultsIfNeeded();
     },
 
@@ -669,13 +666,8 @@ var ResultsView = Marionette.LayoutView.extend({
                 self.modelingRegion.show(new coreViews.TaskMessageView({ model: tmvModel }));
             };
 
-        tmvModel.setWorking('Gathering Data');
+        tmvModel.setWorking('Calculating Results');
         self.modelingRegion.show(new coreViews.TaskMessageView({ model: tmvModel }));
-
-        self.fetchGisDataPromise.done(function() {
-            tmvModel.setWorking('Calculating Results');
-            self.modelingRegion.show(new coreViews.TaskMessageView({ model: tmvModel }));
-        }).fail(errorHandler);
 
         self.fetchResultsPromise.done(function() {
             self.showDetailsRegion();
@@ -864,12 +856,10 @@ function triggerBarChartRefresh() {
 
 function getResultView(modelPackage, resultName) {
     switch (modelPackage) {
-        case models.TR55_PACKAGE:
+        case models.YIELD_PACKAGE:
             switch(resultName) {
-                case 'runoff':
+                case 'yield':
                     return tr55RunoffViews.ResultView;
-                case 'quality':
-                    return tr55QualityViews.ResultView;
                 default:
                     console.log('Result not supported.');
             }

@@ -9,9 +9,9 @@ from django.contrib.auth.models import User
 
 class Project(models.Model):
     # TODO Change this to the bee model package
-    TR55 = 'tr-55'
+    YIELD_MODEL = 'yield'
     MODEL_PACKAGES = (
-        (TR55, 'Site Storm Model'),
+        (YIELD_MODEL, 'Crop Yield Model'),
     )
 
     user = models.ForeignKey(User)
