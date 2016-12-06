@@ -40,11 +40,7 @@
   version: 0.2.0
 - src: azavea.build-essential
   version: 0.1.0
-- src: azavea.mapnik
-  version: 0.1.0
 - src: azavea.beaver
   version: 1.0.1
 - src: azavea.java
   version: 0.2.5
-- src: azavea.docker
-  version: 2.0.1

@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 from __future__ import division
 
 import json
-from urlparse import urljoin
 
 from django.http import Http404
 from django.shortcuts import render_to_response, get_object_or_404, redirect
@@ -79,27 +78,6 @@ def project_clone(request, proj_id=None):
     return redirect('/project/{0}'.format(project.id))
 
 
-def get_layer_url(layer):
-    """ For layers that are served off our tile server,
-    the URL depends on the environment. Therefore, we
-    get it dynamically from the settings file and populate
-    the layer config with the endpoint.
-    """
-    tiler_prefix = '//'
-    tiler_host = settings.TILER_HOST
-    tiler_postfix = '/{z}/{x}/{y}'
-    tiler_base = '%s%s' % (tiler_prefix, tiler_host)
-
-    return urljoin(tiler_base, layer['code'] + tiler_postfix)
-
-
-def get_model_packages():
-    for model_package in settings.MODEL_PACKAGES:
-        if model_package['name'] in settings.DISABLED_MODEL_PACKAGES:
-            model_package['disabled'] = True
-    return settings.MODEL_PACKAGES
-
-
 def get_client_settings(request):
     client_settings = {
         'client_settings': json.dumps({
@@ -107,9 +85,6 @@ def get_client_settings(request):
             'overlay_layer': settings.OVERLAY,
             'draw_tools': settings.DRAW_TOOLS,
             'map_controls': settings.MAP_CONTROLS,
-            'model_packages': get_model_packages(),
-            # TODO Remove/rename when we know if there are max area contraints
-            # for bee model
             'mapshed_max_area': settings.DRAW_CONFIG['MaxAoIArea']
         }),
         'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY,

@@ -199,88 +199,15 @@ def choose_worker():
 
 @decorators.api_view(['POST'])
 @decorators.permission_classes((AllowAny, ))
-def start_tr55(request, format=None):
+def start_crop_yield(request, format=None):
     user = request.user if request.user.is_authenticated() else None
-    created = now()
-
     model_input = json.loads(request.POST['model_input'])
-    job = Job.objects.create(created_at=created, result='', error='',
-                             traceback='', user=user, status='started')
-    task_list = _initiate_tr55_job_chain(model_input, job.id)
-    job.uuid = task_list.id
-    job.save()
 
-    return Response({
-        'job': task_list.id,
-        'status': 'started',
-    })
-
-
-def _initiate_tr55_job_chain(model_input, job_id):
-    job_chain = _construct_tr55_job_chain(model_input, job_id)
-    errback = save_job_error.s(job_id).set(exchange=MAGIC_EXCHANGE,
-                                           routing_key=choose_worker())
-
-    return chain(job_chain).apply_async(link_error=errback)
-
-
-def _construct_tr55_job_chain(model_input, job_id):
-    exchange = MAGIC_EXCHANGE
-    routing_key = choose_worker()
-
-    job_chain = []
-
-    aoi = model_input.get('area_of_interest')
-    aoi_census = model_input.get('aoi_census')
-    modification_censuses = model_input.get('modification_censuses')
-    # Non-overlapping polygons derived from the modifications
-    pieces = model_input.get('modification_pieces', [])
-    # The hash of the current modifications
-    current_hash = model_input.get('modification_hash')
-
-    # The hash of the modifications whose censuses we already have
-    census_hash = None
-    # The list of already-computed censuses of the modifications
-    modification_census_items = []
-    if modification_censuses:
-        census_hash = modification_censuses.get('modification_hash')
-        modification_census_items = modification_censuses.get('censuses')
-
-    if (aoi_census and ((modification_census_items and
-       census_hash == current_hash) or not pieces)):
-        censuses = [aoi_census] + modification_census_items
-
-        job_chain.append(tasks.run_tr55.s(censuses, model_input)
-                         .set(exchange=exchange, routing_key=choose_worker()))
-    else:
-        job_chain.append(tasks.get_histogram_job_results.s()
-                         .set(exchange=exchange, routing_key=routing_key))
-        job_chain.append(tasks.histograms_to_censuses.s()
-                         .set(exchange=exchange, routing_key=routing_key))
-
-        if aoi_census and pieces:
-            polygons = [m['shape']['geometry'] for m in pieces]
-
-            job_chain.insert(0, tasks.start_histograms_job.s(polygons)
-                             .set(exchange=exchange, routing_key=routing_key))
-            job_chain.insert(len(job_chain),
-                             tasks.run_tr55.s(model_input,
-                                              cached_aoi_census=aoi_census)
-                             .set(exchange=exchange,
-                                  routing_key=choose_worker()))
-        else:
-            polygons = [aoi] + [m['shape']['geometry'] for m in pieces]
-
-            job_chain.insert(0, tasks.start_histograms_job.s(polygons)
-                             .set(exchange=exchange, routing_key=routing_key))
-            job_chain.insert(len(job_chain), tasks.run_tr55.s(model_input)
-                             .set(exchange=exchange,
-                                  routing_key=choose_worker()))
-
-    job_chain.append(save_job_result.s(job_id, model_input)
-                     .set(exchange=exchange, routing_key=choose_worker()))
-
-    return job_chain
+    return start_celery_job([
+        tasks.calculate_yield.s(model_input).set(
+            exchange=MAGIC_EXCHANGE, routing_key=choose_worker()
+        )],
+        model_input, user)
 
 
 def start_celery_job(task_list, job_input, user=None,

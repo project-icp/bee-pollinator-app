@@ -11,12 +11,8 @@ var $ = require('jquery'),
     turfErase = require('turf-erase'),
     turfIntersect = require('turf-intersect');
 
-// TODO Remove these when done with fetchGisDataIfNeeded/user input model examples
-var MAPSHED = 'mapshed';
-var GWLFE = 'gwlfe';
-
-var TR55_TASK = 'tr55';
-var TR55_PACKAGE = 'tr-55';
+var YIELD_TASK = 'yield';
+var YIELD_PACKAGE = 'yield';
 
 var ModelPackageControlModel = Backbone.Model.extend({
     defaults: {
@@ -47,21 +43,10 @@ var ModelPackageControlsCollection = Backbone.Collection.extend({
 
 var ModelPackageModel = Backbone.Model.extend();
 
-var Tr55TaskModel = coreModels.TaskModel.extend({
+var YieldTaskModel = coreModels.TaskModel.extend({
     defaults: _.extend(
         {
-            taskName: TR55_TASK,
-            taskType: 'modeling'
-        },
-        coreModels.TaskModel.prototype.defaults
-    )
-});
-
-// TODO Remove when done changing fetchGisDataIfNeeded example
-var MapshedTaskModel = coreModels.TaskModel.extend({
-    defaults: _.extend(
-        {
-            taskName: MAPSHED,
+            taskName: YIELD_TASK,
             taskType: 'modeling'
         },
         coreModels.TaskModel.prototype.defaults
@@ -121,7 +106,7 @@ var ProjectModel = Backbone.Model.extend({
         created_at: null,               // Date
         area_of_interest: null,         // GeoJSON
         area_of_interest_name: null,    // Human readable string for AOI.
-        model_package: TR55_PACKAGE,    // Package name
+        model_package: YIELD_PACKAGE,   // Package name
         scenarios: null,                // ScenariosCollection
         user_id: 0,                     // User that created the project
         is_activity: false,             // Project that persists across routes
@@ -302,91 +287,6 @@ var ProjectModel = Backbone.Model.extend({
         }
 
         return url;
-    },
-
-    /**
-     * Despite there not being any gwlfe model, I've left this
-     * for reference in case the bees need to fetch additional GIS Data:
-
-     * If a project is of the GWLFE package, we trigger the mapshed GIS
-     * data gathering chain, and poll for it to finish. Once it finishes,
-     * we resolve the lock to indicate the project is ready for further
-     * processing.
-     * If the project is not of the GWLFE package, we simply resolve the
-     * lock immediately and return.
-     */
-    fetchGisData: function() {
-        if (this.get('model_package') === GWLFE) {
-            var aoi = this.get('area_of_interest'),
-                promise = $.Deferred(),
-                taskModel = createTaskModel(MAPSHED),
-                taskHelper = {
-                    postData: {
-                        mapshed_input: JSON.stringify({
-                            area_of_interest: aoi
-                        })
-                    },
-
-                    onStart: function() {
-                        console.log('Starting polling for MAPSHED');
-                    },
-
-                    startFailure: function(response) {
-                        console.log('Failed to start gathering data for MAPSHED');
-
-                        if (response.responseJSON && response.responseJSON.error) {
-                            console.log(response.responseJSON.error);
-                        }
-
-                        promise.reject();
-                    },
-
-                    pollSuccess: function() {
-                        promise.resolve(taskModel.get('result'));
-                    },
-
-                    pollFailure: function(err) {
-                        console.log('Failed to gather data required for MAPSHED');
-                        promise.reject(err);
-                    }
-                };
-
-            taskModel.start(taskHelper);
-            return promise;
-        } else {
-            // Currently there are no methods for fetching GIS Data if the
-            // model package is not GWLFE. Thus we return a resolved promise
-            // so that any execution waiting on this can continue immediately.
-            return $.when();
-        }
-    },
-
-    /**
-     * Returns a promise that completes when GIS Data has been fetched. If fetching
-     * is not required, returns an immediatley resolved promise.
-     */
-    fetchGisDataIfNeeded: function() {
-        var self = this,
-            saveProjectAndScenarios = _.bind(self.saveProjectAndScenarios, self);
-
-        if (self.get('gis_data') === null && self.fetchGisDataPromise === undefined) {
-            self.fetchGisDataPromise = self.fetchGisData();
-            self.fetchGisDataPromise
-                .done(function(result) {
-                    if (result) {
-                        self.set('gis_data', result);
-                        saveProjectAndScenarios();
-                    }
-                })
-                .always(function() {
-                    // Clear promise once it completes, so we start a new one
-                    // next time.
-                    delete self.fetchGisDataPromise;
-                });
-        }
-
-        // Return fetchGisDataPromise if it exists, else an immediately resolved one.
-        return self.fetchGisDataPromise || $.when();
     }
 });
 
@@ -578,16 +478,6 @@ var ModificationsCollection = Backbone.Collection.extend({
     model: ModificationModel
 });
 
-// TODO Leaving for reference on how to add model with user input.
-// Remove when done using example...
-var GwlfeModificationModel = Backbone.Model.extend({
-    defaults: {
-        modKey: null,
-        output: null,
-        userInput: null
-    }
-});
-
 var ScenarioModel = Backbone.Model.extend({
     urlRoot: '/api/modeling/scenarios/',
 
@@ -612,7 +502,7 @@ var ScenarioModel = Backbone.Model.extend({
         this.set('user_id', App.user.get('id'));
 
         var defaultMods = {};
-        if (App.currentProject.get('model_package') === TR55_PACKAGE)  {
+        if (App.currentProject.get('model_package') === YIELD_PACKAGE)  {
             defaultMods = {
                inputs: [
                    {
@@ -669,18 +559,6 @@ var ScenarioModel = Backbone.Model.extend({
 
     addModification: function(modification) {
         var modifications = this.get('modifications');
-
-        // For GWLFE, first remove existing mod with the same key since it
-        // doesn't make sense to have multiples of the same type of BMP.
-        if (App.currentProject.get('model_package') === GWLFE) {
-            var modKey = modification.get('modKey'),
-                matches = modifications.where({'modKey': modKey});
-
-            if (matches) {
-                modifications.remove(matches[0], {silent: true});
-            }
-        }
-
         modifications.add(modification);
     },
 
@@ -734,10 +612,9 @@ var ScenarioModel = Backbone.Model.extend({
             });
 
         if (needsResults && self.fetchResultsPromise === undefined) {
-            var fetchResults = _.bind(self.fetchResults, self),
-                fetchGisDataPromise = App.currentProject.fetchGisDataIfNeeded();
+            var fetchResults = _.bind(self.fetchResults, self);
 
-            self.fetchResultsPromise = fetchGisDataPromise.then(function() {
+            self.fetchResultsPromise = $.when().then(function() {
                 var promises = fetchResults();
                 return $.when(promises.startPromise, promises.pollingPromise);
             });
@@ -848,7 +725,7 @@ var ScenarioModel = Backbone.Model.extend({
             project = App.currentProject;
 
         switch(App.currentProject.get('model_package')) {
-            case TR55_PACKAGE:
+            case YIELD_PACKAGE:
                 var nonZeroModifications = self.get('modifications').filter(function(mod) {
                     return mod.get('effectiveArea') > 0;
                 });
@@ -863,21 +740,6 @@ var ScenarioModel = Backbone.Model.extend({
                         inputmod_hash: self.get('inputmod_hash'),
                         modification_hash: self.get('modification_hash')
                     })
-                };
-            // TODO Remove when done changing fetchGisDataIfNeeded example
-            case GWLFE:
-                // Merge the values that came back from Mapshed with the values
-                // in the modifications from the user.
-                var modifications = self.get('modifications'),
-                    mergedGisData = JSON.parse(project.get('gis_data'));
-
-                modifications.forEach(function(mod) {
-                    Object.assign(mergedGisData, mod.get('output'));
-                });
-
-                return {
-                    inputmod_hash: self.get('inputmod_hash'),
-                    model_input: JSON.stringify(mergedGisData)
                 };
         }
     }
@@ -1004,7 +866,7 @@ var ScenariosCollection = Backbone.Collection.extend({
 });
 
 function getControlsForModelPackage(modelPackageName, options) {
-    if (modelPackageName === TR55_PACKAGE) {
+    if (modelPackageName === YIELD_PACKAGE) {
         if (options && (options.compareMode ||
                         options.is_current_conditions)) {
             return new ModelPackageControlsCollection([
@@ -1023,27 +885,19 @@ function getControlsForModelPackage(modelPackageName, options) {
 
 function createTaskModel(modelPackage) {
     switch (modelPackage) {
-        case TR55_PACKAGE:
-            return new Tr55TaskModel();
-        // TODO Remove when done changing fetchGisDataIfNeeded example
-        case MAPSHED:
-            return new MapshedTaskModel();
+        case YIELD_PACKAGE:
+            return new YieldTaskModel();
     }
     throw 'Model package not supported: ' + modelPackage;
 }
 
 function createTaskResultCollection(modelPackage) {
     switch (modelPackage) {
-        case TR55_PACKAGE:
+        case YIELD_PACKAGE:
             return new ResultCollection([
                 {
-                    name: 'runoff',
-                    displayName: 'Runoff',
-                    result: null
-                },
-                {
-                    name: 'quality',
-                    displayName: 'Water Quality',
+                    name: 'yield',
+                    displayName: 'Crop Yield',
                     result: null
                 }
             ]);
@@ -1059,14 +913,12 @@ module.exports = {
     ModelPackageModel: ModelPackageModel,
     ModelPackageControlsCollection: ModelPackageControlsCollection,
     ModelPackageControlModel: ModelPackageControlModel,
-    Tr55TaskModel: Tr55TaskModel,
-    TR55_TASK: TR55_TASK,
-    TR55_PACKAGE: TR55_PACKAGE,
+    YieldTaskModel: YieldTaskModel,
+    YIELD_TASK: YIELD_TASK,
+    YIELD_PACKAGE: YIELD_PACKAGE,
     ProjectModel: ProjectModel,
     ProjectCollection: ProjectCollection,
     ModificationModel: ModificationModel,
-    // TODO Remove when done with user input modal example
-    GwlfeModificationModel: GwlfeModificationModel,
     ModificationsCollection: ModificationsCollection,
     ScenarioModel: ScenarioModel,
     ScenariosCollection: ScenariosCollection

@@ -5,10 +5,8 @@
   with_items:
     - celery
     - django
-    - docker
     - gunicorn
     - nginx
-    - spark-jobserver
   notify:
     - Restart Beaver
 

@@ -1,3 +1,0 @@
----
-dependencies:
-  - { role: "bee-pollinator.spark-jobserver" }
