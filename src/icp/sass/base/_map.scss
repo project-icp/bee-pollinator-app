@@ -166,6 +166,9 @@
 .leaflet-bottom.leaflet-left {
   display: flex;
   flex-direction: row;
+  // account for the height of the map attribution
+  // under the right controls
+  padding-bottom: 16px;
 }
 
 .leaflet-control a {
