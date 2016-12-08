@@ -185,7 +185,11 @@
       text-align: center;
   }
   i {
-      margin-left: auto;
+      margin: auto;
+      margin-right: 0.5rem;
+      margin-left: 0.5rem;
+      size: 25px;
+      cursor: pointer;
   }
   span {
       margin: auto;

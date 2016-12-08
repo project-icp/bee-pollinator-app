@@ -1,6 +1,15 @@
-<div class="layer-control-button-container leaflet-bar" style="width:100px;">
-  <a class="leaflet-bar leaflet-bar-part leaflet-bar-part-single" href="#" title="{{ action }} {{ layerName }}">
-    <i class="{{ iconClass }}"> </i>
-    <span>{{ layerName }}</span>
-  </a>
+<div class="layer-control-button-container leaflet-bar" style="width:100%;">
+    <a class="leaflet-bar leaflet-bar-part leaflet-bar-part-single"
+      style="cursor:default;" href="#" title="{{ action }} {{ layerName }}">
+        <span style="margin-left:0.5rem">{{ layerName }}</span>
+        <input title="Drag to change opacity of overlay"
+            type="{{ inputType }}"
+            min="0"
+            max="99"
+            step="3"
+            class="slider slider-leaflet"
+            value="{{ initialOpacity }}"
+        >
+        <i class="eye-button {{ iconClass }}"></i>
+    </a>
 </div>
