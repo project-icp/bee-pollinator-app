@@ -1,7 +1,7 @@
 from __future__ import division
 from __future__ import print_function
 
-from raster_ops import mask_geom_on_raster, reclassify_from_data
+from raster_ops import extract, reclassify_from_data
 
 from scipy.ndimage.filters import generic_filter
 import numpy as np
@@ -54,7 +54,6 @@ def initialize():
     SETTINGS['window'] = window
     SETTINGS['floral_reclass'] = floral_reclass
     SETTINGS['nesting_reclass'] = nesting_reclass
-    print(SETTINGS)
 
 
 def load_reclass(data_src=DEFAULT_DATA_PATH):
@@ -86,7 +85,7 @@ def abundance(field_geom, raster_path=RASTER_PATH):
     Calculate farm abundance
     """
     # Read in the crop raster and mask field geom on it.
-    cdl, a = mask_geom_on_raster(field_geom, raster_path)
+    cdl, a = extract(field_geom, raster_path)
 
     fl_out = np.zeros(shape=cdl.shape, dtype=np.float32)
     n_out = np.zeros(shape=cdl.shape, dtype=np.float32)

@@ -11,7 +11,7 @@ from functools import partial
 from shapely.ops import transform
 
 
-def mask_geom_on_raster(geom, raster_path, mods=None, all_touched=True):
+def extract(geom, raster_path, mods=None, all_touched=True):
     """"
     For a given polygon, returns a numpy masked array with the intersecting
     values of the raster at `raster_path` unmasked, all non-intersecting
@@ -26,7 +26,7 @@ def mask_geom_on_raster(geom, raster_path, mods=None, all_touched=True):
             raster, provided as json objects containing the following keys:
             geom (geojson): polygon of area where modification should be
                 applied.
-            newValue (int|float): value to be written over the source raster
+            value (int|float): value to be written over the source raster
                 in areas where it intersects geom.  Modifications are applied
                 in order, meaning subsequent items can overwrite earlier ones.
         all_touched (optional bool|default: True): If True, the cells value
@@ -53,7 +53,7 @@ def mask_geom_on_raster(geom, raster_path, mods=None, all_touched=True):
         # This copies over `data` in place.
         for mod in mods:
             features.rasterize(
-                [(mod['geom'], mod['newValue'])],
+                [(mod['geom'], mod['value'])],
                 out=data,
                 transform=shifted_affine,
                 all_touched=all_touched,
