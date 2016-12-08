@@ -233,8 +233,8 @@ var MapView = Marionette.ItemView.extend({
             });
 
             var overlayInfo = settings.get('overlay_layer'),
-                overlayLayer = new L.TileLayer(overlayInfo.url, { 
-                    maxNativeZoom: overlayInfo.maxNativeZoom 
+                overlayLayer = new L.TileLayer(overlayInfo.url, {
+                    maxNativeZoom: overlayInfo.maxNativeZoom
                 });
 
             self.overlayControl = new OverlayControl({
@@ -348,7 +348,7 @@ var MapView = Marionette.ItemView.extend({
             this.updateGoogleMaxZoom({ target: this._leafletMap });
         }
     },
-    
+
     buildLayers: function(layerConfig, map) {
         var self = this,
             layers = {};
@@ -372,13 +372,6 @@ var MapView = Marionette.ItemView.extend({
                     attribution: '',
                     minZoom: 0});
                 leafletLayer = new L.TileLayer(tileUrl, layer);
-
-                if (layer.has_opacity_slider) {
-                    var slider = new OpacityControl({position: 'topright'});
-
-                    slider.setOpacityLayer(leafletLayer);
-                    leafletLayer.slider = slider;
-                }
             } else {
                 leafletLayer = new L.TileLayer('', layer);
             }

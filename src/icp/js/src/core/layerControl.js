@@ -4,10 +4,7 @@ var L = require('leaflet'),
     $ = require('jquery'),
     _ = require('underscore'),
     Marionette = require('../../shim/backbone.marionette'),
-    App = require('../app'),
-    layerControlButtonTmpl = require('./templates/layerToggleControl.html'),
-    layerControlListTmpl = require('./templates/layerControlListTmpl.html');
-
+    layerControlButtonTmpl = require('./templates/layerToggleControl.html');
 
 module.exports = L.Control.extend({
     options: {
@@ -62,9 +59,11 @@ var LayerControlButtonView = Marionette.ItemView.extend({
         if (this.satelliteVisible) {
             this.map.addLayer(this.layers.street);
             this.removeLayer('satellite');
+            this.layers.street.bringToBack();
         } else {
             this.map.addLayer(this.layers.satellite);
             this.removeLayer('street');
+            this.layers.satellite.bringToBack();
         }
 
         this.satelliteVisible = !this.satelliteVisible;

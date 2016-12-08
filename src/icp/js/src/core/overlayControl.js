@@ -28,14 +28,18 @@ var OverlayControlView = Marionette.ItemView.extend({
         this.map = options.map;
         this.layer = options.layer;
         this.isDisplayed = false;
+        this.initialOpacity = 0.50;
+        this.layer.setOpacity(this.initialOpacity);
     },
 
     ui: {
-        controlToggle: '.leaflet-bar-part',
+        controlToggle: '.eye-button',
     },
 
     events: {
-        'click @ui.controlToggle': 'toggle'
+        'click @ui.controlToggle': 'toggle',
+        'mousedown input': 'handleMouseDownEvent',
+        'mouseup input': 'handleMouseUpEvent',
     },
 
     toggle: function() {
@@ -48,11 +52,24 @@ var OverlayControlView = Marionette.ItemView.extend({
         this.render();
     },
 
+    handleMouseDownEvent: function(e) {
+        this.map.dragging.disable();
+    },
+
+    handleMouseUpEvent: function(e) {
+        this.map.dragging.enable();
+        var el = $(e.target),
+        sliderValue = el.val();
+        this.layer.setOpacity(sliderValue / 100);
+        el.attr('value', sliderValue);
+    },
+
     templateHelpers: function() {
         return {
             iconClass: this.isDisplayed ? "fa fa-eye-slash" : "fa fa-eye",
-            action: this.isDisplayed ? 'Hide' : 'Show',
-            layerName: "Crop Layer",
+            inputType: this.isDisplayed ? "range" : "hidden",
+            layerName: 'Crop Layer',
+            initialOpacity: this.initialOpacity * 100,
         };
     }
 });
