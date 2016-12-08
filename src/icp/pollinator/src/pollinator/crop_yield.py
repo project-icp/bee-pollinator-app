@@ -1,7 +1,7 @@
 from __future__ import division
 from __future__ import print_function
 
-from raster_ops import extract, reclassify_from_data
+from raster_ops import extract, reclassify_from_data, geometry_mask
 
 from scipy.ndimage.filters import generic_filter
 import numpy as np
@@ -16,6 +16,7 @@ RASTER_PATH = '/opt/icp-crop-data/cdl_5070.tif'
 SETTINGS = {}
 CELL_SIZE = 30
 FORAGE_DIST = 670
+AG_CLASSES = [46, 50, 54, 66, 67, 68, 69, 72, 74, 75, 76, 77, 204, 209, 212, 213, 217, 218, 220, 221, 222, 223, 229, 242, 249]  # noqa
 
 
 def initialize():
@@ -58,7 +59,8 @@ def initialize():
 
 def load_reclass(data_src=DEFAULT_DATA_PATH):
     """
-    Load reclassification instructions from crop data
+    Load the reclassification values for both floral and nesting attributes
+    from the CDL CSV.
     """
     with open(data_src, mode='r') as cdl_data:
         reader = csv.reader(cdl_data)
@@ -75,29 +77,107 @@ def load_reclass(data_src=DEFAULT_DATA_PATH):
 
 def focal_op(x):
     """
-    Determine focal center value
+    Determine focal center value for the window function.
     """
     return np.sum(x * SETTINGS['effective_dist']/SETTINGS['sum_dist'])
 
 
-def abundance(field_geom, raster_path=RASTER_PATH):
+def abundance(cdl):
     """
-    Calculate farm abundance
+    Calculate farm abundance.
     """
-    # Read in the crop raster and mask field geom on it.
-    cdl, a = extract(field_geom, raster_path)
 
+    # Create floral and nesting rasters derived from the CDL
     fl_out = np.zeros(shape=cdl.shape, dtype=np.float32)
     n_out = np.zeros(shape=cdl.shape, dtype=np.float32)
     floral = reclassify_from_data(cdl, SETTINGS['floral_reclass'], fl_out)
     nesting = reclassify_from_data(cdl, SETTINGS['nesting_reclass'], n_out)
 
+    # Create an abundance index based on forage and nesting indexes
+    # over the area a bee may travel
     forage = generic_filter(floral, footprint=SETTINGS['window'],
                             function=focal_op)
     source = forage * nesting
-    farm = generic_filter(source, footprint=SETTINGS['window'],
-                          function=focal_op)
-    return np.sum(farm)
+    area_abundance = generic_filter(source, footprint=SETTINGS['window'],
+                                    function=focal_op)
+    return area_abundance
+
+
+def apply_managed_hives(field_abundance):
+    """
+    Applies a function to equally distribute managed honey bee hives across
+    a field.
+    """
+    return field_abundance
+
+
+def yield_calc(abundance_field):
+    """
+    Determines the yield change due to landscape factors related to forage
+    and nesting suitability for wild bees and managed honey bee hives.
+    """
+
+    return abundance_field
+
+
+def aggregate_crops(yield_field, cdl, crops=AG_CLASSES):
+    """
+    Within the unmasked field portion of the provided ndarray, sum the yield
+    quantities per ag type, resulting in a total yield increase per relavent
+    crop type on the field.
+
+    Args:
+        yield_field (masked ndarray): The bee shed area of computed yield with
+            a mask of the field applied.
+        cdl (ndarray): The raw crop data layer corresponding to the same area
+            covered in `yield_field`
+        crops (list<int>): Optional. The CDL class types to aggregate on,
+            defaults to system specified list
+
+    Returns:
+        dict<cld_id, yield_sum>: A mapping of bee pollinated agricultural
+            CDL crop types with the sum of their yield across the field
+            portion of the yield data.
+    """
+    crop_yields = {}
+    field_mask = yield_field.mask.copy()
+
+    for crop in crops:
+        # Create a mask for values that are not this crop type and include
+        # the mask which is already applied to non-field areas of AoI
+        cdl_mask = np.ma.masked_where(cdl != crop, cdl).mask
+        crop_mask = np.ma.mask_or(field_mask, cdl_mask)
+
+        # Sum the yield from this one crop only over the field
+        yield_field.mask = crop_mask
+        crop_yields[str(crop)] = np.ma.sum(yield_field).item()
+
+    # Restore the original mask of just the field
+    yield_field.mask = field_mask
+    return crop_yields
+
+
+def calculate(bee_shed_geom, field_geom, raster_path=RASTER_PATH):
+    """
+    Calculate the change in specific crop yield due to bee abundance
+    """
+    # Read in the crop raster clipped to the bee shed geometry
+    cdl, affine = extract(bee_shed_geom, raster_path)
+
+    # Determine pollinator abundance across the entire area
+    area_abundance = abundance(cdl)
+
+    # Clip the bee shed into just the delineated field
+    field_abundance = geometry_mask(field_geom, area_abundance, affine)
+
+    # Apply stocking density function for managed hives
+    stocked_abundance = apply_managed_hives(field_abundance)
+
+    # Apply yield function
+    yield_field = yield_calc(stocked_abundance)
+
+    # Aggregate yield by agricultural cdl type
+    return aggregate_crops(yield_field, cdl)
 
 
 # Determine settings when module is loaded

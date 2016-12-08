@@ -43,7 +43,7 @@ def extract(geom, raster_path, mods=None, all_touched=True):
     # is large. The affine transformation maps geom coordinates to the
     # image mask below.
     with rasterio.open(raster_path) as src:
-        window, shifted_affine = get_window_and_affine(geom, src)
+        window, affine = get_window_and_affine(geom, src)
         data = src.read(1, window=window)
 
     # Burn new raster values in from provided vector modifications. Mods
@@ -55,22 +55,26 @@ def extract(geom, raster_path, mods=None, all_touched=True):
             features.rasterize(
                 [(mod['geom'], mod['value'])],
                 out=data,
-                transform=shifted_affine,
+                transform=affine,
                 all_touched=all_touched,
             )
 
+    return geometry_mask(geom, data, affine, all_touched), affine
+
+
+def geometry_mask(geom, data, affine, all_touched=True):
     # Create a numpy array to mask cells which don't intersect with the
     # polygon. Cells that intersect will have value of 0 (unmasked), the
     # rest are filled with 1s (masked)
     geom_mask = features.geometry_mask(
         [geom],
         out_shape=data.shape,
-        transform=shifted_affine,
+        transform=affine,
         all_touched=all_touched
     )
 
     # Mask the data array, with modifications applied, by the query polygon
-    return np.ma.array(data=data, mask=geom_mask), shifted_affine
+    return np.ma.array(data=data, mask=geom_mask)
 
 
 def get_window_and_affine(geom, raster_src):
