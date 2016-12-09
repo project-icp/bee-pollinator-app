@@ -225,11 +225,13 @@ var MapView = Marionette.ItemView.extend({
             addLocateMeButton(map, maxGeolocationAge);
         }
 
+        var initialLayerName = this.options.initialLayerName || 'satellite',
+            initialLayer = this.baseLayers[initialLayerName];
         if (options.addLayerSelector) {
 
             self.layerControl = new LayerControl({
                 layers: this.baseLayers,
-                initialLayer: this.baseLayers.satellite
+                initialLayer: initialLayer
             });
 
             var overlayInfo = settings.get('overlay_layer'),
@@ -242,6 +244,8 @@ var MapView = Marionette.ItemView.extend({
             });
             self.layerControl.addTo(map);
             self.overlayControl.addTo(map);
+        } else {
+            map.addLayer(initialLayer);
         }
 
         this.setMapEvents();
