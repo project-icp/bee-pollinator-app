@@ -255,8 +255,8 @@ var MapView = Marionette.ItemView.extend({
         }
 
         // wrap the zoom & sidebar toggle controls in one div for styling
-        $('.leaflet-bottom.leaflet-right>.leaflet-control-sidebar-toggle, \
-          .leaflet-bottom.leaflet-right>.leaflet-control-zoom')
+        $('.leaflet-bottom.leaflet-right>.leaflet-control-sidebar-toggle,' +
+          '.leaflet-bottom.leaflet-right>.leaflet-control-zoom')
             .wrapAll('<div class="leaflet-bottom-right-controls"></div>');
     },
 
