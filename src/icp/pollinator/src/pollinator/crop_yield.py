@@ -103,7 +103,7 @@ def abundance(cdl):
     return area_abundance
 
 
-def apply_managed_hives(field_abundance):
+def apply_managed_hives(field_abundance, hives):
     """
     Applies a function to equally distribute managed honey bee hives across
     a field.
@@ -157,12 +157,13 @@ def aggregate_crops(yield_field, cdl, crops=AG_CLASSES):
     return crop_yields
 
 
-def calculate(bee_shed_geom, field_geom, raster_path=RASTER_PATH):
+def calculate(bee_shed_geom, field_geom, modifications, managed_hives,
+              raster_path=RASTER_PATH):
     """
     Calculate the change in specific crop yield due to bee abundance
     """
     # Read in the crop raster clipped to the bee shed geometry
-    cdl, affine = extract(bee_shed_geom, raster_path)
+    cdl, affine = extract(bee_shed_geom, raster_path, modifications)
 
     # Determine pollinator abundance across the entire area
     area_abundance = abundance(cdl)
@@ -171,7 +172,7 @@ def calculate(bee_shed_geom, field_geom, raster_path=RASTER_PATH):
     field_abundance = geometry_mask(field_geom, area_abundance, affine)
 
     # Apply stocking density function for managed hives
-    stocked_abundance = apply_managed_hives(field_abundance)
+    stocked_abundance = apply_managed_hives(field_abundance, managed_hives)
 
     # Apply yield function
     yield_field = yield_calc(stocked_abundance)
