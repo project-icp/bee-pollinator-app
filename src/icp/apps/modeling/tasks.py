@@ -29,10 +29,11 @@ def calculate_yield(model_input):
     aoi_json = model_input['area_of_interest']
     managed_hives = model_input['inputs'][0]['value']
     mods = model_input['modification_pieces']
+
     modifications = [
         {
             'geom': reproject(shape(mod['shape']['geometry']), SRS),
-            'value': mod['value']['reclass']
+            'value': mod['value']
         }
         for mod in mods
     ]

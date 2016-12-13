@@ -43,11 +43,19 @@ function getHumanReadableSummary(modKey) {
     return unknownModKey(modKey);
 }
 
+function getCdlId(modKey) {
+    if (modificationConfig[modKey]) {
+        return modificationConfig[modKey].value || 0;
+    }
+    return unknownModKey(modKey);
+}
+
 var getDrawOpts = function(modKey) {
     var defaultStyle = {
         color: '#888',
         opacity: 1,
         weight: 3,
+        strokeWidth: 1,
         fillColor: '#888',
         fillOpacity: 0.74
     };
@@ -61,7 +69,7 @@ var getDrawOpts = function(modKey) {
                 color: config.strokeColor,
                 opacity: 1,
                 weight: 3,
-                fillColor: 'url(#fill-' + modKey + ')',
+                fillColor: config.fillColor,
                 fillOpacity: 0.74
             };
         } else {
@@ -76,6 +84,7 @@ module.exports = {
     getHumanReadableName: getHumanReadableName,
     getHumanReadableShortName: getHumanReadableShortName,
     getHumanReadableSummary: getHumanReadableSummary,
+    getCdlId: getCdlId,
     getDrawOpts: getDrawOpts,
     setConfig: setConfig,
     resetConfig: resetConfig

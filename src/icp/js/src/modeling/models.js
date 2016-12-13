@@ -507,7 +507,7 @@ var ScenarioModel = Backbone.Model.extend({
                inputs: [
                    {
                        name: 'numberofhives',
-                       value: 0.0
+                       value: 0
                    }
                ]
            };
@@ -637,6 +637,7 @@ var ScenarioModel = Backbone.Model.extend({
             this.get('results').setNullResults();
         } else {
             var serverResults = JSON.parse(rawServerResults);
+            console.debug('temp model results', serverResults); //TODO: remove when charted
             this.get('results').forEach(function(resultModel) {
                 var resultName = resultModel.get('name');
 
@@ -726,14 +727,21 @@ var ScenarioModel = Backbone.Model.extend({
 
         switch(App.currentProject.get('model_package')) {
             case YIELD_PACKAGE:
-                var nonZeroModifications = self.get('modifications').filter(function(mod) {
-                    return mod.get('effectiveArea') > 0;
-                });
+                var activeModifications = self.get('modifications')
+                    .map(function(mod) {
+                        var attr = mod.attributes;
+                        return {
+                            shape: attr.shape,
+                            area: attr.effectiveArea,
+                            category: attr.name,
+                            value: attr.cdlId
+                        };
+                    });
 
                 return {
                     model_input: JSON.stringify({
                         inputs: self.get('inputs').toJSON(),
-                        modification_pieces: alterModifications(nonZeroModifications, self.get('modification_hash')),
+                        modification_pieces: activeModifications,
                         area_of_interest: project.get('area_of_interest'),
                         aoi_census: self.get('aoi_census'),
                         modification_censuses: self.get('modification_censuses'),
