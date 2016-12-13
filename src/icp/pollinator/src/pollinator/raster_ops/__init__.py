@@ -11,7 +11,7 @@ from functools import partial
 from shapely.ops import transform
 
 
-def mask_geom_on_raster(geom, raster_path, mods=None, all_touched=True):
+def extract(geom, raster_path, mods=None, all_touched=True):
     """"
     For a given polygon, returns a numpy masked array with the intersecting
     values of the raster at `raster_path` unmasked, all non-intersecting
@@ -26,7 +26,7 @@ def mask_geom_on_raster(geom, raster_path, mods=None, all_touched=True):
             raster, provided as json objects containing the following keys:
             geom (geojson): polygon of area where modification should be
                 applied.
-            newValue (int|float): value to be written over the source raster
+            value (int|float): value to be written over the source raster
                 in areas where it intersects geom.  Modifications are applied
                 in order, meaning subsequent items can overwrite earlier ones.
         all_touched (optional bool|default: True): If True, the cells value
@@ -43,7 +43,7 @@ def mask_geom_on_raster(geom, raster_path, mods=None, all_touched=True):
     # is large. The affine transformation maps geom coordinates to the
     # image mask below.
     with rasterio.open(raster_path) as src:
-        window, shifted_affine = get_window_and_affine(geom, src)
+        window, affine = get_window_and_affine(geom, src)
         data = src.read(1, window=window)
 
     # Burn new raster values in from provided vector modifications. Mods
@@ -53,24 +53,28 @@ def mask_geom_on_raster(geom, raster_path, mods=None, all_touched=True):
         # This copies over `data` in place.
         for mod in mods:
             features.rasterize(
-                [(mod['geom'], mod['newValue'])],
+                [(mod['geom'], mod['value'])],
                 out=data,
-                transform=shifted_affine,
+                transform=affine,
                 all_touched=all_touched,
             )
 
+    return geometry_mask(geom, data, affine, all_touched), affine
+
+
+def geometry_mask(geom, data, affine, all_touched=True):
     # Create a numpy array to mask cells which don't intersect with the
     # polygon. Cells that intersect will have value of 0 (unmasked), the
     # rest are filled with 1s (masked)
     geom_mask = features.geometry_mask(
         [geom],
         out_shape=data.shape,
-        transform=shifted_affine,
+        transform=affine,
         all_touched=all_touched
     )
 
     # Mask the data array, with modifications applied, by the query polygon
-    return np.ma.array(data=data, mask=geom_mask), shifted_affine
+    return np.ma.array(data=data, mask=geom_mask)
 
 
 def get_window_and_affine(geom, raster_src):
