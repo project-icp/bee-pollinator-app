@@ -107,6 +107,7 @@ var ThumbSelectView = Marionette.ItemView.extend({
             self.addModification(new models.ModificationModel({
                 name: controlName,
                 value: controlValue,
+                cdlId: modificationConfigUtils.getCdlId(controlValue),
                 shape: geojson
             }));
         });
@@ -381,9 +382,8 @@ var LandCoverView = ModificationsView.extend({
             modRowGroups: [{
                 name: '',
                 rows: [
-                    ['open_water', 'developed_open', 'developed_low', 'developed_med'],
-                    ['developed_high', 'barren_land', 'deciduous_forest', 'shrub'],
-                    ['grassland', 'pasture', 'cultivated_crops', 'woody_wetlands']
+                    ['blueberries', 'sweet_potatoes', 'oranges', 'almonds'],
+                    // ['additional crop types', ...],
                 ]
             }]
         });
@@ -399,12 +399,11 @@ var ConservationPracticeView = ModificationsView.extend({
         ModificationsView.prototype.initialize.apply(this, [options]);
         this.model.set({
             controlName: this.getControlName(),
-            controlDisplayName: 'Conservation Practice',
+            controlDisplayName: 'Enhancements',
             modRowGroups: [{
                 name: '',
                 rows: [
-                    ['rain_garden', 'infiltration_basin', 'porous_paving'],
-                    ['green_roof', 'no_till', 'cluster_housing']
+                    ['wildflower_strip', 'bee_hab_a', 'bee_hab_b']
                 ]
             }]
         });
