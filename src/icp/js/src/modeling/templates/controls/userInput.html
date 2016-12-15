@@ -1,5 +1,11 @@
 <div class="hives">
-  <label for="{{ userInputName }}">{{ displayName }}</label>
-  <input type="number" class="form-control" id="{{ userInputName }}">
-  <div class="info-region"></div>
+    <label for="{{ userInputName }}">{{ displayName }}</label>
+    <input
+        type="number"
+        class="form-control"
+        id="{{ userInputName }}"
+        value="{{ value }}"
+        min="0"
+    >
+    <div class="info-region"></div>
 </div>

@@ -236,17 +236,17 @@ var NumberOfHivesView = ControlView.extend({
     },
 
     onInputChange: function() {
-        var value = parseInt(this.ui.input.val()),
-            modification = new models.ModificationModel({
-                name: this.getControlName(),
-                value: value
-        });
-        this.addOrReplaceInput(modification);
+        var value = parseInt(this.ui.input.val());
+        this.addOrReplaceInput(new models.ModificationModel({
+            name: this.getControlName(),
+            value: value
+        }));
     },
 
     templateHelpers: function() {
         return {
-            displayName: 'Managed hives per acre'
+            displayName: 'Managed hives per acre',
+            value: this.controlModel.get('value') || 0,
         };
     },
 
