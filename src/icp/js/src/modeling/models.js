@@ -19,8 +19,6 @@ var ModelPackageControlModel = Backbone.Model.extend({
         name: '',
         controlName: '',
         controlDisplayName: '',
-        manualMode: false,
-        manualMod: '',
         activeMod: '',
         modRows: null,
         dropdownOpen: false,

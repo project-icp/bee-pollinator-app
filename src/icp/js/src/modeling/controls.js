@@ -1,9 +1,5 @@
 "use strict";
 
-/* There is no GWLFE model, but you'll find reference to it here
-*  as an example on how to make a modal with user input
-*/
-
 var $ = require('jquery'),
     _ = require('lodash'),
     Backbone = require('../../shim/backbone'),
@@ -13,7 +9,6 @@ var $ = require('jquery'),
     coreUtils = require('../core/utils'),
     models = require('./models'),
     modificationConfigUtils = require('./modificationConfigUtils'),
-    gwlfeConfig = require('./gwlfeModificationConfig'),
     manualEntryTmpl = require('./templates/controls/manualEntry.html'),
     userInputTmpl = require('./templates/controls/userInput.html'),
     inputInfoTmpl = require('./templates/controls/inputInfo.html'),
@@ -35,7 +30,6 @@ var ControlView = Marionette.LayoutView.extend({
             'controlModel',
             'addModification',
             'addOrReplaceInput',
-            'numberofhives'
         ]);
     },
 
@@ -50,11 +44,10 @@ var ThumbSelectView = Marionette.ItemView.extend({
     initialize: function(options) {
         var modKeys = _.flatten(_.pluck(this.model.get('modRowGroups'), 'rows'), true),
             dataModel = this.model.get('dataModel'),
-            manualMode = this.model.get('manualMode'),
             modEnabled = {};
 
         _.forEach(modKeys, function(modKey) {
-            modEnabled[modKey] = manualMode ? gwlfeConfig.configs[modKey].validateDataModel(dataModel) : true;
+            modEnabled[modKey] = true;
         });
 
         this.model.set({
@@ -89,11 +82,7 @@ var ThumbSelectView = Marionette.ItemView.extend({
             controlValue = $el.data('value');
 
         if (this.model.get('modEnabled')[controlValue]) {
-            if (this.model.get('manualMode')) {
-                this.startManual(controlName, controlValue);
-            } else {
-                this.startDrawing(controlName, controlValue);
-            }
+            this.startDrawing(controlName, controlValue);
         }
     },
 
@@ -111,168 +100,6 @@ var ThumbSelectView = Marionette.ItemView.extend({
                 shape: geojson
             }));
         });
-    },
-
-    startManual: function(controlName, controlValue) {
-        this.model.set('manualMod', controlValue);
-    }
-});
-
-var InputInfoView = Marionette.ItemView.extend({
-    template: inputInfoTmpl,
-
-    initialize: function(options) {
-        this.userInputName = options.userInputName;
-    },
-
-    modelEvents: {
-        'change:output': 'render'
-    },
-
-    templateHelpers: function() {
-        var output = this.model.get('output'),
-            errorMessage = output && output.errorMessages[this.userInputName],
-            infoMessage = output && output.infoMessages[this.userInputName],
-            isError = false,
-            message;
-
-        if (errorMessage) {
-            isError = true;
-            message = errorMessage;
-        } else if (infoMessage) {
-            message = infoMessage;
-        }
-
-        return {
-            message: message,
-            isError: isError
-        };
-    }
-});
-
-var UserInputView = Marionette.LayoutView.extend({
-    template: userInputTmpl,
-
-    initialize: function(options) {
-        this.parentModel = options.parentModel;
-    },
-
-    regions: {
-        infoRegion: '.info-region'
-    },
-
-    onShow: function() {
-        this.infoRegion.show(new InputInfoView({
-            model: this.parentModel,
-            userInputName: this.model.get('userInputName')
-        }));
-    },
-
-    templateHelpers: function() {
-        return {
-            displayNames: gwlfeConfig.displayNames
-        };
-    }
-});
-
-var ManualEntryView = Marionette.CompositeView.extend({
-    template: manualEntryTmpl,
-
-    ui: {
-        'backButton': '.back-button',
-        'applyButton': '.apply-button'
-    },
-
-    events: {
-        'click @ui.backButton': 'clearManualMod',
-        'click @ui.applyButton': 'applyModification',
-        'keyup': 'onKeyUp'
-    },
-
-    childView: UserInputView,
-
-    childViewContainer: '#user-input-region',
-
-    initialize: function(options) {
-        this.addModification = options.addModification;
-    },
-
-    childViewOptions: function() {
-        return {
-            parentModel: this.model
-        };
-    },
-
-    templateHelpers: function() {
-        var manualMod = this.model.get('manualMod');
-        return {
-            modConfig: gwlfeConfig.configs[manualMod],
-            displayNames: gwlfeConfig.displayNames,
-            dataModel: this.model.get('dataModel')
-        };
-    },
-
-    onKeyUp: function(e) {
-        if (e.keyCode === ENTER_KEYCODE) {
-            this.applyModification();
-        }
-    },
-
-    onShow: function() {
-        var self = this,
-            $input = $(this.el).find('input');
-
-        $input.on('change keyup paste', function() {
-            self.computeOutput();
-        });
-
-        $input[0].focus();
-    },
-
-    clearManualMod: function() {
-        this.model.set({
-            manualMod: null,
-            output: null
-        });
-    },
-
-    closeDropdown: function() {
-        this.model.set('dropdownOpen', false);
-    },
-
-    computeOutput: function() {
-        var modConfig = gwlfeConfig.configs[this.model.get('manualMod')],
-            userInput = _.map(modConfig.userInputNames, function(userInputName) {
-                return $('#'+userInputName).val();
-            }),
-            output;
-
-        userInput = _.zipObject(modConfig.userInputNames, userInput);
-        output = gwlfeConfig.aggregateOutput(this.model.get('dataModel'),
-            userInput, modConfig.validate, modConfig.computeOutput);
-
-        this.model.set({
-            output: output,
-            userInput: userInput
-        });
-    },
-
-    applyModification: function() {
-        this.computeOutput();
-        var modKey = this.model.get('manualMod'),
-            userInput = this.model.get('userInput'),
-            output = this.model.get('output');
-
-        if (output && gwlfeConfig.isValid(output.errorMessages)) {
-            this.clearManualMod();
-            this.closeDropdown();
-
-            this.addModification(new models.GwlfeModificationModel({
-                modKey: modKey,
-                userInput: userInput,
-                output: output.output
-            }));
-        }
     }
 });
 
@@ -351,25 +178,10 @@ var ModificationsView = ControlView.extend({
     },
 
     updateContent: function() {
-        var manualMod = this.model.get('manualMod');
-        if (manualMod) {
-            var modConfig = gwlfeConfig.configs[manualMod],
-                userInputNames = _.map(modConfig.userInputNames, function(name) {
-                    return { userInputName: name };
-                }),
-                userInputCollection = new Backbone.Collection(userInputNames);
-
-            this.modContentRegion.show(new ManualEntryView({
-                model: this.model,
-                collection: userInputCollection,
-                addModification: this.addModification
-            }));
-        } else {
-            this.modContentRegion.show(new ThumbSelectView({
-                addModification: this.addModification,
-                model: this.model
-            }));
-        }
+        this.modContentRegion.show(new ThumbSelectView({
+            addModification: this.addModification,
+            model: this.model
+        }));
     }
 });
 
