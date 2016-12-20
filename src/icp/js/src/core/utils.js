@@ -248,9 +248,17 @@ var utils = {
                 // return feet.
                 return value * 3.28084;
 
+            case 'm2':
+                // return acres.
+                return value * 0.000247105;
+
             case 'km':
                 // return miles.
                 return value * 0.621371;
+
+            case 'km2':
+                // return acres.
+                return value * 247.105;
 
             case 'kg':
                 // return Lbs.

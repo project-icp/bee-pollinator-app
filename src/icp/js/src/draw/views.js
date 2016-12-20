@@ -20,7 +20,7 @@ var $ = require('jquery'),
     windowTmpl = require('./templates/window.html'),
     settings = require('../core/settings');
 
-var MAX_AREA = 112700; // About the size of a large state (in km^2)
+var MAX_AREA = 27500000; // About the size of a large state (in acres)
 var codeToLayer = {}; // code to layer mapping
 
 function actOnUI(datum, bool) {
@@ -42,7 +42,7 @@ function actOnLayer(datum) {
 }
 
 function validateShape(polygon) {
-    var area = coreUtils.changeOfAreaUnits(turfArea(polygon), 'm<sup>2</sup>', 'km<sup>2</sup>'),
+    var area = coreUtils.convertToImperial(turfArea(polygon), 'm2'),
         d = new $.Deferred();
     var selfIntersectingShape = turfKinks(polygon).features.length > 0;
 
@@ -54,9 +54,9 @@ function validateShape(polygon) {
         d.reject(errorMsg);
     } else if (area > MAX_AREA) {
         var message = 'Sorry, your Area of Interest is too large.\n\n' +
-                      Math.floor(area).toLocaleString() + ' km² were selected, ' +
+                      Math.floor(area).toLocaleString() + ' acres were selected, ' +
                       'but the maximum supported size is currently ' +
-                      MAX_AREA.toLocaleString() + ' km².';
+                      MAX_AREA.toLocaleString() + ' acres.';
         window.alert(message);
         d.reject(message);
     } else {

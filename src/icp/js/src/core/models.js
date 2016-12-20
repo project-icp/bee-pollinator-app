@@ -225,13 +225,11 @@ var TaskMessageViewModel = Backbone.Model.extend({
 });
 
 var GeoModel = Backbone.Model.extend({
-    M_IN_KM: 1000000,
-
     defaults: {
         name: '',
         shape: null,        // GeoJSON
         area: '0',
-        units: 'm<sup>2</sup>',
+        units: 'acres',
     },
 
     initialize: function() {
@@ -247,14 +245,8 @@ var GeoModel = Backbone.Model.extend({
 
         var areaInMeters = turfArea(this.get(shape));
 
-        // If the area is less than 1 km, use m
-        if (areaInMeters < this.M_IN_KM) {
-            this.set(area, areaInMeters);
-            this.set(units, 'm<sup>2</sup>');
-        } else {
-            this.set(area, areaInMeters / this.M_IN_KM);
-            this.set(units, 'km<sup>2</sup>');
-        }
+        this.set(area, utils.convertToImperial(areaInMeters, 'm2'));
+        this.set(units, 'acres');
     }
 });
 
