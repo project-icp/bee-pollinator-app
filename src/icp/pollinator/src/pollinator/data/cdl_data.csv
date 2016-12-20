@@ -62,7 +62,7 @@ CDL_code,CDL_categories,Attributes,Demand,HF.mean,HN.mean
 71,Other Tree Crops,Tree Crops,none,0.367659457,0.315017853
 72,Citrus,Citrus,little,0.358212334,0.28718199
 74,Pecans,Nuts,none,0.227475043,0.266643385
-75,Almonds,Orchard,great,0.344578281,0.324941214
+75,Almonds,Almonds,great,0.344578281,0.324941214
 76,Walnuts,Nuts,none,0.227475043,0.266643385
 77,Pears,Orchard,great,0.344578281,0.324941214
 83,Water,Open Water,none,0,0
