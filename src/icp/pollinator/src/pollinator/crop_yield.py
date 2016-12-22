@@ -11,12 +11,12 @@ import os
 
 CUR_PATH = os.path.dirname(__file__)
 DEFAULT_DATA_PATH = os.path.join(CUR_PATH, 'data/cdl_data_grouped.csv')
-RASTER_PATH = '/opt/icp-crop-data/cdl_5070.tif'
+RASTER_PATH = '/opt/icp-crop-data/cdl_reclass_lzw_5070.tif'
 
 SETTINGS = {}
 CELL_SIZE = 30
 FORAGE_DIST = 670
-AG_CLASSES = [46, 50, 54, 66, 67, 68, 69, 72, 74, 75, 76, 77, 204, 209, 212, 213, 217, 218, 220, 221, 222, 223, 229, 242, 249]  # noqa
+AG_CLASSES = [12, 16, 17, 18, 20, 27, 33, 46, 47]
 
 
 def initialize():
