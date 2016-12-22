@@ -194,7 +194,7 @@ var LandCoverView = ModificationsView.extend({
             modRowGroups: [{
                 name: '',
                 rows: [
-                    ['blueberries', 'sweet_potatoes', 'oranges', 'almonds'],
+                    ['berries', 'buckwheat', 'melons', 'almonds'],
                     // ['additional crop types', ...],
                 ]
             }]
