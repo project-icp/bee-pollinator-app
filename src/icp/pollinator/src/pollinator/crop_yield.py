@@ -10,13 +10,13 @@ import math
 import os
 
 CUR_PATH = os.path.dirname(__file__)
-DEFAULT_DATA_PATH = os.path.join(CUR_PATH, 'data/cdl_data.csv')
-RASTER_PATH = '/opt/icp-crop-data/cdl_5070.tif'
+DEFAULT_DATA_PATH = os.path.join(CUR_PATH, 'data/cdl_data_grouped.csv')
+RASTER_PATH = '/opt/icp-crop-data/cdl_reclass_lzw_5070.tif'
 
 SETTINGS = {}
 CELL_SIZE = 30
 FORAGE_DIST = 670
-AG_CLASSES = [46, 50, 54, 66, 67, 68, 69, 72, 74, 75, 76, 77, 204, 209, 212, 213, 217, 218, 220, 221, 222, 223, 229, 242, 249]  # noqa
+AG_CLASSES = [12, 16, 17, 18, 20, 27, 33, 46, 47]
 
 
 def initialize():
@@ -66,11 +66,14 @@ def load_reclass(data_src=DEFAULT_DATA_PATH):
         reader = csv.reader(cdl_data)
         nesting_reclass = []
         floral_reclass = []
+        hf_idx = 3
+        hn_idx = 4
+        id_idx = 0
 
         next(reader, None)  # Skip headers
         for row in reader:
-            nesting_reclass.append([int(row[0]), float(row[4])])
-            floral_reclass.append([int(row[0]), float(row[5])])
+            nesting_reclass.append([int(row[id_idx]), float(row[hn_idx])])
+            floral_reclass.append([int(row[id_idx]), float(row[hf_idx])])
 
         return nesting_reclass, floral_reclass
 

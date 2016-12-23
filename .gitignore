@@ -1,3 +1,7 @@
+# Script produced interim data
+src/icp/pollinator/src/pollinator/reclass/*.json
+src/icp/pollinator/src/pollinator/reclass/*.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
