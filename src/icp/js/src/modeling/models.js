@@ -148,6 +148,12 @@ var ProjectModel = Backbone.Model.extend({
             promises.push(scenario.fetchResultsIfNeeded());
         });
 
+        this.get('scenarios').on('change:active', function(scenario) {
+            if (scenario.get('active')) {
+                scenario.fetchResultsIfNeeded();
+            }
+        });
+
         this.get('scenarios').on('add', function(scenario) {
             scenario.fetchResultsIfNeeded();
         });
@@ -451,30 +457,65 @@ var ScenarioModel = Backbone.Model.extend({
     fetchResultsIfNeeded: function() {
         var self = this,
             inputmod_hash = this.get('inputmod_hash'),
-            needsResults = this.get('results').some(function(resultModel) {
-                var emptyResults = !resultModel.get('result'),
-                    staleResults = inputmod_hash !== resultModel.get('inputmod_hash');
+            emptyResults = this.get('results').some(function(resultModel) {
+                return !resultModel.get('result');
+            }),
+            staleResults = this.get('results').some(function(resultModel) {
+                return inputmod_hash !== resultModel.get('inputmod_hash');
+            }),
+            needsResults = emptyResults || staleResults,
+            fetchResultsPromise;
 
-                return emptyResults || staleResults;
-            });
-
-        if (needsResults && self.fetchResultsPromise === undefined) {
+        if (!this.get('is_current_conditions')) {
+            if (!this.get('active')) {
+                return $.when();
+            }
+            if (emptyResults) {
+                var setResultsFromCurrentConditionsOrFetch = _.bind(
+                    self.setResultsFromCurrentConditionsOrFetch, self);
+                fetchResultsPromise = $.when().then(function() {
+                    setResultsFromCurrentConditionsOrFetch();
+                });
+            }
+        } else if (needsResults && self.fetchResultsPromise === undefined) {
             var fetchResults = _.bind(self.fetchResults, self);
 
-            self.fetchResultsPromise = $.when().then(function() {
+            fetchResultsPromise = $.when().then(function() {
                 var promises = fetchResults();
                 return $.when(promises.startPromise, promises.pollingPromise);
             });
+        }
 
+        if (fetchResultsPromise) {
+            self.fetchResultsPromise = fetchResultsPromise;
             self.fetchResultsPromise
+                .always(function() {
+                    // TODO remove when charted
+                    console.debug('Scenario Results',
+                        self.get('name'),
+                        self.get('results').models[0].get('result'));
+                })
                 .always(function() {
                     // Clear promise so we start a new one next time
                     delete self.fetchResultsPromise;
                 });
         }
-
-        // Return fetchResultsPromise if it exists, else an immediately resovled one.
+        // Return fetchResultsPromise if it exists, else an immediately resolved one.
         return self.fetchResultsPromise || $.when();
+    },
+
+    setResultsFromCurrentConditionsOrFetch: function() {
+        var currentConditions = this.collection.models.find(function(model) {
+            return model.get('is_current_conditions');
+        });
+        if (currentConditions.get('results').models[0].get('result')) {
+            this.set('taskModel', currentConditions.get('taskModel').clone());
+            this.setResults();
+        } else {
+            var fetchResults = _.bind(this.fetchResults, this),
+                promises = fetchResults();
+            return $.when(promises.startPromise, promises.pollingPromise);
+        }
     },
 
     setResults: function() {
@@ -484,13 +525,12 @@ var ScenarioModel = Backbone.Model.extend({
             this.get('results').setNullResults();
         } else {
             var serverResults = JSON.parse(rawServerResults);
-            console.debug('temp model results', serverResults); //TODO: remove when charted
             this.get('results').forEach(function(resultModel) {
                 var resultName = resultModel.get('name');
 
                 if (serverResults) {
                     resultModel.set({
-                        'result': serverResults,
+                        'result': serverResults.yield,
                         'inputmod_hash': serverResults.inputmod_hash
                     });
                 } else {
