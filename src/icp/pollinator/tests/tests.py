@@ -7,7 +7,7 @@ import numpy as np
 from shapely.geometry import Polygon
 
 from pollinator import raster_ops
-from pollinator.crop_yield import aggregate_crops
+from pollinator.crop_yield import aggregate_crops, yield_calc
 
 
 class ReadTests(unittest.TestCase):
@@ -103,6 +103,23 @@ class ModelTests(unittest.TestCase):
             '300': 6,  # 3 * 2,
             '400': 0
         }, "Crop yield amounts were not aggregated correctly")
+
+    def test_yield(self):
+        """
+        Test the single cell yield calculation for a given psuedo-crop
+        configuration
+        """
+        config = {
+            1: {'demand': 0.95, 'density': 2.5}
+        }
+
+        cdl_cell = 1
+        abundance_idx = 0.4
+        managed_hives = 1
+        cell_yield = yield_calc(cdl_cell, abundance_idx, managed_hives, config)
+
+        self.assertEqual(cell_yield, 0.886,
+                         "Yield not calculated correctly for psuedo-crop 1")
 
 
 if __name__ == '__main__':
