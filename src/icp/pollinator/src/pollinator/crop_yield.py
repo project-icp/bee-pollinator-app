@@ -17,6 +17,7 @@ RASTER_PATH = '/opt/icp-crop-data/cdl_reclass_lzw_5070.tif'
 
 SETTINGS = {}
 ABUNDANCE_IDX = 0.1  # A constant for managing wild bee yield
+ACRES_PER_SQM = 0.000247105
 CELL_SIZE = 30
 FORAGE_DIST = 670
 AG_CLASSES = [12, 16, 17, 18, 20, 27, 33, 46, 47]
@@ -148,40 +149,62 @@ def yield_calc(crop_id, abundance, managed_hives, config):
     return yield_hb + yield_wild
 
 
-def aggregate_crops(yield_field, cdl, crops=AG_CLASSES):
+def aggregate_crops(yield_field, cdl_field, crops=AG_CLASSES):
     """
-    Within the unmasked field portion of the provided ndarray, sum the yield
-    quantities per ag type, resulting in a total yield increase per relavent
-    crop type on the field.
+    Within the unmasked field portion of the provided yield_field, sum the
+    yield quantities per ag type, resulting in a total yield increase per
+    relavent crop type on the field and report the yield in terms of yield
+    per acre, to create a uniform unit for comparisons.
 
     Args:
         yield_field (masked ndarray): The bee shed area of computed yield with
             a mask of the field applied.
-        cdl (ndarray): The raw crop data layer corresponding to the same area
-            covered in `yield_field`
+        cdl (masked ndarray): The raw crop data layer corresponding to the same
+            area covered in `yield_field` with a mask of the field applied
         crops (list<int>): Optional. The CDL class types to aggregate on,
             defaults to system specified list
 
     Returns:
         dict<cld_id, yield_sum>: A mapping of bee pollinated agricultural
             CDL crop types with the sum of their yield across the field
-            portion of the yield data.
+            portion of the yield data, reported in per acre units
     """
+
+    # Get a count of the number of cells of each crop type in the field
+    values, counts = np.unique(cdl_field.compressed(), return_counts=True)
+    crop_counts = dict(zip(values, counts))
+
     crop_yields = {}
     field_mask = yield_field.mask.copy()
 
+    # Sum the yield for each each crop type cell, by crop
     for crop in crops:
-        # Create a mask for values that are not this crop type and include
-        # the mask which is already applied to non-field areas of AoI
-        cdl_mask = np.ma.masked_where(cdl != crop, cdl).mask
-        crop_mask = np.ma.mask_or(field_mask, cdl_mask)
+        num_cells = crop_counts.get(crop, 0)
 
-        # Sum the yield from this one crop only over the field
-        yield_field.mask = crop_mask
-        crop_yields[str(crop)] = np.ma.sum(yield_field).item()
+        # If there are no cells of this crop type, skip the work of finding
+        # that out again
+        if num_cells:
+            # Create a mask for values that are not this crop type and include
+            # the mask which is already applied to non-field areas of AoI
+            cdl_mask = np.ma.masked_where(cdl_field != crop, cdl_field).mask
+            crop_mask = np.ma.mask_or(field_mask, cdl_mask)
+
+            # Sum the yield from this one crop only over the field
+            yield_field.mask = crop_mask
+            crop_yield = np.ma.sum(yield_field).item()
+
+            # Determine the approximate area in acres which this crop covers
+            # in the field, and calculate the per acre yield
+            crop_acres = CELL_SIZE * ACRES_PER_SQM * num_cells
+            yield_per_acre = crop_yield / crop_acres
+            crop_yields[str(crop)] = yield_per_acre
+
+        else:
+            crop_yields[str(crop)] = 0
 
     # Restore the original mask of just the field
     yield_field.mask = field_mask
+
     return crop_yields
 
 
@@ -208,9 +231,10 @@ def calculate(bee_shed_geom, field_geom, modifications, managed_hives,
 
     # Mask the bee shed into just the delineated field
     yield_field = geometry_mask(field_geom, yield_area, affine)
+    cdl_field = geometry_mask(field_geom, cdl, affine)
 
     # Aggregate yield by agricultural cdl type on the field mask
-    return aggregate_crops(yield_field, cdl)
+    return aggregate_crops(yield_field, cdl_field)
 
 
 # Determine settings when module is loaded

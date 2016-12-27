@@ -7,7 +7,8 @@ import numpy as np
 from shapely.geometry import Polygon
 
 from pollinator import raster_ops
-from pollinator.crop_yield import aggregate_crops, yield_calc
+from pollinator.crop_yield import aggregate_crops, yield_calc, \
+    ACRES_PER_SQM, CELL_SIZE
 
 
 class ReadTests(unittest.TestCase):
@@ -82,14 +83,14 @@ class ModelTests(unittest.TestCase):
     def setUp(self):
         # Simulate an area with a sub section unmasked
         shed = np.array([1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4])
-        field_mask =    [1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1]  # noqa
+        field_mask =    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1]  # noqa
         shed.shape = (3, 4)
         self.yield_field = np.ma.masked_array(shed, mask=field_mask)
 
         # Simulate a crop layer with 4 crop types spread over the bee shed area
         cdl = np.array([100, 100, 100, 200, 200, 200, 300, 300, 300, 400, 400, 400])  # noqa
         cdl.shape = shed.shape
-        self.cdl = cdl
+        self.cdl = np.ma.masked_array(cdl, mask=field_mask)
 
     def test_aggregation(self):
         # Crop types 100 and 400 are completely outside of unmasked field area,
@@ -97,12 +98,17 @@ class ModelTests(unittest.TestCase):
         crops = [100, 200, 300, 400]
         yield_by_crop = aggregate_crops(self.yield_field, self.cdl, crops)
 
-        self.assertEqual(yield_by_crop, {
+        # Expect the values to be the sum / cell count * 30m * acres per m
+        # Crops that were masked out should be 0
+        expected = {
             '100': 0,
-            '200': 4,  # 2 * 2,
-            '300': 6,  # 3 * 2,
+            '200': 4 / (2 * CELL_SIZE * ACRES_PER_SQM),
+            '300': 9 / (3 * CELL_SIZE * ACRES_PER_SQM),
             '400': 0
-        }, "Crop yield amounts were not aggregated correctly")
+        }
+
+        self.assertEqual(yield_by_crop, expected,
+                         "Crop yield amounts were not aggregated correctly")
 
     def test_yield(self):
         """
