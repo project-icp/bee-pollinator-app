@@ -2,15 +2,15 @@
 
 var $ = require('jquery'),
     _ = require('underscore'),
-    Backbone = require('../../../../shim/backbone'),
-    Marionette = require('../../../../shim/backbone.marionette'),
+    Backbone = require('../../../shim/backbone'),
+    Marionette = require('../../../shim/backbone.marionette'),
     AoiVolumeModel = require('../models').AoiVolumeModel,
-    chart = require('../../../core/chart.js'),
-    barChartTmpl = require('../../../core/templates/barChart.html'),
+    chart = require('../../core/chart.js'),
+    barChartTmpl = require('../../core/templates/barChart.html'),
     resultTmpl = require('./templates/result.html'),
     tableRowTmpl = require('./templates/tableRow.html'),
     tableTmpl = require('./templates/table.html'),
-    utils = require('../../../core/utils.js');
+    utils = require('../../core/utils.js');
 
 var ResultView = Marionette.LayoutView.extend({
     className: 'tab-pane',
@@ -36,9 +36,9 @@ var ResultView = Marionette.LayoutView.extend({
 
     initialize: function(options) {
         this.compareMode = options.compareMode;
-        this.aoiVolumeModel = new AoiVolumeModel({
-            areaOfInterest: this.options.areaOfInterest
-        });
+        console.debug("this", this);
+        console.debug("options", options);
+        this.currentConditionsModel = this.model;
     },
 
     onShow: function() {
@@ -52,9 +52,8 @@ var ResultView = Marionette.LayoutView.extend({
                 }));
             } else {
                 var dataCollection = new Backbone.Collection(
-                    this.model.get('result').quality.filter(
-                        utils.filterOutOxygenDemand
-                ));
+                    this.model.get('result')
+                );
 
                 this.tableRegion.show(new TableView({
                     aoiVolumeModel: this.aoiVolumeModel,
@@ -62,7 +61,7 @@ var ResultView = Marionette.LayoutView.extend({
                 }));
 
                 this.chartRegion.show(new ChartView({
-                    aoiVolumeModel: this.aoiVolumeModel,
+                    currentConditionsModel: this.currentConditionResults,
                     model: this.model,
                     collection: dataCollection
                 }));
@@ -76,15 +75,9 @@ var TableRowView = Marionette.ItemView.extend({
     template: tableRowTmpl,
 
     templateHelpers: function() {
-        var load = this.model.get('load'),
-            runoff = this.model.get('runoff'),
-            adjustedRunoff = this.options.aoiVolumeModel.adjust(runoff),
-            loadingRate = this.options.aoiVolumeModel.getLoadingRate(load),
-            concentration = adjustedRunoff ? load / adjustedRunoff : 0;
-
         return {
-            loadingRate: loadingRate,
-            concentration: concentration * 1000 // g -> mg
+            currentConditionsYield: this.options.currentConditionsModel.get(''),
+            scenarioYield: this.model.get('')
         };
     }
 });
@@ -94,7 +87,7 @@ var TableView = Marionette.CompositeView.extend({
     childViewContainer: 'tbody',
     childViewOptions: function() {
         return {
-            aoiVolumeModel: this.options.aoiVolumeModel
+            currentConditionsModel: this.options.currentConditionsModel
         };
     },
 
@@ -119,20 +112,20 @@ var ChartView = Marionette.ItemView.extend({
 
     addChart: function() {
         var chartEl = this.$el.find('.bar-chart').get(0),
-            aoiVolumeModel = this.options.aoiVolumeModel,
+            currentConditionsModel = this.options.currentConditionsModel,
             data = this.collection.map(function(model) {
-                var load = model.attributes.load;
+                var load = model.attributes.crop;
                 return {
-                    x: model.attributes.measure,
-                    y: aoiVolumeModel.getLoadingRate(load)
+                    x: model.attributes.crop,
+                    y: currentConditionsModel.yield(crop)
                 };
             }),
             chartOptions = {
-                yAxisLabel: 'Loading Rate (kg/ha)',
+                yAxisLabel: 'Yield Per Acre',
                 abbreviateTicks: true
             };
 
-        chart.renderHorizontalBarChart(chartEl, data, chartOptions);
+        chart.renderVerticalBarChart(chartEl, data, chartOptions);
     }
 });
 

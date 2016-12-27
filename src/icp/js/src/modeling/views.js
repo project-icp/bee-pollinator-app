@@ -22,9 +22,8 @@ var _ = require('lodash'),
     scenarioMenuTmpl = require('./templates/scenarioMenu.html'),
     scenarioMenuItemTmpl = require('./templates/scenarioMenuItem.html'),
     projectMenuTmpl = require('./templates/projectMenu.html'),
-    tr55ScenarioToolbarTabContentTmpl = require('./templates/tr55ScenarioToolbarTabContent.html'),
-    tr55RunoffViews = require('./tr55/runoff/views.js'),
-    tr55QualityViews = require('./tr55/quality/views.js');
+    yieldScenarioToolbarTabContentTmpl = require('./templates/yieldScenarioToolbarTabContent.html'),
+    yieldViews = require('./yield/views.js');
 
 var ENTER_KEYCODE = 13,
     ESCAPE_KEYCODE = 27;
@@ -499,7 +498,7 @@ var ScenarioDropDownMenuView = Marionette.CompositeView.extend({
 // The toolbar that contains the modification and input tools
 // for a scenario.
 var ToolbarTabContentView = Marionette.CompositeView.extend({
-    template: tr55ScenarioToolbarTabContentTmpl,
+    template: yieldScenarioToolbarTabContentTmpl,
     model: models.ScenarioModel,
     collection: models.ModelPackageControlsCollection,
     childViewContainer: '.controls',
@@ -571,8 +570,8 @@ var ToolbarTabContentView = Marionette.CompositeView.extend({
 
 // The toolbar that contains the modification and input tools
 // for a scenario.
-var Tr55ToolbarTabContentView = ToolbarTabContentView.extend({
-    template: tr55ScenarioToolbarTabContentTmpl,
+var YieldToolbarTabContentView = ToolbarTabContentView.extend({
+    template: yieldScenarioToolbarTabContentTmpl,
     model: models.ScenarioModel,
 
     ui: {
@@ -611,7 +610,7 @@ var ToolbarTabContentsView = Marionette.CollectionView.extend({
     collection: models.ScenariosCollection,
     className: 'tab-content',
     getChildView: function() {
-        return Tr55ToolbarTabContentView;
+        return YieldToolbarTabContentView;
     },
     childViewOptions: function(model) {
         var controls = models.getControlsForModelPackage(
@@ -859,7 +858,7 @@ function getResultView(modelPackage, resultName) {
         case models.YIELD_PACKAGE:
             switch(resultName) {
                 case 'yield':
-                    return tr55RunoffViews.ResultView;
+                    return yieldViews.ResultView;
                 default:
                     console.log('Result not supported.');
             }
@@ -875,7 +874,7 @@ module.exports = {
     ScenariosView: ScenariosView,
     ScenarioTabPanelsView: ScenarioTabPanelsView,
     ScenarioDropDownMenuView: ScenarioDropDownMenuView,
-    Tr55ToolbarTabContentView: Tr55ToolbarTabContentView,
+    YieldToolbarTabContentView: YieldToolbarTabContentView,
     ProjectMenuView: ProjectMenuView,
     getResultView: getResultView
 };
