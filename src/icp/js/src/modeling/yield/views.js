@@ -10,6 +10,7 @@ var $ = require('jquery'),
     resultTmpl = require('./templates/result.html'),
     tableRowTmpl = require('./templates/tableRow.html'),
     tableTmpl = require('./templates/table.html'),
+    cropTypes = require('../../core/cropTypes.json'),
     utils = require('../../core/utils.js');
 
 var ResultView = Marionette.LayoutView.extend({
@@ -26,8 +27,8 @@ var ResultView = Marionette.LayoutView.extend({
     },
 
     regions: {
-        tableRegion: '.quality-table-region',
-        chartRegion: '.quality-chart-region'
+        tableRegion: '.yield-table-region',
+        chartRegion: '.yield-chart-region'
     },
 
     modelEvents: {
@@ -36,34 +37,38 @@ var ResultView = Marionette.LayoutView.extend({
 
     initialize: function(options) {
         this.compareMode = options.compareMode;
-        console.debug("this", this);
-        console.debug("options", options);
-        this.currentConditionsModel = this.model;
+        this.isCurrentConditions = options.scenario.get('is_current_conditions')
+        this.currentConditionsModel = options.currentConditions.get('results').models[0];
     },
 
     onShow: function() {
         this.tableRegion.reset();
         this.chartRegion.reset();
-        if (this.model.get('result')) {
+        if (this.model.get('result') && this.currentConditionsModel.get('result')) {
+            var scenarioResults = this.model.get('result'),
+                currentConditionsResults = this.currentConditionsModel.get('result'),
+                filteredScenarioResults = _.pick(scenarioResults, function(value, key) {
+                    return value !== 0 || currentConditionsResults[key] !== 0
+                }),
+                filteredCurrentConditionsResults = _.pick(currentConditionsResults, function(value, key) {
+                    return value !== 0 || scenarioResults[key] !== 0
+                });
             if (this.compareMode) {
                 this.chartRegion.show(new CompareChartView({
                     model: this.model,
-                    aoiVolumeModel: this.aoiVolumeModel
+                    currentConditionsModel: this.currentConditionsModel,
                 }));
             } else {
-                var dataCollection = new Backbone.Collection(
-                    this.model.get('result')
-                );
-
                 this.tableRegion.show(new TableView({
-                    aoiVolumeModel: this.aoiVolumeModel,
-                    collection: dataCollection
+                    scenarioResults: filteredScenarioResults,
+                    currentConditionsResults: filteredCurrentConditionsResults,
+                    isCurrentConditions: this.isCurrentConditions
                 }));
 
                 this.chartRegion.show(new ChartView({
-                    currentConditionsModel: this.currentConditionResults,
-                    model: this.model,
-                    collection: dataCollection
+                    scenarioResults: filteredScenarioResults,
+                    currentConditionsResults: filteredCurrentConditionsResults,
+                    isCurrentConditions: this.isCurrentConditions
                 }));
             }
         }
@@ -76,8 +81,7 @@ var TableRowView = Marionette.ItemView.extend({
 
     templateHelpers: function() {
         return {
-            currentConditionsYield: this.options.currentConditionsModel.get(''),
-            scenarioYield: this.model.get('')
+            isCurrentConditions: this.options.isCurrentConditions,
         };
     }
 });
@@ -87,20 +91,57 @@ var TableView = Marionette.CompositeView.extend({
     childViewContainer: 'tbody',
     childViewOptions: function() {
         return {
-            currentConditionsModel: this.options.currentConditionsModel
+            scenarioResults: this.options.scenarioResults,
+            currentConditionsResults: this.options.currentConditionsResults,
+            isCurrentConditions: this.options.isCurrentConditions
         };
     },
 
     template: tableTmpl,
 
+    initialize: function() {
+        this.collection = this.formatData();
+    },
+
     onAttach: function() {
         $('[data-toggle="table"]').bootstrapTable();
+    },
+
+    templateHelpers: function() {
+        return {
+            isCurrentConditions: this.options.isCurrentConditions,
+        };
+    },
+
+    formatData: function() {
+        var collection = new Backbone.Collection();
+
+        collection.add(this.makeRowsForScenario(this.options.currentConditionsResults,
+            this.options.scenarioResults));
+
+        return collection;
+    },
+
+    makeRowsForScenario: function(currentConditionsResults, scenarioResults) {
+        var self = this;
+        return _.map(_.keys(currentConditionsResults), function(cropType) {
+            return _.extend(self.getCropTypeValue(currentConditionsResults, scenarioResults, cropType));
+        });
+    },
+
+    getCropTypeValue: function(currentConditionsResults, scenarioResults, cropType) {
+        return {
+            cropType: cropTypes[cropType],
+            currentConditionsYield: currentConditionsResults[cropType],
+            scenarioYield: scenarioResults[cropType]
+        };
     }
+
 });
 
 var ChartView = Marionette.ItemView.extend({
     template: barChartTmpl,
-    className: 'chart-container quality-chart-container',
+    className: 'chart-container yield-chart-container',
 
     initialize: function(options) {
         this.compareMode = options.compareMode;
@@ -112,27 +153,23 @@ var ChartView = Marionette.ItemView.extend({
 
     addChart: function() {
         var chartEl = this.$el.find('.bar-chart').get(0),
-            currentConditionsModel = this.options.currentConditionsModel,
-            data = this.collection.map(function(model) {
-                var load = model.attributes.crop;
-                return {
-                    x: model.attributes.crop,
-                    y: currentConditionsModel.yield(crop)
-                };
-            }),
+            data = formatData(this.options.currentConditionsResults,
+                this.options.scenarioResults, this.options.isCurrentConditions),
             chartOptions = {
                 yAxisLabel: 'Yield Per Acre',
-                abbreviateTicks: true
+                showLegend: false,
+                barClasses: _.pluck(_.flatten(_.pluck(data, 'values')), 'class')
             };
 
-        chart.renderVerticalBarChart(chartEl, data, chartOptions);
+        chart.renderGroupedVerticalBarChart(chartEl, data, chartOptions);
     }
 });
 
 var CompareChartView = Marionette.ItemView.extend({
+    // TODO Render yield chart, filterable by crop
     template: barChartTmpl,
 
-    className: 'chart-container quality-chart-container',
+    className: 'chart-container yield-chart-container',
 
     modelEvents: {
         'change': 'addChart'
@@ -147,47 +184,49 @@ var CompareChartView = Marionette.ItemView.extend({
     },
 
     addChart: function() {
-        function getData(result, seriesDisplayNames) {
-            return _.map(seriesDisplayNames, function(seriesDisplayName, seriesInd) {
-                var load = result[seriesInd].load;
-                return {
-                    key: seriesDisplayName,
-                    values: [
-                        {
-                            x: '',
-                            y: aoiVolumeModel.getLoadingRate(load),
-                        }
-                    ]
-                };
-            });
-        }
-
         var chartEl = this.$el.find('.bar-chart').get(0),
-            result = this.model.get('result').quality.filter(utils.filterOutOxygenDemand),
-            aoiVolumeModel = this.options.aoiVolumeModel,
-            seriesDisplayNames = ['Suspended Solids',
-                                  'Nitrogen',
-                                  'Phosphorus'],
+            result = null,
+            seriesDisplayNames = null,
             data,
             chartOptions;
 
         $(chartEl).empty();
         if (result) {
-            data = getData(result, seriesDisplayNames);
-            chartOptions = {
-                seriesColors: ['#4aeab3', '#4ebaea', '#329b9c'],
-                yAxisLabel: 'Loading Rate (kg/ha)',
-                yAxisUnit: 'kg/ha',
-                margin: {top: 20, right: 0, bottom: 40, left: 60},
-                reverseLegend: this.compareMode,
-                disableToggle: true,
-                abbreviateTicks: true
-            };
+            data = null;
+            chartOptions = null;
 
-            chart.renderVerticalBarChart(chartEl, data, chartOptions);
+            chart.renderGroupedVerticalBarChart(chartEl, data, chartOptions);
         }
     }
 });
+
+var formatResultsFromModel = function(results, seriesName, isCurrentConditionsData) {
+    return {
+        key: seriesName,
+        values: _.map(results, function(value, key) {
+            return {
+                x: cropTypes[key],
+                y: value,
+                class: 'crop-' + key +
+                        (isCurrentConditionsData ? ' current-conditions' : ' scenario'),
+            };
+        })
+    };
+};
+
+var formatData = function(currentConditionsResults, scenarioResults, isCurrentConditions) {
+    var data = [
+        formatResultsFromModel(currentConditionsResults, "Current Conditions",
+            true),
+    ];
+    if (!isCurrentConditions) {
+        data.push(formatResultsFromModel(scenarioResults, "Scenario",
+            false));
+    }
+    // Make the scenario be the leftmost bar
+    return data.reverse();
+};
+
 
 module.exports = {
     ResultView: ResultView

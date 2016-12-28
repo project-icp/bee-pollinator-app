@@ -24,9 +24,12 @@ $active: #478aaf ; /* Blue */
 $brand-primary: #f9cf2f; /* Honeycomb Yellow */
 $sky-blue: #bbe5f5; /*Sky*/
 $water: #49b8ea; /*Water*/
-$et: #c2d33c; /*Evapotranspiration*/
-$i: #f8aa00; /*Infiltration*/
-$r: #cf4300; /*Runoff*/
+
+//Type
+$font-family: 'Roboto', helvetica, arial, sans-serif;
+$font-h1: 1.8rem;
+$font-h2: 1.5rem;
+$font-h3: 1.0rem;
 
 //Heights
 $footer-height: 55%;
@@ -44,31 +47,54 @@ $sidebar-tab-subheader-height: 60px;
 //Border-radius
 $radius-sm: 2px;
 
-//NLCD
-$nlcd-11: #5475A8;
-$nlcd-21: #E8D1D1;
-$nlcd-22: #E29E8C;
-$nlcd-23: #ff0000;
-$nlcd-24: #B50000;
-$nlcd-31: #D2CDC0;
-$nlcd-41: #85C77E;
-$nlcd-52: #DCCA8F;
-$nlcd-71: #FDE9AA;
-$nlcd-81: #FBF65D;
-$nlcd-82: #CA9146;
-$nlcd-90: #C8E6F8;
-
-//Hydrologic Soil Groups
-$soil-a: #ffffd4;
-$soil-b: #fee391;
-$soil-c: #fec44f;
-$soil-d: #8c2d04;
-$soil-ad: #fe9929;
-$soil-bd: #ec7014;
-$soil-cd: #cc4c02;
-
-//Type
-$font-family: 'Roboto', helvetica, arial, sans-serif;
-$font-h1: 1.8rem;
-$font-h2: 1.5rem;
-$font-h3: 1.0rem;
+//CDL Colors
+// TODO replace with official legend colors
+$cropColors: (
+    1: #5475A8,
+    2: #E8D1D1,
+    3: #E29E8C,
+    4: #ff0000,
+    5: #B50000,
+    6: #D2CDC0,
+    7: #85C77E,
+    8: #DCCA8F,
+    9: #FDE9AA,
+    10: #FBF65D,
+    11: #CA9146,
+    12: #C8E6F8,
+    13: #E29E8C,
+    14: #ff0000,
+    15: #B50000,
+    16: #D2CDC0,
+    17: #85C77E,
+    18: #DCCA8F,
+    19: #FDE9AA,
+    20: #FBF65D,
+    21: #5475A8,
+    22: #E8D1D1,
+    23: #E29E8C,
+    24: #ff0000,
+    25: #B50000,
+    26: #D2CDC0,
+    27: #85C77E,
+    28: #DCCA8F,
+    29: #FDE9AA,
+    30: #FBF65D,
+    31: #5475A8,
+    32: #E8D1D1,
+    33: #E29E8C,
+    34: #ff0000,
+    35: #B50000,
+    36: #D2CDC0,
+    37: #85C77E,
+    38: #DCCA8F,
+    39: #FDE9AA,
+    40: #FBF65D,
+    41: #5475A8,
+    42: #E8D1D1,
+    43: #E29E8C,
+    44: #ff0000,
+    45: #B50000,
+    46: #D2CDC0,
+    47: #85C77E
+);

@@ -2,8 +2,10 @@
     <thead>
         <tr>
             <th data-sortable="true">Crop</th>
-            <th class="text-left" data-sortable="true" data-sorter="window.numericSort">Current Conditions (yield/acre)</th>
-            <th class="text-left" data-sortable="true" data-sorter="window.numericSort">Scenario (yield/acre)</th>
+            <th class="text-left" data-sortable="true" data-sorter="window.numericSort">Yield Per Acre</th>
+            {% if not isCurrentConditions %}
+                <th class="text-left" data-sortable="true" data-sorter="window.numericSort">Yield Per Acre Under Current Conditions</th>
+            {% endif %}
         </tr>
     </thead>
     <tbody>

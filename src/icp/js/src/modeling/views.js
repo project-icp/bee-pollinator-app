@@ -683,11 +683,13 @@ var ResultsView = Marionette.LayoutView.extend({
 
     showDetailsRegion: function() {
         var scenarios = this.model.get('scenarios'),
-            scenario = scenarios.getActiveScenario();
+            scenario = scenarios.getActiveScenario(),
+            currentConditions = scenarios.getCurrentConditions();
 
-        if (scenario) {
+        if (scenario && currentConditions) {
             this.modelingRegion.show(new ResultsDetailsView({
                 areaOfInterest: this.model.get('area_of_interest'),
+                currentConditions: currentConditions,
                 collection: scenario.get('results'),
                 scenario: scenario
             }));
@@ -746,7 +748,8 @@ var ResultsDetailsView = Marionette.LayoutView.extend({
         this.contentRegion.show(new ResultsTabContentsView({
             collection: this.collection,
             scenario: this.scenario,
-            areaOfInterest: this.options.areaOfInterest
+            areaOfInterest: this.options.areaOfInterest,
+            currentConditions: this.options.currentConditions,
         }));
     }
 });
@@ -818,6 +821,7 @@ var ResultsTabContentView = Marionette.LayoutView.extend({
 
         this.resultRegion.show(new ResultView({
             model: this.model,
+            currentConditions: this.options.currentConditions,
             areaOfInterest: this.options.areaOfInterest,
             scenario: this.scenario
         }));
@@ -833,7 +837,8 @@ var ResultsTabContentsView = Marionette.CollectionView.extend({
     childViewOptions: function() {
         return {
             scenario: this.scenario,
-            areaOfInterest: this.options.areaOfInterest
+            areaOfInterest: this.options.areaOfInterest,
+            currentConditions: this.options.currentConditions,
         };
     },
     initialize: function(options) {

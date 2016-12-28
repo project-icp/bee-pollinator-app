@@ -33,119 +33,7 @@ function getNumBars(data) {
 }
 
 /*
-    Renders a horizontal bar chart for a single series of data without a legend.
-
-    data is of the form
-    [
-        {
-            x: ...,
-            y: ...
-        },
-        ...
-    ]
-    note that x corresponds to the vertical axis since this is a horizontal bar
-    chart.
-
-    options includes: barClasses, margin, yAxisLabel, isPercentage, maxBarHeight
-    and abbreviateTicks
-*/
-function renderHorizontalBarChart(chartEl, data, options) {
-    var chart = nv.models.multiBarHorizontalChart(),
-        svg = makeSvg(chartEl),
-        $svg = $(svg);
-
-    // Augment data so that it is part of a single series to match
-    // the format expected by NVD3.
-    data = [
-        {
-          key: 'Series 1',
-          values: data
-        }
-    ];
-
-
-    // The colors and barColors methods on chart do not
-    // support the behavior we want.
-    function addBarClasses() {
-        var bars = $(chartEl).find('.nv-bar'),
-            oldClass,
-            newClass;
-
-        _.each(bars, function(bar, i) {
-            // Can't use addClass on SVG elements.
-            oldClass = $(bar).attr('class');
-            newClass = oldClass + ' ' + options.barClasses[i];
-            $(bar).attr('class', newClass);
-        });
-    }
-
-    function setChartHeight() {
-        // Set chart height to ensure that bars (and their padding)
-        // are no taller than maxBarHeight.
-        var numBars = getNumBars(data),
-            maxHeight = options.margin.top + options.margin.bottom +
-                        numBars * options.maxBarHeight,
-            actualHeight = $svg.height();
-
-        if (actualHeight > maxHeight) {
-            chart.height(maxHeight);
-        } else {
-            chart.height(actualHeight);
-        }
-    }
-
-    function updateChart() {
-        var width = $svg.width(),
-            availableWidth = width - (options.margin.left + options.margin.right),
-            minTickWidth = 60,
-            yticks = Math.floor(availableWidth / minTickWidth);
-
-        if($svg.is(':visible')) {
-            setChartHeight();
-            chart.yAxis.ticks(Math.min(yticks, 5));
-            chart.update(); // Throws error if updating a hidden svg.
-            if (options.barClasses) {
-                addBarClasses();
-            }
-        }
-    }
-
-    options = options || {};
-    _.defaults(options, {
-        margin: {top: 30, right: 30, bottom: 40, left: 200},
-        maxBarHeight: 150
-    });
-
-    nv.addGraph(function() {
-        chart.showLegend(false)
-             .showControls(false)
-             .duration(0)
-             .margin(options.margin);
-
-        setChartHeight();
-        chart.tooltip.enabled(false);
-        chart.yAxis.ticks(5);
-        handleCommonOptions(chart, options);
-
-        d3.select(svg)
-            .datum(data)
-            .call(chart);
-
-        if (options.barClasses) {
-            addBarClasses();
-        }
-
-        nv.utils.windowResize(updateChart);
-        // The bar-chart:refresh event occurs when switching tabs which requires
-        // redrawing the chart.
-        $(chartEl).on('bar-chart:refresh', updateChart);
-
-        return chart;
-    });
-}
-
-/*
-    Renders a stacked vertical bar chart for multiple series of data
+    Renders a grouped vertical bar chart for multiple series of data
     with a legend.
 
     data is of the form
@@ -162,17 +50,34 @@ function renderHorizontalBarChart(chartEl, data, options) {
         },
         ...
    ]
-   where a series corresponds to a group of data that will be
-   displayed with the same color/legend item. Eg. Runoff
 
-   options includes: margin, yAxisLabel, yAxisUnit, seriesColors,
+   where a series corresponds to a group of data that will be
+   displayed with the same color/legend item. Eg. Current Conditions
+
+   options includes: margin, showLegend, yAxisLabel, yAxisUnit, seriesColors,
    isPercentage, maxBarWidth, abbreviateTicks, reverseLegend, and
-   disableToggle
+   disableToggle, barColors
 */
-function renderVerticalBarChart(chartEl, data, options) {
+function renderGroupedVerticalBarChart(chartEl, data, options) {
     var chart = nv.models.multiBarChart(),
         svg = makeSvg(chartEl),
         $svg = $(svg);
+
+    // The colors and barColors methods on chart do not
+    // support the behavior we want.
+    function addBarClasses() {
+        var bars = $(chartEl).find('.nv-bar'),
+            oldClass,
+            newClass;
+
+        _.each(bars, function(bar, i) {
+            // Can't use addClass on SVG elements.
+            oldClass = $(bar).attr('class');
+            newClass = oldClass + ' ' + options.barClasses[i];
+            $(bar).attr('class', newClass);
+            $(bar).attr('style', '');
+        });
+    }
 
     function setChartWidth() {
         // Set chart width to ensure that bars (and their padding)
@@ -193,23 +98,25 @@ function renderVerticalBarChart(chartEl, data, options) {
         if($svg.is(':visible')) {
             setChartWidth();
             chart
-                .staggerLabels($svg.width() < widthCutoff)
                 .update(); // Throws error if updating a hidden svg.
+            if (options.barClasses) {
+                addBarClasses();
+            }
         }
     }
 
     options = options || {};
     _.defaults(options, {
         margin: {top: 20, right: 30, bottom: 40, left: 60},
-        maxBarWidth: 150
+        maxBarWidth: 150,
+        showLegend: true,
+        disableToggle: true,
     });
 
     nv.addGraph(function() {
-        chart.showLegend(true)
+        chart.showLegend(options.showLegend)
              .showControls(false)
-             .stacked(true)
              .reduceXTicks(false)
-             .staggerLabels($svg.width() < widthCutoff)
              .duration(0)
              .margin(options.margin);
 
@@ -220,7 +127,6 @@ function renderVerticalBarChart(chartEl, data, options) {
             .reverse(options.reverseLegend)
             .rightAlign(false);
         chart.tooltip.enabled(true);
-        chart.yAxis.ticks(5);
         handleCommonOptions(chart, options);
 
         if (options.yAxisUnit) {
@@ -228,14 +134,18 @@ function renderVerticalBarChart(chartEl, data, options) {
                 return chart.yAxis.tickFormat()(d) + ' ' + options.yAxisUnit;
             });
         }
+
         if (options.seriesColors) {
             chart.color(options.seriesColors);
         }
 
-
         d3.select(svg)
             .datum(data)
             .call(chart);
+
+        if (options.barClasses) {
+            addBarClasses();
+        }
 
         nv.utils.windowResize(updateChart);
         // The bar-chart:refresh event occurs when switching tabs which requires
@@ -246,46 +156,7 @@ function renderVerticalBarChart(chartEl, data, options) {
     });
 }
 
-// data is same format as for renderVerticalBarChart
-function renderLineChart(chartEl, data, options) {
-    var chart = nv.models.lineChart(),
-        svg = makeSvg(chartEl);
-
-    options = options || {};
-    _.defaults(options, {
-        margin: {top: 20, right: 30, bottom: 40, left: 60}
-    });
-
-    nv.addGraph(function() {
-        chart.showLegend(false)
-            .margin(options.margin);
-
-        chart.xAxis
-            .tickValues(options.xTickValues)
-            .tickFormat(function(month) {
-                return options.xAxisLabel(month);
-            });
-
-        chart.yAxis
-            .axisLabel(options.yAxisLabel)
-            .tickFormat(d3.format('.02f'));
-
-        chart.tooltip.valueFormatter(function(d) {
-            return chart.yAxis.tickFormat()(d) + ' ' + options.yAxisUnit;
-        });
-
-        handleCommonOptions(chart, options);
-
-        d3.select(svg)
-            .datum(data)
-            .call(chart);
-
-        return chart;
-    });
-}
 
 module.exports = {
-    renderHorizontalBarChart: renderHorizontalBarChart,
-    renderVerticalBarChart: renderVerticalBarChart,
-    renderLineChart: renderLineChart
+    renderGroupedVerticalBarChart: renderGroupedVerticalBarChart,
 };
