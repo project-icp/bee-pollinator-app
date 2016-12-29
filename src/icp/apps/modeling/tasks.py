@@ -44,4 +44,8 @@ def calculate_yield(model_input):
 
     yields = crop_yield.calculate(bee_shed_geom, field_geom,
                                   modifications, managed_hives)
-    return json.dumps(yields)
+
+    return {
+        'inputmod_hash': model_input['inputmod_hash'],
+        'yield': yields,
+    }

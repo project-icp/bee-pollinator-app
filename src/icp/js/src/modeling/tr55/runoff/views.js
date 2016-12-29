@@ -34,7 +34,6 @@ var ResultView = Marionette.LayoutView.extend({
     onShow: function() {
         this.tableRegion.reset();
         this.chartRegion.reset();
-
         if (this.model.get('result')) {
             var aoiVolumeModel = new AoiVolumeModel({
                 areaOfInterest: this.aoi
@@ -175,6 +174,7 @@ var TableView = Marionette.CompositeView.extend({
     },
 
     makeRowsForScenario: function(runoffKey) {
+        return;
         var self = this,
             runoffPartition = this.tr55Results[runoffKey];
 
