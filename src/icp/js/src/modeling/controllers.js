@@ -187,7 +187,8 @@ function updateUrl() {
 }
 
 function updateScenario(scenario) {
-    App.getMapView().updateModifications(scenario.get('modifications'));
+    // Render both shared and scenario specific modifications
+    App.getMapView().updateModifications(scenario);
     updateUrl();
 }
 

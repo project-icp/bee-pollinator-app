@@ -12,6 +12,7 @@ var L = require('leaflet'),
     headerTmpl = require('./templates/header.html'),
     messageTmpl = require('./templates/message.html'),
     modificationPopupTmpl = require('./templates/modificationPopup.html'),
+    sharedModificationPopupTmpl = require('./templates/sharedModificationPopup.html'),
     areaOfInterestTmpl = require('./templates/areaOfInterestHeader.html'),
     modalModels = require('./modals/models'),
     modalViews = require('./modals/views'),
@@ -267,7 +268,7 @@ var MapView = Marionette.ItemView.extend({
     clearMapState: function() {
         var self = this;
         self._leafletMap.fitBounds(self._centeredBounds);
-        self.updateModifications(null);
+        self.clearModifications();
         self.model.set('areaOfInterest', null);
         self.model.set('areaOfInterestName', '');
         self.model.set('previousAreaOfInterest', null);
@@ -576,39 +577,46 @@ var MapView = Marionette.ItemView.extend({
         }
     },
 
-    // Add GeoJSON layer for each modification model in modificationsColl.
-    // Pass null or empty argument to clear modification layers.
-    updateModifications: function(modificationsColl) {
-        var self = this,
-            map = this._leafletMap;
-
-        drawUtils.cancelDrawing(map);
+    clearModifications: function() {
+        drawUtils.cancelDrawing(this._leafletMap);
         this._modificationsLayer.clearLayers();
+    },
 
-        if (!modificationsColl) {
-            return;
-        }
+    // Add GeoJSON layer for each modification model in the given scenario's 
+    // shared and specific modification collections.
+    updateModifications: function(scenario) {
+        var self = this,
+            sharedMods = self._modificationToLayer(scenario.get('shared_modifications'), true),
+            mods = self._modificationToLayer(scenario.get('modifications'));
 
-        var layers = modificationsColl.reduce(function(acc, model) {
-                try {
-                    var style = modificationConfigUtils.getDrawOpts(model.get('value'));
-                    return acc.concat(new L.GeoJSON(model.get('shape'), {
-                            style: style,
-                            onEachFeature: function(feature, layer) {
-                                if (self.options.interactiveMode) {
-                                    var popupContent = new ModificationPopupView({ model: model }).render().el;
-                                    layer.bindPopup(popupContent);
-                                }
-                            }
-                    }));
-                } catch (ex) {
-                    console.log('Error creating Leaflet layer (invalid GeoJSON object)');
-                }
-            }, []);
+        self.clearModifications();
 
-        _.each(layers, function(layer) {
+        _.each(sharedMods.concat(mods), function(layer) {
             self._modificationsLayer.addLayer(layer);
         });
+    },
+
+    _modificationToLayer: function(modificationsColl, shared) {
+        var self = this;
+        return modificationsColl.reduce(function(acc, model) {
+            try {
+                var popupView = shared ? SharedModificationPopupView : ModificationPopupView,
+                    modType = model.get('value'),
+                    style = modificationConfigUtils.getDrawOpts(modType, shared);
+
+                return acc.concat(new L.GeoJSON(model.get('shape'), {
+                        style: style,
+                        onEachFeature: function(feature, layer) {
+                            if (self.options.interactiveMode) {
+                                var popupContent = new popupView({ model: model }).render().el;
+                                layer.bindPopup(popupContent);
+                            }
+                        }
+                }));
+            } catch (ex) {
+                console.error(ex, 'Error creating Leaflet layer (invalid GeoJSON object)');
+            }
+        }, []);
     },
 
     toggleMapSize: function() {
@@ -764,6 +772,10 @@ var ModificationPopupView = Marionette.ItemView.extend({
         this.model.destroy();
         this.destroy();
     }
+});
+
+var SharedModificationPopupView = Marionette.ItemView.extend({
+    template: sharedModificationPopupTmpl,
 });
 
 var AreaOfInterestView = Marionette.ItemView.extend({

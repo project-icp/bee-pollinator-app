@@ -155,8 +155,8 @@ var utils = {
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     },
 
-    // Convert a backbone collection into a canonical MD5 hash
-    getCollectionHash: function(collection) {
+    // Converts up to two backbone collections into a canonical MD5 hash
+    getCollectionHash: function(collection1, collection2) {
         // JSON objects are not guaranteed consistent order in string
         // representation, so we convert to sorted array which can be
         // stringified reliably.
@@ -181,9 +181,17 @@ var utils = {
                 return sorted;
             },
             // Convert each model to a sorted array
-            sortedCollection = collection.map(function(model) {
+            sortedCollection = collection1.map(function(model) {
                 return objectToSortedArray(model.toJSON());
             });
+
+            if (collection2) {
+                sortedCollection = sortedCollection.concat(
+                    collection2.map(function(model) {
+                        return objectToSortedArray(model.toJSON());
+                    })
+                );
+            }
 
         return md5(JSON.stringify(sortedCollection));
     },
