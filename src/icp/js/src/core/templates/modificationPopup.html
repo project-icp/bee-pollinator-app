@@ -1,12 +1,13 @@
-<h2>{{ value|modName }}</h2>
-<table class='table'>
-    <tr>
-        <td>Total Area</td>
-        <td class='strong text-right'>{{ area|round(2)|toLocaleString(2) }} {{ units }}</td>
-    </tr>
-</table>
-<span>
-    <button class="btn btn-sm btn-icon dark delete-modification" type="button">
-        <i class="fa fa-trash"></i>
-    </button>
-</span>
+<h3>
+    {{ value|modName }}
+    <small class="text-muted">{{ area|round(2)|toLocaleString(2) }} {{ units }}</small>
+</h3>
+
+{% if isCurrentConditions %}
+    <p>This change corrects the underlying land cover data and will be applied to all scenarios. </p>
+{% else %}
+    <p>This land cover change will only affect this scenario.</p>
+{% endif %}
+<button class="btn btn-sm btn-icon dark delete-modification" type="button" title="Remove">
+    <i class="fa fa-trash"></i>
+</button>

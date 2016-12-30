@@ -319,6 +319,7 @@ var ModificationModel = coreModels.GeoModel.extend({
     defaults: _.extend({
             name: '',
             type: '',
+            summary: '',
             effectiveArea: null, // Area after being clip by AoI
             effectiveUnits: null, // Units of effective area
             effectiveShape: null, // GeoJSON after being clip by AoI,

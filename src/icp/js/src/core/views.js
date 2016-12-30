@@ -586,8 +586,9 @@ var MapView = Marionette.ItemView.extend({
     // shared and specific modification collections.
     updateModifications: function(scenario) {
         var self = this,
+            isCurrentConditions = scenario.get('is_current_conditions'),
             sharedMods = self._modificationToLayer(scenario.get('shared_modifications'), true),
-            mods = self._modificationToLayer(scenario.get('modifications'));
+            mods = self._modificationToLayer(scenario.get('modifications'), false, isCurrentConditions);
 
         self.clearModifications();
 
@@ -596,13 +597,15 @@ var MapView = Marionette.ItemView.extend({
         });
     },
 
-    _modificationToLayer: function(modificationsColl, shared) {
+    _modificationToLayer: function(modificationsColl, shared, isCurrentConditions) {
         var self = this;
         return modificationsColl.reduce(function(acc, model) {
             try {
                 var popupView = shared ? SharedModificationPopupView : ModificationPopupView,
                     modType = model.get('value'),
                     style = modificationConfigUtils.getDrawOpts(modType, shared);
+
+                model.set('isCurrentConditions', isCurrentConditions);
 
                 return acc.concat(new L.GeoJSON(model.get('shape'), {
                         style: style,
