@@ -629,16 +629,18 @@ var ScenarioModel = Backbone.Model.extend({
 
         switch(App.currentProject.get('model_package')) {
             case YIELD_PACKAGE:
-                var activeModifications = self.get('modifications')
-                    .map(function(mod) {
-                        var attr = mod.attributes;
-                        return {
-                            shape: attr.shape,
-                            area: attr.effectiveArea,
-                            category: attr.name,
-                            value: attr.cdlId
-                        };
-                    });
+                var scenarioMods = self.get('modifications').models,
+                    sharedMods = self.get('shared_modifications').models,
+                    activeModifications = sharedMods.concat(scenarioMods)
+                        .map(function(mod) {
+                            var attr = mod.attributes;
+                            return {
+                                shape: attr.shape,
+                                area: attr.effectiveArea,
+                                category: attr.name,
+                                value: attr.cdlId
+                            };
+                        });
 
                 return {
                     model_input: JSON.stringify({
