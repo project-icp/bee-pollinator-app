@@ -20,27 +20,6 @@ h1, h2, h3 {
   }
 }
 
-h1 {
-  font-size: $font-h1;
-  font-weight: 500;
-
-  &.precip {
-    color: $water;
-  }
-
-  &.evapo {
-    color: $et;
-  }
-
-  &.runoff {
-    color: $r;
-  }
-
-  &.infil {
-    color: $i;
-  }
-}
-
 h2 {
   font-size: $font-h2;
   font-weight: 500;

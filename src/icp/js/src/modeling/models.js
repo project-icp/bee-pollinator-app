@@ -490,12 +490,6 @@ var ScenarioModel = Backbone.Model.extend({
             self.fetchResultsPromise = fetchResultsPromise;
             self.fetchResultsPromise
                 .always(function() {
-                    // TODO remove when charted
-                    console.debug('Scenario Results',
-                        self.get('name'),
-                        self.get('results').models[0].get('result'));
-                })
-                .always(function() {
                     // Clear promise so we start a new one next time
                     delete self.fetchResultsPromise;
                 });
@@ -757,6 +751,10 @@ var ScenariosCollection = Backbone.Collection.extend({
 
     getActiveScenario: function() {
         return this.findWhere({active: true});
+    },
+
+    getCurrentConditions: function() {
+        return this.findWhere({is_current_conditions: true});
     }
 });
 

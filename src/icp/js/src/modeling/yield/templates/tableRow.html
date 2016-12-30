@@ -1,0 +1,5 @@
+<td>{{ cropType }}</td>
+<td class="strong text-right">{{ scenarioYield|round(3)|toLocaleString(3) }}</td>
+{% if not isCurrentConditions %}
+    <td class="strong text-right">{{ currentConditionsYield|round(3)|toLocaleString(3) }}</td>
+{% endif %}

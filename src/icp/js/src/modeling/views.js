@@ -22,9 +22,8 @@ var _ = require('lodash'),
     scenarioMenuTmpl = require('./templates/scenarioMenu.html'),
     scenarioMenuItemTmpl = require('./templates/scenarioMenuItem.html'),
     projectMenuTmpl = require('./templates/projectMenu.html'),
-    tr55ScenarioToolbarTabContentTmpl = require('./templates/tr55ScenarioToolbarTabContent.html'),
-    tr55RunoffViews = require('./tr55/runoff/views.js'),
-    tr55QualityViews = require('./tr55/quality/views.js');
+    yieldScenarioToolbarTabContentTmpl = require('./templates/yieldScenarioToolbarTabContent.html'),
+    yieldViews = require('./yield/views.js');
 
 var ENTER_KEYCODE = 13,
     ESCAPE_KEYCODE = 27;
@@ -499,7 +498,7 @@ var ScenarioDropDownMenuView = Marionette.CompositeView.extend({
 // The toolbar that contains the modification and input tools
 // for a scenario.
 var ToolbarTabContentView = Marionette.CompositeView.extend({
-    template: tr55ScenarioToolbarTabContentTmpl,
+    template: yieldScenarioToolbarTabContentTmpl,
     model: models.ScenarioModel,
     collection: models.ModelPackageControlsCollection,
     childViewContainer: '.controls',
@@ -571,8 +570,8 @@ var ToolbarTabContentView = Marionette.CompositeView.extend({
 
 // The toolbar that contains the modification and input tools
 // for a scenario.
-var Tr55ToolbarTabContentView = ToolbarTabContentView.extend({
-    template: tr55ScenarioToolbarTabContentTmpl,
+var YieldToolbarTabContentView = ToolbarTabContentView.extend({
+    template: yieldScenarioToolbarTabContentTmpl,
     model: models.ScenarioModel,
 
     ui: {
@@ -611,7 +610,7 @@ var ToolbarTabContentsView = Marionette.CollectionView.extend({
     collection: models.ScenariosCollection,
     className: 'tab-content',
     getChildView: function() {
-        return Tr55ToolbarTabContentView;
+        return YieldToolbarTabContentView;
     },
     childViewOptions: function(model) {
         var controls = models.getControlsForModelPackage(
@@ -684,11 +683,13 @@ var ResultsView = Marionette.LayoutView.extend({
 
     showDetailsRegion: function() {
         var scenarios = this.model.get('scenarios'),
-            scenario = scenarios.getActiveScenario();
+            scenario = scenarios.getActiveScenario(),
+            currentConditions = scenarios.getCurrentConditions();
 
-        if (scenario) {
+        if (scenario && currentConditions) {
             this.modelingRegion.show(new ResultsDetailsView({
                 areaOfInterest: this.model.get('area_of_interest'),
+                currentConditions: currentConditions,
                 collection: scenario.get('results'),
                 scenario: scenario
             }));
@@ -747,7 +748,8 @@ var ResultsDetailsView = Marionette.LayoutView.extend({
         this.contentRegion.show(new ResultsTabContentsView({
             collection: this.collection,
             scenario: this.scenario,
-            areaOfInterest: this.options.areaOfInterest
+            areaOfInterest: this.options.areaOfInterest,
+            currentConditions: this.options.currentConditions,
         }));
     }
 });
@@ -819,6 +821,7 @@ var ResultsTabContentView = Marionette.LayoutView.extend({
 
         this.resultRegion.show(new ResultView({
             model: this.model,
+            currentConditions: this.options.currentConditions,
             areaOfInterest: this.options.areaOfInterest,
             scenario: this.scenario
         }));
@@ -834,7 +837,8 @@ var ResultsTabContentsView = Marionette.CollectionView.extend({
     childViewOptions: function() {
         return {
             scenario: this.scenario,
-            areaOfInterest: this.options.areaOfInterest
+            areaOfInterest: this.options.areaOfInterest,
+            currentConditions: this.options.currentConditions,
         };
     },
     initialize: function(options) {
@@ -859,7 +863,7 @@ function getResultView(modelPackage, resultName) {
         case models.YIELD_PACKAGE:
             switch(resultName) {
                 case 'yield':
-                    return tr55RunoffViews.ResultView;
+                    return yieldViews.ResultView;
                 default:
                     console.log('Result not supported.');
             }
@@ -875,7 +879,7 @@ module.exports = {
     ScenariosView: ScenariosView,
     ScenarioTabPanelsView: ScenarioTabPanelsView,
     ScenarioDropDownMenuView: ScenarioDropDownMenuView,
-    Tr55ToolbarTabContentView: Tr55ToolbarTabContentView,
+    YieldToolbarTabContentView: YieldToolbarTabContentView,
     ProjectMenuView: ProjectMenuView,
     getResultView: getResultView
 };

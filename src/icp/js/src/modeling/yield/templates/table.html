@@ -1,0 +1,13 @@
+<table class="table custom-hover" data-toggle="table">
+    <thead>
+        <tr>
+            <th data-sortable="true">Crop</th>
+            <th class="text-left" data-sortable="true" data-sorter="window.numericSort">Yield Per Acre</th>
+            {% if not isCurrentConditions %}
+                <th class="text-left" data-sortable="true" data-sorter="window.numericSort">Yield Per Acre Under Current Conditions</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
