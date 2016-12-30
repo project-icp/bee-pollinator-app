@@ -10,7 +10,7 @@ from copy import copy
 from datetime import datetime
 from subprocess import call
 
-from cdl_colors import COLORS
+from cdl_colormap import COLORMAP
 
 # When you want to test changes on a smaller raster use:
 # src_path = '../../../tests/data/cdl_test.tif'
@@ -34,11 +34,9 @@ def init():
                         tiled='yes', compress='none')
 
         with rasterio.open(DST_PATH, 'w', **new_meta) as dst:
-
-            # The colormap doesn't copy over with the src's meta
-            # so write it anew
-            colormap = dict(zip(range(1, 48), COLORS))
-            dst.write_colormap(1, colormap)
+            # Add a colormap based on the original raster's values
+            # but where each id's color is unique
+            dst.write_colormap(1, COLORMAP)
 
             # This script takes a while to run, so set up for printing
             # its progress
