@@ -127,13 +127,13 @@ var ProjectModel = Backbone.Model.extend({
         this.set('is_activity', settings.get('activityMode'));
 
         this.listenTo(this.get('scenarios'), 'add', this.addIdsToScenarios, this);
-        this.get('scenarios').on('change:modification_hash', this.shareGlobalModifications);
+        this.get('scenarios').on('change:modification_hash', this.shareGlobalModifications, this);
     },
 
     shareGlobalModifications: function(changedScenario) {
         // When modifications are made to current conditions, add them
         // to all other scenarios as well
-        var scenarios = this;
+        var scenarios = this.get('scenarios');
         if (changedScenario.get('is_current_conditions')) {
             var sharedMods = changedScenario.get('modifications').toJSON();
             scenarios.each(function(scenario) {
@@ -267,6 +267,11 @@ var ProjectModel = Backbone.Model.extend({
                 });
 
             scenariosCollection.reset(scenarios);
+
+            // Apply current condition's modifications to all other scenarios
+            var currentConditions = scenariosCollection.findWhere({is_current_conditions: true});
+            this.shareGlobalModifications(currentConditions);
+
             // Set the user_id to ensure controls are properly set.
             response.user_id = user_id;
 
