@@ -66,6 +66,7 @@ var OverlayControlView = Marionette.ItemView.extend({
 
     templateHelpers: function() {
         return {
+            legend: this.isDisplayed ? "open" : "",
             iconClass: this.isDisplayed ? "fa fa-eye-slash" : "fa fa-eye",
             inputType: this.isDisplayed ? "range" : "hidden",
             layerName: 'Crop Layer',
