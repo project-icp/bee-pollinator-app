@@ -169,3 +169,35 @@
 .modification-dropdown {
   z-index: 1002;
 }
+
+.crop-legend-dropdown {
+
+  .dropdown-menu {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0.5rem;
+    overflow: scroll;
+    column-count: 4;
+  }
+
+  .legend-color {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+    margin-bottom: -3px;
+    border: 2px solid $black-39;
+
+    // Official CDL legend colors for classes selected for display
+    @for $i from 1 through 47 {
+      &.crop-#{$i} {
+        background: map-get($cropColors, $i)
+      }
+    }
+  }
+
+  .legend-item {
+    white-space: nowrap;
+  }
+}

@@ -1,3 +1,13 @@
+<div class="crop-legend-dropdown dropup {{ legend }}">
+    <div class="dropdown-menu dropdown-menu-left">
+        {% for id, name in cropTypes %}
+            <div class="legend-item">
+                <span class="legend-color crop-{{ id }}"></span>
+                {{ name }}
+            </div>
+        {% endfor %}
+    </div>
+</div>
 <div class="layer-control-button-container leaflet-bar" style="width:100%;">
     <a class="leaflet-bar leaflet-bar-part leaflet-bar-part-single"
       style="cursor:default;" href="#" title="{{ action }} {{ layerName }}">

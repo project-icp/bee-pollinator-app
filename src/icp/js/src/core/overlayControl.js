@@ -4,7 +4,8 @@ var L = require('leaflet'),
     $ = require('jquery'),
     _ = require('underscore'),
     Marionette = require('../../shim/backbone.marionette'),
-    overlayControlTmpl = require('./templates/overlayControl.html');
+    overlayControlTmpl = require('./templates/overlayControl.html'),
+    cropTypes = require('./cropTypes.json');
 
 module.exports = L.Control.extend({
     options: {
@@ -66,6 +67,8 @@ var OverlayControlView = Marionette.ItemView.extend({
 
     templateHelpers: function() {
         return {
+            legend: this.isDisplayed ? "open" : "",
+            cropTypes: cropTypes,
             iconClass: this.isDisplayed ? "fa fa-eye-slash" : "fa fa-eye",
             inputType: this.isDisplayed ? "range" : "hidden",
             layerName: 'Crop Layer',
