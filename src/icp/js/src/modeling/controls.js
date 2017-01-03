@@ -97,6 +97,7 @@ var ThumbSelectView = Marionette.ItemView.extend({
                 name: controlName,
                 value: controlValue,
                 cdlId: modificationConfigUtils.getCdlId(controlValue),
+                summary: modificationConfigUtils.getHumanReadableSummary(controlValue),
                 shape: geojson
             }));
         });

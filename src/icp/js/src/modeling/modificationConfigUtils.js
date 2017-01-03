@@ -1,4 +1,5 @@
 "use strict";
+var $ = require('jquery');
 
 var modificationConfig = require('../core/modificationConfig.json');
 
@@ -50,28 +51,35 @@ function getCdlId(modKey) {
     return unknownModKey(modKey);
 }
 
-var getDrawOpts = function(modKey) {
-    var defaultStyle = {
-        color: '#888',
-        opacity: 1,
-        weight: 3,
-        strokeWidth: 1,
-        fillColor: '#888',
-        fillOpacity: 0.74
-    };
+/*
+ * Retrieve configuration for vector drawing of modification types,
+ * both Land Cover and Enhancements.
+ * Args:
+ *   modKey (string): The key for the modification entry in modificationConfig
+ *   shared (bool): Will augment the returned rendering options to include
+ *      changes appropriate for shared vectors drawn across scenarios.
+ */
+var getDrawOpts = function(modKey, shared) {
+    var defaultOpacity = shared ? 0.4 : 0.75,
+        defaultStrokeWidth = shared ? 1 : 3,
+        defaultStyle = {
+            weight: defaultStrokeWidth,
+            color: '#888',
+            opacity: defaultOpacity,
+            strokeWidth: defaultStrokeWidth,
+            fillColor: '#888',
+            fillOpacity: defaultOpacity
+        };
 
     if (modKey && modificationConfig[modKey]) {
         var config = modificationConfig[modKey];
         if (config.copyStyle) {
             return getDrawOpts(config.copyStyle);
         } else if (config.strokeColor){
-            return {
+            return $.extend(defaultStyle, {
                 color: config.strokeColor,
-                opacity: 1,
-                weight: 3,
                 fillColor: config.fillColor,
-                fillOpacity: 0.74
-            };
+            });
         } else {
             return defaultStyle;
         }

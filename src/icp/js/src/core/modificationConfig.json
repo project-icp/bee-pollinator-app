@@ -28,21 +28,21 @@
         "strokeColor": "#021655"
     },
     "wildflower_strip": {
-        "value": 5,
+        "value": 21,
         "name": "Wildflower Strip",
         "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture.",
         "fillColor": "pink",
         "strokeColor": "#777777"
     },
     "bee_hab_a": {
-        "value": 42,
+        "value": 24,
         "name": "Bee Habitat A",
         "summary": "A roof of a building that is partially or completely covered with vegetation and a growing medium, planted over a waterproofing membrane.",
         "fillColor": "green",
         "strokeColor": "#9ABD52"
     },
     "bee_hab_b": {
-        "value": 43,
+        "value": 25,
         "name": "Bee Habitat B",
         "summary": "A roof of a building that is partially or completely covered with vegetation and a growing medium, planted over a waterproofing membrane.",
         "fillColor": "blue",

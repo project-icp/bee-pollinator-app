@@ -134,7 +134,7 @@ var CompareScenarioView = Marionette.LayoutView.extend({
 
         this.mapView.fitToAoi();
         this.mapView.updateAreaOfInterest();
-        this.mapView.updateModifications(this.model.get('modifications'));
+        this.mapView.updateModifications(this.model);
         this.mapRegion.show(this.mapView);
         this.modelingRegion.show(new CompareModelingView({
             projectModel: this.projectModel,

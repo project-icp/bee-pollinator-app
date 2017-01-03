@@ -127,6 +127,21 @@ var ProjectModel = Backbone.Model.extend({
         this.set('is_activity', settings.get('activityMode'));
 
         this.listenTo(this.get('scenarios'), 'add', this.addIdsToScenarios, this);
+        this.get('scenarios').on('change:modification_hash', this.shareGlobalModifications, this);
+    },
+
+    shareGlobalModifications: function(changedScenario) {
+        // When modifications are made to current conditions, add them
+        // to all other scenarios as well
+        var scenarios = this.get('scenarios');
+        if (changedScenario.get('is_current_conditions')) {
+            var sharedMods = changedScenario.get('modifications').toJSON();
+            scenarios.each(function(scenario) {
+                if (changedScenario.cid !== scenario.cid) {
+                    scenario.get('shared_modifications').reset(sharedMods);
+                }
+            });
+        }
     },
 
     setProjectModel: function(modelPackage) {
@@ -252,6 +267,11 @@ var ProjectModel = Backbone.Model.extend({
                 });
 
             scenariosCollection.reset(scenarios);
+
+            // Apply current condition's modifications to all other scenarios
+            var currentConditions = scenariosCollection.findWhere({is_current_conditions: true});
+            this.shareGlobalModifications(currentConditions);
+
             // Set the user_id to ensure controls are properly set.
             response.user_id = user_id;
 
@@ -304,6 +324,7 @@ var ModificationModel = coreModels.GeoModel.extend({
     defaults: _.extend({
             name: '',
             type: '',
+            summary: '',
             effectiveArea: null, // Area after being clip by AoI
             effectiveUnits: null, // Units of effective area
             effectiveShape: null, // GeoJSON after being clip by AoI,
@@ -340,6 +361,7 @@ var ScenarioModel = Backbone.Model.extend({
         user_id: 0, // User that created the project
         inputs: null, // ModificationsCollection
         inputmod_hash: null, // MD5 string
+        shared_modifications: null, //ModificationsCollection
         modifications: null, // ModificationsCollection
         modification_hash: null, // MD5 string
         active: false,
@@ -369,12 +391,14 @@ var ScenarioModel = Backbone.Model.extend({
 
         this.set('inputs', new ModificationsCollection(attrs.inputs));
         this.set('modifications', new ModificationsCollection(attrs.modifications));
+        this.set('shared_modifications', new ModificationsCollection(attrs.shared_modifications));
 
         this.updateModificationHash();
         this.updateInputModHash();
 
         this.on('change:project change:name', this.attemptSave, this);
         this.get('modifications').on('add remove change', this.updateModificationHash, this);
+        this.get('shared_modifications').on('reset', this.updateModificationHash, this);
 
         var debouncedFetchResults = _.debounce(_.bind(this.fetchResults, this), 500);
         this.get('inputs').on('add', debouncedFetchResults);
@@ -597,7 +621,10 @@ var ScenarioModel = Backbone.Model.extend({
     },
 
     updateModificationHash: function() {
-        var hash = utils.getCollectionHash(this.get('modifications'));
+        var hash = utils.getCollectionHash(
+            this.get('modifications'),
+            this.get('shared_modifications')
+        );
 
         this.set('modification_hash', hash);
     },
@@ -608,16 +635,18 @@ var ScenarioModel = Backbone.Model.extend({
 
         switch(App.currentProject.get('model_package')) {
             case YIELD_PACKAGE:
-                var activeModifications = self.get('modifications')
-                    .map(function(mod) {
-                        var attr = mod.attributes;
-                        return {
-                            shape: attr.shape,
-                            area: attr.effectiveArea,
-                            category: attr.name,
-                            value: attr.cdlId
-                        };
-                    });
+                var scenarioMods = self.get('modifications').models,
+                    sharedMods = self.get('shared_modifications').models,
+                    activeModifications = sharedMods.concat(scenarioMods)
+                        .map(function(mod) {
+                            var attr = mod.attributes;
+                            return {
+                                shape: attr.shape,
+                                area: attr.effectiveArea,
+                                category: attr.name,
+                                value: attr.cdlId
+                            };
+                        });
 
                 return {
                     model_input: JSON.stringify({
@@ -684,10 +713,12 @@ var ScenariosCollection = Backbone.Collection.extend({
     },
 
     createNewScenario: function(aoi_census) {
-        var scenario = new ScenarioModel({
-            name: this.makeNewScenarioName('New Scenario'),
-            aoi_census: aoi_census
-        });
+        var sharedMods = this.findWhere({is_current_conditions: true}).get('modifications'),
+            scenario = new ScenarioModel({
+                name: this.makeNewScenarioName('New Scenario'),
+                aoi_census: aoi_census,
+                shared_modifications: sharedMods.toJSON()
+            });
 
         this.add(scenario);
         this.setActiveScenarioByCid(scenario.cid);
@@ -723,7 +754,8 @@ var ScenariosCollection = Backbone.Collection.extend({
                 is_current_conditions: false,
                 name: this.makeNewScenarioName('Copy of ' + source.get('name')),
                 inputs: source.get('inputs').toJSON(),
-                modifications: source.get('modifications').toJSON()
+                modifications: source.get('modifications').toJSON(),
+                shared_modifications: source.get('shared_modifications').toJSON()
             });
 
         this.add(newModel);
@@ -797,7 +829,6 @@ function createTaskResultCollection(modelPackage) {
     }
     throw 'Model package not supported: ' + modelPackage;
 }
-
 
 module.exports = {
     getControlsForModelPackage: getControlsForModelPackage,
