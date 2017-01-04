@@ -13,7 +13,8 @@ var _ = require('lodash'),
     compareScenariosTmpl = require('./templates/compareScenarios.html'),
     compareScenarioTmpl = require('./templates/compareScenario.html'),
     compareModelingTmpl = require('./templates/compareModeling.html'),
-    compareModificationsTmpl = require('./templates/compareModifications.html');
+    compareModificationsTmpl = require('./templates/compareModifications.html'),
+    cropTypes = require('../core/cropTypes.json');
 
 var CompareWindow = Marionette.LayoutView.extend({
     //model: modelingModels.ProjectModel,
@@ -210,7 +211,7 @@ var CompareModelingView = Marionette.LayoutView.extend({
     updateResult: function() {
         var selection = this.ui.resultSelector.val();
 
-        this.model.get('results').setActive(selection);
+        this.model.get('results').setActiveByAttribute("displayName", selection);
         this.showResult();
 
         _.forEach(this.scenariosView.modelingViews, function(sibling) {
@@ -218,7 +219,7 @@ var CompareModelingView = Marionette.LayoutView.extend({
                 return;
             } else {
                 sibling.ui.resultSelector.val(selection);
-                sibling.model.get('results').setActive(selection);
+                sibling.model.get('results').setActiveByAttribute("displayName", selection);
                 sibling.showResult();
             }
         });
@@ -233,8 +234,9 @@ var CompareModelingView = Marionette.LayoutView.extend({
         this.resultRegion.show(new ResultView({
             areaOfInterest: this.projectModel.get('area_of_interest'),
             model: resultModel,
+            currentConditions: _.head(this.projectModel.get('scenarios').models),
             scenario: this.model,
-            compareMode: true
+            compareMode: true,
         }));
     },
 

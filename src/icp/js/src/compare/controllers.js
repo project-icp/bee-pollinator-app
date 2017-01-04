@@ -5,7 +5,8 @@ var _ = require('lodash'),
     router = require('../router').router,
     views = require('./views'),
     modelingModels = require('../modeling/models.js'),
-    modelingControls = require('../modeling/controls');
+    modelingControls = require('../modeling/controls'),
+    cropTypes = require('../core/cropTypes.json');
 
 var CompareController = {
     compare: function(projectId) {
@@ -75,6 +76,63 @@ function setupProjectCopy(aoi_census) {
 
     App.user.on('change:guest', saveAfterLogin);
     App.origProject.on('change:id', updateUrl);
+
+    /* transform the result models for display: each result object with n
+        actual "result data" objects is mapped to n result objects, which are
+        clones with only a single data item; doing so permits the
+        comparison view to invert the aggregation scheme, such that it
+        displays multiple selectable items of the same "type" rather than
+        a group of items of the same (selectable) "type"
+    */
+    var currentScenarios = App.currentProject.get('scenarios').models;
+
+    var displayModels = _.map(currentScenarios, function(scenarioModel) {
+        var resultModels = scenarioModel.get('results').models;
+        var transformedModels = _.map(resultModels, function (r) {
+            var results = r.get('result');
+            var clones = _.map(results, function (value, key) {
+                var clone = r.clone();
+                clone.set('result', { key: key, value: value });
+                clone.set('displayName', cropTypes[key]);
+                return clone;
+            });
+            return clones;
+        });
+
+        // transformedModels is an array type but will always have a single element,
+        // taking the head of the list is a vestigial necessity from the original
+        // MMW implementation
+        return _.head(transformedModels);
+    });
+
+    // filter models for those with nonzero data in any scenario
+    var nonzeroCrops = _.chain(displayModels)
+        .flatten()
+        .map(function(d) { return d.get('result'); })
+        .filter(function(d) { return d.value !== 0; })
+        .pluck('key')
+        .uniq()
+        .value();
+
+    var filteredModels = _.map(displayModels, function(displayModel) {
+        var filteredResults = _.filter(displayModel, function(resultModel) {
+            return _.contains(nonzeroCrops, resultModel.get('result').key);
+        });
+        return filteredResults;
+    });
+    
+    // defaultResults is used for scenario(s) with no modifications
+    var defaultResults = _.head(filteredModels);
+
+    // pair scenarios with their filtered result models and update
+    _.each(_.zip(currentScenarios, filteredModels), function(pair) {
+        var scenarioModel = pair[0];
+        var newResultsModel = pair[1];
+        if (_.size(newResultsModel) === 0) {
+            newResultsModel = defaultResults;
+        }
+        scenarioModel.get('results').models = newResultsModel;
+    });
 }
 
 // Creates a special-purpose copy of the project

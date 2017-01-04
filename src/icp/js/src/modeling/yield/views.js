@@ -185,17 +185,33 @@ var CompareChartView = Marionette.ItemView.extend({
 
     addChart: function() {
         var chartEl = this.$el.find('.bar-chart').get(0),
-            result = null,
+            result = this.model.get('result'),
             seriesDisplayNames = null,
             data,
             chartOptions;
 
+        function getData(result) {
+            return [{
+                key: cropTypes[result.key],
+                values: [{ x: "", y: result.value}],
+                class: 'crop-' + result.key
+            }];
+        }
+
         $(chartEl).empty();
         if (result) {
-            data = null;
-            chartOptions = null;
+            data = getData(result),
+            chartOptions = {
+                yAxisLabel: 'Yield Per Acre',
+                barClasses: _.pluck(data, 'class'),
+                yAxisUnit: 'bu / A',
+                margin: {top: 20, right: 0, bottom: 40, left: 60},
+                showLegend: false,
+                disableToggle: true,
+                yAxisDomain: [0,100]
+            };
 
-            chart.renderGroupedVerticalBarChart(chartEl, data, chartOptions);
+            chart.renderVerticalBarChart(chartEl, data, chartOptions);
         }
     }
 });
