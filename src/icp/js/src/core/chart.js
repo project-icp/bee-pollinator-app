@@ -32,6 +32,121 @@ function getNumBars(data) {
     return data[0].values.length;
 }
 
+// When we replace a chart with a new one, the tooltip for the old chart
+// persists because it resides under the body tag instead of under
+// chartEl (the container div for the chart) like the other chart components.
+// Therefore, we manually remove the tooltip when elements under chartEl are
+// destroyed.
+function removeTooltipOnDestroy(chartEl, tooltip) {
+    $(chartEl).children().bind('destroyed', function() {
+        $('#' + tooltip.id()).remove();
+    });
+}
+
+/*
+    Renders a stacked vertical bar chart for multiple series of data
+    with a legend.
+
+    data is of the form
+    [
+        {
+            key: series-name,
+            values: [
+                {
+                    x: ...,
+                    y: ...
+                },
+                ...
+            ]
+        },
+        ...
+   ]
+   where a series corresponds to a group of data that will be
+   displayed with the same color/legend item. Eg. Runoff
+
+   options includes: margin, yAxisLabel, yAxisUnit, seriesColors,
+   isPercentage, maxBarWidth, abbreviateTicks, reverseLegend, and
+   disableToggle
+*/
+function renderVerticalBarChart(chartEl, data, options) {
+    var chart = nv.models.multiBarChart(),
+        svg = makeSvg(chartEl),
+        $svg = $(svg);
+
+    function setChartWidth() {
+        // Set chart width to ensure that bars (and their padding)
+        // are no wider than maxBarWidth.
+        var numBars = getNumBars(data),
+            maxWidth = options.margin.left + options.margin.right +
+                       numBars * options.maxBarWidth,
+            actualWidth = $svg.width();
+
+        if (actualWidth > maxWidth) {
+           chart.width(maxWidth);
+        } else {
+           chart.width(actualWidth);
+        }
+    }
+
+    function updateChart() {
+        if($svg.is(':visible')) {
+            setChartWidth();
+            chart
+                .staggerLabels($svg.width() < widthCutoff)
+                .update(); // Throws error if updating a hidden svg.
+        }
+    }
+
+    options = options || {};
+    _.defaults(options, {
+        margin: {top: 20, right: 30, bottom: 40, left: 60},
+        maxBarWidth: 150
+    });
+
+    nv.addGraph(function() {
+        chart.showLegend(options.showLegend || false)
+             .showControls(false)
+             .stacked(true)
+             .reduceXTicks(false)
+             .staggerLabels($svg.width() < widthCutoff)
+             .duration(0)
+             .margin(options.margin);
+
+        setChartWidth();
+        // Throws error if this is not set to false for unknown reasons.
+        chart.legend
+            .disableToggle(options.disableToggle)
+            .reverse(options.reverseLegend)
+            .rightAlign(false);
+        chart.tooltip.enabled(true);
+        chart.yAxis.ticks(5);
+        handleCommonOptions(chart, options);
+
+        if (options.yAxisUnit) {
+            chart.tooltip.valueFormatter(function(d) {
+                return chart.yAxis.tickFormat()(d) + ' ' + options.yAxisUnit;
+            });
+        }
+        if (options.seriesColors) {
+            chart.color(options.seriesColors);
+        }
+
+        d3.select(svg)
+            .datum(data)
+            .call(chart);
+
+        nv.utils.windowResize(updateChart);
+        // The bar-chart:refresh event occurs when switching tabs which requires
+        // redrawing the chart.
+        $(chartEl).on('bar-chart:refresh', updateChart);
+
+        removeTooltipOnDestroy(chartEl, chart.tooltip);
+
+        return chart;
+    });
+}
+
+
 /*
     Renders a grouped vertical bar chart for multiple series of data
     with a legend.
@@ -158,5 +273,6 @@ function renderGroupedVerticalBarChart(chartEl, data, options) {
 
 
 module.exports = {
+    renderVerticalBarChart: renderVerticalBarChart,
     renderGroupedVerticalBarChart: renderGroupedVerticalBarChart,
 };
