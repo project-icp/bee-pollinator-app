@@ -4,14 +4,12 @@ var $ = require('jquery'),
     _ = require('underscore'),
     Backbone = require('../../../shim/backbone'),
     Marionette = require('../../../shim/backbone.marionette'),
-    AoiVolumeModel = require('../models').AoiVolumeModel,
     chart = require('../../core/chart.js'),
     barChartTmpl = require('../../core/templates/barChart.html'),
     resultTmpl = require('./templates/result.html'),
     tableRowTmpl = require('./templates/tableRow.html'),
     tableTmpl = require('./templates/table.html'),
-    cropTypes = require('../../core/cropTypes.json'),
-    utils = require('../../core/utils.js');
+    cropTypes = require('../../core/cropTypes.json');
 
 var ResultView = Marionette.LayoutView.extend({
     className: 'tab-pane',
@@ -37,7 +35,7 @@ var ResultView = Marionette.LayoutView.extend({
 
     initialize: function(options) {
         this.compareMode = options.compareMode;
-        this.isCurrentConditions = options.scenario.get('is_current_conditions')
+        this.isCurrentConditions = options.scenario.get('is_current_conditions');
         this.currentConditionsModel = options.currentConditions.get('results').models[0];
     },
 
@@ -48,10 +46,10 @@ var ResultView = Marionette.LayoutView.extend({
             var scenarioResults = this.model.get('result'),
                 currentConditionsResults = this.currentConditionsModel.get('result'),
                 filteredScenarioResults = _.pick(scenarioResults, function(value, key) {
-                    return value !== 0 || currentConditionsResults[key] !== 0
+                    return value !== 0 || currentConditionsResults[key] !== 0;
                 }),
                 filteredCurrentConditionsResults = _.pick(currentConditionsResults, function(value, key) {
-                    return value !== 0 || scenarioResults[key] !== 0
+                    return value !== 0 || scenarioResults[key] !== 0;
                 });
             if (this.compareMode) {
                 this.chartRegion.show(new CompareChartView({
@@ -186,7 +184,6 @@ var CompareChartView = Marionette.ItemView.extend({
     addChart: function() {
         var chartEl = this.$el.find('.bar-chart').get(0),
             result = this.model.get('result'),
-            seriesDisplayNames = null,
             data,
             chartOptions;
 

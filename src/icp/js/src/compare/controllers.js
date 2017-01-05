@@ -5,7 +5,6 @@ var _ = require('lodash'),
     router = require('../router').router,
     views = require('./views'),
     modelingModels = require('../modeling/models.js'),
-    modelingControls = require('../modeling/controls'),
     cropTypes = require('../core/cropTypes.json');
 
 var CompareController = {
