@@ -423,6 +423,7 @@ var ScenarioModel = Backbone.Model.extend({
 
         this.set('taskModel', App.currentProject.createTaskModel());
         this.set('results', App.currentProject.createTaskResultCollection());
+        this.get('results').on('change', this.attemptSave, this);
     },
 
     attemptSave: function() {
