@@ -539,15 +539,15 @@ var ScenarioModel = Backbone.Model.extend({
 
     setResultsFromCurrentConditionsOrFetch: function() {
         var currentConditions = this.collection.findWhere({
-            'is_current_conditions': true
-        }),
-            ccHash = currentConditions.get('inputmod_hash'),
-            ccEmpty = currentConditions.get('results').first().isEmpty();
+                'is_current_conditions': true
+            }),
+            ccInputModHash = currentConditions.get('inputmod_hash'),
+            ccIsEmpty = currentConditions.get('results').first().isEmpty();
 
         // Without results in current conditions or if current conditions
         // has diverged from this scenario with respect to modifications,
         // fetch them anew
-        if (ccEmpty || ccHash !== this.get('inputmod_hash')) {
+        if (ccIsEmpty || ccInputModHash !== this.get('inputmod_hash')) {
             var fetchResults = _.bind(this.fetchResults, this),
                 promises = fetchResults();
 
@@ -567,7 +567,7 @@ var ScenarioModel = Backbone.Model.extend({
     setResults: function() {
         var rawServerResults = this.get('taskModel').get('result');
 
-        if (rawServerResults === '' || rawServerResults === null) {
+        if (!rawServerResults) {
             this.get('results').setNullResults();
         } else {
             var serverResults = JSON.parse(rawServerResults);
@@ -597,6 +597,8 @@ var ScenarioModel = Backbone.Model.extend({
             taskModel = this.get('taskModel'),
             gisData = this.getGisData(),
             taskHelper = {
+                inputmod_hash: self.get('inputmod_hash'),
+
                 postData: gisData,
 
                 onStart: function() {
@@ -628,6 +630,12 @@ var ScenarioModel = Backbone.Model.extend({
                     results.setPolling(false);
                 }
             };
+
+        // Don't re-request the model results if this is the same input as the
+        // current request
+        if (this.get('inputmod_hash') ===  taskModel.get('inputmod_hash')) {
+            return $.when();
+        }
 
         return taskModel.start(taskHelper);
     },

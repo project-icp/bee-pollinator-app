@@ -107,6 +107,7 @@ var TaskModel = Backbone.Model.extend({
     // by previous calls to pollForResults will be rejected.
     reset: function() {
         this.set({
+            'inputmod_hash': null,
             'job': null,
             'result': null,
             'status': null
@@ -126,6 +127,8 @@ var TaskModel = Backbone.Model.extend({
         });
 
         this.reset();
+        this.set('inputmod_hash', taskHelper.inputmod_hash);
+
         if (taskHelper.onStart) {
             taskHelper.onStart();
         }
