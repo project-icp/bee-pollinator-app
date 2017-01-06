@@ -615,8 +615,12 @@ var ScenarioModel = Backbone.Model.extend({
                     results.setNullResults();
                 },
 
-                pollEnd: function() {
-                    results.setPolling(false);
+                pollEnd: function(endType) {
+                    // Jobs are cancelled by starting a new job with
+                    // updated input, continue to poll in that case.
+                    if (!endType.cancelledJob) {
+                        results.setPolling(false);
+                    }
                     self.attemptSave();
                 },
 
