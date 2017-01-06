@@ -6,7 +6,6 @@ var _ = require('lodash'),
     App = require('../app'),
     coreModels = require('../core/models'),
     coreViews = require('../core/views'),
-    modelingModels = require('../modeling/models'),
     modelingViews = require('../modeling/views'),
     modConfigUtils = require('../modeling/modificationConfigUtils'),
     compareWindowTmpl = require('./templates/compareWindow.html'),
@@ -210,7 +209,7 @@ var CompareModelingView = Marionette.LayoutView.extend({
     updateResult: function() {
         var selection = this.ui.resultSelector.val();
 
-        this.model.get('results').setActive(selection);
+        this.model.get('results').setActiveByAttribute("displayName", selection);
         this.showResult();
 
         _.forEach(this.scenariosView.modelingViews, function(sibling) {
@@ -218,7 +217,7 @@ var CompareModelingView = Marionette.LayoutView.extend({
                 return;
             } else {
                 sibling.ui.resultSelector.val(selection);
-                sibling.model.get('results').setActive(selection);
+                sibling.model.get('results').setActiveByAttribute("displayName", selection);
                 sibling.showResult();
             }
         });
@@ -233,8 +232,9 @@ var CompareModelingView = Marionette.LayoutView.extend({
         this.resultRegion.show(new ResultView({
             areaOfInterest: this.projectModel.get('area_of_interest'),
             model: resultModel,
+            currentConditions: _.head(this.projectModel.get('scenarios').models),
             scenario: this.model,
-            compareMode: true
+            compareMode: true,
         }));
     },
 

@@ -81,9 +81,21 @@ var ResultCollection = Backbone.Collection.extend({
         return this.findWhere({name: name});
     },
 
+    getResultByAttribute(attribute, value) {
+        var d = {};
+        d[attribute] = value;
+        return this.findWhere(d);
+    },
+
     setActive: function(name) {
         this.invoke('set', 'active', false);
         this.getResult(name).set('active', true);
+        this.trigger('change:active');
+    },
+
+    setActiveByAttribute: function(attribute, value) {
+        this.invoke('set', 'active', false);
+        this.getResultByAttribute(attribute, value).set('active', true);
         this.trigger('change:active');
     },
 
@@ -93,7 +105,7 @@ var ResultCollection = Backbone.Collection.extend({
 
     makeFirstActive: function() {
         this.setActive(this.at(0).get('name'));
-    }
+    },
 });
 
 var ProjectModel = Backbone.Model.extend({
