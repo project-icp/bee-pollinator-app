@@ -88,12 +88,30 @@ function renderVerticalBarChart(chartEl, data, options) {
         }
     }
 
+    function addBarClasses() {
+        var bars = $(chartEl).find('.nv-bar'),
+            oldClass,
+            newClass;
+
+        _.each(bars, function(bar, i) {
+            // Can't use addClass on SVG elements.
+            oldClass = $(bar).attr('class');
+            newClass = oldClass + ' ' + options.barClasses[i];
+            $(bar).attr('class', newClass);
+            $(bar).attr('style', '');
+        });
+    }
+
     function updateChart() {
         if($svg.is(':visible')) {
             setChartWidth();
             chart
                 .staggerLabels($svg.width() < widthCutoff)
                 .update(); // Throws error if updating a hidden svg.
+
+            if (options.barClasses) {
+                addBarClasses();
+            }
         }
     }
 
@@ -111,6 +129,10 @@ function renderVerticalBarChart(chartEl, data, options) {
              .staggerLabels($svg.width() < widthCutoff)
              .duration(0)
              .margin(options.margin);
+
+        if (options.yAxisDomain) {
+            chart.yDomain(options.yAxisDomain);
+        }
 
         setChartWidth();
         // Throws error if this is not set to false for unknown reasons.
@@ -134,6 +156,10 @@ function renderVerticalBarChart(chartEl, data, options) {
         d3.select(svg)
             .datum(data)
             .call(chart);
+
+        if (options.barClasses) {
+            addBarClasses();
+        }
 
         nv.utils.windowResize(updateChart);
         // The bar-chart:refresh event occurs when switching tabs which requires
