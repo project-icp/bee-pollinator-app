@@ -59,6 +59,22 @@ var ResultModel = Backbone.Model.extend({
         result: null, // The actual result object
         polling: false, // True if currently polling
         active: false, // True if currently selected in Compare UI
+    },
+
+    isEmpty: function() {
+        return !this.get('result');
+    },
+
+    /* Does this ResultModel instance have a differing value for
+     * the provided inputmod_has?  This is an indication that the
+     * results are old and need to be fetched again.
+     */
+    isStale: function(hash) {
+        if (this.isEmpty()) {
+            return true;
+        }
+
+        return this.get('inputmod_hash') !== hash;
     }
 });
 
@@ -411,6 +427,7 @@ var ScenarioModel = Backbone.Model.extend({
         this.on('change:project change:name', this.attemptSave, this);
         this.get('modifications').on('add remove change', this.updateModificationHash, this);
         this.get('shared_modifications').on('reset', this.updateModificationHash, this);
+        this.on('change:modification_hash', this.updateInputModHash, this);
 
         var debouncedFetchResults = _.debounce(_.bind(this.fetchResults, this), 500);
         this.get('inputs').on('add', debouncedFetchResults);
@@ -418,6 +435,7 @@ var ScenarioModel = Backbone.Model.extend({
 
         this.set('taskModel', App.currentProject.createTaskModel());
         this.set('results', App.currentProject.createTaskResultCollection());
+        this.get('results').on('change', this.attemptSave, this);
     },
 
     attemptSave: function() {
@@ -492,23 +510,21 @@ var ScenarioModel = Backbone.Model.extend({
 
     fetchResultsIfNeeded: function() {
         var self = this,
-            inputmod_hash = this.get('inputmod_hash'),
-            emptyResults = this.get('results').some(function(resultModel) {
-                return !resultModel.get('result');
-            }),
-            staleResults = this.get('results').some(function(resultModel) {
-                return inputmod_hash !== resultModel.get('inputmod_hash');
-            }),
-            needsResults = emptyResults || staleResults,
+            inputmodHash = this.get('inputmod_hash'),
+            resultModel = this.get('results').first(),
+            needsResults = resultModel.isEmpty() || resultModel.isStale(inputmodHash),
+            isCurrentConditions = this.get('is_current_conditions'),
             fetchResultsPromise;
 
-        if (!this.get('is_current_conditions')) {
+        if (!isCurrentConditions) {
             if (!this.get('active')) {
                 return $.when();
             }
-            if (emptyResults) {
+
+            if (needsResults) {
                 var setResultsFromCurrentConditionsOrFetch = _.bind(
                     self.setResultsFromCurrentConditionsOrFetch, self);
+
                 fetchResultsPromise = $.when().then(function() {
                     setResultsFromCurrentConditionsOrFetch();
                 });
@@ -535,23 +551,36 @@ var ScenarioModel = Backbone.Model.extend({
     },
 
     setResultsFromCurrentConditionsOrFetch: function() {
-        var currentConditions = this.collection.models.find(function(model) {
-            return model.get('is_current_conditions');
-        });
-        if (currentConditions.get('results').models[0].get('result')) {
-            this.set('taskModel', currentConditions.get('taskModel').clone());
-            this.setResults();
-        } else {
+        var currentConditions = this.collection.findWhere({
+                'is_current_conditions': true
+            }),
+            ccInputModHash = currentConditions.get('inputmod_hash'),
+            ccIsEmpty = currentConditions.get('results').first().isEmpty();
+
+        // Without results in current conditions or if current conditions
+        // has diverged from this scenario with respect to modifications,
+        // fetch them anew
+        if (ccIsEmpty || ccInputModHash !== this.get('inputmod_hash')) {
             var fetchResults = _.bind(this.fetchResults, this),
                 promises = fetchResults();
+
             return $.when(promises.startPromise, promises.pollingPromise);
+        } else {
+            // If current conditions has results which should be the same,
+            // use them here too
+            var currentConditionResults = currentConditions.get('results').first();
+            this.set('taskModel', currentConditions.get('taskModel').clone());
+            this.get('results').first().set({
+                'result': currentConditionResults.get('result'),
+                'inputmod_hash': currentConditionResults.get('inputmod_hash')
+            });
         }
     },
 
     setResults: function() {
         var rawServerResults = this.get('taskModel').get('result');
 
-        if (rawServerResults === '' || rawServerResults === null) {
+        if (!rawServerResults) {
             this.get('results').setNullResults();
         } else {
             var serverResults = JSON.parse(rawServerResults);
@@ -567,12 +596,6 @@ var ScenarioModel = Backbone.Model.extend({
                     console.log('Response is missing ' + resultName + '.');
                 }
             });
-
-            this.set('aoi_census', serverResults.aoi_census);
-            this.set('modification_censuses', {
-                modification_hash: serverResults.modification_hash,
-                censuses: serverResults.modification_censuses
-            });
         }
     },
 
@@ -587,6 +610,8 @@ var ScenarioModel = Backbone.Model.extend({
             taskModel = this.get('taskModel'),
             gisData = this.getGisData(),
             taskHelper = {
+                inputmod_hash: self.get('inputmod_hash'),
+
                 postData: gisData,
 
                 onStart: function() {
@@ -602,8 +627,12 @@ var ScenarioModel = Backbone.Model.extend({
                     results.setNullResults();
                 },
 
-                pollEnd: function() {
-                    results.setPolling(false);
+                pollEnd: function(endType) {
+                    // Jobs are cancelled by starting a new job with
+                    // updated input, continue to poll in that case.
+                    if (!endType.cancelledJob) {
+                        results.setPolling(false);
+                    }
                     self.attemptSave();
                 },
 
@@ -618,6 +647,12 @@ var ScenarioModel = Backbone.Model.extend({
                     results.setPolling(false);
                 }
             };
+
+        // Don't re-request the model results if this is the same input as the
+        // current request
+        if (this.get('inputmod_hash') ===  taskModel.get('inputmod_hash')) {
+            return $.when();
+        }
 
         return taskModel.start(taskHelper);
     },

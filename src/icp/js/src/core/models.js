@@ -85,7 +85,7 @@ var MapModel = Backbone.Model.extend({
 
 var TaskModel = Backbone.Model.extend({
     defaults: {
-        pollInterval: 500,
+        pollInterval: 1000,
         /* The timeout is set to 45 seconds here, while in the
            src/icp/apps/modeling/tasks.py file it is set to 42
            seconds.  That was done because the countdown starts in the
@@ -107,6 +107,7 @@ var TaskModel = Backbone.Model.extend({
     // by previous calls to pollForResults will be rejected.
     reset: function() {
         this.set({
+            'inputmod_hash': null,
             'job': null,
             'result': null,
             'status': null
@@ -126,6 +127,8 @@ var TaskModel = Backbone.Model.extend({
         });
 
         this.reset();
+        this.set('inputmod_hash', taskHelper.inputmod_hash);
+
         if (taskHelper.onStart) {
             taskHelper.onStart();
         }
