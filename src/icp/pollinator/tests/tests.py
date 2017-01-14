@@ -7,8 +7,7 @@ import numpy as np
 from shapely.geometry import Polygon
 
 from pollinator import raster_ops
-from pollinator.crop_yield import aggregate_crops, yield_calc, \
-    ACRES_PER_SQM, CELL_SIZE
+from pollinator.crop_yield import aggregate_crops, yield_calc
 
 
 class ReadTests(unittest.TestCase):
@@ -82,8 +81,8 @@ class ReadTests(unittest.TestCase):
 class ModelTests(unittest.TestCase):
     def setUp(self):
         # Simulate an area with a sub section unmasked
-        shed = np.array([1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4])
-        field_mask =    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1]  # noqa
+        shed = np.array([.1, .1, .1, .2, .2, .2, .3, .3, .3, .4, .4, .4])
+        field_mask =    [ 1,  1,  1,  1,  0,  0,  0,  0,  0,  1,  1,  1]  # noqa
         shed.shape = (3, 4)
         self.yield_field = np.ma.masked_array(shed, mask=field_mask)
 
@@ -93,17 +92,16 @@ class ModelTests(unittest.TestCase):
         self.cdl = np.ma.masked_array(cdl, mask=field_mask)
 
     def test_aggregation(self):
-        # Crop types 100 and 400 are completely outside of unmasked field area,
-        # and types 200 & 300 each have one pixel outside the area
+        # Crop types 100 and 400 are completely outside of unmasked field area
         crops = [100, 200, 300, 400]
         yield_by_crop = aggregate_crops(self.yield_field, self.cdl, crops)
 
-        # Expect the values to be the sum / cell count * 30m * acres per m
+        # Expect the values to be the mean yield value per crop
         # Crops that were masked out should be 0
         expected = {
             '100': 0,
-            '200': 4 / (2 * CELL_SIZE * ACRES_PER_SQM),
-            '300': 9 / (3 * CELL_SIZE * ACRES_PER_SQM),
+            '200': .4 / 2 * 100,
+            '300': .9 / 3 * 100,
             '400': 0
         }
 
