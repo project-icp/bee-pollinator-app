@@ -34,6 +34,7 @@ var ResultView = Marionette.LayoutView.extend({
     },
 
     initialize: function(options) {
+        this.selectedCrops = options.scenario.get('selectedCrops');
         this.compareMode = options.compareMode;
         this.isCurrentConditions = options.scenario.get('is_current_conditions');
         this.currentConditionsModel = options.currentConditions.get('results').models[0];
@@ -53,6 +54,7 @@ var ResultView = Marionette.LayoutView.extend({
                 });
             if (this.compareMode) {
                 this.chartRegion.show(new CompareChartView({
+                    selectedCrops: this.selectedCrops,
                     model: this.model,
                     currentConditionsModel: this.currentConditionsModel,
                 }));
@@ -188,28 +190,34 @@ var CompareChartView = Marionette.ItemView.extend({
             data,
             chartOptions;
 
-        function getData(result) {
-            return [{
-                key: cropTypes[result.key],
-                values: [{ x: "", y: result.value}],
-                class: 'crop-' + result.key
-            }];
+        function getData(result, selectedCrops ) {
+            var values = selectedCrops.map(function(cropId) {
+                return {
+                    x: cropTypes[cropId],
+                    y: result[cropId],
+                    class: 'crop-' + cropId
+                };
+            });
+
+            return [{values: values}];
         }
 
         $(chartEl).empty();
         if (result) {
-            data = getData(result),
+            data = getData(result, this.options.selectedCrops),
             chartOptions = {
                 yAxisLabel: 'Relative Yield',
-                barClasses: _.pluck(data, 'class'),
                 yAxisUnit: 'Relative Yield',
-                margin: {top: 20, right: 0, bottom: 40, left: 60},
+                barClasses: _.pluck(_.flatten(_.pluck(data, 'values')), 'class'),
+                maxBarWidth: 100,
+                margin: {top: 20, right: 0, bottom: 40, left: 40},
                 showLegend: false,
                 disableToggle: true,
-                yAxisDomain: [0,100]
+                yAxisDomain: [0, 100],
+                compareMode: true
             };
 
-            chart.renderVerticalBarChart(chartEl, data, chartOptions);
+            chart.renderGroupedVerticalBarChart(chartEl, data, chartOptions);
         }
     }
 });

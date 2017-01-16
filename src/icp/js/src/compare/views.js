@@ -13,7 +13,8 @@ var _ = require('lodash'),
     compareScenariosTmpl = require('./templates/compareScenarios.html'),
     compareScenarioTmpl = require('./templates/compareScenario.html'),
     compareModelingTmpl = require('./templates/compareModeling.html'),
-    compareModificationsTmpl = require('./templates/compareModifications.html');
+    compareModificationsTmpl = require('./templates/compareModifications.html'),
+    cropTypes = require('../core/cropTypes.json');
 
 var CompareWindow = Marionette.LayoutView.extend({
     //model: modelingModels.ProjectModel,
@@ -112,6 +113,8 @@ var CompareScenarioView = Marionette.LayoutView.extend({
     initialize: function(options) {
         this.projectModel = options.projectModel;
         this.scenariosView = options.scenariosView;
+        this.model.set('chartableCrops', options.chartableCrops);
+        this.model.set('selectedCrops', options.chartableCrops);
     },
 
     onShow: function() {
@@ -167,11 +170,24 @@ var CompareScenariosView = Marionette.CompositeView.extend({
     childViewOptions: function() {
         return {
             scenariosView: this,
-            projectModel: this.model
+            projectModel: this.model,
+            chartableCrops: this.chartableCrops
         };
     },
 
     initialize: function() {
+        var scenarios = this.collection;
+
+        // Get the list of crops that have values in any scenario of this project
+        this.chartableCrops = scenarios.reduce(function(cropTypes, scenario) {
+            var nonZeroCrops = scenario.get('results').map(function(result) {
+                return Object.keys(_.omit(result.get('result'), function(value) {
+                    return value === 0;
+                }));
+            });
+            return _.uniq(cropTypes.concat(_.flatten(nonZeroCrops)));
+        }, []);
+
         this.modelingViews = [];
     }
 });
@@ -208,15 +224,20 @@ var CompareModelingView = Marionette.LayoutView.extend({
 
     templateHelpers: function() {
         return {
+            chartableCrops: this.model.get('chartableCrops'),
+            cropTypes: cropTypes,
             polling: this.model.get('results').at(0).get('polling'),
             results: this.model.get('results').toJSON()
         };
     },
 
     updateResult: function() {
-        var selection = this.ui.resultSelector.val();
+        var selection = this.ui.resultSelector.val(),
+            selectedCrops = selection === "all"
+                ? this.model.get('chartableCrops')
+                : [selection];
 
-        this.model.get('results').setActiveByAttribute("displayName", selection);
+        this.model.set('selectedCrops', selectedCrops);
         this.showResult();
 
         _.forEach(this.scenariosView.modelingViews, function(sibling) {
@@ -224,7 +245,7 @@ var CompareModelingView = Marionette.LayoutView.extend({
                 return;
             } else {
                 sibling.ui.resultSelector.val(selection);
-                sibling.model.get('results').setActiveByAttribute("displayName", selection);
+                sibling.model.set('selectedCrops', selectedCrops);
                 sibling.showResult();
             }
         });
