@@ -97,7 +97,7 @@ var ResultCollection = Backbone.Collection.extend({
         return this.findWhere({name: name});
     },
 
-    getResultByAttribute(attribute, value) {
+    getResultByAttribute: function(attribute, value) {
         var d = {};
         d[attribute] = value;
         return this.findWhere(d);
