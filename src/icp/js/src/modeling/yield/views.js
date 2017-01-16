@@ -154,9 +154,11 @@ var ChartView = Marionette.ItemView.extend({
             data = formatData(this.options.currentConditionsResults,
                 this.options.scenarioResults, this.options.isCurrentConditions),
             chartOptions = {
-                yAxisLabel: 'Yield Per Acre',
+                yAxisLabel: 'Relative Yield',
+                yAxisUnit: 'Relative Yield',
                 showLegend: false,
-                barClasses: _.pluck(_.flatten(_.pluck(data, 'values')), 'class')
+                barClasses: _.pluck(_.flatten(_.pluck(data, 'values')), 'class'),
+                yAxisDomain: [0,100]
             };
 
         chart.renderGroupedVerticalBarChart(chartEl, data, chartOptions);
@@ -164,7 +166,6 @@ var ChartView = Marionette.ItemView.extend({
 });
 
 var CompareChartView = Marionette.ItemView.extend({
-    // TODO Render yield chart, filterable by crop
     template: barChartTmpl,
 
     className: 'chart-container yield-chart-container',
@@ -199,9 +200,9 @@ var CompareChartView = Marionette.ItemView.extend({
         if (result) {
             data = getData(result),
             chartOptions = {
-                yAxisLabel: 'Yield Per Acre',
+                yAxisLabel: 'Relative Yield',
                 barClasses: _.pluck(data, 'class'),
-                yAxisUnit: 'bu / A',
+                yAxisUnit: 'Relative Yield',
                 margin: {top: 20, right: 0, bottom: 40, left: 60},
                 showLegend: false,
                 disableToggle: true,
@@ -213,7 +214,7 @@ var CompareChartView = Marionette.ItemView.extend({
     }
 });
 
-var formatResultsFromModel = function(results, seriesName, isCurrentConditionsData) {
+var formatResultsFromModel = function(results, seriesName, useCurrentConditionsClass) {
     return {
         key: seriesName,
         values: _.map(results, function(value, key) {
@@ -221,7 +222,7 @@ var formatResultsFromModel = function(results, seriesName, isCurrentConditionsDa
                 x: cropTypes[key],
                 y: value,
                 class: 'crop-' + key +
-                        (isCurrentConditionsData ? ' current-conditions' : ' scenario'),
+                        (useCurrentConditionsClass ? ' current-conditions' : ' scenario'),
             };
         })
     };
@@ -230,14 +231,14 @@ var formatResultsFromModel = function(results, seriesName, isCurrentConditionsDa
 var formatData = function(currentConditionsResults, scenarioResults, isCurrentConditions) {
     var data = [
         formatResultsFromModel(currentConditionsResults, "Current Conditions",
-            true),
+            isCurrentConditions ? false : true),
     ];
     if (!isCurrentConditions) {
-        data.push(formatResultsFromModel(scenarioResults, "Scenario",
+        data.push(formatResultsFromModel(scenarioResults, "This Scenario",
             false));
     }
     // Make the scenario be the leftmost bar
-    return data.reverse();
+    return data;
 };
 
 

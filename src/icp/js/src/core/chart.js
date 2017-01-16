@@ -267,6 +267,7 @@ function renderGroupedVerticalBarChart(chartEl, data, options) {
             .disableToggle(options.disableToggle)
             .reverse(options.reverseLegend)
             .rightAlign(false);
+        chart.yAxis.ticks(5);
         chart.tooltip.enabled(true);
         handleCommonOptions(chart, options);
 
@@ -274,6 +275,10 @@ function renderGroupedVerticalBarChart(chartEl, data, options) {
             chart.tooltip.valueFormatter(function(d) {
                 return chart.yAxis.tickFormat()(d) + ' ' + options.yAxisUnit;
             });
+        }
+
+        if (options.yAxisDomain) {
+            chart.yDomain(options.yAxisDomain);
         }
 
         if (options.seriesColors) {
