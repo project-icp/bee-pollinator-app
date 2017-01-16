@@ -11,10 +11,16 @@
                     +{{ mod.get('area').toFixed(1) }} {{ mod.get('units') }}
                 </td>
             </tr>
+        {% else %}
+            <tr>
+                <td class="modification-value">
+                    None
+                </td>
+            </tr>
         {% endfor %}
     </tbody>
 </table>
 {% endmacro %}
 
-{{ modificationsTable('Land Cover', landCovers) }}
-{{ modificationsTable('Conservation Practices', conservationPractices) }}
+{{ modificationsTable('Land Cover Changes', landCovers) }}
+{{ modificationsTable('Enhancements', conservationPractices) }}
