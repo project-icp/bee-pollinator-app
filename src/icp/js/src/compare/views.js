@@ -2,6 +2,7 @@
 
 var _ = require('lodash'),
     $ = require('jquery'),
+    Backbone = require('../../shim/backbone'),
     Marionette = require('../../shim/backbone.marionette'),
     App = require('../app'),
     coreModels = require('../core/models'),
@@ -141,8 +142,12 @@ var CompareScenarioView = Marionette.LayoutView.extend({
             model: this.model
         }));
 
+        var allModifications = this.model.get('modifications').models.concat(
+            this.model.get('shared_modifications').models
+        );
+
         this.modificationsRegion.show(new CompareModificationsView({
-            model: this.model.get('modifications')
+            model: new Backbone.Collection(allModifications)
         }));
     }
 });
