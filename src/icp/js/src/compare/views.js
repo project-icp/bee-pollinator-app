@@ -144,6 +144,8 @@ var CompareScenarioView = Marionette.LayoutView.extend({
 
         var allModifications = this.model.get('modifications').models.concat(
             this.model.get('shared_modifications').models
+        ).concat(
+            this.model.get('inputs').models
         );
 
         this.modificationsRegion.show(new CompareModificationsView({
@@ -256,12 +258,9 @@ var CompareModificationsView = Marionette.ItemView.extend({
 
     templateHelpers: function() {
         return {
-            conservationPractices: this.model.filter(function(modification) {
-                return modification.get('name') === 'conservation_practice';
-            }),
-            landCovers: this.model.filter(function(modification) {
-                return modification.get('name') === 'landcover';
-            }),
+            enhancements: this.model.where({name: 'conservation_practice'}),
+            landCovers: this.model.where({name: 'landcover'}),
+            numberOfHives: this.model.findWhere({name: 'numberofhives'}).get('value'),
             modConfigUtils: modConfigUtils
         };
     }
