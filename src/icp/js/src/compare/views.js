@@ -2,6 +2,7 @@
 
 var _ = require('lodash'),
     $ = require('jquery'),
+    Backbone = require('../../shim/backbone'),
     Marionette = require('../../shim/backbone.marionette'),
     App = require('../app'),
     coreModels = require('../core/models'),
@@ -141,8 +142,14 @@ var CompareScenarioView = Marionette.LayoutView.extend({
             model: this.model
         }));
 
+        var allModifications = this.model.get('modifications').models.concat(
+            this.model.get('shared_modifications').models
+        ).concat(
+            this.model.get('inputs').models
+        );
+
         this.modificationsRegion.show(new CompareModificationsView({
-            model: this.model.get('modifications')
+            model: new Backbone.Collection(allModifications)
         }));
     }
 });
@@ -251,12 +258,9 @@ var CompareModificationsView = Marionette.ItemView.extend({
 
     templateHelpers: function() {
         return {
-            conservationPractices: this.model.filter(function(modification) {
-                return modification.get('name') === 'conservation_practice';
-            }),
-            landCovers: this.model.filter(function(modification) {
-                return modification.get('name') === 'landcover';
-            }),
+            enhancements: this.model.where({name: 'conservation_practice'}),
+            landCovers: this.model.where({name: 'landcover'}),
+            numberOfHives: this.model.findWhere({name: 'numberofhives'}).get('value'),
             modConfigUtils: modConfigUtils
         };
     }

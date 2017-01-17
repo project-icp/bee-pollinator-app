@@ -145,6 +145,7 @@ function copyProject(project, aoi_census) {
             name: scenario.get('name'),
             is_current_conditions: scenario.get('is_current_conditions'),
             modifications: scenario.get('modifications'),
+            shared_modifications: scenario.get('shared_modifications'),
             modification_hash: scenario.get('modification_hash'),
             modification_censuses: scenario.get('modification_censuses'),
             results: new modelingModels.ResultCollection(scenario.get('results').toJSON()),
