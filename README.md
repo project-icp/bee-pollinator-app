@@ -31,8 +31,9 @@ $ aws configure --profile icp-stg
 ```
 
 Next, ensure you have the CDL raster data available to the worker machine.  This can be done, on your host:
-* Create the file at `/opt/icp-crop-data/cdl_5070.tif`, or
-* Add the `cdl_5070.tif` file at a directory of your choosing, and set an environment variable `ICP_DATA_DIR` to it. 
+* Get the file `cdl_reclass_lzw_5070.tif` off of a USB stick
+* Copy the file to `/opt/icp-crop-data/cdl_reclass_lzw_5070.tif`, or
+* Add the `cdl_reclass_lzw_5070.tif` file at a directory of your choosing, and set an environment variable `ICP_DATA_DIR` to it.
 
 Then, use the following command to bring up a local development environment:
 
@@ -49,10 +50,10 @@ $ ./scripts/manage.sh migrate
 $ ./scripts/bundle.sh
 ```
 
-To load or reload data, from an `app` server, run (`scripts` is not mounted by default to the VM, you may need to copy the file over):
+To load or reload data, from an `app` server, run
 
 ```bash
-$ ./scripts/setupdb.sh
+$ /vagrant/scripts/aws/setupdb.sh
 ```
 
 Note that if you receive out of memory errors while loading the data, you may want to increase the RAM on your `services` VM (1512 MB may be all that is necessary).
