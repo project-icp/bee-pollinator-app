@@ -7,6 +7,20 @@ var d3 = require('d3'),
 
 var widthCutoff = 400;
 
+// Make jQuery handle destroyed event. This is needed so that
+// removeTooltipOnDestroy will work.
+// http://stackoverflow.com/questions/2200494/
+// jquery-trigger-event-when-an-element-is-removed-from-the-dom
+(function($) {
+    $.event.special.destroyed = {
+        remove: function(o) {
+            if (o.handler) {
+                o.handler();
+            }
+        }
+    };
+})($);
+
 function makeSvg(el) {
     // For some reason, the chart will only render if the style is
     // defined inline, even if it is blank.
@@ -297,6 +311,8 @@ function renderGroupedVerticalBarChart(chartEl, data, options) {
         // The bar-chart:refresh event occurs when switching tabs which requires
         // redrawing the chart.
         $(chartEl).on('bar-chart:refresh', updateChart);
+
+        removeTooltipOnDestroy(chartEl, chart.tooltip);
 
         return chart;
     });
