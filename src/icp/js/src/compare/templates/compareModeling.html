@@ -5,9 +5,10 @@
     {% endif %}
     <div class="pull-right">
         <select class="form-control btn btn-small btn-primary">
-            {% for result in results %}
-                <option value="{{ result.displayName }}" {{ "selected" if result.active }}>
-                    {{ result.displayName }}
+            <option value="all">All Crops</option>
+            {% for crop in chartableCrops %}
+                <option value="{{ crop }}">
+                    {{ cropTypes[crop] }}
                 </option>
             {% endfor %}
         </select>

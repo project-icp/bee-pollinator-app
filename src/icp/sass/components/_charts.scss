@@ -33,5 +33,9 @@
   svg {
     width: 450px;
     height: 300px;
+
+    &.compare {
+      width: 300px;
+    }
   }
 }
