@@ -191,3 +191,12 @@
   background-color: darken($ui-light, 5%);
   border: solid 1px darken($ui-light, 10%);
 }
+
+// Crop Layer Overlay Control
+.leaflet-bar a i.legend-button {
+  color: $black-39;
+
+  &.open {
+    color: $black-74;
+  }
+}

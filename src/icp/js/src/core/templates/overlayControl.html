@@ -21,5 +21,8 @@
             value="{{ initialOpacity }}"
         >
         <i class="eye-button {{ iconClass }}"></i>
+        {% if isDisplayed %}
+            <i class="legend-button {{ legend }} fa fa-th-list"></i>
+        {% endif %}
     </a>
 </div>

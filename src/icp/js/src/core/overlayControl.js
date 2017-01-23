@@ -29,17 +29,20 @@ var OverlayControlView = Marionette.ItemView.extend({
         this.map = options.map;
         this.layer = options.layer;
         this.isDisplayed = false;
+        this.isLegendOpen = false;
         this.initialOpacity = 0.50;
         this.layer.setOpacity(this.initialOpacity);
     },
 
     ui: {
         controlToggle: '.eye-button',
+        legendToggle: '.legend-button',
         legendDropdown: '.crop-legend-dropdown > .dropdown-menu',
     },
 
     events: {
         'click @ui.controlToggle': 'toggle',
+        'click @ui.legendToggle': 'toggleLegend',
         'mouseover @ui.legendDropdown': 'disableMapScrollZoom',
         'mouseout @ui.legendDropdown': 'enableMapScrollZoom',
         'mousedown @ui.legendDropdown': 'disableMapDragging',
@@ -51,10 +54,17 @@ var OverlayControlView = Marionette.ItemView.extend({
     toggle: function() {
         if (this.isDisplayed) {
             this.map.removeLayer(this.layer);
+            this.isLegendOpen = false;
         } else {
             this.map.addLayer(this.layer);
+            this.isLegendOpen = true;
         }
         this.isDisplayed = !this.isDisplayed;
+        this.render();
+    },
+
+    toggleLegend: function() {
+        this.isLegendOpen = !this.isLegendOpen;
         this.render();
     },
 
@@ -84,12 +94,13 @@ var OverlayControlView = Marionette.ItemView.extend({
 
     templateHelpers: function() {
         return {
-            legend: this.isDisplayed ? "open" : "",
+            isDisplayed: this.isDisplayed,
+            legend: this.isLegendOpen ? "open" : "",
             cropTypes: cropTypes,
             iconClass: this.isDisplayed ? "fa fa-eye-slash" : "fa fa-eye",
             inputType: this.isDisplayed ? "range" : "hidden",
             layerName: 'Crop Layer',
-            initialOpacity: this.initialOpacity * 100,
+            initialOpacity: this.layer.options.opacity * 100,
         };
     }
 });
