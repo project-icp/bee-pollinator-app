@@ -35,11 +35,16 @@ var OverlayControlView = Marionette.ItemView.extend({
 
     ui: {
         controlToggle: '.eye-button',
+        legendDropdown: '.crop-legend-dropdown > .dropdown-menu',
     },
 
     events: {
         'click @ui.controlToggle': 'toggle',
-        'mousedown input': 'handleMouseDownEvent',
+        'mouseover @ui.legendDropdown': 'disableMapScrollZoom',
+        'mouseout @ui.legendDropdown': 'enableMapScrollZoom',
+        'mousedown @ui.legendDropdown': 'disableMapDragging',
+        'mouseup @ui.legendDropdown': 'enableMapDragging',
+        'mousedown input': 'disableMapDragging',
         'mouseup input': 'handleMouseUpEvent',
     },
 
@@ -53,12 +58,24 @@ var OverlayControlView = Marionette.ItemView.extend({
         this.render();
     },
 
-    handleMouseDownEvent: function(e) {
+    disableMapScrollZoom: function() {
+        this.map.scrollWheelZoom.disable();
+    },
+
+    enableMapScrollZoom: function() {
+        this.map.scrollWheelZoom.enable();
+    },
+
+    disableMapDragging: function(e) {
         this.map.dragging.disable();
     },
 
-    handleMouseUpEvent: function(e) {
+    enableMapDragging: function() {
         this.map.dragging.enable();
+    },
+
+    handleMouseUpEvent: function(e) {
+        this.enableMapDragging();
         var el = $(e.target),
         sliderValue = el.val();
         this.layer.setOpacity(sliderValue / 100);
