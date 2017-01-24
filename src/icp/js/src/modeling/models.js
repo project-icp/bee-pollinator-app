@@ -395,6 +395,7 @@ var ScenarioModel = Backbone.Model.extend({
         active: false,
         job_id: null,
         results: null, // ResultCollection
+        pollError: null,
         aoi_census: null, // JSON blob
         modification_censuses: null, // JSON blob
         allow_save: true // Is allowed to save to the server - false in compare mode
@@ -615,6 +616,7 @@ var ScenarioModel = Backbone.Model.extend({
                 postData: gisData,
 
                 onStart: function() {
+                    self.set('pollError', null);
                     results.setPolling(true);
                 },
 
@@ -622,8 +624,8 @@ var ScenarioModel = Backbone.Model.extend({
                     self.setResults();
                 },
 
-                pollFailure: function() {
-                    console.log('Failed to get modeling results.');
+                pollFailure: function(error) {
+                    self.set('pollError', error);
                     results.setNullResults();
                 },
 
@@ -633,6 +635,7 @@ var ScenarioModel = Backbone.Model.extend({
                     if (!endType.cancelledJob) {
                         results.setPolling(false);
                     }
+
                     self.attemptSave();
                 },
 
