@@ -29,36 +29,63 @@ var OverlayControlView = Marionette.ItemView.extend({
         this.map = options.map;
         this.layer = options.layer;
         this.isDisplayed = false;
+        this.isLegendOpen = false;
         this.initialOpacity = 0.50;
         this.layer.setOpacity(this.initialOpacity);
     },
 
     ui: {
         controlToggle: '.eye-button',
+        legendToggle: '.legend-button',
+        legendDropdown: '.crop-legend-dropdown > .dropdown-menu',
     },
 
     events: {
         'click @ui.controlToggle': 'toggle',
-        'mousedown input': 'handleMouseDownEvent',
+        'click @ui.legendToggle': 'toggleLegend',
+        'mouseover @ui.legendDropdown': 'disableMapScrollZoom',
+        'mouseout @ui.legendDropdown': 'enableMapScrollZoom',
+        'mousedown @ui.legendDropdown': 'disableMapDragging',
+        'mouseup @ui.legendDropdown': 'enableMapDragging',
+        'mousedown input': 'disableMapDragging',
         'mouseup input': 'handleMouseUpEvent',
     },
 
     toggle: function() {
         if (this.isDisplayed) {
             this.map.removeLayer(this.layer);
+            this.isLegendOpen = false;
         } else {
             this.map.addLayer(this.layer);
+            this.isLegendOpen = true;
         }
         this.isDisplayed = !this.isDisplayed;
         this.render();
     },
 
-    handleMouseDownEvent: function(e) {
+    toggleLegend: function() {
+        this.isLegendOpen = !this.isLegendOpen;
+        this.render();
+    },
+
+    disableMapScrollZoom: function() {
+        this.map.scrollWheelZoom.disable();
+    },
+
+    enableMapScrollZoom: function() {
+        this.map.scrollWheelZoom.enable();
+    },
+
+    disableMapDragging: function(e) {
         this.map.dragging.disable();
     },
 
-    handleMouseUpEvent: function(e) {
+    enableMapDragging: function() {
         this.map.dragging.enable();
+    },
+
+    handleMouseUpEvent: function(e) {
+        this.enableMapDragging();
         var el = $(e.target),
         sliderValue = el.val();
         this.layer.setOpacity(sliderValue / 100);
@@ -67,12 +94,13 @@ var OverlayControlView = Marionette.ItemView.extend({
 
     templateHelpers: function() {
         return {
-            legend: this.isDisplayed ? "open" : "",
+            isDisplayed: this.isDisplayed,
+            legend: this.isLegendOpen ? "open" : "",
             cropTypes: cropTypes,
             iconClass: this.isDisplayed ? "fa fa-eye-slash" : "fa fa-eye",
             inputType: this.isDisplayed ? "range" : "hidden",
             layerName: 'Crop Layer',
-            initialOpacity: this.initialOpacity * 100,
+            initialOpacity: this.layer.options.opacity * 100,
         };
     }
 });

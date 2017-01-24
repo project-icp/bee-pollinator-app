@@ -177,8 +177,10 @@
     border-radius: 0;
     box-shadow: none;
     padding: 0.5rem;
-    overflow: scroll;
-    column-count: 4;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    max-height: 8.5rem;
+    width: 100%;
   }
 
   .legend-color {
