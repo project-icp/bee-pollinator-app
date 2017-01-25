@@ -638,7 +638,8 @@ var ResultsView = Marionette.LayoutView.extend({
     },
 
     initialize: function(options) {
-        var scenarios = this.model.get('scenarios');
+        var scenarios = this.model.get('scenarios'),
+            self = this;
 
         this.listenTo(scenarios, 'change:active', this.onShow);
 
@@ -646,30 +647,7 @@ var ResultsView = Marionette.LayoutView.extend({
             this.lock = options.lock;
         }
 
-        this.fetchResultsPromise = this.model.fetchResultsIfNeeded();
-    },
-
-    onShow: function() {
-        var self = this,
-            tmvModel = new coreModels.TaskMessageViewModel(),
-            errorHandler = function(err) {
-                if (err && err.timeout) {
-                    tmvModel.setTimeoutError();
-                } else {
-                    var message = err.error === 'NO_LAND_COVER' ?
-                        'Selected area of interest doesn\'t include any land ' +
-                        'cover to run the model' : 'Error';
-                    tmvModel.setError(message);
-                }
-                self.modelingRegion.show(new coreViews.TaskMessageView({ model: tmvModel }));
-            };
-
-        tmvModel.setWorking('Calculating Results');
-        self.modelingRegion.show(new coreViews.TaskMessageView({ model: tmvModel }));
-
-        self.fetchResultsPromise.done(function() {
-            self.showDetailsRegion();
-        }).fail(errorHandler);
+        this.model.fetchResultsIfNeeded();
     },
 
     onRender: function() {
@@ -680,7 +658,7 @@ var ResultsView = Marionette.LayoutView.extend({
         this.$el.find('.tab-pane:last').addClass('active');
     },
 
-    showDetailsRegion: function() {
+    onShow: function() {
         var scenarios = this.model.get('scenarios'),
             scenario = scenarios.getActiveScenario(),
             currentConditions = scenarios.getCurrentConditions();
@@ -809,21 +787,46 @@ var ResultsTabContentView = Marionette.LayoutView.extend({
         return this.model.get('name');
     },
 
+    modelEvents: {
+        'change:polling': 'onShow',
+        'change:result': 'onShow',
+    },
+
     initialize: function(options) {
         this.scenario = options.scenario;
     },
 
     onShow: function() {
-        var modelPackage = App.currentProject.get('model_package'),
+        var self = this,
+            modelPackage = App.currentProject.get('model_package'),
             resultName = this.model.get('name'),
-            ResultView = getResultView(modelPackage, resultName);
+            ResultView = getResultView(modelPackage, resultName),
+            tmvModel = new coreModels.TaskMessageViewModel(),
+            polling = this.model.get('polling'),
+            result = this.model.get('result');
 
-        this.resultRegion.show(new ResultView({
-            model: this.model,
-            currentConditions: this.options.currentConditions,
-            areaOfInterest: this.options.areaOfInterest,
-            scenario: this.scenario
-        }));
+        // Only show this on the initial polling. On subsequent polling, we
+        // keep showing the current results.
+        if (polling && !result) {
+            tmvModel.setWorking('Calculating Results');
+            self.resultRegion.show(new coreViews.TaskMessageView({ model: tmvModel }));
+        } else if (!result) {
+            var error = self.scenario.get('pollError');
+            if (error && error.timeout) {
+               tmvModel.setTimeoutError();
+           } else {
+               var message = 'Error';
+               tmvModel.setError(message);
+           }
+           self.resultRegion.show(new coreViews.TaskMessageView({ model: tmvModel }));
+        } else {
+            this.resultRegion.show(new ResultView({
+                model: this.model,
+                currentConditions: this.options.currentConditions,
+                areaOfInterest: this.options.areaOfInterest,
+                scenario: this.scenario
+            }));
+        }
     }
 });
 
