@@ -237,7 +237,7 @@ var NumberOfHivesView = ControlView.extend({
     },
 
     onInputChange: function() {
-        var value = parseInt(this.ui.input.val());
+        var value = parseFloat(this.ui.input.val());
         this.addOrReplaceInput(new models.ModificationModel({
             name: this.getControlName(),
             value: value
