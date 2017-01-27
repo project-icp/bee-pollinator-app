@@ -13,6 +13,12 @@
     &.slider-leaflet {
         background-color: transparent;
         cursor: pointer;
+        @media screen and (-webkit-min-device-pixel-ratio:0) {
+        /* Webkit only http://phrappe.com/css/conditional-css-for-webkit-based-browsers/ */
+            border-top: 11px solid transparent;
+            border-bottom: 11px solid transparent;
+        }
+        padding: 0;
 
         &::-webkit-slider-thumb {
             background: $black;
@@ -36,7 +42,8 @@
         }
 
         &::-moz-range-track {
-            background: $ui-primary;
+            background-color: $ui-primary;
+            height: 2px;
         }
         &::-moz-range-thumb {
             background: $black;
@@ -47,19 +54,24 @@
         }
 
         &::-ms-track {
+            color: transparent;
             background: transparent;
             border-color: transparent;
-            color: transparent;
+            width: 100%;
+            height: 2px;
+            cursor: pointer;
+            border-top: 11px solid transparent;
+            border-bottom: 11px solid transparent;
         }
         &::-ms-thumb {
             background: $black;
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             border: 1px solid $black;
             border-radius: 50px;
         }
         &::-ms-fill-lower {
-            background:$ui-primary;
+            background: $ui-primary;
             border: $ui-primary;
         }
         &::-ms-fill-upper {
