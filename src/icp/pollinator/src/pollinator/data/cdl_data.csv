@@ -43,7 +43,7 @@ CDL_code,CDL_categories,Attributes,Demand,HF.mean,HN.mean
 52,Lentils,Grains,none,0.168805836,0.153012568
 53,Peas,Vegs,little,0.254939371,0.221472574
 54,Tomatoes,Solanums,little,0.322284457,0.201445805
-55,Caneberries,Berries,great,0.441217947,0.303912369
+55,Caneberries,Raspberries,great,0.441217947,0.303912369
 56,Hops,Grains,none,0.168805836,0.153012568
 57,Herbs,Herbs,none,0.37714837,0.244788596
 58,Clover/Wildflowers,Wildflowers,none,0.752105893,0.27282195
@@ -54,9 +54,9 @@ CDL_code,CDL_categories,Attributes,Demand,HF.mean,HN.mean
 63,Forest,Mixed Forest,none,0.482223419,0.676985046
 64,Shrubland,Shrubland,none,0.560492743,0.719726597
 65,Barren,Barren,none,0.253280228,0.213039209
-66,Cherries,Orchard,great,0.344578281,0.324941214
+66,Cherries,Cherries,great,0.344578281,0.324941214
 67,Peaches,Orchard,great,0.344578281,0.324941214
-68,Apples,Orchard,great,0.344578281,0.324941214
+68,Apples,Apples,great,0.344578281,0.324941214
 69,Grapes,Grapes,none,0.224126373,0.2836128
 70,Christmas Trees,Christmas Trees,none,0.316633697,0.266834521
 71,Other Tree Crops,Tree Crops,none,0.367659457,0.315017853
@@ -107,7 +107,7 @@ CDL_code,CDL_categories,Attributes,Demand,HF.mean,HN.mean
 225,Dbl Crop WinWht/Corn,Dbl Crop,none,0.267295416,0.296378706
 226,Dbl Crop Oats/Corn,Dbl Crop,none,0.267295416,0.296378706
 227,Lettuce,Vegs,none,0.254939371,0.221472574
-229,Pumpkins,Cucurbits,essential,0.360610595,0.258825765
+229,Pumpkins,Pumpkins,essential,0.360610595,0.258825765
 230,Dbl Crop Lettuce/Durum Wht,Dbl Crop,none,0.267295416,0.296378706
 231,Dbl Crop Lettuce/Cantaloupe,Melons,modest,0.322335022,0.22753718
 232,Dbl Crop Lettuce/Cotton,Dbl Crop,none,0.267295416,0.296378706
@@ -120,7 +120,7 @@ CDL_code,CDL_categories,Attributes,Demand,HF.mean,HN.mean
 239,Dbl Crop Soybeans/Cotton,Dbl Crop,little,0.267295416,0.296378706
 240,Dbl Crop Soybeans/Oats,Dbl Crop,little,0.267295416,0.296378706
 241,Dbl Crop Corn/Soybeans,Dbl Crop,little,0.267295416,0.296378706
-242,Blueberries,Berries,great,0.441217947,0.303912369
+242,Blueberries,Blueberries,great,0.441217947,0.303912369
 243,Cabbage,Vegs,none,0.254939371,0.221472574
 244,Cauliflower,Vegs,none,0.254939371,0.221472574
 245,Celery,Vegs,none,0.254939371,0.221472574
