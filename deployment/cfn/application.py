@@ -4,17 +4,15 @@ from troposphere import (
     Output,
     Tags,
     GetAtt,
-    Base64,
     Join,
-    Equals,
-    cloudwatch as cw,
+    Base64,
     ec2,
+    autoscaling as asg,
     elasticloadbalancing as elb,
-    autoscaling as asg
+    cloudwatch as cw
 )
 
 from utils.cfn import get_recent_ami
-
 from utils.constants import (
     ALLOW_ALL_CIDR,
     EC2_INSTANCE_TYPES,
@@ -48,20 +46,16 @@ class Application(StackNode):
         'AppServerAutoScalingDesired': ['global:AppServerAutoScalingDesired'],
         'AppServerAutoScalingMin': ['global:AppServerAutoScalingMin'],
         'AppServerAutoScalingMax': ['global:AppServerAutoScalingMax'],
+        'AppServerAutoScalingScheduleStartCapacity': ['global:AppServerAutoScalingScheduleStartCapacity'],  # NOQA
+        'AppServerAutoScalingScheduleStartRecurrence': ['global:AppServerAutoScalingScheduleStartRecurrence'],  # NOQA
+        'AppServerAutoScalingScheduleEndCapacity': ['global:AppServerAutoScalingScheduleEndCapacity'],  # NOQA
+        'AppServerAutoScalingScheduleEndRecurrence': ['global:AppServerAutoScalingScheduleEndRecurrence'],  # NOQA
         'SSLCertificateARN': ['global:SSLCertificateARN'],
-        'BackwardCompatSSLCertificateARN':
-        ['global:BackwardCompatSSLCertificateARN'],
         'PublicSubnets': ['global:PublicSubnets', 'VPC:PublicSubnets'],
         'PrivateSubnets': ['global:PrivateSubnets', 'VPC:PrivateSubnets'],
         'PublicHostedZoneName': ['global:PublicHostedZoneName'],
         'VpcId': ['global:VpcId', 'VPC:VpcId'],
         'GlobalNotificationsARN': ['global:GlobalNotificationsARN'],
-        'BlueTileServerDistributionEndpoint':
-        ['global:BlueTileServerDistributionEndpoint',
-            'TileDeliveryNetwork:BlueTileServerDistributionEndpoint'],
-        'GreenTileServerDistributionEndpoint':
-        ['global:GreenTileServerDistributionEndpoint',
-            'TileDeliveryNetwork:GreenTileServerDistributionEndpoint'],
         'RollbarServerSideAccessToken':
         ['global:RollbarServerSideAccessToken'],
     }
@@ -150,16 +144,38 @@ class Application(StackNode):
             Description='Application server AutoScalingGroup maximum'
         ), 'AppServerAutoScalingMax')
 
+        self.app_server_auto_scaling_schedule_start_recurrence = self.add_parameter(  # NOQA
+            Parameter(
+                'AppServerAutoScalingScheduleStartRecurrence', Type='String',
+                Default='0 13 * * 1-5',
+                Description='Application server ASG schedule start recurrence'
+            ), 'AppServerAutoScalingScheduleStartRecurrence')
+
+        self.app_server_auto_scaling_schedule_start_capacity = self.add_parameter(  # NOQA
+            Parameter(
+                'AppServerAutoScalingScheduleStartCapacity', Type='String',
+                Default='1',
+                Description='Application server ASG schedule start capacity'
+            ), 'AppServerAutoScalingScheduleStartCapacity')
+
+        self.app_server_auto_scaling_schedule_end_recurrence = self.add_parameter(  # NOQA
+            Parameter(
+                'AppServerAutoScalingScheduleEndRecurrence', Type='String',
+                Default='0 23 * * *',
+                Description='Application server ASG schedule end recurrence'
+            ), 'AppServerAutoScalingScheduleEndRecurrence')
+
+        self.app_server_auto_scaling_schedule_end_capacity = self.add_parameter(  # NOQA
+            Parameter(
+                'AppServerAutoScalingScheduleEndCapacity', Type='String',
+                Default='1',
+                Description='Application server ASG schedule end capacity'
+            ), 'AppServerAutoScalingScheduleEndCapacity')
+
         self.ssl_certificate_arn = self.add_parameter(Parameter(
             'SSLCertificateARN', Type='String',
             Description='ARN for a SSL certificate stored in IAM'
         ), 'SSLCertificateARN')
-
-        self.backward_compat_ssl_certificate_arn = self.add_parameter(
-            Parameter(
-                'BackwardCompatSSLCertificateARN', Type='String',
-                Description='ARN for a SSL certificate stored in IAM'
-            ), 'BackwardCompatSSLCertificateARN')
 
         self.public_subnets = self.add_parameter(Parameter(
             'PublicSubnets', Type='CommaDelimitedList',
@@ -186,25 +202,13 @@ class Application(StackNode):
             Description='ARN for an SNS topic to broadcast notifications'
         ), 'GlobalNotificationsARN')
 
-        self.blue_tile_distribution_endpoint = self.add_parameter(Parameter(
-            'BlueTileServerDistributionEndpoint', Type='String',
-            Description='Endpoint for blue tile CloudFront distribution'
-        ), 'BlueTileServerDistributionEndpoint')
-
-        self.green_tile_distribution_endpoint = self.add_parameter(Parameter(
-            'GreenTileServerDistributionEndpoint', Type='String',
-            Description='Endpoint for green tile CloudFront distribution'
-        ), 'GreenTileServerDistributionEndpoint')
-
         app_server_lb_security_group, \
             app_server_security_group = self.create_security_groups()
-        app_server_lb, \
-            backward_compat_app_server_lb = self.create_load_balancers(
-                app_server_lb_security_group)
+        app_server_lb = self.create_load_balancers(
+            app_server_lb_security_group)
 
         self.create_auto_scaling_resources(app_server_security_group,
-                                           app_server_lb,
-                                           backward_compat_app_server_lb)
+                                           app_server_lb)
 
         self.create_cloud_watch_resources(app_server_lb)
 
@@ -213,25 +217,24 @@ class Application(StackNode):
         self.add_output(Output('AppServerLoadBalancerHostedZoneNameID',
                                Value=GetAtt(app_server_lb,
                                             'CanonicalHostedZoneNameID')))
-        self.add_output(Output('BackwardCompatAppServerLoadBalancerEndpoint',
-                               Value=GetAtt(backward_compat_app_server_lb,
-                                            'DNSName')))
-        self.add_output(
-            Output('BackwardCompatAppServerLoadBalancerHostedZoneNameID',
-                   Value=GetAtt(backward_compat_app_server_lb,
-                                'CanonicalHostedZoneNameID')))
 
     def get_recent_app_server_ami(self):
         try:
             app_server_ami_id = self.get_input('AppServerAMI')
         except MKUnresolvableInputError:
-            app_server_ami_id = get_recent_ami(self.aws_profile, 'icp-app-*')
+            filters = {'name': 'icp-app-*',
+                       'architecture': 'x86_64',
+                       'block-device-mapping.volume-type': 'gp2',
+                       'root-device-type': 'ebs',
+                       'virtualization-type': 'hvm'}
+
+            app_server_ami_id = get_recent_ami(self.aws_profile,
+                                               filters=filters)
 
         return app_server_ami_id
 
     def create_security_groups(self):
         app_server_lb_security_group_name = 'sgAppServerLoadBalancer'
-
         app_server_lb_security_group = self.add_resource(ec2.SecurityGroup(
             app_server_lb_security_group_name,
             GroupDescription='Enables access to application servers via a '
@@ -254,7 +257,6 @@ class Application(StackNode):
         ))
 
         app_server_security_group_name = 'sgAppServer'
-
         app_server_security_group = self.add_resource(ec2.SecurityGroup(
             app_server_security_group_name,
             DependsOn='sgAppServerLoadBalancer',
@@ -296,105 +298,62 @@ class Application(StackNode):
 
     def create_load_balancers(self, app_server_lb_security_group):
         app_server_lb_name = 'elbAppServer'
-        backward_compat_app_server_lb_name = 'elbBackwardCompatAppServer'
-
-        return [
-            self.add_resource(elb.LoadBalancer(
-                app_server_lb_name,
-                ConnectionDrainingPolicy=elb.ConnectionDrainingPolicy(
-                    Enabled=True,
-                    Timeout=300,
+        return self.add_resource(elb.LoadBalancer(
+            app_server_lb_name,
+            ConnectionDrainingPolicy=elb.ConnectionDrainingPolicy(
+                Enabled=True,
+                Timeout=300,
+            ),
+            CrossZone=True,
+            SecurityGroups=[Ref(app_server_lb_security_group)],
+            Listeners=[
+                elb.Listener(
+                    LoadBalancerPort='80',
+                    InstancePort='80',
+                    Protocol='HTTP',
                 ),
-                CrossZone=True,
-                SecurityGroups=[Ref(app_server_lb_security_group)],
-                Listeners=[
-                    elb.Listener(
-                        LoadBalancerPort='80',
-                        InstancePort='80',
-                        Protocol='HTTP',
-                    ),
-                    elb.Listener(
-                        LoadBalancerPort='443',
-                        InstancePort='80',
-                        Protocol='HTTPS',
-                        SSLCertificateId=Ref(self.ssl_certificate_arn)
-                    )
-                ],
-                HealthCheck=elb.HealthCheck(
-                    Target='HTTP:80/health-check/',
-                    HealthyThreshold='3',
-                    UnhealthyThreshold='2',
-                    Interval='30',
-                    Timeout='5',
-                ),
-                Subnets=Ref(self.public_subnets),
-                Tags=self.get_tags(Name=app_server_lb_name)
-            )),
-            self.add_resource(elb.LoadBalancer(
-                backward_compat_app_server_lb_name,
-                ConnectionDrainingPolicy=elb.ConnectionDrainingPolicy(
-                    Enabled=True,
-                    Timeout=300,
-                ),
-                CrossZone=True,
-                SecurityGroups=[Ref(app_server_lb_security_group)],
-                Listeners=[
-                    elb.Listener(
-                        LoadBalancerPort='80',
-                        InstancePort='80',
-                        Protocol='HTTP',
-                    ),
-                    elb.Listener(
-                        LoadBalancerPort='443',
-                        InstancePort='80',
-                        Protocol='HTTPS',
-                        SSLCertificateId=Ref(
-                            self.backward_compat_ssl_certificate_arn)
-                    )
-                ],
-                HealthCheck=elb.HealthCheck(
-                    Target='HTTP:80/health-check/',
-                    HealthyThreshold='3',
-                    UnhealthyThreshold='2',
-                    Interval='30',
-                    Timeout='5',
-                ),
-                Subnets=Ref(self.public_subnets),
-                Tags=self.get_tags(Name=backward_compat_app_server_lb_name)
-            ))]
+                elb.Listener(
+                    LoadBalancerPort='443',
+                    InstancePort='80',
+                    Protocol='HTTPS',
+                    SSLCertificateId=Ref(self.ssl_certificate_arn)
+                )
+            ],
+            HealthCheck=elb.HealthCheck(
+                Target='HTTP:80/health-check/',
+                HealthyThreshold='3',
+                UnhealthyThreshold='2',
+                Interval='30',
+                Timeout='5',
+            ),
+            Subnets=Ref(self.public_subnets),
+            Tags=self.get_tags(Name=app_server_lb_name)
+        ))
 
     def create_auto_scaling_resources(self, app_server_security_group,
-                                      app_server_lb,
-                                      backward_compat_app_server_lb):
-        self.add_condition('BlueCondition', Equals('Blue', Ref(self.color)))
-        self.add_condition('GreenCondition', Equals('Green', Ref(self.color)))
-
-        blue_app_server_launch_config = self.add_resource(
+                                      app_server_lb):
+        app_server_launch_config = self.add_resource(
             asg.LaunchConfiguration(
-                'lcAppServerBlue',
-                Condition='BlueCondition',
+                'lcAppServer',
                 ImageId=Ref(self.app_server_ami),
                 IamInstanceProfile=Ref(self.app_server_instance_profile),
                 InstanceType=Ref(self.app_server_instance_type),
                 KeyName=Ref(self.keyname),
                 SecurityGroups=[Ref(app_server_security_group)],
                 UserData=Base64(
-                    Join('', self.get_cloud_config(
-                        self.blue_tile_distribution_endpoint)))
+                    Join('', self.get_cloud_config()))
             ))
 
-        self.add_resource(
+        app_server_auto_scaling_group = self.add_resource(
             asg.AutoScalingGroup(
-                'asgAppServerBlue',
+                'asgAppServer',
                 AvailabilityZones=Ref(self.availability_zones),
-                Condition='BlueCondition',
                 Cooldown=300,
                 DesiredCapacity=Ref(self.app_server_auto_scaling_desired),
                 HealthCheckGracePeriod=600,
                 HealthCheckType='ELB',
-                LaunchConfigurationName=Ref(blue_app_server_launch_config),
-                LoadBalancerNames=[Ref(app_server_lb),
-                                   Ref(backward_compat_app_server_lb)],
+                LaunchConfigurationName=Ref(app_server_launch_config),
+                LoadBalancerNames=[Ref(app_server_lb)],
                 MaxSize=Ref(self.app_server_auto_scaling_max),
                 MinSize=Ref(self.app_server_auto_scaling_min),
                 NotificationConfigurations=[
@@ -412,50 +371,29 @@ class Application(StackNode):
                 Tags=[asg.Tag('Name', 'AppServer', True)])
         )
 
-        green_app_server_launch_config = self.add_resource(
-            asg.LaunchConfiguration(
-                'lcAppServerGreen',
-                Condition='GreenCondition',
-                ImageId=Ref(self.app_server_ami),
-                IamInstanceProfile=Ref(self.app_server_instance_profile),
-                InstanceType=Ref(self.app_server_instance_type),
-                KeyName=Ref(self.keyname),
-                SecurityGroups=[Ref(app_server_security_group)],
-                UserData=Base64(
-                    Join('', self.get_cloud_config(
-                        self.green_tile_distribution_endpoint)))
-            ))
-
         self.add_resource(
-            asg.AutoScalingGroup(
-                'asgAppServerGreen',
-                AvailabilityZones=Ref(self.availability_zones),
-                Condition='GreenCondition',
-                Cooldown=300,
-                DesiredCapacity=Ref(self.app_server_auto_scaling_desired),
-                HealthCheckGracePeriod=600,
-                HealthCheckType='ELB',
-                LaunchConfigurationName=Ref(green_app_server_launch_config),
-                LoadBalancerNames=[Ref(app_server_lb),
-                                   Ref(backward_compat_app_server_lb)],
-                MaxSize=Ref(self.app_server_auto_scaling_max),
-                MinSize=Ref(self.app_server_auto_scaling_min),
-                NotificationConfigurations=[
-                    asg.NotificationConfigurations(
-                        TopicARN=Ref(self.notification_topic_arn),
-                        NotificationTypes=[
-                            asg.EC2_INSTANCE_LAUNCH,
-                            asg.EC2_INSTANCE_LAUNCH_ERROR,
-                            asg.EC2_INSTANCE_TERMINATE,
-                            asg.EC2_INSTANCE_TERMINATE_ERROR
-                        ]
-                    )
-                ],
-                VPCZoneIdentifier=Ref(self.private_subnets),
-                Tags=[asg.Tag('Name', 'AppServer', True)])
+            asg.ScheduledAction(
+                'schedTileServerAutoScalingStart',
+                AutoScalingGroupName=Ref(app_server_auto_scaling_group),
+                DesiredCapacity=Ref(
+                    self.app_server_auto_scaling_schedule_start_capacity),
+                Recurrence=Ref(
+                    self.app_server_auto_scaling_schedule_start_recurrence)
+            )
         )
 
-    def get_cloud_config(self, tile_distribution_endpoint):
+        self.add_resource(
+            asg.ScheduledAction(
+                'schedTileServerAutoScalingEnd',
+                AutoScalingGroupName=Ref(app_server_auto_scaling_group),
+                DesiredCapacity=Ref(
+                    self.app_server_auto_scaling_schedule_end_capacity),
+                Recurrence=Ref(
+                    self.app_server_auto_scaling_schedule_end_recurrence)
+            )
+        )
+
+    def get_cloud_config(self):
         return ['#cloud-config\n',
                 '\n',
                 'write_files:\n',
@@ -467,10 +405,6 @@ class Application(StackNode):
                 '    permissions: 0750\n',
                 '    owner: root:icp\n',
                 '    content: ', self.get_input('StackType'), '\n',
-                '  - path: /etc/icp.d/env/ICP_PUBLIC_HOSTED_ZONE_NAME\n',
-                '    permissions: 0750\n',
-                '    owner: root:icp\n',
-                '    content: ', Ref(self.public_hosted_zone_name), '\n',
                 '  - path: /etc/icp.d/env/ICP_DB_PASSWORD\n',
                 '    permissions: 0750\n',
                 '    owner: root:icp\n',

@@ -10,7 +10,7 @@
     - "/opt/bee-pollinator"
 
 - name: Clone application source
-  git: repo=https://github.com/project-icp/bee-pollinator.git
+  git: repo=https://github.com/project-icp/bee-pollinator-app.git
        dest=/opt/bee-pollinator
        version="{{ app_deploy_branch }}"
   become: False
