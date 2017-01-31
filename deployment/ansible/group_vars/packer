@@ -1,8 +1,8 @@
 ---
 django_settings_module: "icp.settings.production"
 
-postgresql_username: "modelmywatershed"
-postgresql_database: "modelmywatershed"
+postgresql_username: "icp_bees"
+postgresql_database: "icp_bees"
 
 ntp_servers:
   - 0.amazon.pool.ntp.org

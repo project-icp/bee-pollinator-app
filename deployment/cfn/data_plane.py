@@ -1,10 +1,10 @@
 from troposphere import (
     Parameter,
     Ref,
+    Output,
     Tags,
-    Join,
     GetAtt,
-    Select,
+    Join,
     cloudwatch,
     ec2,
     elasticache as ec,
@@ -12,27 +12,15 @@ from troposphere import (
     route53 as r53
 )
 
-from utils.cfn import get_recent_ami
-
 from utils.constants import (
-    ALLOW_ALL_CIDR,
-    EC2_INSTANCE_TYPES,
     ELASTICACHE_INSTANCE_TYPES,
-    GRAPHITE,
-    GRAPHITE_WEB,
-    HTTP,
-    HTTPS,
-    KIBANA,
     POSTGRESQL,
     RDS_INSTANCE_TYPES,
     REDIS,
-    RELP,
-    SSH,
-    STATSITE,
     VPC_CIDR
 )
 
-from majorkirby import StackNode, MKUnresolvableInputError
+from majorkirby import StackNode
 
 
 class DataPlane(StackNode):
@@ -40,12 +28,8 @@ class DataPlane(StackNode):
         'Tags': ['global:Tags'],
         'Region': ['global:Region'],
         'StackType': ['global:StackType'],
-        'KeyName': ['global:KeyName'],
-        'IPAccess': ['global:IPAccess'],
         'AvailabilityZones': ['global:AvailabilityZones',
                               'VPC:AvailabilityZones'],
-        'BastionHostInstanceType': ['global:BastionHostInstanceType'],
-        'BastionHostAMI': ['global:BastionHostAMI'],
         'RDSInstanceType': ['global:RDSInstanceType'],
         'RDSDbName': ['global:RDSDbName'],
         'RDSUsername': ['global:RDSUsername'],
@@ -55,7 +39,7 @@ class DataPlane(StackNode):
         'PrivateSubnets': ['global:PrivateSubnets', 'VPC:PrivateSubnets'],
         'PublicHostedZoneName': ['global:PublicHostedZoneName'],
         'PrivateHostedZoneId': ['global:PrivateHostedZoneId',
-                                'PrivateHostedZone:PrivateHostedZoneId'],
+                                'VPC:PrivateHostedZoneId'],
         'PrivateHostedZoneName': ['global:PrivateHostedZoneName'],
         'VpcId': ['global:VpcId', 'VPC:VpcId'],
         'GlobalNotificationsARN': ['global:GlobalNotificationsARN'],
@@ -65,13 +49,10 @@ class DataPlane(StackNode):
         'Tags': {},
         'Region': 'us-east-1',
         'StackType': 'Staging',
-        'KeyName': 'icp-stg',
-        'IPAccess': ALLOW_ALL_CIDR,
-        'BastionHostInstanceType': 't2.medium',
         'RDSInstanceType': 'db.t2.micro',
-        'RDSDbName': 'modelmywatershed',
-        'RDSUsername': 'modelmywatershed',
-        'RDSPassword': 'modelmywatershed',
+        'RDSDbName': 'icp_bees',
+        'RDSUsername': 'icp_bees',
+        'RDSPassword': 'icp_bees',
         'ECInstanceType': 'cache.m1.small',
     }
 
@@ -89,33 +70,10 @@ class DataPlane(StackNode):
         self.add_description('Data plane stack for ICP')
 
         # Parameters
-        self.keyname = self.add_parameter(Parameter(
-            'KeyName', Type='String',
-            Description='Name of an existing EC2 key pair'
-        ), 'KeyName')
-
-        self.ip_access = self.add_parameter(Parameter(
-            'IPAccess', Type='String', Default=self.get_input('IPAccess'),
-            Description='CIDR for allowing SSH access'
-        ), 'IPAccess')
-
         self.availability_zones = self.add_parameter(Parameter(
             'AvailabilityZones', Type='CommaDelimitedList',
             Description='Comma delimited list of availability zones'
         ), 'AvailabilityZones')
-
-        self.bastion_instance_type = self.add_parameter(Parameter(
-            'BastionHostInstanceType', Type='String', Default='t2.medium',
-            Description='Bastion host EC2 instance type',
-            AllowedValues=EC2_INSTANCE_TYPES,
-            ConstraintDescription='must be a valid EC2 instance type.'
-        ), 'BastionHostInstanceType')
-
-        self.bastion_host_ami = self.add_parameter(Parameter(
-            'BastionHostAMI', Type='String',
-            Default=self.get_recent_monitoring_ami(),
-            Description='Bastion host AMI'
-        ), 'BastionHostAMI')
 
         self.rds_instance_type = self.add_parameter(Parameter(
             'RDSInstanceType', Type='String', Default='db.t2.micro',
@@ -178,93 +136,22 @@ class DataPlane(StackNode):
             Description='ARN for an SNS topic to broadcast notifications'
         ), 'GlobalNotificationsARN')
 
-        bastion_host = self.create_bastion()
-
-        rds_database = self.create_rds_instance()
+        rds_database, rds_database_security_group = self.create_rds_instance()
         self.create_rds_cloudwatch_alarms(rds_database)
 
-        elasticache_group = self.create_elasticache_replication_group()
-        self.create_elasticache_cloudwatch_alarms(elasticache_group)
+        ec_group, ec_security_group \
+            = self.create_elasticache_replication_group()
+        self.create_elasticache_cloudwatch_alarms(ec_group)
 
-        self.create_dns_records(bastion_host, rds_database, elasticache_group)
+        self.create_dns_records(rds_database, ec_group)
 
-    def get_recent_monitoring_ami(self):
-        try:
-            monitoring_ami_id = self.get_input('BastionHostAMI')
-        except MKUnresolvableInputError:
-            monitoring_ami_id = get_recent_ami(self.aws_profile,
-                                               'icp-monitoring-*')
-
-        return monitoring_ami_id
-
-    def create_bastion(self):
-        bastion_security_group_name = 'sgBastion'
-
-        bastion_security_group = self.add_resource(ec2.SecurityGroup(
-            bastion_security_group_name,
-            GroupDescription='Enables access to the BastionHost',
-            VpcId=Ref(self.vpc_id),
-            SecurityGroupIngress=[
-                ec2.SecurityGroupRule(IpProtocol='tcp',
-                                      CidrIp=Ref(self.ip_access),
-                                      FromPort=p, ToPort=p)
-                for p in [GRAPHITE_WEB, KIBANA, SSH]
-            ] + [
-                ec2.SecurityGroupRule(IpProtocol='tcp',
-                                      CidrIp=VPC_CIDR,
-                                      FromPort=p, ToPort=p)
-                for p in [GRAPHITE, RELP, STATSITE]
-            ] + [
-                ec2.SecurityGroupRule(IpProtocol='udp', CidrIp=VPC_CIDR,
-                                      FromPort=p, ToPort=p)
-                for p in [STATSITE]
-            ],
-            SecurityGroupEgress=[
-                ec2.SecurityGroupRule(IpProtocol='tcp',
-                                      CidrIp=VPC_CIDR,
-                                      FromPort=p, ToPort=p)
-                for p in [POSTGRESQL, REDIS, SSH]
-            ] + [
-                ec2.SecurityGroupRule(IpProtocol='tcp',
-                                      CidrIp=ALLOW_ALL_CIDR,
-                                      FromPort=p, ToPort=p)
-                for p in [HTTP, HTTPS]
-            ],
-            Tags=self.get_tags(Name=bastion_security_group_name)
-        ))
-
-        bastion_host_name = 'BastionHost'
-
-        return self.add_resource(ec2.Instance(
-            bastion_host_name,
-            BlockDeviceMappings=[
-                {
-                    "DeviceName": "/dev/sda1",
-                    "Ebs": {
-                        "VolumeType": "gp2",
-                        "VolumeSize": "256"
-                    }
-                }
-            ],
-            InstanceType=Ref(self.bastion_instance_type),
-            KeyName=Ref(self.keyname),
-            ImageId=Ref(self.bastion_host_ami),
-            NetworkInterfaces=[
-                ec2.NetworkInterfaceProperty(
-                    Description='ENI for BastionHost',
-                    GroupSet=[Ref(bastion_security_group)],
-                    SubnetId=Select("0", Ref(self.public_subnets)),
-                    AssociatePublicIpAddress=True,
-                    DeviceIndex=0,
-                    DeleteOnTermination=True
-                )
-            ],
-            Tags=self.get_tags(Name=bastion_host_name)
-        ))
+        self.add_output(Output('DatabaseSecurityGroup',
+                               Value=Ref(rds_database_security_group)))
+        self.add_output(Output('CacheSecurityGroup',
+                               Value=Ref(ec_security_group)))
 
     def create_rds_instance(self):
         rds_security_group_name = 'sgDatabaseServer'
-
         rds_security_group = self.add_resource(ec2.SecurityGroup(
             rds_security_group_name,
             GroupDescription='Enables access to database servers',
@@ -285,7 +172,6 @@ class DataPlane(StackNode):
         ))
 
         rds_subnet_group_name = 'dbsngDatabaseServer'
-
         rds_subnet_group = self.add_resource(rds.DBSubnetGroup(
             rds_subnet_group_name,
             DBSubnetGroupDescription='Private subnets for the RDS instances',
@@ -301,8 +187,7 @@ class DataPlane(StackNode):
         ))
 
         rds_database_name = 'DatabaseServer'
-
-        return self.add_resource(rds.DBInstance(
+        rds_database = self.add_resource(rds.DBInstance(
             rds_database_name,
             AllocatedStorage=128,
             AllowMajorVersionUpgrade=False,
@@ -313,16 +198,18 @@ class DataPlane(StackNode):
             DBParameterGroupName=Ref(rds_parameter_group),
             DBSubnetGroupName=Ref(rds_subnet_group),
             Engine='postgres',
-            EngineVersion='9.4.1',
+            EngineVersion='9.4.9',
             MasterUsername=Ref(self.rds_username),
             MasterUserPassword=Ref(self.rds_password),
             MultiAZ=True,
             PreferredBackupWindow='04:00-04:30',  # 12:00AM-12:30AM ET
-            PreferredMaintenanceWindow='sun:04:30-sun:05:30',  # SUN 12:30AM-01:30AM ET
+            PreferredMaintenanceWindow='sun:04:30-sun:05:30',  # NOQA SUN 12:30AM-01:30AM ET
             StorageType='gp2',
             VPCSecurityGroups=[Ref(rds_security_group)],
             Tags=self.get_tags(Name=rds_database_name)
         ))
+
+        return rds_database, rds_security_group
 
     def create_rds_cloudwatch_alarms(self, rds_database):
         self.add_resource(cloudwatch.Alarm(
@@ -407,7 +294,6 @@ class DataPlane(StackNode):
 
     def create_elasticache_replication_group(self):
         elasticache_security_group_name = 'sgCacheCluster'
-
         elasticache_security_group = self.add_resource(ec2.SecurityGroup(
             elasticache_security_group_name,
             GroupDescription='Enables access to the cache cluster',
@@ -433,23 +319,25 @@ class DataPlane(StackNode):
             SubnetIds=Ref(self.private_subnets)
         ))
 
-        return self.add_resource(ec.ReplicationGroup(
+        elasticache_group = self.add_resource(ec.ReplicationGroup(
             'CacheReplicationGroup',
             AutomaticFailoverEnabled=True,
             AutoMinorVersionUpgrade=True,
             CacheNodeType=Ref(self.elasticache_instance_type),
             CacheSubnetGroupName=Ref(elasticache_subnet_group),
             Engine='redis',
-            EngineVersion='2.8.19',
+            EngineVersion='2.8.24',
             NotificationTopicArn=Ref(self.notification_topic_arn),
             NumCacheClusters=2,
             PreferredCacheClusterAZs=Ref(self.availability_zones),
-            PreferredMaintenanceWindow='sun:05:00-sun:06:00',  # SUN 01:00AM-02:00AM ET
+            PreferredMaintenanceWindow='sun:05:00-sun:06:00',  # NOQA SUN 01:00AM-02:00AM ET
             ReplicationGroupDescription='Redis replication group',
             SecurityGroupIds=[Ref(elasticache_security_group)],
             SnapshotRetentionLimit=30,
             SnapshotWindow='04:00-05:00'  # 12:00AM-01:00AM ET
         ))
+
+        return elasticache_group, elasticache_security_group
 
     def create_elasticache_cloudwatch_alarms(self, elasticache_cache_cluster):
         for index in [1, 2]:
@@ -497,35 +385,11 @@ class DataPlane(StackNode):
                 ],
             ))
 
-    def create_dns_records(self, bastion_host, rds_database,
-                           elasticache_group):
-        self.add_resource(r53.RecordSetGroup(
-            'dnsPublicRecords',
-            HostedZoneName=Join('', [Ref(self.public_hosted_zone_name), '.']),
-            RecordSets=[
-                r53.RecordSet(
-                    'dnsMonitoringServer',
-                    Name=Join('', ['monitoring.',
-                              Ref(self.public_hosted_zone_name), '.']),
-                    Type='A',
-                    TTL='300',
-                    ResourceRecords=[GetAtt(bastion_host, 'PublicIp')]
-                )
-            ]
-        ))
-
+    def create_dns_records(self, rds_database, elasticache_group):
         self.add_resource(r53.RecordSetGroup(
             'dnsPrivateRecords',
             HostedZoneId=Ref(self.private_hosted_zone_id),
             RecordSets=[
-                r53.RecordSet(
-                    'dnsBastionHost',
-                    Name=Join('', ['monitoring.service.',
-                              Ref(self.private_hosted_zone_name), '.']),
-                    Type='A',
-                    TTL='10',
-                    ResourceRecords=[GetAtt(bastion_host, 'PrivateIp')]
-                ),
                 r53.RecordSet(
                     'dnsDatabaseServer',
                     Name=Join('', ['database.service.',

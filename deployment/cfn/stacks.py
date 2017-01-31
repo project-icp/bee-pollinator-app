@@ -5,7 +5,6 @@ from s3_vpc_endpoint import S3VPCEndpoint
 from private_hosted_zone import PrivateHostedZone
 from data_plane import DataPlane
 from application import Application
-from tile_delivery_network import TileDeliveryNetwork
 from worker import Worker
 from public_hosted_zone import PublicHostedZone
 
