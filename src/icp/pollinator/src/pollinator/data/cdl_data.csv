@@ -138,3 +138,9 @@ CDL_code,CDL_categories,Attributes,Demand,HF.mean,HN.mean,Density
 260,Raspberry with cover crop,Raspberry with cover crop,great,0.491,0.354,2
 261,Watermelon with cover crop,Watermelon with cover crop,great,0.371,0.248,4.5
 262,Pumpkin with cover crop,Pumpkin with cover crop,great,0.455,0.178,3.8
+263,Wildflower (early),Wildflower (early),none,0.67,0.5,0
+264,Wildflower (late),Wildflower (late),none,0.58,0.5,0
+265,Woody (early),Woody (early),none,0.42,0.42,0
+266,Woody (late),Woody (late),none,0.42,0.42,0
+267,Mix (early),Mix (early),none,0.75,0.5,0
+268,Mix (late),Mix (late),none,0.83,0.5,0
