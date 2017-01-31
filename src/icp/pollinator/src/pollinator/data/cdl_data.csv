@@ -130,3 +130,11 @@ CDL_code,CDL_categories,Attributes,Demand,HF.mean,HN.mean,Density
 249,Gourds,Cucurbits,essential,0.360610595,0.258825765,2.7
 250,Cranberries,Berries,great,0.441217947,0.303912369,2.25
 254,Dbl Crop Barley/Soybeans,Dbl Crop,little,0.267295416,0.296378706,0
+255,Raspberry,Raspberry,great,0.441,0.304,2
+256,Almond with cover crop,Almond with cover crop,great,0.395,0.375,6
+257,Apple with cover crop,Apple with cover crop,great,0.395,0.375,3.7
+258,Blueberry with cover crop,Blueberry with cover crop,great,0.491,0.354,7.5
+259,Cherry with cover crop,Cherry with cover crop,great,0.395,0.375,4.2
+260,Raspberry with cover crop,Raspberry with cover crop,great,0.491,0.354,2
+261,Watermelon with cover crop,Watermelon with cover crop,great,0.371,0.248,4.5
+262,Pumpkin with cover crop,Pumpkin with cover crop,great,0.455,0.178,3.8
