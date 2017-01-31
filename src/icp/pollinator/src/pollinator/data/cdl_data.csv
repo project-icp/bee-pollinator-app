@@ -1,132 +1,132 @@
-CDL_code,CDL_categories,Attributes,Demand,HF.mean,HN.mean
-1,Corn,Corns,none,0.157236422,0.138331418
-2,Cotton,Cotton,little,0.259618459,0.29670855
-3,Rice,Grains,none,0.168805836,0.153012568
-4,Sorghum,Corns,none,0.157236422,0.138331418
-5,Soybeans,Beans,little,0.268583785,0.176093103
-6,Sunflower,Flowers,modest,0.49545325,0.18975107
-10,Peanuts,Beans,little,0.268583785,0.176093103
-11,Tobacco,Tobacco,none,0.268399373,0.222063654
-12,Sweet Corn,Corns,none,0.157236422,0.138331418
-13,Pop or Orn Corn,Corns,none,0.157236422,0.138331418
-14,Mint,Herbs,none,0.37714837,0.244788596
-21,Barley,Grains,none,0.168805836,0.153012568
-22,Durum Wheat,Grains,none,0.168805836,0.153012568
-23,Spring Wheat,Grains,none,0.168805836,0.153012568
-24,Winter Wheat,Grains,none,0.168805836,0.153012568
-25,Other Small Grains,Grains,none,0.168805836,0.153012568
-26,Dbl Crop WinWht/Soybeans,Dbl Crop,none,0.267295416,0.296378706
-27,Rye,Grains,none,0.168805836,0.153012568
-28,Oats,Grains,none,0.168805836,0.153012568
-29,Millet,Grains,none,0.168805836,0.153012568
-30,Speltz,Grains,none,0.168805836,0.153012568
-31,Canola,Oilseed,little,0.434199645,0.191497694
-32,Flaxseed,Oilseed,little,0.434199645,0.191497694
-33,Safflower,Oilseed,little,0.434199645,0.191497694
-34,Rape Seed,Oilseed,little,0.434199645,0.191497694
-35,Mustard,Oilseed,none,0.434199645,0.191497694
-36,Alfalfa,Alfalfa,none,0.313291555,0.193594026
-37,Other Hay/Non Alfalfa,Grassland/Pasture,none,0.450428722,0.383345494
-38,Camelina,Oilseed,little,0.434199645,0.191497694
-39,Buckwheat,Buckwheat,great,0.371268293,0.209896734
-41,Sugarbeets,Root Vegs,none,0.21390243,0.301005964
-42,Dry Beans,Beans,little,0.268583785,0.176093103
-43,Potatoes,Solanums,none,0.322284457,0.201445805
-44,Other Crops,Other Crops,none,0.312087549,0.271130576
-45,Sugarcane,Grains,none,0.168805836,0.153012568
-46,Sweet Potatoes,Solanums,none,0.322284457,0.201445805
-47,Misc Vegs & Fruits,Vegs & Fruits,modest,0.278332583,0.226602295
-48,Watermelons,Watermelons,essential,0.320754546,0.197550519
-49,Onions,Root Vegs,none,0.21390243,0.301005964
-50,Cucumbers,Melons,great,0.322335022,0.22753718
-51,Chick Peas,Vegs,none,0.254939371,0.221472574
-52,Lentils,Grains,none,0.168805836,0.153012568
-53,Peas,Vegs,little,0.254939371,0.221472574
-54,Tomatoes,Solanums,little,0.322284457,0.201445805
-55,Caneberries,Raspberries,great,0.441217947,0.303912369
-56,Hops,Grains,none,0.168805836,0.153012568
-57,Herbs,Herbs,none,0.37714837,0.244788596
-58,Clover/Wildflowers,Wildflowers,none,0.752105893,0.27282195
-59,Sod/Grass Seed,Grass,none,0.24549423,0.187702018
-60,Switchgrass,Grass,none,0.24549423,0.187702018
-61,Fallow/Idle Cropland,Idle Crops,none,0.317106193,0.358061449
-62,Pasture/Grass,Grassland/Pasture,none,0.450428722,0.383345494
-63,Forest,Mixed Forest,none,0.482223419,0.676985046
-64,Shrubland,Shrubland,none,0.560492743,0.719726597
-65,Barren,Barren,none,0.253280228,0.213039209
-66,Cherries,Cherries,great,0.344578281,0.324941214
-67,Peaches,Orchard,great,0.344578281,0.324941214
-68,Apples,Apples,great,0.344578281,0.324941214
-69,Grapes,Grapes,none,0.224126373,0.2836128
-70,Christmas Trees,Christmas Trees,none,0.316633697,0.266834521
-71,Other Tree Crops,Tree Crops,none,0.367659457,0.315017853
-72,Citrus,Citrus,little,0.358212334,0.28718199
-74,Pecans,Nuts,none,0.227475043,0.266643385
-75,Almonds,Almonds,great,0.344578281,0.324941214
-76,Walnuts,Nuts,none,0.227475043,0.266643385
-77,Pears,Orchard,great,0.344578281,0.324941214
-83,Water,Open Water,none,0,0
-87,Wetlands,Wetlands,none,0.483599156,0.193761703
-92,Aquaculture,Open Water,none,0,0
-111,Open Water,Open Water,none,0,0
-112,Perennial Ice/Snow,Open Water,none,0,0
-121,Developed/Open Space,Developed/Open Space,none,0.488612477,0.323799159
-122,Developed/Low Intensity,Developed/Low Intensity,none,0.536726367,0.290735164
-123,Developed/Med Intensity,Developed/Med Intensity,none,0.439643198,0.171655787
-124,Developed/High Intensity,Developed/High Intensity,none,0.342894466,0.092345213
-131,Barren,Barren,none,0.253280228,0.213039209
-141,Deciduous Forest,Deciduous Forest,none,0.530005956,0.551721758
-142,Evergreen Forest,Evergreen Forest,none,0.415253678,0.43861668
-143,Mixed Forest,Mixed Forest,none,0.482223419,0.676985046
-152,Shrubland,Shrubland,none,0.560492743,0.719726597
-171,Grassland Herbaceous,Grassland/Pasture,none,0.450428722,0.383345494
-176,Grassland/Pasture,Grassland/Pasture,none,0.450428722,0.383345494
-181,Pasture/Hay,Grassland/Pasture,none,0.450428722,0.383345494
-190,Woody Wetlands,Woody Wetlands,none,0.513648933,0.221259249
-195,Herbaceous Wetlands,Herbaceous Wetlands,none,0.47352604,0.15601586
-204,Pistachios,Nuts,none,0.227475043,0.266643385
-205,Triticale,Grains,none,0.168805836,0.153012568
-206,Carrots,Root Vegs,none,0.21390243,0.301005964
-207,Asparagus,Asparagus,none,0.181167024,0.307837418
-208,Garlic,Root Vegs,none,0.21390243,0.301005964
-209,Cantaloupes,Melons,essential,0.322335022,0.22753718
-210,Prunes,Orchard,great,0.344578281,0.324941214
-211,Olives,Olives,none,0.223464364,0.377683835
-212,Oranges,Citrus,little,0.358212334,0.28718199
-213,Honeydew Melons,Melons,essential,0.322335022,0.22753718
-214,Broccoli,Vegs,none,0.254939371,0.221472574
-216,Peppers,Solanums,none,0.322284457,0.201445805
-217,Pomegranates,Orchard,modest,0.344578281,0.324941214
-218,Nectarines,Orchard,great,0.344578281,0.324941214
-219,Greens,Vegs,none,0.254939371,0.221472574
-220,Plums,Orchard,great,0.344578281,0.324941214
-221,Strawberries,Strawberries,modest,0.297459371,0.226023918
-222,Squash,Cucurbits,essential,0.360610595,0.258825765
-223,Apricots,Orchard,great,0.344578281,0.324941214
-224,Vetch,Beans,none,0.268583785,0.176093103
-225,Dbl Crop WinWht/Corn,Dbl Crop,none,0.267295416,0.296378706
-226,Dbl Crop Oats/Corn,Dbl Crop,none,0.267295416,0.296378706
-227,Lettuce,Vegs,none,0.254939371,0.221472574
-229,Pumpkins,Pumpkins,essential,0.360610595,0.258825765
-230,Dbl Crop Lettuce/Durum Wht,Dbl Crop,none,0.267295416,0.296378706
-231,Dbl Crop Lettuce/Cantaloupe,Melons,modest,0.322335022,0.22753718
-232,Dbl Crop Lettuce/Cotton,Dbl Crop,none,0.267295416,0.296378706
-233,Dbl Crop Lettuce/Barley,Dbl Crop,none,0.267295416,0.296378706
-234,Dbl Crop Durum Wht/Sorghum,Dbl Crop,none,0.267295416,0.296378706
-235,Dbl Crop Barley/Sorghum,Dbl Crop,none,0.267295416,0.296378706
-236,Dbl Crop WinWht/Sorghum,Dbl Crop,none,0.267295416,0.296378706
-237,Dbl Crop Barley/Corn,Dbl Crop,none,0.267295416,0.296378706
-238,Dbl Crop WinWht/Cotton,Dbl Crop,none,0.267295416,0.296378706
-239,Dbl Crop Soybeans/Cotton,Dbl Crop,little,0.267295416,0.296378706
-240,Dbl Crop Soybeans/Oats,Dbl Crop,little,0.267295416,0.296378706
-241,Dbl Crop Corn/Soybeans,Dbl Crop,little,0.267295416,0.296378706
-242,Blueberries,Blueberries,great,0.441217947,0.303912369
-243,Cabbage,Vegs,none,0.254939371,0.221472574
-244,Cauliflower,Vegs,none,0.254939371,0.221472574
-245,Celery,Vegs,none,0.254939371,0.221472574
-246,Radishes,Root Vegs,none,0.21390243,0.301005964
-247,Turnips,Root Vegs,great,0.21390243,0.301005964
-248,Eggplants,Solanums,modest,0.322284457,0.201445805
-249,Gourds,Cucurbits,essential,0.360610595,0.258825765
-250,Cranberries,Berries,great,0.441217947,0.303912369
-254,Dbl Crop Barley/Soybeans,Dbl Crop,little,0.267295416,0.296378706
+CDL_code,CDL_categories,Attributes,Demand,HF.mean,HN.mean,Density
+1,Corn,Corns,none,0.157236422,0.138331418,0
+2,Cotton,Cotton,little,0.259618459,0.29670855,0
+3,Rice,Grains,none,0.168805836,0.153012568,0
+4,Sorghum,Corns,none,0.157236422,0.138331418,0
+5,Soybeans,Beans,little,0.268583785,0.176093103,0
+6,Sunflower,Flowers,modest,0.49545325,0.18975107,0
+10,Peanuts,Beans,little,0.268583785,0.176093103,0
+11,Tobacco,Tobacco,none,0.268399373,0.222063654,0
+12,Sweet Corn,Corns,none,0.157236422,0.138331418,0
+13,Pop or Orn Corn,Corns,none,0.157236422,0.138331418,0
+14,Mint,Herbs,none,0.37714837,0.244788596,0
+21,Barley,Grains,none,0.168805836,0.153012568,0
+22,Durum Wheat,Grains,none,0.168805836,0.153012568,0
+23,Spring Wheat,Grains,none,0.168805836,0.153012568,0
+24,Winter Wheat,Grains,none,0.168805836,0.153012568,0
+25,Other Small Grains,Grains,none,0.168805836,0.153012568,0
+26,Dbl Crop WinWht/Soybeans,Dbl Crop,none,0.267295416,0.296378706,0
+27,Rye,Grains,none,0.168805836,0.153012568,0
+28,Oats,Grains,none,0.168805836,0.153012568,0
+29,Millet,Grains,none,0.168805836,0.153012568,0
+30,Speltz,Grains,none,0.168805836,0.153012568,0
+31,Canola,Oilseed,little,0.434199645,0.191497694,0
+32,Flaxseed,Oilseed,little,0.434199645,0.191497694,0
+33,Safflower,Oilseed,little,0.434199645,0.191497694,0
+34,Rape Seed,Oilseed,little,0.434199645,0.191497694,0
+35,Mustard,Oilseed,none,0.434199645,0.191497694,0
+36,Alfalfa,Alfalfa,none,0.313291555,0.193594026,0
+37,Other Hay/Non Alfalfa,Grassland/Pasture,none,0.450428722,0.383345494,0
+38,Camelina,Oilseed,little,0.434199645,0.191497694,0
+39,Buckwheat,Buckwheat,great,0.371268293,0.209896734,0
+41,Sugarbeets,Root Vegs,none,0.21390243,0.301005964,0
+42,Dry Beans,Beans,little,0.268583785,0.176093103,0
+43,Potatoes,Solanums,none,0.322284457,0.201445805,0
+44,Other Crops,Other Crops,none,0.312087549,0.271130576,0
+45,Sugarcane,Grains,none,0.168805836,0.153012568,0
+46,Sweet Potatoes,Solanums,none,0.322284457,0.201445805,0
+47,Misc Vegs & Fruits,Vegs & Fruits,modest,0.278332583,0.226602295,0
+48,Watermelons,Watermelons,essential,0.320754546,0.197550519,0
+49,Onions,Root Vegs,none,0.21390243,0.301005964,0
+50,Cucumbers,Melons,great,0.322335022,0.22753718,0
+51,Chick Peas,Vegs,none,0.254939371,0.221472574,0
+52,Lentils,Grains,none,0.168805836,0.153012568,0
+53,Peas,Vegs,little,0.254939371,0.221472574,0
+54,Tomatoes,Solanums,little,0.322284457,0.201445805,0
+55,Caneberries,Berries,great,0.441217947,0.303912369,0
+56,Hops,Grains,none,0.168805836,0.153012568,0
+57,Herbs,Herbs,none,0.37714837,0.244788596,0
+58,Clover/Wildflowers,Wildflowers,none,0.752105893,0.27282195,0
+59,Sod/Grass Seed,Grass,none,0.24549423,0.187702018,0
+60,Switchgrass,Grass,none,0.24549423,0.187702018,0
+61,Fallow/Idle Cropland,Idle Crops,none,0.317106193,0.358061449,0
+62,Pasture/Grass,Grassland/Pasture,none,0.450428722,0.383345494,0
+63,Forest,Mixed Forest,none,0.482223419,0.676985046,0
+64,Shrubland,Shrubland,none,0.560492743,0.719726597,0
+65,Barren,Barren,none,0.253280228,0.213039209,0
+66,Cherries,Cherries,great,0.344578281,0.324941214,0
+67,Peaches,Orchard,great,0.344578281,0.324941214,0
+68,Apples,Apples,great,0.344578281,0.324941214,0
+69,Grapes,Grapes,none,0.224126373,0.2836128,0
+70,Christmas Trees,Christmas Trees,none,0.316633697,0.266834521,0
+71,Other Tree Crops,Tree Crops,none,0.367659457,0.315017853,0
+72,Citrus,Citrus,little,0.358212334,0.28718199,0
+74,Pecans,Nuts,none,0.227475043,0.266643385,0
+75,Almonds,Almonds,great,0.344578281,0.324941214,0
+76,Walnuts,Nuts,none,0.227475043,0.266643385,0
+77,Pears,Orchard,great,0.344578281,0.324941214,0
+83,Water,Open Water,none,0,0,0
+87,Wetlands,Wetlands,none,0.483599156,0.193761703,0
+92,Aquaculture,Open Water,none,0,0,0
+111,Open Water,Open Water,none,0,0,0
+112,Perennial Ice/Snow,Open Water,none,0,0,0
+121,Developed/Open Space,Developed/Open Space,none,0.488612477,0.323799159,0
+122,Developed/Low Intensity,Developed/Low Intensity,none,0.536726367,0.290735164,0
+123,Developed/Med Intensity,Developed/Med Intensity,none,0.439643198,0.171655787,0
+124,Developed/High Intensity,Developed/High Intensity,none,0.342894466,0.092345213,0
+131,Barren,Barren,none,0.253280228,0.213039209,0
+141,Deciduous Forest,Deciduous Forest,none,0.530005956,0.551721758,0
+142,Evergreen Forest,Evergreen Forest,none,0.415253678,0.43861668,0
+143,Mixed Forest,Mixed Forest,none,0.482223419,0.676985046,0
+152,Shrubland,Shrubland,none,0.560492743,0.719726597,0
+171,Grassland Herbaceous,Grassland/Pasture,none,0.450428722,0.383345494,0
+176,Grassland/Pasture,Grassland/Pasture,none,0.450428722,0.383345494,0
+181,Pasture/Hay,Grassland/Pasture,none,0.450428722,0.383345494,0
+190,Woody Wetlands,Woody Wetlands,none,0.513648933,0.221259249,0
+195,Herbaceous Wetlands,Herbaceous Wetlands,none,0.47352604,0.15601586,0
+204,Pistachios,Nuts,none,0.227475043,0.266643385,0
+205,Triticale,Grains,none,0.168805836,0.153012568,0
+206,Carrots,Root Vegs,none,0.21390243,0.301005964,0
+207,Asparagus,Asparagus,none,0.181167024,0.307837418,0
+208,Garlic,Root Vegs,none,0.21390243,0.301005964,0
+209,Cantaloupes,Melons,essential,0.322335022,0.22753718,0
+210,Prunes,Orchard,great,0.344578281,0.324941214,0
+211,Olives,Olives,none,0.223464364,0.377683835,0
+212,Oranges,Citrus,little,0.358212334,0.28718199,0
+213,Honeydew Melons,Melons,essential,0.322335022,0.22753718,0
+214,Broccoli,Vegs,none,0.254939371,0.221472574,0
+216,Peppers,Solanums,none,0.322284457,0.201445805,0
+217,Pomegranates,Orchard,modest,0.344578281,0.324941214,0
+218,Nectarines,Orchard,great,0.344578281,0.324941214,0
+219,Greens,Vegs,none,0.254939371,0.221472574,0
+220,Plums,Orchard,great,0.344578281,0.324941214,0
+221,Strawberries,Strawberries,modest,0.297459371,0.226023918,0
+222,Squash,Cucurbits,essential,0.360610595,0.258825765,0
+223,Apricots,Orchard,great,0.344578281,0.324941214,0
+224,Vetch,Beans,none,0.268583785,0.176093103,0
+225,Dbl Crop WinWht/Corn,Dbl Crop,none,0.267295416,0.296378706,0
+226,Dbl Crop Oats/Corn,Dbl Crop,none,0.267295416,0.296378706,0
+227,Lettuce,Vegs,none,0.254939371,0.221472574,0
+229,Pumpkins,Pumpkins,essential,0.360610595,0.258825765,0
+230,Dbl Crop Lettuce/Durum Wht,Dbl Crop,none,0.267295416,0.296378706,0
+231,Dbl Crop Lettuce/Cantaloupe,Melons,modest,0.322335022,0.22753718,0
+232,Dbl Crop Lettuce/Cotton,Dbl Crop,none,0.267295416,0.296378706,0
+233,Dbl Crop Lettuce/Barley,Dbl Crop,none,0.267295416,0.296378706,0
+234,Dbl Crop Durum Wht/Sorghum,Dbl Crop,none,0.267295416,0.296378706,0
+235,Dbl Crop Barley/Sorghum,Dbl Crop,none,0.267295416,0.296378706,0
+236,Dbl Crop WinWht/Sorghum,Dbl Crop,none,0.267295416,0.296378706,0
+237,Dbl Crop Barley/Corn,Dbl Crop,none,0.267295416,0.296378706,0
+238,Dbl Crop WinWht/Cotton,Dbl Crop,none,0.267295416,0.296378706,0
+239,Dbl Crop Soybeans/Cotton,Dbl Crop,little,0.267295416,0.296378706,0
+240,Dbl Crop Soybeans/Oats,Dbl Crop,little,0.267295416,0.296378706,0
+241,Dbl Crop Corn/Soybeans,Dbl Crop,little,0.267295416,0.296378706,0
+242,Blueberries,Blueberries,great,0.441217947,0.303912369,0
+243,Cabbage,Vegs,none,0.254939371,0.221472574,0
+244,Cauliflower,Vegs,none,0.254939371,0.221472574,0
+245,Celery,Vegs,none,0.254939371,0.221472574,0
+246,Radishes,Root Vegs,none,0.21390243,0.301005964,0
+247,Turnips,Root Vegs,great,0.21390243,0.301005964,0
+248,Eggplants,Solanums,modest,0.322284457,0.201445805,0
+249,Gourds,Cucurbits,essential,0.360610595,0.258825765,0
+250,Cranberries,Berries,great,0.441217947,0.303912369,0
+254,Dbl Crop Barley/Soybeans,Dbl Crop,little,0.267295416,0.296378706,0
