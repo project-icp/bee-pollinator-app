@@ -1,4 +1,5 @@
 EC2_INSTANCE_TYPES = [
+    't2.nano',
     't2.micro',
     't2.small',
     't2.medium',
@@ -18,6 +19,8 @@ ELASTICACHE_INSTANCE_TYPES = [
 
 ALLOW_ALL_CIDR = '0.0.0.0/0'
 VPC_CIDR = '10.0.0.0/16'
+
+AMAZON_S3_VPC_ENDPOINT = 'com.amazonaws.us-east-1.s3'
 
 GRAPHITE = 2003
 GRAPHITE_WEB = 8080
