@@ -19,8 +19,9 @@ SETTINGS = {}
 ABUNDANCE_IDX = 0.1  # A constant for managing wild bee yield
 CELL_SIZE = 30
 FORAGE_DIST = 670
-AG_CLASSES = [12, 16, 17, 18, 20, 27, 33, 46, 47]
 
+AG_CLASSES = [35, 29, 51, 27, 52, 17, 50, 49, 18, 20, 28, 48]
+COVER_CROPS = { 35: 53, 29: 54, 51: 55, 27: 56, 52: 57, 17: 58, 50: 59 }
 
 def initialize():
     """
@@ -148,7 +149,7 @@ def yield_calc(crop_id, abundance, managed_hives, config):
     return yield_hb + yield_wild
 
 
-def aggregate_crops(yield_field, cdl_field, crops=AG_CLASSES):
+def aggregate_crops(yield_field, cdl_field, crops=AG_CLASSES, paired_crops=COVER_CROPS):
     """
     Within the unmasked field portion of the provided yield_field, avg the
     yield quantities per ag type, resulting in a total yield increase per
@@ -160,6 +161,10 @@ def aggregate_crops(yield_field, cdl_field, crops=AG_CLASSES):
         cdl (masked ndarray): The raw crop data layer corresponding to the same
             area covered in `yield_field` with a mask of the field applied
         crops (list<int>): Optional. The CDL class types to aggregate on,
+            defaults to system specified list
+        paired_crops (dict<int,int>): Optional. The CDL class types that have a
+            crop they should aggregate with. Keys are the
+            class types in `crops`; values are class types the keys pair with,
             defaults to system specified list
 
     Returns:
@@ -173,9 +178,15 @@ def aggregate_crops(yield_field, cdl_field, crops=AG_CLASSES):
 
     # Average the yield for each each crop type cell, by crop
     for crop in crops:
-        # Create a mask for values that are not this crop type and include
+        # Create a mask for values that are not this crop type, (or, if it
+        # has a paired crop, its pair), and include
         # the mask which is already applied to non-field areas of AoI
-        cdl_mask = np.ma.masked_where(cdl_field != crop, cdl_field).mask
+        crop_mask = cdl_field != crop
+        if crop in paired_crops:
+            crop_mask = crop_mask & (cdl_field != paired_crops[crop])
+
+        cdl_mask = np.ma.masked_where(crop_mask, cdl_field).mask
+
         crop_mask = np.ma.mask_or(field_mask, cdl_mask)
 
         # Average the yield from this one crop only over the field
