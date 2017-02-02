@@ -65,20 +65,6 @@ function validateShape(polygon) {
     return d.promise();
 }
 
-function validateClickedPointWithinDRB(latlng) {
-    var point = L.marker(latlng).toGeoJSON(),
-        d = $.Deferred(),
-        streamLayers = settings.get('stream_layers'),
-        drbPerimeter = _.findWhere(streamLayers, {code:'drb_streams_v2'}).perimeter;
-    if (turfIntersect(point, drbPerimeter)) {
-        d.resolve(latlng);
-    } else {
-        var message = 'Selected point is outside the Delaware River Basin';
-        d.reject(message);
-    }
-    return d.promise();
-}
-
 function makePointGeoJson(coords, props) {
     return {
         geometry: {
