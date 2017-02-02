@@ -20,7 +20,7 @@ var $ = require('jquery'),
     windowTmpl = require('./templates/window.html'),
     settings = require('../core/settings');
 
-var MAX_AREA = 27500000; // About the size of a large state (in acres)
+var MAX_DRAW_ACRES = 400; // About 5/8's of a square mile
 var codeToLayer = {}; // code to layer mapping
 
 function actOnUI(datum, bool) {
@@ -52,11 +52,11 @@ function validateShape(polygon) {
                        'over its own border.';
         window.alert(errorMsg);
         d.reject(errorMsg);
-    } else if (area > MAX_AREA) {
+    } else if (area > MAX_DRAW_ACRES) {
         var message = 'Sorry, your Area of Interest is too large.\n\n' +
                       Math.floor(area).toLocaleString() + ' acres were selected, ' +
                       'but the maximum supported size is currently ' +
-                      MAX_AREA.toLocaleString() + ' acres.';
+                      MAX_DRAW_ACRES.toLocaleString() + ' acres.';
         window.alert(message);
         d.reject(message);
     } else {
