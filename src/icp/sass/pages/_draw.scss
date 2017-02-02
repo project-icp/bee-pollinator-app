@@ -1,9 +1,12 @@
 #splash-window, #draw-window {
   width: 485px;
+  height: 100%;
   padding: 15px;
+  padding-bottom: $app-header-height + 15;
   position: absolute;
   right: 0;
   transition: all 200ms;
+  overflow: scroll;
 
   .hidden-sidebar & {
     transform: translateX(100%);
