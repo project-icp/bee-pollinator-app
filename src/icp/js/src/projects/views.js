@@ -152,7 +152,7 @@ var ProjectRowView = Marionette.ItemView.extend({
             self.model
                 .destroy({ wait: true })
                 .fail(function() {
-                    window.alert('Could not delete this project.');
+                    modalViews.showError('Could not delete this project.');
                 });
         });
     }

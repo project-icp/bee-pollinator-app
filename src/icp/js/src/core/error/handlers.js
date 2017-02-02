@@ -1,11 +1,12 @@
 "use strict";
 
-var router = require('../../router').router;
+var router = require('../../router').router,
+    modalViews = require('../modals/views');
 
 var ErrorHandlers = {
     generic: function(type) {
         router.navigate('');
-        window.alert("We're sorry, but an error occurred in the application.");
+        modalViews.showError("We're sorry, but an error occurred in the application.");
         console.log("[ICP] An unknown error occurred: " + type);
     }
 };

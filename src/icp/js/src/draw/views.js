@@ -18,7 +18,8 @@ var $ = require('jquery'),
     drawTmpl = require('./templates/draw.html'),
     resetDrawTmpl = require('./templates/reset.html'),
     windowTmpl = require('./templates/window.html'),
-    settings = require('../core/settings');
+    settings = require('../core/settings'),
+    modalViews = require('../core/modals/views');
 
 var MAX_DRAW_ACRES = 400; // About 5/8's of a square mile
 var codeToLayer = {}; // code to layer mapping
@@ -50,14 +51,12 @@ function validateShape(polygon) {
         var errorMsg = 'This watershed shape is invalid because it intersects ' +
                        'itself. Try drawing the shape again without crossing ' +
                        'over its own border.';
-        window.alert(errorMsg);
         d.reject(errorMsg);
     } else if (area > MAX_DRAW_ACRES) {
         var message = 'Sorry, your Area of Interest is too large.\n\n' +
                       Math.floor(area).toLocaleString() + ' acres were selected, ' +
                       'but the maximum supported size is currently ' +
                       MAX_DRAW_ACRES.toLocaleString() + ' acres.';
-        window.alert(message);
         d.reject(message);
     } else {
         d.resolve(polygon);
@@ -161,8 +160,11 @@ var DrawWindow = Marionette.LayoutView.extend({
                     isDrawing: false,
                     isDrawn: true
                 });
-            }).fail(function() {
+            }).fail(function(message) {
                 revertLayer();
+                if (message) {
+                    modalViews.showWarning(message);
+                }
                 self.model.set({
                     isDrawing: false,
                     isDrawn: false

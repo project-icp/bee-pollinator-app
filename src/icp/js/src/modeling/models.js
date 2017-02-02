@@ -9,7 +9,8 @@ var $ = require('jquery'),
     coreModels = require('../core/models'),
     turfArea = require('turf-area'),
     turfErase = require('turf-erase'),
-    turfIntersect = require('turf-intersect');
+    turfIntersect = require('turf-intersect'),
+    modalViews = require('../core/modals/views');
 
 var YIELD_TASK = 'yield';
 var YIELD_PACKAGE = 'yield';
@@ -775,11 +776,9 @@ var ScenariosCollection = Backbone.Collection.extend({
         });
 
         if (match) {
-            window.alert("There is another scenario with the same name. " +
-                    "Please choose a unique name for this scenario.");
-
             console.log('This name is already in use.');
-
+            modalViews.showWarning('There is another scenario with the same name. ' +
+                'Please choose a unique name for this scenario.');
             return false;
         } else if (model.get('name') !== newName) {
             return model.set('name', newName);

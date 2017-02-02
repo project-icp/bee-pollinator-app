@@ -180,7 +180,7 @@ var ProjectMenuView = Marionette.ItemView.extend({
             if (xhr) {
                 xhr.done(navigateAfterDelete)
                     .fail(function() {
-                        window.alert('Could not delete this project.');
+                        modalViews.showError('Could not delete this project.');
                     });
             } else {
                 navigateAfterDelete();

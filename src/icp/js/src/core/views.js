@@ -116,11 +116,9 @@ var HeaderView = Marionette.ItemView.extend({
                     window.location.replace(cloneUrl);
                 })
                 .fail(function() {
-                    window.alert(
-                        'There was an error trying to clone that project. ' +
+                    modalViews.showError('There was an error trying to clone that project. ' +
                         'Please ensure that the project ID is valid and ' +
-                        'that you have permission to view the project.'
-                    );
+                        'that you have permission to view the project.');
                 });
         });
         view.render();
@@ -582,7 +580,7 @@ var MapView = Marionette.ItemView.extend({
         this._modificationsLayer.clearLayers();
     },
 
-    // Add GeoJSON layer for each modification model in the given scenario's 
+    // Add GeoJSON layer for each modification model in the given scenario's
     // shared and specific modification collections.
     updateModifications: function(scenario) {
         var self = this,
