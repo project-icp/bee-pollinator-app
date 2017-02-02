@@ -1,21 +1,15 @@
 from troposphere import (
     Parameter,
     Ref,
-    Output,
     Tags,
-    GetAtt,
     Base64,
     Join,
-    Equals,
-    cloudwatch as cw,
     ec2,
-    elasticloadbalancing as elb,
     autoscaling as asg,
-    route53 as r53
+    cloudwatch as cw
 )
 
 from utils.cfn import get_recent_ami
-
 from utils.constants import (
     ALLOW_ALL_CIDR,
     EC2_INSTANCE_TYPES,
@@ -40,7 +34,6 @@ class Worker(StackNode):
         'StackType': ['global:StackType'],
         'StackColor': ['global:StackColor'],
         'KeyName': ['global:KeyName'],
-        'IPAccess': ['global:IPAccess'],
         'AvailabilityZones': ['global:AvailabilityZones',
                               'VPC:AvailabilityZones'],
         'RDSPassword': ['global:RDSPassword', 'DataPlane:RDSPassword'],
@@ -50,6 +43,10 @@ class Worker(StackNode):
         'WorkerAutoScalingDesired': ['global:WorkerAutoScalingDesired'],  # NOQA
         'WorkerAutoScalingMin': ['global:WorkerAutoScalingMin'],
         'WorkerAutoScalingMax': ['global:WorkerAutoScalingMax'],
+        'WorkerAutoScalingScheduleStartCapacity': ['global:WorkerAutoScalingScheduleStartCapacity'],  # NOQA
+        'WorkerAutoScalingScheduleStartRecurrence': ['global:WorkerAutoScalingScheduleStartRecurrence'],  # NOQA
+        'WorkerAutoScalingScheduleEndCapacity': ['global:WorkerAutoScalingScheduleEndCapacity'],  # NOQA
+        'WorkerAutoScalingScheduleEndRecurrence': ['global:WorkerAutoScalingScheduleEndRecurrence'],  # NOQA
         'PublicSubnets': ['global:PublicSubnets', 'VPC:PublicSubnets'],
         'PrivateSubnets': ['global:PrivateSubnets', 'VPC:PrivateSubnets'],
         'PublicHostedZoneName': ['global:PublicHostedZoneName'],
@@ -65,7 +62,6 @@ class Worker(StackNode):
         'StackType': 'Staging',
         'StackColor': 'Green',
         'KeyName': 'icp-stg',
-        'IPAccess': ALLOW_ALL_CIDR,
         'WorkerInstanceType': 't2.micro',
         'WorkerInstanceProfile': 'WorkerInstanceProfile',
         'WorkerAutoScalingDesired': '1',
@@ -100,11 +96,6 @@ class Worker(StackNode):
             Description='Name of an existing EC2 key pair'
         ), 'KeyName')
 
-        self.ip_access = self.add_parameter(Parameter(
-            'IPAccess', Type='String', Default=self.get_input('IPAccess'),
-            Description='CIDR for allowing SSH access'
-        ), 'IPAccess')
-
         self.availability_zones = self.add_parameter(Parameter(
             'AvailabilityZones', Type='CommaDelimitedList',
             Description='Comma delimited list of availability zones'
@@ -135,19 +126,47 @@ class Worker(StackNode):
         ), 'WorkerInstanceProfile')
 
         self.worker_auto_scaling_desired = self.add_parameter(Parameter(
-            'WorkerAutoScalingDesired', Type='String', Default='1',
+            'WorkerAutoScalingDesired', Type='String', Default='2',
             Description='Worker AutoScalingGroup desired'
         ), 'WorkerAutoScalingDesired')
 
         self.worker_auto_scaling_min = self.add_parameter(Parameter(
-            'WorkerAutoScalingMin', Type='String', Default='1',
+            'WorkerAutoScalingMin', Type='String', Default='0',
             Description='Worker AutoScalingGroup minimum'
         ), 'WorkerAutoScalingMin')
 
         self.worker_auto_scaling_max = self.add_parameter(Parameter(
-            'WorkerAutoScalingMax', Type='String', Default='1',
+            'WorkerAutoScalingMax', Type='String', Default='2',
             Description='Worker AutoScalingGroup maximum'
         ), 'WorkerAutoScalingMax')
+
+        self.worker_auto_scaling_schedule_start_recurrence = self.add_parameter(  # NOQA
+            Parameter(
+                'WorkerAutoScalingScheduleStartRecurrence', Type='String',
+                Default='0 13 * * 1-5',
+                Description='Worker ASG schedule start recurrence'
+            ), 'WorkerAutoScalingScheduleStartRecurrence')
+
+        self.worker_auto_scaling_schedule_start_capacity = self.add_parameter(  # NOQA
+            Parameter(
+                'WorkerAutoScalingScheduleStartCapacity', Type='String',
+                Default='2',
+                Description='Worker ASG schedule start capacity'
+            ), 'WorkerAutoScalingScheduleStartCapacity')
+
+        self.worker_auto_scaling_schedule_end_recurrence = self.add_parameter(  # NOQA
+            Parameter(
+                'WorkerAutoScalingScheduleEndRecurrence', Type='String',
+                Default='0 23 * * *',
+                Description='Worker ASG schedule end recurrence'
+            ), 'WorkerAutoScalingScheduleEndRecurrence')
+
+        self.worker_auto_scaling_schedule_end_capacity = self.add_parameter(  # NOQA
+            Parameter(
+                'WorkerAutoScalingScheduleEndCapacity', Type='String',
+                Default='0',
+                Description='Worker ASG schedule end capacity'
+            ), 'WorkerAutoScalingScheduleEndCapacity')
 
         self.public_subnets = self.add_parameter(Parameter(
             'PublicSubnets', Type='CommaDelimitedList',
@@ -174,58 +193,28 @@ class Worker(StackNode):
             Description='ARN for an SNS topic to broadcast notifications'
         ), 'GlobalNotificationsARN')
 
-        worker_lb_security_group, \
-            worker_security_group = self.create_security_groups()
-        worker_lb = self.create_load_balancer(worker_lb_security_group)
-
+        worker_security_group = self.create_security_groups()
         worker_auto_scaling_group = self.create_auto_scaling_resources(
-            worker_security_group,
-            worker_lb)
-
+            worker_security_group)
         self.create_cloud_watch_resources(worker_auto_scaling_group)
-
-        self.create_dns_records(worker_lb)
-
-        self.add_output(Output('WorkerLoadBalancerEndpoint',
-                               Value=GetAtt(worker_lb, 'DNSName')))
-        self.add_output(Output('WorkerLoadBalancerHostedZoneNameID',
-                               Value=GetAtt(worker_lb,
-                                            'CanonicalHostedZoneNameID')))
 
     def get_recent_worker_ami(self):
         try:
             worker_ami_id = self.get_input('WorkerAMI')
         except MKUnresolvableInputError:
+            filters = {'name': 'icp-worker-*',
+                       'architecture': 'x86_64',
+                       'block-device-mapping.volume-type': 'gp2',
+                       'root-device-type': 'ebs',
+                       'virtualization-type': 'hvm'}
+
             worker_ami_id = get_recent_ami(self.aws_profile,
-                                           'icp-worker-*')
+                                           filters=filters)
 
         return worker_ami_id
 
     def create_security_groups(self):
-        worker_lb_security_group_name = 'sgWorkerLoadBalancer'
-
-        worker_lb_security_group = self.add_resource(ec2.SecurityGroup(
-            worker_lb_security_group_name,
-            GroupDescription='Enables access to workers via a load balancer',
-            VpcId=Ref(self.vpc_id),
-            SecurityGroupIngress=[
-                ec2.SecurityGroupRule(
-                    IpProtocol='tcp', CidrIp=Ref(self.ip_access), FromPort=p,
-                    ToPort=p
-                )
-                for p in [HTTP]
-            ],
-            SecurityGroupEgress=[
-                ec2.SecurityGroupRule(
-                    IpProtocol='tcp', CidrIp=VPC_CIDR, FromPort=p, ToPort=p
-                )
-                for p in [HTTP]
-            ],
-            Tags=self.get_tags(Name=worker_lb_security_group_name)
-        ))
-
         worker_security_group_name = 'sgWorker'
-
         worker_security_group = self.add_resource(ec2.SecurityGroup(
             worker_security_group_name,
             GroupDescription='Enables access to workers',
@@ -235,12 +224,6 @@ class Worker(StackNode):
                     IpProtocol='tcp', CidrIp=VPC_CIDR, FromPort=p, ToPort=p
                 )
                 for p in [SSH, HTTP]
-            ] + [
-                ec2.SecurityGroupRule(
-                    IpProtocol='tcp', SourceSecurityGroupId=Ref(sg),
-                    FromPort=HTTP, ToPort=HTTP
-                )
-                for sg in [worker_lb_security_group]
             ],
             SecurityGroupEgress=[
                 ec2.SecurityGroupRule(
@@ -262,40 +245,10 @@ class Worker(StackNode):
             Tags=self.get_tags(Name=worker_security_group_name)
         ))
 
-        return worker_lb_security_group, worker_security_group
+        return worker_security_group
 
-    def create_load_balancer(self, worker_lb_security_group):
-        worker_lb_name = 'elbWorker'
-
-        return self.add_resource(elb.LoadBalancer(
-            worker_lb_name,
-            ConnectionDrainingPolicy=elb.ConnectionDrainingPolicy(
-                Enabled=True,
-                Timeout=300,
-            ),
-            CrossZone=True,
-            SecurityGroups=[Ref(worker_lb_security_group)],
-            Listeners=[
-                elb.Listener(
-                    LoadBalancerPort='80',
-                    InstancePort='80',
-                    Protocol='HTTP',
-                )
-            ],
-            HealthCheck=elb.HealthCheck(
-                Target='HTTP:80/',
-                HealthyThreshold='3',
-                UnhealthyThreshold='2',
-                Interval='60',
-                Timeout='10',
-            ),
-            Subnets=Ref(self.public_subnets),
-            Tags=self.get_tags(Name=worker_lb_name)
-        ))
-
-    def create_auto_scaling_resources(self, worker_security_group, worker_lb):
+    def create_auto_scaling_resources(self, worker_security_group):
         worker_launch_config_name = 'lcWorker'
-
         worker_launch_config = self.add_resource(
             asg.LaunchConfiguration(
                 worker_launch_config_name,
@@ -309,8 +262,7 @@ class Worker(StackNode):
             ))
 
         worker_auto_scaling_group_name = 'asgWorker'
-
-        return self.add_resource(
+        worker_auto_scaling_group = self.add_resource(
             asg.AutoScalingGroup(
                 worker_auto_scaling_group_name,
                 AvailabilityZones=Ref(self.availability_zones),
@@ -319,7 +271,6 @@ class Worker(StackNode):
                 HealthCheckGracePeriod=600,
                 HealthCheckType='ELB',
                 LaunchConfigurationName=Ref(worker_launch_config),
-                LoadBalancerNames=[Ref(worker_lb)],
                 MaxSize=Ref(self.worker_auto_scaling_max),
                 MinSize=Ref(self.worker_auto_scaling_min),
                 NotificationConfigurations=[
@@ -338,8 +289,35 @@ class Worker(StackNode):
             )
         )
 
+        self.add_resource(
+            asg.ScheduledAction(
+                'schedWorkerAutoScalingStart',
+                AutoScalingGroupName=Ref(worker_auto_scaling_group),
+                DesiredCapacity=Ref(
+                    self.worker_auto_scaling_schedule_start_capacity),
+                Recurrence=Ref(
+                    self.worker_auto_scaling_schedule_start_recurrence)
+            )
+        )
+
+        self.add_resource(
+            asg.ScheduledAction(
+                'schedWorkerAutoScalingEnd',
+                AutoScalingGroupName=Ref(worker_auto_scaling_group),
+                DesiredCapacity=Ref(
+                    self.worker_auto_scaling_schedule_end_capacity),
+                Recurrence=Ref(
+                    self.worker_auto_scaling_schedule_end_recurrence)
+            )
+        )
+
+        return worker_auto_scaling_group
+
     def get_cloud_config(self):
         return ['#cloud-config\n',
+                '\n',
+                'mounts:\n',
+                '  - [xvdf, /opt/icp-crop-data, ext4, "defaults,nofail,discard", 0, 2]\n'  # NOQA
                 '\n',
                 'write_files:\n',
                 '  - path: /etc/icp.d/env/ICP_STACK_COLOR\n',
@@ -376,48 +354,6 @@ class Worker(StackNode):
                     'metricAutoScalingGroupName',
                     Name='AutoScalingGroupName',
                     Value=Ref(worker_auto_scaling_group)
-                )
-            ]
-        ))
-
-    def create_dns_records(self, worker_lb):
-        self.add_condition('BlueCondition', Equals('Blue', Ref(self.color)))
-        self.add_condition('GreenCondition', Equals('Green', Ref(self.color)))
-
-        self.add_resource(r53.RecordSetGroup(
-            'dnsPublicRecordsBlue',
-            Condition='BlueCondition',
-            HostedZoneName=Join('', [Ref(self.public_hosted_zone_name), '.']),
-            RecordSets=[
-                r53.RecordSet(
-                    'dnsTileServersBlue',
-                    AliasTarget=r53.AliasTarget(
-                        GetAtt(worker_lb, 'CanonicalHostedZoneNameID'),
-                        GetAtt(worker_lb, 'DNSName'),
-                        True
-                    ),
-                    Name=Join('', ['blue-workers.',
-                                   Ref(self.public_hosted_zone_name), '.']),
-                    Type='A'
-                )
-            ]
-        ))
-
-        self.add_resource(r53.RecordSetGroup(
-            'dnsPublicRecordsGreen',
-            Condition='GreenCondition',
-            HostedZoneName=Join('', [Ref(self.public_hosted_zone_name), '.']),
-            RecordSets=[
-                r53.RecordSet(
-                    'dnsTileServersGreen',
-                    AliasTarget=r53.AliasTarget(
-                        GetAtt(worker_lb, 'CanonicalHostedZoneNameID'),
-                        GetAtt(worker_lb, 'DNSName'),
-                        True
-                    ),
-                    Name=Join('', ['green-workers.',
-                                   Ref(self.public_hosted_zone_name), '.']),
-                    Type='A'
                 )
             ]
         ))

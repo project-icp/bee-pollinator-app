@@ -1,5 +1,7 @@
 import boto
 
+from boto.ec2 import get_region
+
 
 class AvailabilityZone(object):
     """Helper class that represents an availability zone
@@ -51,9 +53,10 @@ def get_subnet_cidr_block():
         current += 1
 
 
-def get_recent_ami(aws_profile, ami_name, owner="self", executable_by="self"):
-    conn = boto.connect_ec2(profile_name=aws_profile)
-    filters = {'name': ami_name}
+def get_recent_ami(aws_profile, filters={}, owner='self',
+                   region='us-east-1', executable_by='self'):
+    conn = boto.connect_ec2(profile_name=aws_profile,
+                            region=get_region(region))
 
     # Filter images by owned by self first.
     images = conn.get_all_images(owners=owner, filters=filters)
@@ -63,16 +66,7 @@ def get_recent_ami(aws_profile, ami_name, owner="self", executable_by="self"):
         images = conn.get_all_images(executable_by=executable_by,
                                      filters=filters)
 
-    return sorted(filter(lambda i: True if 'beta' not in i.name else False,
-                         images),
-                  key=lambda i: i.name, reverse=True)[0].id
+    # Make sure RC images are omitted from results
+    images = filter(lambda i: True if '.rc-' not in i.name else False, images)
 
-
-def read_file(file_name):
-    """Reads an entire file and returns it as a string
-
-    Arguments
-    :param file_name: A path to a file
-    """
-    with open(file_name, 'r') as f:
-        return f.read()
+    return sorted(images, key=lambda i: i.creationDate, reverse=True)[0].id

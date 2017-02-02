@@ -1,11 +1,8 @@
 from majorkirby import GlobalConfigNode
 
 from vpc import VPC
-from s3_vpc_endpoint import S3VPCEndpoint
-from private_hosted_zone import PrivateHostedZone
 from data_plane import DataPlane
 from application import Application
-from tile_delivery_network import TileDeliveryNetwork
 from worker import Worker
 from public_hosted_zone import PublicHostedZone
 
@@ -50,34 +47,25 @@ def build_graph(icp_config, aws_profile, **kwargs):
 
     global_config = GlobalConfigNode(**icp_config)
     vpc = VPC(globalconfig=global_config, aws_profile=aws_profile)
-    s3_vpc_endpoint = S3VPCEndpoint(globalconfig=global_config, VPC=vpc,
-                                    aws_profile=aws_profile)
-    private_hosted_zone = PrivateHostedZone(globalconfig=global_config,
-                                            VPC=vpc, aws_profile=aws_profile)
     data_plane = DataPlane(globalconfig=global_config, VPC=vpc,
-                           PrivateHostedZone=private_hosted_zone,
                            aws_profile=aws_profile)
-
     application = Application(globalconfig=global_config, VPC=vpc,
                               DataPlane=data_plane,
                               aws_profile=aws_profile)
-    worker = Worker(globalconfig=global_config, VPC=vpc, DataPlane=data_plane,
-                    aws_profile=aws_profile)
+    worker = Worker(globalconfig=global_config, VPC=vpc,
+                    DataPlane=data_plane, aws_profile=aws_profile)
     public_hosted_zone = PublicHostedZone(globalconfig=global_config,
                                           Application=application,
                                           aws_profile=aws_profile)
 
-    return s3_vpc_endpoint, data_plane, application, \
-        worker, public_hosted_zone
+    return data_plane, application, worker, public_hosted_zone
 
 
 def build_stacks(icp_config, aws_profile, **kwargs):
     """Trigger actual building of graphs"""
-    s3_vpc_endpoint_graph, data_plane_graph, \
-        application_graph, worker_graph, \
+    data_plane_graph, application_graph, worker_graph, \
         public_hosted_zone_graph = build_graph(icp_config, aws_profile,
                                                **kwargs)
-    s3_vpc_endpoint_graph.go()
     data_plane_graph.go()
 
     if kwargs['stack_color'] is not None:
