@@ -81,7 +81,7 @@ def load_crop_data(data_src=DEFAULT_DATA_PATH):
             id = int(row[id_idx])
             nesting_reclass.append([id, float(row[hn_idx])])
             floral_reclass.append([id, float(row[hf_idx])])
-            yield_config[id]['demand'] = id / 47  # Temporary unique default
+            yield_config[id]['demand'] = id / 65  # Temporary unique default
             yield_config[id]['density'] = 2.5  # Temporary default
 
         return nesting_reclass, floral_reclass, yield_config
