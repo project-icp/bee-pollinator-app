@@ -195,8 +195,14 @@ var LandCoverView = ModificationsView.extend({
             modRowGroups: [{
                 name: '',
                 rows: [
-                    ['berries', 'buckwheat', 'melons', 'almonds'],
-                    // ['additional crop types', ...],
+                    ['almonds', 'almonds_with_cover_crop',
+                        'apples', 'apples_with_cover_crop'],
+                    ['blueberries','blueberries_with_cover_crop',
+                        'cherries', 'cherries_with_cover_crop'],
+                    ['raspberries', 'raspberries_with_cover_crop',
+                        'watermelons', 'watermelons_with_cover_crop'],
+                    ['pumpkins', 'pumpkins_with_cover_crop',
+                        'grassland'],
                 ]
             }]
         });
@@ -216,7 +222,8 @@ var ConservationPracticeView = ModificationsView.extend({
             modRowGroups: [{
                 name: '',
                 rows: [
-                    ['wildflower_strip', 'bee_hab_a', 'bee_hab_b']
+                    ['wildflower_early', 'wildflower_late', 'woody_early',],
+                    ['woody_late', 'mix_early', 'mix_late'],
                 ]
             }]
         });

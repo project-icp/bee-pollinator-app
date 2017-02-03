@@ -5,8 +5,10 @@
 
 {% if isCurrentConditions %}
     <p>This change corrects the underlying land cover data and will be applied to all scenarios. </p>
-{% else %}
+{% elif name == 'landcover' %}
     <p>This land cover change will only affect this scenario.</p>
+{% elif name == 'conservation_practice' %}
+    <p>This enhancement will only affect this scenario.</p>
 {% endif %}
 <button class="btn btn-sm btn-icon dark delete-modification" type="button" title="Remove">
     <i class="fa fa-trash"></i>

@@ -108,6 +108,26 @@ class ModelTests(unittest.TestCase):
         self.assertEqual(yield_by_crop, expected,
                          "Crop yield amounts were not aggregated correctly")
 
+    def test_aggregation_with_paired_crops(self):
+        # Crop types 100 and 400 are completely outside of unmasked field area
+        # 300 is in the field area, but we pair it with 200 instead of
+        # aggregating over it
+        crops = [100, 200, 400]
+        paired_crops = {200: 300}
+        yield_by_crop = aggregate_crops(self.yield_field, self.cdl, crops, paired_crops)
+
+        # Expect the values to be the mean yield value per crop + its paired crop
+        # if it has one.
+        # Crops that were masked out should be 0
+        expected = {
+            '100': 0,
+            '200': 1.3 / 5 * 100,
+            '400': 0
+        }
+
+        self.assertEqual(yield_by_crop, expected,
+                         "Paired crop yield amounts were not aggregated correctly")
+
     def test_yield(self):
         """
         Test the single cell yield calculation for a given psuedo-crop
