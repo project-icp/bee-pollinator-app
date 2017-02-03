@@ -11,6 +11,7 @@ var _ = require('lodash'),
     utils = require('../core/utils'),
     models = require('./models'),
     views = require('./views'),
+    modalViews = require('../core/modals/views'),
     App = require('../app.js'),
     testUtils = require('../core/testUtils'),
     modConfigUtils = require('./modificationConfigUtils');
@@ -869,45 +870,53 @@ describe('Modeling', function() {
             describe('#updateScenarioName', function() {
                 var realAlert, spyAlert;
 
-                // Swap out window.alert so that testing can complete
-                // automatically without the user being prompted that the
-                // scenario name must be unique.
-                before(function() {
-                    realAlert = window.alert;
-                });
-
-                after(function() {
-                    window.alert = realAlert;
-                });
-
                 beforeEach(function() {
-                    window.alert = spyAlert = sinon.spy();
+                    spyAlert = sinon.spy(modalViews.AlertView.prototype, 'render');
+                    spyView = new modalViews.showWarning('Test');
                 });
 
                 it('trims whitespace from the provided new name', function() {
-                    var collection = getTestScenarioCollection();
+                    var collection = getTestScenarioCollection(),
+                        view = new views.ScenarioTabPanelsView({ collection: collection });
 
                     collection.updateScenarioName(collection.at(0), 'New Name       ');
+                    view.collection.updateScenarioName(view.collection.at(0), 'New Name       ');
+                    view.render();
+                    var childViews = _.values(view.children._views);
+
+                    childViews[0].ui.rename.trigger('click');
+                    childViews[0].ui.nameField.text('New Name         ');
+                    childViews[0].ui.nameField.trigger('blur');
 
                     assert.isFalse(spyAlert.called);
                     assert.equal(collection.at(0).get('name'), 'New Name');
                 });
 
                 it('ignores case when comparing the new name with existing names', function() {
-                    var collection = getTestScenarioCollection();
+                    var collection = getTestScenarioCollection(),
+                        view = new views.ScenarioTabPanelsView({ collection: collection });
 
-                    // There's already a scenario with the name "New Scenario 1"
-                    collection.updateScenarioName(collection.at(0), 'NEW scenArio 1');
+                    view.render();
+                    var childViews = _.values(view.children._views);
+
+                    childViews[1].ui.rename.trigger('click');
+                    childViews[1].ui.nameField.text('cuRRENT conDITions');
+                    childViews[1].ui.nameField.trigger('blur');
 
                     assert.isTrue(spyAlert.calledOnce);
-                    assert.equal(collection.at(0).get('name'), 'Current Conditions');
+                    assert.equal(collection.at(1).get('name'), 'New Scenario 1');
                 });
 
                 it('will not rename the scenario if the new name matches an existing name', function() {
-                    var collection = getTestScenarioCollection();
+                    var collection = getTestScenarioCollection(),
+                        view = new views.ScenarioTabPanelsView({ collection: collection });
 
-                    // There's already a scenario with the name "Current Conditions"
-                    collection.updateScenarioName(collection.at(1), 'Current Conditions');
+                    view.render();
+                    var childViews = _.values(view.children._views);
+
+                    childViews[1].ui.rename.trigger('click');
+                    childViews[1].ui.nameField.text('Current Conditions');
+                    childViews[1].ui.nameField.trigger('blur');
 
                     assert.isTrue(spyAlert.calledOnce);
                     assert.equal(collection.at(1).get('name'), 'New Scenario 1');

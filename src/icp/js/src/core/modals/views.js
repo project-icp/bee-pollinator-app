@@ -8,6 +8,7 @@ var _ = require('underscore'),
     modalConfirmTmpl = require('./templates/confirmModal.html'),
     modalInputTmpl = require('./templates/inputModal.html'),
     modalShareTmpl = require('./templates/shareModal.html'),
+    modalAlertTmpl = require('./templates/alertModal.html'),
 
     ENTER_KEYCODE = 13,
     BASIC_MODAL_CLASS = 'modal modal-basic fade';
@@ -70,6 +71,26 @@ var ModalBaseView = Marionette.ItemView.extend({
 
     hide: function() {
         this.$el.modal('hide');
+    }
+});
+
+var AlertView = ModalBaseView.extend({
+    template: modalAlertTmpl,
+
+    ui: {
+        dismiss: '.btn-default'
+    },
+
+    events: _.defaults({
+        'click @ui.dismiss': 'dismissAction'
+    }, ModalBaseView.prototype.events),
+
+    dismissAction: function() {
+        this.triggerMethod('dismiss');
+    },
+
+    templateHelpers: function() {
+        return _.extend(this.model.get('alertType'), { alertMessage: this.model.get('alertMessage') });
     }
 });
 
@@ -193,8 +214,34 @@ var ShareView = ModalBaseView.extend({
     }
 });
 
+function showAlert(message, alertType) {
+    var alertView = new AlertView({
+        model: new models.AlertModel({
+            alertMessage: message,
+            alertType: alertType,
+        })
+    });
+    alertView.render();
+}
+
+function showError(message) {
+    showAlert(message, models.AlertTypes.error);
+}
+
+function showInfo(message) {
+    showAlert(message, models.AlertTypes.info);
+}
+
+function showWarning(message) {
+    showAlert(message, models.AlertTypes.warn);
+}
+
+
 module.exports = {
     ShareView: ShareView,
     InputView: InputView,
     ConfirmView: ConfirmView,
+    showError: showError,
+    showInfo: showInfo,
+    showWarning: showWarning,
 };

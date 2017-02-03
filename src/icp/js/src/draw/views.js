@@ -18,9 +18,10 @@ var $ = require('jquery'),
     drawTmpl = require('./templates/draw.html'),
     resetDrawTmpl = require('./templates/reset.html'),
     windowTmpl = require('./templates/window.html'),
-    settings = require('../core/settings');
+    settings = require('../core/settings'),
+    modalViews = require('../core/modals/views');
 
-var MAX_AREA = 27500000; // About the size of a large state (in acres)
+var MAX_DRAW_ACRES = 400; // About 5/8's of a square mile
 var codeToLayer = {}; // code to layer mapping
 
 function actOnUI(datum, bool) {
@@ -50,31 +51,15 @@ function validateShape(polygon) {
         var errorMsg = 'This watershed shape is invalid because it intersects ' +
                        'itself. Try drawing the shape again without crossing ' +
                        'over its own border.';
-        window.alert(errorMsg);
         d.reject(errorMsg);
-    } else if (area > MAX_AREA) {
+    } else if (area > MAX_DRAW_ACRES) {
         var message = 'Sorry, your Area of Interest is too large.\n\n' +
                       Math.floor(area).toLocaleString() + ' acres were selected, ' +
                       'but the maximum supported size is currently ' +
-                      MAX_AREA.toLocaleString() + ' acres.';
-        window.alert(message);
+                      MAX_DRAW_ACRES.toLocaleString() + ' acres.';
         d.reject(message);
     } else {
         d.resolve(polygon);
-    }
-    return d.promise();
-}
-
-function validateClickedPointWithinDRB(latlng) {
-    var point = L.marker(latlng).toGeoJSON(),
-        d = $.Deferred(),
-        streamLayers = settings.get('stream_layers'),
-        drbPerimeter = _.findWhere(streamLayers, {code:'drb_streams_v2'}).perimeter;
-    if (turfIntersect(point, drbPerimeter)) {
-        d.resolve(latlng);
-    } else {
-        var message = 'Selected point is outside the Delaware River Basin';
-        d.reject(message);
     }
     return d.promise();
 }
@@ -175,8 +160,11 @@ var DrawWindow = Marionette.LayoutView.extend({
                     isDrawing: false,
                     isDrawn: true
                 });
-            }).fail(function() {
+            }).fail(function(message) {
                 revertLayer();
+                if (message) {
+                    modalViews.showWarning(message);
+                }
                 self.model.set({
                     isDrawing: false,
                     isDrawn: false
