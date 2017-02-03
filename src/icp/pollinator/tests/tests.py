@@ -82,7 +82,7 @@ class ModelTests(unittest.TestCase):
     def setUp(self):
         # Simulate an area with a sub section unmasked
         shed = np.array([.1, .1, .1, .2, .2, .2, .3, .3, .3, .4, .4, .4])
-        field_mask =    [ 1,  1,  1,  1,  0,  0,  0,  0,  0,  1,  1,  1]  # noqa
+        field_mask = [1,  1,  1,  1,  0,  0,  0,  0,  0,  1,  1,  1]
         shed.shape = (3, 4)
         self.yield_field = np.ma.masked_array(shed, mask=field_mask)
 
@@ -114,11 +114,11 @@ class ModelTests(unittest.TestCase):
         # aggregating over it
         crops = [100, 200, 400]
         paired_crops = {200: 300}
-        yield_by_crop = aggregate_crops(self.yield_field, self.cdl, crops, paired_crops)
+        yield_by_crop = aggregate_crops(self.yield_field, self.cdl, crops,
+                                        paired_crops)
 
-        # Expect the values to be the mean yield value per crop + its paired crop
-        # if it has one.
-        # Crops that were masked out should be 0
+        # Expect the values to be the mean yield value per crop + its
+        # paired crop if it has one.  Crops that were masked out should be 0
         expected = {
             '100': 0,
             '200': 1.3 / 5 * 100,
@@ -126,7 +126,7 @@ class ModelTests(unittest.TestCase):
         }
 
         self.assertEqual(yield_by_crop, expected,
-                         "Paired crop yield amounts were not aggregated correctly")
+                         "Paired crop yields were not aggregated correctly")
 
     def test_yield(self):
         """

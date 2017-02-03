@@ -4,6 +4,7 @@ import csv
 import json
 import sys
 
+
 def init():
 
     with open('../data/cdl_data_grouped.csv', mode='r') as cdl_data_grouped:
@@ -18,7 +19,7 @@ def init():
 
         with open('./cropTypes.json', mode='w') as crop_types_json:
             crop_types_json.write(json.dumps(crop_types, sort_keys=True,
-                separators=(',', ':'), indent=4))
+                                  separators=(',', ':'), indent=4))
 
 if __name__ == '__main__':
     msg = """
