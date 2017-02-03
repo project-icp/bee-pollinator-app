@@ -1,9 +1,15 @@
 #splash-window, #draw-window {
-  width: 485px;
+  width: $sidebar-width;
+  @media(min-width: 1040px) {
+    width: $sidebar-width-lg;
+  }
+  height: 100%;
   padding: 15px;
+  padding-bottom: $app-header-height + 15;
   position: absolute;
   right: 0;
   transition: all 200ms;
+  overflow: scroll;
 
   .hidden-sidebar & {
     transform: translateX(100%);
@@ -16,4 +22,15 @@
   img {
       width: 100%;
   }
+}
+
+#splash-button {
+  position: fixed;
+  bottom: 0;
+  width: $sidebar-width - (15px * 2);
+  @media(min-width: 1040px) {
+    width: $sidebar-width-lg - (15px * 2);
+  }
+  padding: 15px 0;
+  background: white;
 }
