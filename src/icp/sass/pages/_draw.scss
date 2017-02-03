@@ -23,3 +23,14 @@
       width: 100%;
   }
 }
+
+#splash-button {
+  position: fixed;
+  bottom: 0;
+  width: $sidebar-width - (15px * 2);
+  @media(min-width: 1040px) {
+    width: $sidebar-width-lg - (15px * 2);
+  }
+  padding: 15px 0;
+  background: white;
+}
