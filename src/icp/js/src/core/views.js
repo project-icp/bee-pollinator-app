@@ -599,7 +599,7 @@ var MapView = Marionette.ItemView.extend({
         var self = this;
         return modificationsColl.reduce(function(acc, model) {
             try {
-                var popupView = shared ? SharedModificationPopupView : ModificationPopupView,
+                var PopupView = shared ? SharedModificationPopupView : ModificationPopupView,
                     modType = model.get('value'),
                     style = modificationConfigUtils.getDrawOpts(modType, shared);
 
@@ -609,7 +609,7 @@ var MapView = Marionette.ItemView.extend({
                         style: style,
                         onEachFeature: function(feature, layer) {
                             if (self.options.interactiveMode) {
-                                var popupContent = new popupView({ model: model }).render().el;
+                                var popupContent = new PopupView({ model: model }).render().el;
                                 layer.bindPopup(popupContent);
                             }
                         }

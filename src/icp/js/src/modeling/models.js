@@ -7,9 +7,6 @@ var $ = require('jquery'),
     settings = require('../core/settings'),
     App = require('../app'),
     coreModels = require('../core/models'),
-    turfArea = require('turf-area'),
-    turfErase = require('turf-erase'),
-    turfIntersect = require('turf-intersect'),
     modalViews = require('../core/modals/views');
 
 var YIELD_TASK = 'yield';
@@ -357,8 +354,7 @@ var ModificationModel = coreModels.GeoModel.extend({
     },
 
     setEffectiveArea: function() {
-        var aoi = App.map.get('areaOfInterest'),
-            shape = this.get('shape');
+        var shape = this.get('shape');
 
         this.set('effectiveShape', shape);
         this.setDisplayArea('effectiveShape', 'effectiveArea', 'effectiveUnits');

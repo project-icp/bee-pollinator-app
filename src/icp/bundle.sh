@@ -110,10 +110,7 @@ JS_DEPS=(backbone
          bootstrap-select
          bootstrap-table/dist/bootstrap-table.js
          d3
-         iframe-phone
-         ./js/shim/leaflet.utfgrid.js
          ./js/shim/marionette.transition-region.js
-         ./js/shim/highstock.js
          ./js/shim/nv.d3.js
          jquery
          leaflet
@@ -125,8 +122,6 @@ JS_DEPS=(backbone
          moment
          nunjucks
          turf-area
-         turf-bbox-polygon
-         turf-destination
          turf-erase
          turf-intersect
          turf-kinks

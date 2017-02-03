@@ -868,7 +868,7 @@ describe('Modeling', function() {
             });
 
             describe('#updateScenarioName', function() {
-                var realAlert, spyAlert;
+                var spyView, spyAlert;
 
                 beforeEach(function() {
                     spyAlert = sinon.spy(modalViews.AlertView.prototype, 'render');

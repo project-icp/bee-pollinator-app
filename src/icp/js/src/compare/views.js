@@ -233,9 +233,9 @@ var CompareModelingView = Marionette.LayoutView.extend({
 
     updateResult: function() {
         var selection = this.ui.resultSelector.val(),
-            selectedCrops = selection === "all"
-                ? this.model.get('chartableCrops')
-                : [selection];
+            selectedCrops = selection === "all" ?
+                this.model.get('chartableCrops') :
+                [selection];
 
         this.model.set('selectedCrops', selectedCrops);
         this.showResult();

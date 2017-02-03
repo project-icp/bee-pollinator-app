@@ -1,7 +1,6 @@
 'use strict';
 
 var L = require('leaflet'),
-    $ = require('jquery'),
     _ = require('underscore'),
     Marionette = require('../../shim/backbone.marionette'),
     layerControlButtonTmpl = require('./templates/layerToggleControl.html');

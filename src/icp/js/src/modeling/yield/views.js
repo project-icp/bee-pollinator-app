@@ -186,9 +186,7 @@ var CompareChartView = Marionette.ItemView.extend({
 
     addChart: function() {
         var chartEl = this.$el.find('.bar-chart').get(0),
-            result = this.model.get('result'),
-            data,
-            chartOptions;
+            result = this.model.get('result');
 
         function getData(result, selectedCrops ) {
             var values = selectedCrops.map(function(cropId) {
@@ -204,18 +202,18 @@ var CompareChartView = Marionette.ItemView.extend({
 
         $(chartEl).empty();
         if (result) {
-            data = getData(result, this.options.selectedCrops),
-            chartOptions = {
-                yAxisLabel: 'Relative Yield',
-                yAxisUnit: 'Relative Yield',
-                barClasses: _.pluck(_.flatten(_.pluck(data, 'values')), 'class'),
-                maxBarWidth: 100,
-                margin: {top: 20, right: 0, bottom: 40, left: 40},
-                showLegend: false,
-                disableToggle: true,
-                yAxisDomain: [0, 100],
-                compareMode: true
-            };
+            var data = getData(result, this.options.selectedCrops),
+                chartOptions = {
+                    yAxisLabel: 'Relative Yield',
+                    yAxisUnit: 'Relative Yield',
+                    barClasses: _.pluck(_.flatten(_.pluck(data, 'values')), 'class'),
+                    maxBarWidth: 100,
+                    margin: {top: 20, right: 0, bottom: 40, left: 40},
+                    showLegend: false,
+                    disableToggle: true,
+                    yAxisDomain: [0, 100],
+                    compareMode: true
+                };
 
             chart.renderGroupedVerticalBarChart(chartEl, data, chartOptions);
         }

@@ -2,7 +2,6 @@
 
 var L = require('leaflet'),
     $ = require('jquery'),
-    _ = require('underscore'),
     Marionette = require('../../shim/backbone.marionette'),
     overlayControlTmpl = require('./templates/overlayControl.html'),
     cropTypes = require('./cropTypes.json');
@@ -76,7 +75,7 @@ var OverlayControlView = Marionette.ItemView.extend({
         this.map.scrollWheelZoom.enable();
     },
 
-    disableMapDragging: function(e) {
+    disableMapDragging: function() {
         this.map.dragging.disable();
     },
 

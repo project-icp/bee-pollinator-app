@@ -1,46 +1,18 @@
 "use strict";
 
 var $ = require('jquery'),
-    _ = require('lodash'),
-    L = require('leaflet'),
     Marionette = require('../../shim/backbone.marionette'),
     turfArea = require('turf-area'),
-    turfBboxPolygon = require('turf-bbox-polygon'),
-    turfDestination = require('turf-destination'),
-    turfIntersect = require('turf-intersect'),
     turfKinks = require('turf-kinks'),
     router = require('../router').router,
     App = require('../app'),
     utils = require('./utils'),
     coreUtils = require('../core/utils'),
+    modalViews = require('../core/modals/views'),
     splashTmpl = require('./templates/splash.html'),
-    toolbarTmpl = require('./templates/toolbar.html'),
-    drawTmpl = require('./templates/draw.html'),
-    resetDrawTmpl = require('./templates/reset.html'),
-    windowTmpl = require('./templates/window.html'),
-    settings = require('../core/settings'),
-    modalViews = require('../core/modals/views');
+    windowTmpl = require('./templates/window.html');
 
 var MAX_DRAW_ACRES = 400; // About 5/8's of a square mile
-var codeToLayer = {}; // code to layer mapping
-
-function actOnUI(datum, bool) {
-    var code = datum.code,
-        $el = $('[data-layer-code="' + code + '"]');
-
-    if (bool) {
-        $el.addClass('disabled');
-    } else {
-        $el.removeClass('disabled');
-    }
-}
-
-function actOnLayer(datum) {
-    $('#boundary-label').hide();
-    if (datum.code && codeToLayer[datum.code]) {
-        codeToLayer[datum.code]._clearBgBuffer();
-    }
-}
 
 function validateShape(polygon) {
     var area = coreUtils.convertToImperial(turfArea(polygon), 'm2'),
@@ -62,17 +34,6 @@ function validateShape(polygon) {
         d.resolve(polygon);
     }
     return d.promise();
-}
-
-function makePointGeoJson(coords, props) {
-    return {
-        geometry: {
-            coordinates: coords,
-            type: 'Point'
-        },
-        properties: props,
-        type: 'Feature'
-    };
 }
 
 function clearAoiLayer() {

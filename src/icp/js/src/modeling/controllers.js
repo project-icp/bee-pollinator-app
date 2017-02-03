@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require('jquery'),
-    _ = require('lodash'),
     App = require('../app'),
     settings = require('../core/settings'),
     router = require('../router').router,

@@ -2,20 +2,14 @@
 
 var $ = require('jquery'),
     _ = require('lodash'),
-    Backbone = require('../../shim/backbone'),
     Marionette = require('../../shim/backbone.marionette'),
     App = require('../app'),
     drawUtils = require('../draw/utils'),
-    coreUtils = require('../core/utils'),
     models = require('./models'),
     modificationConfigUtils = require('./modificationConfigUtils'),
-    manualEntryTmpl = require('./templates/controls/manualEntry.html'),
     userInputTmpl = require('./templates/controls/userInput.html'),
-    inputInfoTmpl = require('./templates/controls/inputInfo.html'),
     thumbSelectTmpl = require('./templates/controls/thumbSelect.html'),
     modDropdownTmpl = require('./templates/controls/modDropdown.html');
-
-var ENTER_KEYCODE = 13;
 
 // Simulation input controls base class.
 var ControlView = Marionette.LayoutView.extend({
@@ -43,7 +37,6 @@ var ThumbSelectView = Marionette.ItemView.extend({
 
     initialize: function(options) {
         var modKeys = _.flatten(_.pluck(this.model.get('modRowGroups'), 'rows'), true),
-            dataModel = this.model.get('dataModel'),
             modEnabled = {};
 
         _.forEach(modKeys, function(modKey) {

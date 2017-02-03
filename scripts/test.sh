@@ -15,7 +15,7 @@ set -x
  vagrant ssh app -c "cd /opt/app && envdir /etc/icp.d/env ./manage.py test --noinput"
 
 # Check for client-side JS lint.
-# vagrant ssh app -c "cd /opt/app && npm run lint"
+vagrant ssh app -c "cd /opt/app && npm run lint"
 
 # Run JS unit tests.
 # vagrant ssh app -c "cd /var/www/icp/static &&
