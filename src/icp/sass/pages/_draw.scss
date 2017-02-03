@@ -1,9 +1,16 @@
 #splash-window, #draw-window {
-  width: 485px;
+  width: $sidebar-width;
   padding: 15px;
   position: absolute;
   right: 0;
   transition: all 200ms;
+  top: 44px;
+  bottom: 64px;
+  overflow-y: auto;
+
+  @media(min-width: 1040px) {
+    width: 485px;
+  }
 
   .hidden-sidebar & {
     transform: translateX(100%);
@@ -15,5 +22,16 @@
 
   img {
       width: 100%;
+  }
+
+  .action-button {
+    margin-left: -15px;
+    margin-right: -15px;
+    padding: 10px 15px;
+    background-color: #fff;
+    position: fixed;
+    bottom: 0;
+    width: inherit;
+    left: auto;
   }
 }
