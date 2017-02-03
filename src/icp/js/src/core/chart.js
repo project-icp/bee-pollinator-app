@@ -5,8 +5,6 @@ var d3 = require('d3'),
     $ = require('jquery'),
     _ = require('lodash');
 
-var widthCutoff = 400;
-
 // Make jQuery handle destroyed event. This is needed so that
 // removeTooltipOnDestroy will work.
 // http://stackoverflow.com/questions/2200494/
@@ -91,9 +89,7 @@ function renderGroupedVerticalBarChart(chartEl, data, options) {
     // The colors and barColors methods on chart do not
     // support the behavior we want.
     function addBarClasses() {
-        var bars = $(chartEl).find('.nv-bar'),
-            oldClass,
-            newClass;
+        var bars = $(chartEl).find('.nv-bar');
 
         _.each(bars, function(bar, i) {
             var $bar = $(bar),

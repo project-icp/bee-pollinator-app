@@ -1,7 +1,6 @@
 "use strict";
 
 var _ = require('underscore'),
-    lodash = require('lodash'),
     md5 = require('blueimp-md5').md5,
     intersect = require('turf-intersect');
 

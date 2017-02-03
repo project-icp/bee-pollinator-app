@@ -3,8 +3,6 @@ from uuid import uuid1
 from django.contrib.auth import (authenticate,
                                  logout as auth_logout,
                                  login as auth_login)
-from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.contrib.auth.forms import PasswordResetForm
 from django.core.exceptions import ObjectDoesNotExist

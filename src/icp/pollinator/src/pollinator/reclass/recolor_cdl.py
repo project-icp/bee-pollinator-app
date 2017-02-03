@@ -16,8 +16,8 @@ def convert_rgb_to_hex(rgb):
 
 # For creating css variables
 def create_hex_colormap():
-    return { key: convert_rgb_to_hex(rgb)
-        for key, rgb in COLORMAP.iteritems() }
+    return {key: convert_rgb_to_hex(rgb)
+            for key, rgb in COLORMAP.iteritems()}
 
 
 def init():

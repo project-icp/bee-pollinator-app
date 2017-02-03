@@ -3,8 +3,6 @@
 var App = require('../app'),
     geocoder = require('../geocode/views'),
     views = require('./views'),
-    coreModels = require('../core/models'),
-    coreViews = require('../core/views'),
     settings = require('../core/settings'),
     modelingModels = require('../modeling/models'),
     models = require('./models');

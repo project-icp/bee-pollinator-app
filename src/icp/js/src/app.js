@@ -1,10 +1,8 @@
 "use strict";
 
-var $ = require('jquery'),
-    Marionette = require('../shim/backbone.marionette'),
+var Marionette = require('../shim/backbone.marionette'),
     views = require('./core/views'),
     models = require('./core/models'),
-    settings = require('./core/settings'),
     userModels = require('./user/models'),
     userViews = require('./user/views');
 

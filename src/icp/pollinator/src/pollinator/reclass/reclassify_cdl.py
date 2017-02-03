@@ -53,7 +53,7 @@ def init():
                     for key, reclass_values in reclass_map.iteritems():
                         # Create a mask for all cells equal to one of
                         # the current key's reclassify values
-                        mask = np.in1d(data, reclass_values).reshape(data.shape)
+                        mask = np.in1d(data, reclass_values).reshape(data.shape)  # noqa
                         reclass_data[mask] = int(key)
 
                     dst.write_band(1, reclass_data, window=window)

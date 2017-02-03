@@ -21,7 +21,8 @@ CELL_SIZE = 30
 FORAGE_DIST = 670
 
 AG_CLASSES = [35, 29, 51, 27, 52, 17, 50, 49, 18, 20, 28, 48]
-COVER_CROPS = { 35: 53, 29: 54, 51: 55, 27: 56, 52: 57, 17: 58, 50: 59 }
+COVER_CROPS = {35: 53, 29: 54, 51: 55, 27: 56, 52: 57, 17: 58, 50: 59}
+
 
 def initialize():
     """
@@ -149,7 +150,8 @@ def yield_calc(crop_id, abundance, managed_hives, config):
     return yield_hb + yield_wild
 
 
-def aggregate_crops(yield_field, cdl_field, crops=AG_CLASSES, paired_crops=COVER_CROPS):
+def aggregate_crops(yield_field, cdl_field, crops=AG_CLASSES,
+                    paired_crops=COVER_CROPS):
     """
     Within the unmasked field portion of the provided yield_field, avg the
     yield quantities per ag type, resulting in a total yield increase per

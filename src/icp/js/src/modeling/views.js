@@ -638,8 +638,7 @@ var ResultsView = Marionette.LayoutView.extend({
     },
 
     initialize: function(options) {
-        var scenarios = this.model.get('scenarios'),
-            self = this;
+        var scenarios = this.model.get('scenarios');
 
         this.listenTo(scenarios, 'change:active', this.onShow);
 
