@@ -1,5 +1,8 @@
 #splash-window, #draw-window {
-  width: 485px;
+  width: $sidebar-width;
+  @media(min-width: 1040px) {
+    width: $sidebar-width-lg;
+  }
   height: 100%;
   padding: 15px;
   padding-bottom: $app-header-height + 15;
