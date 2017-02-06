@@ -16,12 +16,25 @@
     transform: translateX(100%);
   }
 
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    margin-top: 14px;
+    font-weight: 900;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
   h2, p {
-      padding: 15px 0;
+    padding: 0 0 15px;
   }
 
   img {
-      width: 100%;
+    width: 100%;
+    margin-bottom: 10px;
   }
 
   .action-button {
@@ -33,5 +46,9 @@
     bottom: 0;
     width: inherit;
     left: auto;
+  }
+
+  .btn-lg {
+    margin-top: 10px;
   }
 }
