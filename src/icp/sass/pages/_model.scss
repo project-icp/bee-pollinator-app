@@ -6,7 +6,7 @@
   bottom: 0;
   width: $sidebar-width !important;
   @media(min-width: 1040px) {
-    width: 485px !important;
+    width: $sidebar-width-lg !important;
   }
   min-height: 300px;
   height: auto !important;

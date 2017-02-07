@@ -9,7 +9,7 @@
   overflow-y: auto;
 
   @media(min-width: 1040px) {
-    width: 485px;
+    width: $sidebar-width-lg;
   }
 
   .hidden-sidebar & {
