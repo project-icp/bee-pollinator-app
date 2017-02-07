@@ -17,7 +17,7 @@ header {
     a {
       float: left;
       line-height: $height-lg;
-      font-size: 1.0rem;
+      font-size: 0.7rem;
       font-weight: 400;
       color: $paper;
 
@@ -102,7 +102,7 @@ header {
     height: $height-lg;
 
     .project {
-      width: 240px;
+      width: 200px;
       background-color: $ui-primary;
       height: 100%;
 
@@ -110,11 +110,12 @@ header {
         display: inline-block;
         position: relative;
         width: 180px;
-        margin-left: 52px;
+        margin-left: 1rem;
 
         h3 {
           margin: 0;
           line-height: $height-lg;
+          font-size: 0.7rem;
         }
 
         #project-settings {
@@ -130,7 +131,7 @@ header {
     .top-bar {
       position: absolute;
       top: 0;
-      left: 240px;
+      left: 200px;
       right: 0;
       padding: 8px 0 8px 8px;
       height: inherit;
@@ -192,9 +193,9 @@ header {
     top: $height-lg;
     left: 0;
     right: 0;
-    padding: 0.7rem;
     background-color: #D0D0D0;
     height: $toolbar-height;
+    padding: 13px 0.7rem;
 
     #modification-btn-wrapper {
       float: right;
@@ -220,16 +221,22 @@ header {
       .hives {
         // Undo bootstrap input[type="range"] syling
         label {
-            font-size: 1.0rem;
+            font-size: 0.7rem;
             color: $ui-primary;
             vertical-align: middle;
             margin-left: 1rem;
+            font-weight: 400;
+            top: 0.15rem;
+            position: relative;
         }
         input {
           display: inline-block;
           width: 80px;
-          margin: 0 0.7rem;
-          vertical-align: bottom;
+          margin: 0 0 0 0.2rem;
+          vertical-align: top;
+          height: 28px;
+          font-size: 0.7rem;
+          color: $black-54;
         }
       }
     }

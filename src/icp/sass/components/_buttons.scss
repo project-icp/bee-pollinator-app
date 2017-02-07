@@ -13,7 +13,7 @@
 
 .btn-sm {
   border-radius: $radius-sm;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   padding: 0 0.7rem;
   line-height: $height-sm;
 }
@@ -28,7 +28,7 @@
 .btn-lg {
   line-height: $height-lg;
   border-radius: $radius-sm;
-  font-size: 1.2rem;
+  font-size: 1rem;
   padding: 0 1rem;
 }
 
@@ -151,7 +151,7 @@
 .btn-compare {
   color: $paper;
   background-color: $ui-secondary;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   height: $height-lg;
   border-radius: 0!important;
   padding: 0.7rem;
@@ -199,4 +199,8 @@
   &.open {
     color: $black-74;
   }
+}
+
+.delete-modification {
+  margin-left: -0.7rem;
 }
