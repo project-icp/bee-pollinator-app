@@ -646,7 +646,9 @@ var ResultsView = Marionette.LayoutView.extend({
             this.lock = options.lock;
         }
 
-        this.model.fetchResultsIfNeeded();
+        scenarios
+            .findWhere({ active: true })
+            .fetchResultsIfNeeded();
     },
 
     onRender: function() {

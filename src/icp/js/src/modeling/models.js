@@ -142,6 +142,16 @@ var ProjectModel = Backbone.Model.extend({
 
         this.listenTo(this.get('scenarios'), 'add', this.addIdsToScenarios, this);
         this.get('scenarios').on('change:modification_hash', this.shareGlobalModifications, this);
+
+        this.get('scenarios').on('change:active', function(scenario) {
+            if (scenario.get('active')) {
+                scenario.fetchResultsIfNeeded();
+            }
+        });
+
+        this.get('scenarios').on('add', function(scenario) {
+            scenario.fetchResultsIfNeeded();
+        });
     },
 
     shareGlobalModifications: function(changedScenario) {
@@ -175,16 +185,6 @@ var ProjectModel = Backbone.Model.extend({
 
         this.get('scenarios').forEach(function(scenario) {
             promises.push(scenario.fetchResultsIfNeeded());
-        });
-
-        this.get('scenarios').on('change:active', function(scenario) {
-            if (scenario.get('active')) {
-                scenario.fetchResultsIfNeeded();
-            }
-        });
-
-        this.get('scenarios').on('add', function(scenario) {
-            scenario.fetchResultsIfNeeded();
         });
 
         return $.when.apply($, promises);
@@ -503,10 +503,6 @@ var ScenarioModel = Backbone.Model.extend({
             fetchResultsPromise;
 
         if (!isCurrentConditions) {
-            if (!this.get('active')) {
-                return $.when();
-            }
-
             if (needsResults) {
                 var setResultsFromCurrentConditionsOrFetch = _.bind(
                     self.setResultsFromCurrentConditionsOrFetch, self);
