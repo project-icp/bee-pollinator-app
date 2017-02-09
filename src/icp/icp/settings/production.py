@@ -98,6 +98,7 @@ DRAW_TOOLS = [
 MAP_CONTROLS = [
     'LayerAttribution',
     'LocateMeButton',
+    'LayerSelector',
     'ZoomControl',
     'SidebarToggle'
 ]
