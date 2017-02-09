@@ -7,6 +7,13 @@ import sys
 from collections import defaultdict
 
 INIT_ID = 0
+DEMAND_LOOKUP = {
+    'none': 0,
+    'little': 0.05,
+    'modest': 0.25,
+    'great': 0.65,
+    'essential': 0.95
+}
 
 
 def next_id():
@@ -31,6 +38,7 @@ def init():
             else:
                 group_id = groups.setdefault(crop_group, next_id())
                 row['group_id'] = group_id
+                row['Demand'] = DEMAND_LOOKUP[row['Demand']]
                 new_data.append(row)
 
             reclass[group_id].append(int(row['CDL_code']))

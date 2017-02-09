@@ -77,6 +77,7 @@ def load_crop_data(data_src=DEFAULT_DATA_PATH):
         hf_idx = 3
         hn_idx = 4
         density_idx = 5
+        demand_idx = 2
         id_idx = 0
 
         next(reader, None)  # Skip headers
@@ -84,8 +85,8 @@ def load_crop_data(data_src=DEFAULT_DATA_PATH):
             id = int(row[id_idx])
             nesting_reclass.append([id, float(row[hn_idx])])
             floral_reclass.append([id, float(row[hf_idx])])
+            yield_config[id]['demand'] = float(row[demand_idx])
             yield_config[id]['density'] = float(row[density_idx])
-            yield_config[id]['demand'] = id / 65  # Temporary unique default
 
         return nesting_reclass, floral_reclass, yield_config
 
