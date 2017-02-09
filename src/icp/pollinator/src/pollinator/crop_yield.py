@@ -76,6 +76,8 @@ def load_crop_data(data_src=DEFAULT_DATA_PATH):
 
         hf_idx = 3
         hn_idx = 4
+        density_idx = 5
+        demand_idx = 2
         id_idx = 0
 
         next(reader, None)  # Skip headers
@@ -83,8 +85,8 @@ def load_crop_data(data_src=DEFAULT_DATA_PATH):
             id = int(row[id_idx])
             nesting_reclass.append([id, float(row[hn_idx])])
             floral_reclass.append([id, float(row[hf_idx])])
-            yield_config[id]['demand'] = id / 65  # Temporary unique default
-            yield_config[id]['density'] = 2.5  # Temporary default
+            yield_config[id]['demand'] = float(row[demand_idx])
+            yield_config[id]['density'] = float(row[density_idx])
 
         return nesting_reclass, floral_reclass, yield_config
 
@@ -139,9 +141,12 @@ def yield_calc(crop_id, abundance, managed_hives, config):
     demand = config[crop_id]['demand']
     rec_hives = config[crop_id]['density']
 
+    # Avoid division by 0 for crops which don't have a recommended density
+    hives_ratio = 0 if rec_hives == 0 else managed_hives/rec_hives
+
     # Calculate the yield for managed honeybee, keeping a ceiling such
     # that if more hives are used than recommended, yield remains at 1
-    yield_hb = (1 - demand) + demand * min(1, managed_hives/rec_hives)
+    yield_hb = (1 - demand) + demand * min(1, hives_ratio)
 
     # Determine the remainig yield to be had from wild bee abundance
     yield_wild = (1 - yield_hb) * (abundance / (ABUNDANCE_IDX + abundance))
