@@ -128,26 +128,26 @@ var HeaderView = Marionette.ItemView.extend({
 // Init the locate plugin button and add it to the map.
 function addLocateMeButton(map, maxZoom, maxAge) {
     var locateOptions = {
-        position: 'topright',
-        metric: false,
-        drawCircle: false,
-        showPopup: false,
-        follow: false,
-        markerClass: L.marker,
-        markerStyle: {
-            opacity: 0.0,
-            clickable: false,
-            keyboard: false
-        },
-        locateOptions: {
-            maxZoom: maxZoom,
-            // Cache location response, in ms
-            maximumAge: maxAge
-        },
-        strings: {
-            title: 'Zoom to your location.'
-        }
-    };
+            position: 'bottomright',
+            metric: false,
+            drawCircle: false,
+            showPopup: false,
+            follow: false,
+            markerClass: L.marker,
+            markerStyle: {
+                opacity: 0.0,
+                clickable: false,
+                keyboard: false
+            },
+            locateOptions: {
+                maxZoom: maxZoom,
+                // Cache location response, in ms
+                maximumAge: maxAge
+            },
+            strings: {
+                title: 'Zoom to your location.'
+            }
+        };
 
     L.control.locate(locateOptions).addTo(map);
 }
@@ -259,7 +259,8 @@ var MapView = Marionette.ItemView.extend({
 
         // wrap the zoom & sidebar toggle controls in one div for styling
         $('.leaflet-bottom.leaflet-right>.leaflet-control-sidebar-toggle,' +
-          '.leaflet-bottom.leaflet-right>.leaflet-control-zoom')
+          '.leaflet-bottom.leaflet-right>.leaflet-control-zoom,' +
+          '.leaflet-bottom.leaflet-right>.leaflet-control-locate')
             .wrapAll('<div class="leaflet-bottom-right-controls"></div>');
     },
 
