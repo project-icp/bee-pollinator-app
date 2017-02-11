@@ -2,8 +2,10 @@ from __future__ import print_function
 from __future__ import division
 
 import os
+import pprint
 import rasterio
 import sys
+
 from cdl_colormap import COLORMAP
 
 DST_PATH = '/opt/icp-crop-data/cdl_reclass_lzw_5070.tif'
@@ -31,6 +33,9 @@ def init():
     auxillary_file_path = DST_PATH + '.aux.xml'
     if os.path.exists(auxillary_file_path):
         os.remove(auxillary_file_path)
+
+    pp = pprint.PrettyPrinter()
+    pp.pprint(create_hex_colormap())
 
 
 if __name__ == '__main__':
