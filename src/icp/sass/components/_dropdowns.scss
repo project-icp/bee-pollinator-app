@@ -195,13 +195,6 @@
     margin-right: 4px;
     margin-bottom: -3px;
     border: 2px solid $black-39;
-
-    // Official CDL legend colors for classes selected for display
-    @for $i from 1 through 47 {
-      &.crop-#{$i} {
-        background: map-get($cropColors, $i)
-      }
-    }
   }
 
   .legend-item {

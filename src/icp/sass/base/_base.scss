@@ -146,3 +146,12 @@ p.info {
   z-index: 1;
   opacity: 0.8;
 }
+
+// Official CDL legend colors for crops displayed throughout the app.
+@for $i from 1 through 65 {
+  .crop-#{$i} {
+    fill: map-get($cropColors, $i);
+    background: map-get($cropColors, $i);
+  }
+}
+

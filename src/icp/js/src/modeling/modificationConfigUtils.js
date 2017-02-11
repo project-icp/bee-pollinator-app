@@ -60,29 +60,22 @@ function getCdlId(modKey) {
  *      changes appropriate for shared vectors drawn across scenarios.
  */
 var getDrawOpts = function(modKey, shared) {
-    var defaultOpacity = shared ? 0.4 : 0.75,
-        defaultStrokeWidth = shared ? 1 : 3,
+    var defaultOpacity = shared ? 0.55 : 0.8,
+        defaultStrokeWidth = shared ? 1 : 2,
         defaultStyle = {
             weight: defaultStrokeWidth,
-            color: '#888',
+            color: '#212121',
             opacity: defaultOpacity,
             strokeWidth: defaultStrokeWidth,
-            fillColor: '#888',
             fillOpacity: defaultOpacity
         };
 
     if (modKey && modificationConfig[modKey]) {
         var config = modificationConfig[modKey];
-        if (config.copyStyle) {
-            return getDrawOpts(config.copyStyle);
-        } else if (config.strokeColor){
-            return $.extend(defaultStyle, {
-                color: config.strokeColor,
-                fillColor: config.fillColor,
-            });
-        } else {
-            return defaultStyle;
-        }
+
+        return $.extend(defaultStyle, {
+            className: 'crop-' + config.value,
+        });
     } else {
         return defaultStyle;
     }

@@ -5,7 +5,6 @@ var $ = require('jquery'),
     _ = require('lodash');
 
 var polygonDefaults = {
-        fill: false,
         color: '#f9cf2f'
     };
 

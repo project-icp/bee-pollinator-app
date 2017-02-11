@@ -14,19 +14,7 @@
   vertical-align: baseline;
   vertical-align: bottom;
 
-  .nv-bar {
-    fill: $brand-primary;
-  }
-
   .nv-x .tick line { display: none; }
-
-  // Official CDL legend colors for classes selected for display
-  @for $i from 1 through 47 {
-    .crop-#{$i} {
-      fill: map-get($cropColors, $i)
-    }
-  }
-
   .scenario { fill-opacity: 0.8; }
   .current-conditions { fill-opacity: 0.4; }
 
