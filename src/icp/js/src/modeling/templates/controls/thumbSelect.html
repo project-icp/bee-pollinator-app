@@ -8,12 +8,12 @@
                 <ul class="row">
                     {% for modKey in row %}
                         <li>
-                            <div class="thumb {{ "disabled" if not modEnabled[modKey] }}" data-value="{{ modKey }}">
+                            <div class="thumb crop-{{ modIds[modKey]}}" data-value="{{ modKey }}">
                                 <svg height="{{ 56 }}" width="{{ 56 }}">
-                                    <rect height="{{ 56 }}" width="{{ 56 }}" fill="{{ modKey|modFill }}"></rect>
+                                    <rect height="{{ 56 }}" width="{{ 56 }}"></rect>
                                 </svg>
                             </div>
-                            <label class="dark {{ "disabled" if not modEnabled[modKey] }}">{{ modKey|modShortName }}</label>
+                            <label class="dark">{{ modKey|modShortName }}</label>
                         </li>
                     {% endfor %}
                 </ul>

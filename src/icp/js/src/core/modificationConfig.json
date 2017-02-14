@@ -2,148 +2,106 @@
     "almonds": {
         "value": 35,
         "name": "Almonds",
-        "summary": "NLCD Class 71:  Areas dominated by grass or herbaceous vegetation, generally greater than 80% of total vegetation. These areas are not subject to intensive management such as tilling, but can be utilized for grazing.  Examples include oak savanna, longleaf pine savanna, and tall and shortgrass prairies.",
-        "fillColor": "#ff8fab",
-        "strokeColor": "#021655"
+        "summary": "NLCD Class 71:  Areas dominated by grass or herbaceous vegetation, generally greater than 80% of total vegetation. These areas are not subject to intensive management such as tilling, but can be utilized for grazing.  Examples include oak savanna, longleaf pine savanna, and tall and shortgrass prairies."
     },
     "almonds_with_cover_crop": {
         "value": 53,
         "name": "Almonds With Cover Crop",
-        "summary": "NLCD Class 71:  Areas dominated by grass or herbaceous vegetation, generally greater than 80% of total vegetation. These areas are not subject to intensive management such as tilling, but can be utilized for grazing.  Examples include oak savanna, longleaf pine savanna, and tall and shortgrass prairies.",
-        "fillColor": "#ff8fab",
-        "strokeColor": "#021655"
+        "summary": "NLCD Class 71:  Areas dominated by grass or herbaceous vegetation, generally greater than 80% of total vegetation. These areas are not subject to intensive management such as tilling, but can be utilized for grazing.  Examples include oak savanna, longleaf pine savanna, and tall and shortgrass prairies."
     },
     "apples": {
         "value": 29,
         "name": "Apples",
-        "summary": "NLCD Class 71:  Areas dominated by grass or herbaceous vegetation, generally greater than 80% of total vegetation. These areas are not subject to intensive management such as tilling, but can be utilized for grazing.  Examples include oak savanna, longleaf pine savanna, and tall and shortgrass prairies.",
-        "fillColor": "#007878",
-        "strokeColor": "#021655"
+        "summary": "NLCD Class 71:  Areas dominated by grass or herbaceous vegetation, generally greater than 80% of total vegetation. These areas are not subject to intensive management such as tilling, but can be utilized for grazing.  Examples include oak savanna, longleaf pine savanna, and tall and shortgrass prairies."
     },
     "apples_with_cover_crop": {
         "value": 54,
         "name": "Apples With Cover Crop",
-        "summary": "NLCD Class 71:  Areas dominated by grass or herbaceous vegetation, generally greater than 80% of total vegetation. These areas are not subject to intensive management such as tilling, but can be utilized for grazing.  Examples include oak savanna, longleaf pine savanna, and tall and shortgrass prairies.",
-        "fillColor": "#007878",
-        "strokeColor": "#021655"
+        "summary": "NLCD Class 71:  Areas dominated by grass or herbaceous vegetation, generally greater than 80% of total vegetation. These areas are not subject to intensive management such as tilling, but can be utilized for grazing.  Examples include oak savanna, longleaf pine savanna, and tall and shortgrass prairies."
     },
     "blueberries": {
         "value": 51,
         "name": "Blueberries",
-        "summary": "NLCD Class 52:  Areas dominated by woody shrubs or small trees less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions. Examples include chaparral, scrub oak woodland, subalpine krumholz forests, sagebrush steppe, and desert scrublands.",
-        "fillColor": "#e8ffc0",
-        "strokeColor": "#233570"
+        "summary": "NLCD Class 52:  Areas dominated by woody shrubs or small trees less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions. Examples include chaparral, scrub oak woodland, subalpine krumholz forests, sagebrush steppe, and desert scrublands."
     },
     "blueberries_with_cover_crop": {
         "value": 55,
         "name": "Blueberries with Cover Crop",
-        "summary": "NLCD Class 52:  Areas dominated by woody shrubs or small trees less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions. Examples include chaparral, scrub oak woodland, subalpine krumholz forests, sagebrush steppe, and desert scrublands.",
-        "fillColor": "#e8ffc0",
-        "strokeColor": "#233570"
+        "summary": "NLCD Class 52:  Areas dominated by woody shrubs or small trees less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions. Examples include chaparral, scrub oak woodland, subalpine krumholz forests, sagebrush steppe, and desert scrublands."
     },
     "cherries": {
         "value": 27,
         "name": "Cherries",
-        "summary": "NLCD Class 31:  Areas of bedrock, desert pavement, scarps, talus, slides, volcanic material, glacial debris, sand dunes, strip mines, gravel pits and other accumulations of earthen material. Generally, vegetation accounts for less than 15% of total cover.",
-        "fillColor": "#ffff7d",
-        "strokeColor": "#2D323F"
+        "summary": "NLCD Class 31:  Areas of bedrock, desert pavement, scarps, talus, slides, volcanic material, glacial debris, sand dunes, strip mines, gravel pits and other accumulations of earthen material. Generally, vegetation accounts for less than 15% of total cover."
     },
     "cherries_with_cover_crop": {
         "value": 56,
         "name": "Cherries With Cover Crop",
-        "summary": "NLCD Class 52:  Areas dominated by woody shrubs or small trees less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions. Examples include chaparral, scrub oak woodland, subalpine krumholz forests, sagebrush steppe, and desert scrublands.",
-        "fillColor": "#ffff7d",
-        "strokeColor": "#007878"
+        "summary": "NLCD Class 52:  Areas dominated by woody shrubs or small trees less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions. Examples include chaparral, scrub oak woodland, subalpine krumholz forests, sagebrush steppe, and desert scrublands."
     },
     "raspberries": {
         "value": 52,
         "name": "Raspberries",
-        "summary": "NLCD Class 31:  Areas of bedrock, desert pavement, scarps, talus, slides, volcanic material, glacial debris, sand dunes, strip mines, gravel pits and other accumulations of earthen material. Generally, vegetation accounts for less than 15% of total cover.",
-        "fillColor": "#e8c0ff",
-        "strokeColor": "#2D323F"
+        "summary": "NLCD Class 31:  Areas of bedrock, desert pavement, scarps, talus, slides, volcanic material, glacial debris, sand dunes, strip mines, gravel pits and other accumulations of earthen material. Generally, vegetation accounts for less than 15% of total cover."
     },
     "raspberries_with_cover_crop": {
         "value": 57,
         "name": "Raspberries With Cover Crop",
-        "summary": "NLCD Class 52:  Areas dominated by woody shrubs or small trees less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions. Examples include chaparral, scrub oak woodland, subalpine krumholz forests, sagebrush steppe, and desert scrublands.",
-        "fillColor": "#e8c0ff",
-        "strokeColor": "#233570"
+        "summary": "NLCD Class 52:  Areas dominated by woody shrubs or small trees less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions. Examples include chaparral, scrub oak woodland, subalpine krumholz forests, sagebrush steppe, and desert scrublands."
     },
     "watermelons": {
         "value": 17,
         "name": "Watermelons",
-        "summary": "NLCD Class 31:  Areas of bedrock, desert pavement, scarps, talus, slides, volcanic material, glacial debris, sand dunes, strip mines, gravel pits and other accumulations of earthen material. Generally, vegetation accounts for less than 15% of total cover.",
-        "fillColor": "#f45b40",
-        "strokeColor": "#2D323F"
+        "summary": "NLCD Class 31:  Areas of bedrock, desert pavement, scarps, talus, slides, volcanic material, glacial debris, sand dunes, strip mines, gravel pits and other accumulations of earthen material. Generally, vegetation accounts for less than 15% of total cover."
     },
     "watermelons_with_cover_crop": {
         "value": 58,
         "name": "Watermelons With Cover Crop",
-        "summary": "NLCD Class 52:  Areas dominated by woody shrubs or small trees less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions. Examples include chaparral, scrub oak woodland, subalpine krumholz forests, sagebrush steppe, and desert scrublands.",
-        "fillColor": "#f45b40",
-        "strokeColor": "#233570"
+        "summary": "NLCD Class 52:  Areas dominated by woody shrubs or small trees less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions. Examples include chaparral, scrub oak woodland, subalpine krumholz forests, sagebrush steppe, and desert scrublands."
     },
     "pumpkins": {
         "value": 50,
         "name": "Pumpkins",
-        "summary": "NLCD Class 31:  Areas of bedrock, desert pavement, scarps, talus, slides, volcanic material, glacial debris, sand dunes, strip mines, gravel pits and other accumulations of earthen material. Generally, vegetation accounts for less than 15% of total cover.",
-        "fillColor": "#ffd400",
-        "strokeColor": "#2D323F"
+        "summary": "NLCD Class 31:  Areas of bedrock, desert pavement, scarps, talus, slides, volcanic material, glacial debris, sand dunes, strip mines, gravel pits and other accumulations of earthen material. Generally, vegetation accounts for less than 15% of total cover."
     },
     "pumpkins_with_cover_crop": {
         "value": 59,
         "name": "Pumpkins With Cover Crop",
-        "summary": "NLCD Class 52:  Areas dominated by woody shrubs or small trees less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions. Examples include chaparral, scrub oak woodland, subalpine krumholz forests, sagebrush steppe, and desert scrublands.",
-        "fillColor": "#ffd400",
-        "strokeColor": "#233570"
+        "summary": "NLCD Class 52:  Areas dominated by woody shrubs or small trees less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions. Examples include chaparral, scrub oak woodland, subalpine krumholz forests, sagebrush steppe, and desert scrublands."
     },
     "grassland": {
         "value": 11,
         "name": "Grassland / Pasture",
-        "summary": "NLCD Class 52:  Areas dominated by woody shrubs or small trees less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions. Examples include chaparral, scrub oak woodland, subalpine krumholz forests, sagebrush steppe, and desert scrublands.",
-        "fillColor": "#a6f38c",
-        "strokeColor": "#233570"
+        "summary": "NLCD Class 52:  Areas dominated by woody shrubs or small trees less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions. Examples include chaparral, scrub oak woodland, subalpine krumholz forests, sagebrush steppe, and desert scrublands."
     },
     "wildflower_early": {
         "value": 60,
         "name": "Wildflower Early",
-        "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture.",
-        "fillColor": "pink",
-        "strokeColor": "#777777"
+        "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture."
     },
     "wildflower_late": {
         "value": 61,
         "name": "Wildflower Late",
-        "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture.",
-        "fillColor": "red",
-        "strokeColor": "#777777"
+        "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture."
     },
     "woody_early": {
         "value": 62,
         "name": "Woody Early",
-        "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture.",
-        "fillColor": "blue",
-        "strokeColor": "#777777"
+        "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture."
     },
     "woody_late": {
         "value": 63,
         "name": "Woody Late",
-        "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture.",
-        "fillColor": "orange",
-        "strokeColor": "#777777"
+        "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture."
     },
     "mix_early": {
         "value": 64,
         "name": "Mix Early",
-        "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture.",
-        "fillColor": "yellow",
-        "strokeColor": "#777777"
+        "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture."
     },
     "mix_late": {
         "value": 65,
         "name": "Mix Late",
-        "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture.",
-        "fillColor": "green",
-        "strokeColor": "#777777"
+        "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture."
     },
 }

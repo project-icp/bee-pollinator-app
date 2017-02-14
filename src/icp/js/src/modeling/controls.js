@@ -37,15 +37,13 @@ var ThumbSelectView = Marionette.ItemView.extend({
 
     initialize: function(options) {
         var modKeys = _.flatten(_.pluck(this.model.get('modRowGroups'), 'rows'), true),
-            modEnabled = {};
-
-        _.forEach(modKeys, function(modKey) {
-            modEnabled[modKey] = true;
-        });
+            modIds = _.object(_.map(modKeys, function(key) { 
+                return [key, modificationConfigUtils.getCdlId(key)];
+            }));
 
         this.model.set({
             activeMod: null,
-            modEnabled: modEnabled
+            modIds: modIds
         });
         this.addModification = options.addModification;
     },
@@ -74,9 +72,7 @@ var ThumbSelectView = Marionette.ItemView.extend({
             controlName = this.model.get('controlName'),
             controlValue = $el.data('value');
 
-        if (this.model.get('modEnabled')[controlValue]) {
-            this.startDrawing(controlName, controlValue);
-        }
+        this.startDrawing(controlName, controlValue);
     },
 
     startDrawing: function(controlName, controlValue) {
@@ -186,16 +182,17 @@ var LandCoverView = ModificationsView.extend({
             controlName: this.getControlName(),
             controlDisplayName: 'Land Cover',
             modRowGroups: [{
-                name: '',
+                name: 'Crops',
                 rows: [
-                    ['almonds', 'almonds_with_cover_crop',
-                        'apples', 'apples_with_cover_crop'],
-                    ['blueberries','blueberries_with_cover_crop',
-                        'cherries', 'cherries_with_cover_crop'],
-                    ['raspberries', 'raspberries_with_cover_crop',
-                        'watermelons', 'watermelons_with_cover_crop'],
-                    ['pumpkins', 'pumpkins_with_cover_crop',
-                        'grassland'],
+                    ['almonds', 'apples', 'blueberries', 'cherries'],
+                    ['pumpkins', 'raspberries', 'watermelons', 'grassland'],
+                ]
+            },
+            {
+                name: 'Crops with Cover Crops',
+                rows: [
+                    ['almonds_with_cover_crop', 'apples_with_cover_crop', 'blueberries_with_cover_crop', 'cherries_with_cover_crop'],
+                    ['pumpkins_with_cover_crop', 'raspberries_with_cover_crop', 'watermelons_with_cover_crop']
                 ]
             }]
         });
@@ -215,8 +212,9 @@ var ConservationPracticeView = ModificationsView.extend({
             modRowGroups: [{
                 name: '',
                 rows: [
-                    ['wildflower_early', 'wildflower_late', 'woody_early',],
-                    ['woody_late', 'mix_early', 'mix_late'],
+                    ['wildflower_early', 'wildflower_late'],
+                    ['woody_early', 'woody_late'],
+                    ['mix_early', 'mix_late'],
                 ]
             }]
         });
