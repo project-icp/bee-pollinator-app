@@ -150,8 +150,10 @@ p.info {
 // Official CDL legend colors for crops displayed throughout the app.
 @for $i from 1 through 65 {
   .crop-#{$i} {
-    fill: map-get($cropColors, $i);
     background: map-get($cropColors, $i);
+  }
+  .crop-fill-#{$i} {
+    fill: map-get($cropColors, $i);
   }
 }
 

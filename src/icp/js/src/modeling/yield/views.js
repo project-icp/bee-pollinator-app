@@ -193,7 +193,7 @@ var CompareChartView = Marionette.ItemView.extend({
                 return {
                     x: cropTypes[cropId],
                     y: result[cropId],
-                    class: 'crop-' + cropId
+                    class: 'crop-fill-' + cropId
                 };
             });
 
@@ -227,7 +227,7 @@ var formatResultsFromModel = function(results, seriesName, useCurrentConditionsC
             return {
                 x: cropTypes[key],
                 y: value,
-                class: 'crop-' + key +
+                class: 'crop-fill-' + key +
                         (useCurrentConditionsClass ? ' current-conditions' : ' scenario'),
             };
         })
