@@ -67,6 +67,7 @@ var getDrawOpts = function(modKey, shared) {
             color: '#212121',
             opacity: defaultOpacity,
             strokeWidth: defaultStrokeWidth,
+            fillColor: '#212121',
             fillOpacity: defaultOpacity
         };
 
@@ -75,6 +76,7 @@ var getDrawOpts = function(modKey, shared) {
 
         return $.extend(defaultStyle, {
             className: 'crop-' + config.value,
+            fillColor: 'url(#fill-crop-' + config.value + ')',
         });
     } else {
         return defaultStyle;
