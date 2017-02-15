@@ -45,6 +45,8 @@ var CompareWindow = Marionette.LayoutView.extend({
         // so the offset of the container needs to be
         // recomputed.
         $(window).bind('resize.app', _.debounce(_.bind(this.updateContainerPos, this)));
+
+        this.model.fetchResultsIfNeeded();
     },
 
     onDestroy: function() {
