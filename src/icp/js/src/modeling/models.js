@@ -142,6 +142,16 @@ var ProjectModel = Backbone.Model.extend({
 
         this.listenTo(this.get('scenarios'), 'add', this.addIdsToScenarios, this);
         this.get('scenarios').on('change:modification_hash', this.shareGlobalModifications, this);
+
+        this.get('scenarios').on('change:active', function(scenario) {
+            if (scenario.get('active')) {
+                scenario.fetchResultsIfNeeded();
+            }
+        });
+
+        this.get('scenarios').on('add', function(scenario) {
+            scenario.fetchResultsIfNeeded();
+        });
     },
 
     shareGlobalModifications: function(changedScenario) {
@@ -175,16 +185,6 @@ var ProjectModel = Backbone.Model.extend({
 
         this.get('scenarios').forEach(function(scenario) {
             promises.push(scenario.fetchResultsIfNeeded());
-        });
-
-        this.get('scenarios').on('change:active', function(scenario) {
-            if (scenario.get('active')) {
-                scenario.fetchResultsIfNeeded();
-            }
-        });
-
-        this.get('scenarios').on('add', function(scenario) {
-            scenario.fetchResultsIfNeeded();
         });
 
         return $.when.apply($, promises);
@@ -502,26 +502,17 @@ var ScenarioModel = Backbone.Model.extend({
             isCurrentConditions = this.get('is_current_conditions'),
             fetchResultsPromise;
 
+        if (!needsResults) {
+            // Return current promise or immediately resolve
+            return self.fetchResultsPromise || $.when();
+        }
+
         if (!isCurrentConditions) {
-            if (!this.get('active')) {
-                return $.when();
-            }
+            fetchResultsPromise = self.setResultsFromCurrentConditionsOrFetch();
+        } else if (self.fetchResultsPromise === undefined) {
+            var promises = this.fetchResults();
 
-            if (needsResults) {
-                var setResultsFromCurrentConditionsOrFetch = _.bind(
-                    self.setResultsFromCurrentConditionsOrFetch, self);
-
-                fetchResultsPromise = $.when().then(function() {
-                    setResultsFromCurrentConditionsOrFetch();
-                });
-            }
-        } else if (needsResults && self.fetchResultsPromise === undefined) {
-            var fetchResults = _.bind(self.fetchResults, self);
-
-            fetchResultsPromise = $.when().then(function() {
-                var promises = fetchResults();
-                return $.when(promises.startPromise, promises.pollingPromise);
-            });
+            fetchResultsPromise = $.when(promises.startPromise, promises.pollingPromise);
         }
 
         if (fetchResultsPromise) {
@@ -547,8 +538,7 @@ var ScenarioModel = Backbone.Model.extend({
         // has diverged from this scenario with respect to modifications,
         // fetch them anew
         if (ccIsEmpty || ccInputModHash !== this.get('inputmod_hash')) {
-            var fetchResults = _.bind(this.fetchResults, this),
-                promises = fetchResults();
+            var promises = this.fetchResults();
 
             return $.when(promises.startPromise, promises.pollingPromise);
         } else {
@@ -560,6 +550,8 @@ var ScenarioModel = Backbone.Model.extend({
                 'result': currentConditionResults.get('result'),
                 'inputmod_hash': currentConditionResults.get('inputmod_hash')
             });
+
+            return $.when();
         }
     },
 

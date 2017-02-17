@@ -9,6 +9,7 @@ var _ = require('lodash'),
     coreViews = require('../core/views'),
     modelingViews = require('../modeling/views'),
     modConfigUtils = require('../modeling/modificationConfigUtils'),
+    utils = require('./utils'),
     compareWindowTmpl = require('./templates/compareWindow.html'),
     compareScenariosTmpl = require('./templates/compareScenarios.html'),
     compareScenarioTmpl = require('./templates/compareScenario.html'),
@@ -45,6 +46,8 @@ var CompareWindow = Marionette.LayoutView.extend({
         // so the offset of the container needs to be
         // recomputed.
         $(window).bind('resize.app', _.debounce(_.bind(this.updateContainerPos, this)));
+
+        this.model.fetchResultsIfNeeded();
     },
 
     onDestroy: function() {
@@ -113,8 +116,7 @@ var CompareScenarioView = Marionette.LayoutView.extend({
     initialize: function(options) {
         this.projectModel = options.projectModel;
         this.scenariosView = options.scenariosView;
-        this.model.set('chartableCrops', options.chartableCrops);
-        this.model.set('selectedCrops', options.chartableCrops);
+        this.model.set('selectedCrops', this.projectModel.get('chartableCrops'));
     },
 
     onShow: function() {
@@ -171,24 +173,18 @@ var CompareScenariosView = Marionette.CompositeView.extend({
         return {
             scenariosView: this,
             projectModel: this.model,
-            chartableCrops: this.chartableCrops
         };
     },
 
     initialize: function() {
-        var scenarios = this.collection;
-
-        // Get the list of crops that have values in any scenario of this project
-        this.chartableCrops = scenarios.reduce(function(cropTypes, scenario) {
-            var nonZeroCrops = scenario.get('results').map(function(result) {
-                return Object.keys(_.omit(result.get('result'), function(value) {
-                    return value === 0;
-                }));
-            });
-            return _.uniq(cropTypes.concat(_.flatten(nonZeroCrops)));
-        }, []);
-
         this.modelingViews = [];
+        this.updateChartableCrops();
+    },
+
+    updateChartableCrops: function() {
+        this.model.set({
+            chartableCrops: utils.getChartableCrops(this.collection),
+        });
     }
 });
 
@@ -214,17 +210,18 @@ var CompareModelingView = Marionette.LayoutView.extend({
     initialize: function(options) {
         this.projectModel = options.projectModel;
         this.model.get('results').makeFirstActive();
-        this.listenTo(this.model.get('results').at(0), 'change:polling', function() {
-            this.render();
-            this.onShow();
-        });
         this.scenariosView = options.scenariosView;
         this.scenariosView.modelingViews.push(this);
+        this.listenTo(this.model.get('results').at(0), 'change:polling', function() {
+            this.scenariosView.updateChartableCrops();
+            this.render();
+            this.updateResult();
+        });
     },
 
     templateHelpers: function() {
         return {
-            chartableCrops: this.model.get('chartableCrops'),
+            chartableCrops: this.projectModel.get('chartableCrops'),
             cropTypes: cropTypes,
             polling: this.model.get('results').at(0).get('polling'),
             results: this.model.get('results').toJSON()
@@ -232,18 +229,18 @@ var CompareModelingView = Marionette.LayoutView.extend({
     },
 
     updateResult: function() {
-        var selection = this.ui.resultSelector.val(),
+        var self = this,
+            selection = this.ui.resultSelector.val(),
             selectedCrops = selection === "all" ?
-                this.model.get('chartableCrops') :
+                this.projectModel.get('chartableCrops') :
                 [selection];
 
         this.model.set('selectedCrops', selectedCrops);
         this.showResult();
 
         _.forEach(this.scenariosView.modelingViews, function(sibling) {
-            if (sibling.ui.resultSelector.val() === selection) {
-                return;
-            } else {
+            if (sibling.cid !== self.cid) {
+                sibling.render();
                 sibling.ui.resultSelector.val(selection);
                 sibling.model.set('selectedCrops', selectedCrops);
                 sibling.showResult();
