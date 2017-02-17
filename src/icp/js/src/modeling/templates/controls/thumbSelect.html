@@ -10,7 +10,7 @@
                         <li>
                             <div class="thumb crop-{{ modIds[modKey]}}" data-value="{{ modKey }}">
                                 <svg height="{{ 56 }}" width="{{ 56 }}">
-                                    <rect height="{{ 56 }}" width="{{ 56 }}"></rect>
+                                    <rect height="{{ 56 }}" width="{{ 56 }}" fill="{{ modKey|modFill }}"></rect>
                                 </svg>
                             </div>
                             <label class="dark">{{ modKey|modShortName }}</label>
