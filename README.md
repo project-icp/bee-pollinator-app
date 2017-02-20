@@ -156,7 +156,7 @@ and start the livereload server with the following command:
 ./scripts/npm.sh run livereload
 ```
 
-#### Bundling static assets
+### Bundling static assets
 
 The `bundle.sh` script runs browserify, node-sass, and othe pre-processing
 tasks to generate static assets.
@@ -190,9 +190,71 @@ This flag is for troubleshooting purposes only.
       --vendor     Generate vendor bundle and copy assets
       -h, --help   Display this help text
 
-#### Adding JS dependencies
+### Adding JS dependencies
 
 To add a new JS depenency, update the `JS_DEPS` array in `bundle.sh`, and `package.json` accordingly.
 Because our dependencies are shrinkwrapped, follow the [instructions](https://docs.npmjs.com/cli/shrinkwrap#building-shrinkwrapped-packages) for adding a dependency to a shrinkwrapped package.
 Rebuild the vendor bundle using `./scripts/bundle.sh --vendor`.
 `npm` commands can be run using `./scripts/npm.sh`.
+
+### Updating the crop yield model
+
+The latest crop yield model is installed every time the worker is provisioned:
+
+`vagrant provision worker`
+
+If you make changes to the model, and would like to reinstall it on the app without provisioning the worker, you can run:
+
+`vagrant ssh worker -c "cd /opt/app/pollinator && sudo python setup.py install"`
+
+
+## Updating the Crop Data Layer (CDL)
+
+### Updating Data
+- If you received a new `cdl_data.csv`, it should go in `src/icp/pollinator/src/pollinator/data/cdl_data.csv`
+- If you received a new raster, it should go in `/opt/icp-crop-data/cdl_5070.tif`
+
+1. Navigate on the worker VM to the processing scripts
+
+    ```
+    vagrant ssh worker
+    cd /vagrant/src/icp/pollinator/src/pollinator/reclass/
+    ```
+1. Group the raw CDL CSV `ID` values together based on the CSV's `Attributes` column. To keep a particular crop distinct from its attribute group, change that record's `Attribute` value. For example, `Almonds` was initially part of `Orchard`, but was given a new `Attribute` of `Almonds` so that it would have a distinct row in the output group CSV
+
+    `python group_cdl_data.py`
+1. Copy the resulting file `cdl_data_grouped.csv` into `src/icp/pollinator/src/pollinator/data/`
+1. Reclassify the raster to use the newly grouped CSV values
+
+    `python reclassify_cdl.py`
+1. Write the grouped CSV values to `cropTypes.json` for the frontend's lookup
+
+    `python write_crop_type_json.py`
+1. So that the legend in the app doesn't have extraneous entries, remove any enhancement/cover crop rows from `cropTypes.json`. They aren't part of the actual raster. Move the file to `src/icp/js/src/core/cropTypes.json`
+
+1. Update the `value` keys (crop ids) in `/src/icp/js/src/core/modificationConfig.json` to their most current values in `cdl_data_group.csv`/`cropTypes.json`
+
+1. Update the app's colors and SVGs
+
+    `python /vagrant/scripts/colors/update.py`
+1. If you are authorized to update the staging/production accounts, you can update the deployed raster by logging into AWS and completing the following:
+   - Create a new volume
+   - Create a new EC2 instance, and mount the volume
+   - Upload the updated raster to the volume
+   - Take a snapshot of the volume
+   - Replace the worker `snapshot_id` in `deployment/packer/template.js` with the new snapshot's id
+   - Clean up by destroying the EC2 instance you created
+
+### Updating Crop Colors
+
+1. Update the desired RGB crop colors in `src/icp/pollinator/src/pollinator/reclass/cdl_colormap.py`
+2. To recolor the raster without running the reclassify script over again
+
+    ```
+    vagrant ssh worker
+    cd /vagrant/src/icp/pollinator/src/pollinator/reclass/
+    python recolor_cdl.py
+    ```
+3. Update the app's colors and SVGs
+
+    `python /vagrant/scripts/colors/update.py`
