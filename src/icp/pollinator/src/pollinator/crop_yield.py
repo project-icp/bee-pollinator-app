@@ -138,6 +138,10 @@ def yield_calc(crop_id, abundance, managed_hives, config):
     Returns
         yield (float): The predicted yield for this cell position
     """
+
+    if crop_id not in config:
+        return 0
+
     demand = config[crop_id]['demand']
     rec_hives = config[crop_id]['density']
 

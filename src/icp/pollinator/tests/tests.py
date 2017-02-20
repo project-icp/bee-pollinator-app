@@ -145,6 +145,22 @@ class ModelTests(unittest.TestCase):
         self.assertEqual(cell_yield, 0.886,
                          "Yield not calculated correctly for psuedo-crop 1")
 
+    def test_nodata_yield(self):
+        """
+        Test that NODATA values are handled properly.
+        """
+        config = {
+            1: {'demand': 0.95, 'density': 2.5}
+        }
+
+        nodata = 0
+        abundance_idx = 0.4
+        managed_hives = 1
+        cell_yield = yield_calc(nodata, abundance_idx, managed_hives, config)
+
+        self.assertEqual(cell_yield, 0,
+                         "NODATA should return 0 value for yield")
+
 
 if __name__ == '__main__':
     unittest.main()
