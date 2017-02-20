@@ -354,11 +354,13 @@ GEOP = {}
 BASEMAPS = [
     {
         'display': 'street',
-        'url': 'https://server.arcgisonline.com/arcgis/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}'  # noqa
+        'url': 'https://server.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',  # noqa
+        'attribution': 'Tiles &copy; Esri'
     },
     {
         'display': 'satellite',
-        'url': 'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'  # noqa
+        'url': 'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',  # noqa
+        'attribution': 'Tiles &copy; Esri'
     },
 ]
 

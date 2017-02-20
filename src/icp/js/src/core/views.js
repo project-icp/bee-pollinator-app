@@ -375,7 +375,9 @@ var MapView = Marionette.ItemView.extend({
                     zIndex: zIndex,
                     attribution: '',
                     minZoom: 0});
-                leafletLayer = new L.TileLayer(tileUrl, layer);
+                leafletLayer = new L.TileLayer(tileUrl, layer, {
+                    attribution: layer.attribution
+                });
             } else {
                 leafletLayer = new L.TileLayer('', layer);
             }

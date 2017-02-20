@@ -86,8 +86,7 @@ def get_client_settings(request):
             'draw_tools': settings.DRAW_TOOLS,
             'map_controls': settings.MAP_CONTROLS,
             'mapshed_max_area': settings.DRAW_CONFIG['MaxAoIArea']
-        }),
-        'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY,
+        })
     }
 
     return client_settings

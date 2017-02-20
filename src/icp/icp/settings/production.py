@@ -107,8 +107,5 @@ DISABLED_MODEL_PACKAGES = []
 
 # END UI CONFIGURATION
 
-# Google API key for production deployment
-GOOGLE_MAPS_API_KEY = 'AIzaSyCXdkywU7rps_i1CeKqWxlBi97vyGeXsqk'
-
 # Stroud account
 GOOGLE_ANALYTICS_ACCOUNT = 'UA-47047573-7'
