@@ -37,7 +37,7 @@ var ThumbSelectView = Marionette.ItemView.extend({
 
     initialize: function(options) {
         var modKeys = _.flatten(_.pluck(this.model.get('modRowGroups'), 'rows'), true),
-            modIds = _.object(_.map(modKeys, function(key) { 
+            modIds = _.object(_.map(modKeys, function(key) {
                 return [key, modificationConfigUtils.getCdlId(key)];
             }));
 
@@ -212,9 +212,7 @@ var ConservationPracticeView = ModificationsView.extend({
             modRowGroups: [{
                 name: '',
                 rows: [
-                    ['wildflower_early', 'wildflower_late'],
-                    ['woody_early', 'woody_late'],
-                    ['mix_early', 'mix_late'],
+                    ['wildflower', 'woody', 'wildflower_woody_mix'],
                 ]
             }]
         });
