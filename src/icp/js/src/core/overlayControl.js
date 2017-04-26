@@ -34,7 +34,7 @@ var OverlayControlView = Marionette.ItemView.extend({
     },
 
     ui: {
-        controlToggle: '.eye-button',
+        controlToggle: '.layer-name, .eye-button',
         legendToggle: '.legend-button',
         legendDropdown: '.crop-legend-dropdown > .dropdown-menu',
     },

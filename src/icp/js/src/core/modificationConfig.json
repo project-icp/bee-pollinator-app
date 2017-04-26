@@ -74,34 +74,19 @@
         "name": "Grassland / Pasture",
         "summary": "NLCD Class 52:  Areas dominated by woody shrubs or small trees less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions. Examples include chaparral, scrub oak woodland, subalpine krumholz forests, sagebrush steppe, and desert scrublands."
     },
-    "wildflower_early": {
-        "value": 60,
-        "name": "Wildflower Early",
-        "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture."
-    },
-    "wildflower_late": {
+    "wildflower": {
         "value": 61,
-        "name": "Wildflower Late",
+        "name": "Wildflower",
         "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture."
     },
-    "woody_early": {
-        "value": 62,
-        "name": "Woody Early",
-        "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture."
-    },
-    "woody_late": {
+    "woody": {
         "value": 63,
-        "name": "Woody Late",
+        "name": "Woody",
         "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture."
     },
-    "mix_early": {
-        "value": 64,
-        "name": "Mix Early",
-        "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture."
-    },
-    "mix_late": {
+    "wildflower_woody_mix": {
         "value": 65,
-        "name": "Mix Late",
+        "name": "Wildflower-Woody Mix",
         "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture."
     },
 }

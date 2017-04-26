@@ -98,11 +98,6 @@
   background-image: url('../images/layers-2x.png');
 }
 
-.layer-control-button-container a {
-    float: left;
-}
-
-
 .leaflet-control {
   .leaflet-control-stream {
     min-width: 220px;
@@ -149,6 +144,12 @@
     display: flex;
     flex-direction: row;
     width: 100%;
+  }
+  .leaflet-touch & {
+      border: none;
+      .leaflet-bar a {
+          width: 100%;
+      }
   }
 }
 
