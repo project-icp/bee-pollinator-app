@@ -59,7 +59,8 @@ def extract(geom, raster_path, mods=None, all_touched=True):
                 all_touched=all_touched,
             )
 
-    return geometry_mask(geom, data, affine, all_touched), affine
+    data = geometry_mask(geom, data, affine, all_touched)
+    return data, affine, window, src.meta
 
 
 def geometry_mask(geom, data, affine, all_touched=True):
@@ -169,3 +170,30 @@ def reclassify_from_data(layer, substitutions, out=None):
         reclassed[expression] = new
 
     return reclassed
+
+
+def write_tif(name, data, affine, window, meta):
+    """
+    Write an array to disk using an affine transformation, to the local
+    directory.  Used for debugging only.
+
+    Args:
+        name (string): Filename for tif
+        data (ndarray): Data array to be written
+        affine (Affine): Affine object for spatial transformation
+        window (tuple): Rasterio window tuple defining data shape
+        meta (dict): GeoTiff header values to be used in new file
+
+    """
+    import rasterio
+    meta.update({
+        'height': window[0][1] - window[0][0],
+        'width': window[1][1] - window[1][0],
+        'driver': 'GTiff',
+        'transform': affine,
+        'dtype': data.dtype
+        })
+
+    filename = './{}.tif'.format(name)
+    with rasterio.open(filename, 'w', **meta) as out:
+        out.write(data, indexes=1)

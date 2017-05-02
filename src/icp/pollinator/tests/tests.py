@@ -38,7 +38,8 @@ class ReadTests(unittest.TestCase):
         Test a read in of a portion of the crop raster corresponding to a
         field and test that it read the correct area.
         """
-        field, mask = raster_ops.extract(self.field_geom, self.crop_tif)
+        field, mask, win, meta = raster_ops.extract(self.field_geom,
+                                                    self.crop_tif)
         values, counts = np.unique(field.compressed(), return_counts=True)
         count_map = dict(zip(map(str, values), counts))
 
@@ -68,8 +69,8 @@ class ReadTests(unittest.TestCase):
 
         expected_count = sum(self.field_counts.values())
 
-        field, mask = raster_ops.extract(self.field_geom, self.crop_tif,
-                                         reclass)
+        field, mask, win, meta = raster_ops.extract(self.field_geom,
+                                                    self.crop_tif, reclass)
         values, counts = np.unique(field.compressed(), return_counts=True)
 
         self.assertEqual(values, [almonds],
