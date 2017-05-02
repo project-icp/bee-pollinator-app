@@ -4,12 +4,16 @@ from __future__ import print_function
 from scipy.ndimage.filters import generic_filter
 from collections import defaultdict
 
-from raster_ops import extract, reclassify_from_data, geometry_mask
+from raster_ops import extract, reclassify_from_data, geometry_mask, \
+    write_tif
 
 import numpy as np
 import csv
 import math
 import os
+
+# Enableing DEBUG will write all intermediate rasters to disk
+DEBUG = False
 
 CUR_PATH = os.path.dirname(__file__)
 DEFAULT_DATA_PATH = os.path.join(CUR_PATH, 'data/cdl_data_grouped.csv')
@@ -98,7 +102,7 @@ def focal_op(x):
     return np.sum(x * SETTINGS['effective_dist']/SETTINGS['sum_dist'])
 
 
-def calc_abundance(cdl):
+def calc_abundance(cdl, affine, window, meta):
     """
     Calculate farm abundance based on nesting and floral coefficients for
     various crop types.
@@ -117,6 +121,15 @@ def calc_abundance(cdl):
     source = forage * nesting
     area_abundance = generic_filter(source, footprint=SETTINGS['window'],
                                     function=focal_op)
+
+    if DEBUG:
+        write_tif('cdl', cdl, affine, window, meta)
+        write_tif('floral', floral, affine, window, meta)
+        write_tif('nesting', nesting, affine, window, meta)
+        write_tif('forage', forage, affine, window, meta)
+        write_tif('source', source, affine, window, meta)
+        write_tif('abundance', area_abundance, affine, window, meta)
+
     return area_abundance
 
 
@@ -218,10 +231,10 @@ def calculate(bee_shed_geom, field_geom, modifications, managed_hives,
     Calculate the change in specific crop yield due to bee abundance
     """
     # Read in the crop raster clipped to the bee shed geometry
-    cdl, affine = extract(bee_shed_geom, raster_path, modifications)
+    cdl, affine, win, meta = extract(bee_shed_geom, raster_path, modifications)
 
     # Determine pollinator abundance across the entire area
-    area_abundance = calc_abundance(cdl)
+    area_abundance = calc_abundance(cdl, affine, win, meta)
 
     # Vectorize the yield function to allow paired element position input
     # from the CDL, area abundance raster, plus user input and system config
