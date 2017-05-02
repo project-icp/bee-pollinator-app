@@ -164,6 +164,10 @@ var ChartView = Marionette.ItemView.extend({
             };
 
         chart.renderGroupedVerticalBarChart(chartEl, data, chartOptions);
+    },
+
+    templateHelpers: {
+        showDesc: true
     }
 });
 
@@ -217,6 +221,10 @@ var CompareChartView = Marionette.ItemView.extend({
 
             chart.renderGroupedVerticalBarChart(chartEl, data, chartOptions);
         }
+    },
+
+    templateHelpers: {
+        showDesc: false
     }
 });
 
