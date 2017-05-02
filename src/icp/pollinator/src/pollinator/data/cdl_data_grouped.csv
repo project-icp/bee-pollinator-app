@@ -58,9 +58,6 @@ group_id,Attributes,Demand,HF.mean,HN.mean,Density
 57,Raspberry with cover crop,0.65,0.491,0.354,2
 58,Watermelon with cover crop,0.65,0.371,0.248,4.5
 59,Pumpkin with cover crop,0.65,0.455,0.178,3.8
-60,Wildflower (early),0,0.67,0.5,0
-61,Wildflower (late),0,0.58,0.5,0
-62,Woody (early),0,0.42,0.42,0
-63,Woody (late),0,0.42,0.42,0
-64,Mix (early),0,0.75,0.5,0
-65,Mix (late),0,0.83,0.5,0
+60,Wildflower,0,0.9,0.8,0
+61,Woody,0,0.8,0.9,0
+62,Mix,0,1,1,0
