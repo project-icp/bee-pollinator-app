@@ -27,3 +27,12 @@
     }
   }
 }
+
+.compare .nvd3.nv-noData {
+  // No data string is too long for custom size in compare mode
+  font-size: 16px;
+}
+.nvd3.nv-noData {
+  // No data string is too long for default text size
+  font-size: 17px;
+}

@@ -1,12 +1,20 @@
-<h2>Select Area</h2>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac pharetra nibh. Nullam gravida massa non egestas pellentesque. Nam vitae fermentum ex. Maecenas accumsan velit sit amet justo lobortis maximus. Quisque a ullamcorper est, sit amet imperdiet nunc. Suspendisse rhoncus consequat laoreet. Nam malesuada purus et blandit dictum.</p>
+{% if not isDrawn %}
+    <h2>Select Field or Farm of Interest</h2>
+    <img src="/static/images/draw-photo.png" alt="Example field boundary sketch">
+    <p>Outline the field or farm area of pollinator-dependent crop(s) that you would like to evaluate. Only one area of 400 acres or less can be drawn at a time.</p>
+{% endif %}
 {% if not isDrawing and not isDrawn %}
     <button id="start-drawing" class="btn btn-active btn-lg btn-block" type="button">Start drawing</button>
 {% endif %}
 {% if isDrawing %}
     <button id="cancel-drawing" class="btn btn-lg btn-block" type="button">Cancel drawing</button>
 {% endif %}
+
 {% if isDrawn %}
+    <h2>Confirm or Redraw Area</h2>
+    <p>
+        Does this selected area look correct? Are there pollinator-dependent crops in the selected area? If yes, click confirm to continue. If you would like to change the selected area, click redraw area.
+    </p>
     <a data-url="/project/new/yield" class="btn btn-active btn-lg btn-block">Confirm <i class="fa fa-arrow-right"></i></a>
     <button id="cancel-drawing" class="btn btn-link btn-block" type="button"><i class="fa fa-arrow-left"></i> Redraw area</button>
 {% endif %}
