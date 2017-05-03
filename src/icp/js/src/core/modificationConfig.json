@@ -75,17 +75,17 @@
         "summary": "NLCD Class 52:  Areas dominated by woody shrubs or small trees less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions. Examples include chaparral, scrub oak woodland, subalpine krumholz forests, sagebrush steppe, and desert scrublands."
     },
     "wildflower": {
-        "value": 61,
+        "value": 60,
         "name": "Wildflower",
         "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture."
     },
     "woody": {
-        "value": 63,
+        "value": 61,
         "name": "Woody",
         "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture."
     },
     "wildflower_woody_mix": {
-        "value": 65,
+        "value": 62,
         "name": "Wildflower-Woody Mix",
         "summary": "Grouping of residential homes on a development site in order to use the extra land as open space, recreation or agriculture."
     },

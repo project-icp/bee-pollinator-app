@@ -60,10 +60,7 @@ COLORMAP = {
     57: (239, 83, 80),     # Raspberry CC
     58: (240, 98, 146),    # Watermelon CC
     59: (245, 124, 0),     # Pumpkin CC
-    60: (225, 190, 231),   # Wildflower early
-    61: (171, 71, 188),    # Wildflower late
-    62: (230, 238, 156),   # Woody early
-    63: (192, 202, 51),    # Woody late
-    64: (179, 229, 252),   # Mix early
-    65: (79, 195, 247),    # Mix late
+    60: (171, 71, 188),    # Wildflower
+    61: (192, 202, 51),    # Woody
+    62: (79, 195, 247),    # Mix
 }
