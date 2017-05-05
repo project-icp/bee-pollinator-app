@@ -2,6 +2,7 @@
 
 var L = require('leaflet'),
     $ = require('jquery'),
+    _ = require('lodash'),
     Marionette = require('../../shim/backbone.marionette'),
     overlayControlTmpl = require('./templates/overlayControl.html'),
     cropTypes = require('./cropTypes.json');
@@ -92,10 +93,17 @@ var OverlayControlView = Marionette.ItemView.extend({
     },
 
     templateHelpers: function() {
+        var crops = _.chain(cropTypes)
+            .map(function(name, id) {
+                return { id: id, name: name };
+            })
+            .sortBy('name')
+            .value();
+
         return {
             isDisplayed: this.isDisplayed,
             legend: this.isLegendOpen ? "open" : "",
-            cropTypes: cropTypes,
+            cropTypes: crops,
             iconClass: this.isDisplayed ? "fa fa-eye-slash" : "fa fa-eye",
             inputType: this.isDisplayed ? "range" : "hidden",
             layerName: 'Crop Layer',

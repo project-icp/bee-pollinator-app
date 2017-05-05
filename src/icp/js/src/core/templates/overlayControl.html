@@ -1,9 +1,9 @@
 <div class="crop-legend-dropdown dropup {{ legend }}">
     <div class="dropdown-menu dropdown-menu-left">
-        {% for id, name in cropTypes %}
+        {% for crop in cropTypes %}
             <div class="legend-item">
-                <span class="legend-color crop-{{ id }}"></span>
-                {{ name }}
+                <span class="legend-color crop-{{ crop.id }}"></span>
+                {{ crop.name }}
             </div>
         {% endfor %}
     </div>
