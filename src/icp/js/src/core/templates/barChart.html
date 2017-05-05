@@ -1,4 +1,12 @@
-<div class="bar-chart"></div>
-{% if showDesc %}
+{% if hasData %}
+    <div class="bar-chart"></div>
+{% else %}
+    <div class="yield-no-data">
+        <h3>No pollinator-dependent crops found in selected area.</h3>
+        <p>Adjust the Land Cover on this field to see yield results.</p> 
+    </div>
+{% endif %}
+
+{% if showDesc and hasData %}
     <p class="yield-help">Relative yield represents the predicted crop yield relative to the potential maximum yield for that crop. This yield metric is based on two main factors: how much the crop is dependent on pollination to produce fruit and the number of wild bees expected to visit the crop given the quality of wild bee habitat in the surrounding landscape.</p>
 {% endif %}

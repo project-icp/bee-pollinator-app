@@ -101,6 +101,7 @@ var TableView = Marionette.CompositeView.extend({
 
     initialize: function() {
         this.collection = this.formatData();
+        this.hasData = !_.isEmpty(this.options.scenarioResults);
     },
 
     onAttach: function() {
@@ -110,6 +111,7 @@ var TableView = Marionette.CompositeView.extend({
     templateHelpers: function() {
         return {
             isCurrentConditions: this.options.isCurrentConditions,
+            hasData: this.hasData
         };
     },
 
@@ -145,6 +147,7 @@ var ChartView = Marionette.ItemView.extend({
 
     initialize: function(options) {
         this.compareMode = options.compareMode;
+        this.hasData = !_.isEmpty(this.options.scenarioResults);
     },
 
     onAttach: function() {
@@ -163,11 +166,16 @@ var ChartView = Marionette.ItemView.extend({
                 yAxisDomain: [0,100]
             };
 
-        chart.renderGroupedVerticalBarChart(chartEl, data, chartOptions);
+        if (this.hasData) {
+            chart.renderGroupedVerticalBarChart(chartEl, data, chartOptions);
+        }
     },
 
-    templateHelpers: {
-        showDesc: true
+    templateHelpers: function() {
+        return {
+            showDesc: true,
+            hasData: this.hasData
+        };
     }
 });
 
@@ -182,6 +190,7 @@ var CompareChartView = Marionette.ItemView.extend({
 
     initialize: function(options) {
         this.scenario = options.scenario;
+        this.hasData = _.any(this.model.get('result'));
     },
 
     onAttach: function() {
@@ -219,12 +228,17 @@ var CompareChartView = Marionette.ItemView.extend({
                     compareMode: true
                 };
 
-            chart.renderGroupedVerticalBarChart(chartEl, data, chartOptions);
+            if (this.hasData) {
+                chart.renderGroupedVerticalBarChart(chartEl, data, chartOptions);
+            }
         }
     },
 
-    templateHelpers: {
-        showDesc: false
+    templateHelpers: function() {
+        return {
+            showDesc: false,
+            hasData: this.hasData
+        };
     }
 });
 
