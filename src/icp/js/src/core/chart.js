@@ -38,13 +38,6 @@ function handleCommonOptions(chart, options) {
     if (options.abbreviateTicks) {
         chart.yAxis.tickFormat(d3.format('.2s'));
     }
-    if (options.compareMode) {
-        // The desired text is too long to display in compare mode, compress
-        // to a reasonable compromise.
-        chart.noData('No pollinator-dependent crops found.');
-    } else {
-        chart.noData('No pollinator-dependent crops found in selected area.');
-    }
 }
 
 function getNumBars(data) {
