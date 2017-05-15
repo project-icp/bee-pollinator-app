@@ -1,9 +1,12 @@
 //Paragraph Styles
-p {
+p, ul, ol {
   font-size: 0.8rem;
   font-weight: 400;
   color: $black-54;
   line-height: 1.5;
+}
+
+p {
   margin: 0;
 }
 

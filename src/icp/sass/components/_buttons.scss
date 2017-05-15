@@ -84,11 +84,26 @@
   display: inline-block;
   background-color: $brand-primary !important;
   border: darken($brand-primary, 5%);
+  font-weight: 600;
 
   &:hover, &:focus {
     color: $ui-primary!important;
     background-color: darken($brand-primary, 5%);
     border: darken($brand-primary, 10%);
+  }
+}
+
+.btn-secondary {
+  color: #fff !important;
+  position: relative;
+  display: inline-block;
+  background-color: $ui-primary !important;
+  border: darken($ui-primary, 5%);
+
+  &:hover, &:focus {
+    color: #fff !important;
+    background-color: darken($ui-primary, 5%);
+    border: darken($ui-primary, 10%);
   }
 }
 
