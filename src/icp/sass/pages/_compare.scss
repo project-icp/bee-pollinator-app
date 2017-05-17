@@ -143,6 +143,9 @@ $compare-chart-table-height: calc(100vh - #{$height-lg} - #{$compare-footer-heig
                   .yield-chart-region {
                     height: 100%;
                   }
+                  .yield-no-data {
+                      top: 0;
+                  }
                 }
               }
             }
@@ -219,11 +222,12 @@ $compare-chart-table-height: calc(100vh - #{$height-lg} - #{$compare-footer-heig
     padding: 8px;
   }
 
-  h3 {
+  .back-text {
+    color: $black;
     display: inline-block;
     vertical-align: top;
-    line-height: $compare-footer-height;
-    padding-left: 1rem;
+    line-height: inherit;
+    padding-left: 0.5rem;
     position: relative;
     height: 100%;
   }

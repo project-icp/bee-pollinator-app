@@ -222,7 +222,7 @@ var ConservationPracticeView = ModificationsView.extend({
         ModificationsView.prototype.initialize.apply(this, [options]);
         this.model.set({
             controlName: this.getControlName(),
-            controlDisplayName: 'Enhancements',
+            controlDisplayName: 'Pollinator Plantings',
             modRowGroups: [{
                 name: '',
                 rows: [

@@ -159,8 +159,8 @@ var ChartView = Marionette.ItemView.extend({
             data = formatData(this.options.currentConditionsResults,
                 this.options.scenarioResults, this.options.isCurrentConditions),
             chartOptions = {
-                yAxisLabel: 'Relative Yield',
-                yAxisUnit: 'Relative Yield',
+                yAxisLabel: '% of Maximum Yield',
+                yAxisUnit: '% of Maximum Yield',
                 showLegend: false,
                 barClasses: _.pluck(_.flatten(_.pluck(data, 'values')), 'class'),
                 yAxisDomain: [0,100]
@@ -217,8 +217,8 @@ var CompareChartView = Marionette.ItemView.extend({
         if (result) {
             var data = getData(result, this.options.selectedCrops),
                 chartOptions = {
-                    yAxisLabel: 'Relative Yield',
-                    yAxisUnit: 'Relative Yield',
+                    yAxisLabel: '% of Maximum Yield',
+                    yAxisUnit: '% of Maximum Yield',
                     barClasses: _.pluck(_.flatten(_.pluck(data, 'values')), 'class'),
                     maxBarWidth: 100,
                     margin: {top: 20, right: 0, bottom: 40, left: 40},
@@ -258,7 +258,7 @@ var formatResultsFromModel = function(results, seriesName, useCurrentConditionsC
 
 var formatData = function(currentConditionsResults, scenarioResults, isCurrentConditions) {
     var data = [
-        formatResultsFromModel(currentConditionsResults, "Current Conditions",
+        formatResultsFromModel(currentConditionsResults, "Current Crop Map",
             isCurrentConditions ? false : true),
     ];
     if (!isCurrentConditions) {

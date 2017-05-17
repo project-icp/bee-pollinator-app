@@ -1,7 +1,7 @@
 {% if not isDrawn %}
     <h2>Select Field or Farm of Interest</h2>
     <img src="/static/images/draw-photo.png" alt="Example field boundary sketch">
-    <p>Outline the field or farm area of pollinator-dependent crop(s) that you would like to evaluate. Only one area of 400 acres or less can be drawn at a time.</p>
+    <p>Zoom in to your farm using the map on the left. Then outline the field or farm area of pollinator-dependent crop(s) that you would like to evaluate. Only one area of 400 acres or less can be drawn at a time. Fields or farms should not be smaller than 100 ft &times; 100 ft.</p>
 {% endif %}
 {% if not isDrawing and not isDrawn %}
     <button id="start-drawing" class="btn btn-active btn-lg btn-block" type="button">Start drawing</button>

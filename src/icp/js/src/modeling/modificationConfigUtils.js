@@ -13,7 +13,7 @@ function resetConfig() {
 }
 
 function unknownModKey(modKey) {
-    console.warn('Unknown Land Cover or Conservation Practice: ' + modKey);
+    console.warn('Unknown Land Cover or Pollinator Planting: ' + modKey);
     return '';
 }
 
