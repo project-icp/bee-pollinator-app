@@ -9,6 +9,7 @@ var $ = require('jquery'),
     modificationConfigUtils = require('./modificationConfigUtils'),
     userInputTmpl = require('./templates/controls/userInput.html'),
     thumbSelectTmpl = require('./templates/controls/thumbSelect.html'),
+    thumbSelectSummaryTmpl = require('./templates/controls/thumbSelectSummary.html'),
     modDropdownTmpl = require('./templates/controls/modDropdown.html');
 
 // Simulation input controls base class.
@@ -32,7 +33,14 @@ var ControlView = Marionette.LayoutView.extend({
     }
 });
 
-var ThumbSelectView = Marionette.ItemView.extend({
+var ThumbSelectSummaryView = Marionette.ItemView.extend({
+    template: thumbSelectSummaryTmpl,
+    modelEvents: {
+        'change:activeMod': 'render',
+    }
+});
+
+var ThumbSelectView = Marionette.LayoutView.extend({
     template: thumbSelectTmpl,
 
     initialize: function(options) {
@@ -53,13 +61,19 @@ var ThumbSelectView = Marionette.ItemView.extend({
         drawControl: '[data-value]'
     },
 
+    regions: {
+        summaryRegion: '.thumb-summary-region',
+    },
+
     events: {
         'click @ui.drawControl': 'onThumbClick',
         'mouseenter @ui.thumb': 'onThumbHover'
     },
 
-    modelEvents: {
-        'change:activeMod': 'render'
+    onShow: function() {
+        this.summaryRegion.show(new ThumbSelectSummaryView({
+            model: this.model,
+        }));
     },
 
     onThumbHover: function(e) {

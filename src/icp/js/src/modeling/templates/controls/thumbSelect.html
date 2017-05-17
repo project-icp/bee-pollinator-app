@@ -1,5 +1,5 @@
 <div class="thumb-select">
-    <div class="pad-1">
+    <div class="pad-1 thumb-container">
         {% for modRowGroup in modRowGroups %}
             {% if modRowGroup.name %}
                 <h5>{{ modRowGroup.name }}</h5>
@@ -20,11 +20,5 @@
             {% endfor %}
         {% endfor %}
     </div>
-
-    {% if activeMod %}
-        <div class="dropdown-footer pad-1 summary-region">
-            <h2 class="dark">{{ activeMod|modName }}</h2>
-            <p class="small summary">{{ activeMod|modSummary }}</p>
-        </div>
-    {% endif %}
+    <div class="thumb-summary-region"></div>
 </div>
