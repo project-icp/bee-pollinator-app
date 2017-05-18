@@ -26,7 +26,7 @@
     },
     "blueberries_with_cover_crop": {
         "value": 55,
-        "name": "Blueberries with Cover Crop",
+        "name": "Blueberries With Cover Crop",
         "summary": "Add a block of blueberries interplanted with cover crops to the farm landscape."
     },
     "cherries": {
@@ -87,6 +87,6 @@
     "wildflower_woody_mix": {
         "value": 62,
         "name": "Wildflower-Woody Mix",
-        "summary": "Wildflower, and flowering shrub and tree planting designed to provide bees with pollen, nectar, and ground and tunnel nesting sites."
+        "summary": "Wildflower, flowering shrub, and tree planting designed to provide bees with pollen, nectar, and ground and tunnel nesting sites."
     },
 }

@@ -199,7 +199,7 @@ function setupNewProjectScenarios(project) {
     var aoiCensus = project.get('aoi_census');
     project.get('scenarios').add([
         new models.ScenarioModel({
-            name: 'Current Conditions',
+            name: 'Current Crop Map',
             is_current_conditions: true,
             active: true,
             aoi_census: aoiCensus

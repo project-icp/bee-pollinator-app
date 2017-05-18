@@ -109,6 +109,17 @@
 .thumb-select {
   padding: 0!important;
   min-width: 200px;
+  // The space below the app and project header (height-lg) and toolbar
+  // Allows scroll on thumb-container
+  max-height: calc(100vh - 2 * #{$height-lg} - #{$toolbar-height}) !important;
+
+  .thumb-container {
+      overflow-y: auto;
+      // The space below the app and project header (height-lg) and toolbar
+      // and above the summary region
+      // Allows scroll
+      max-height: calc(100vh - 2 * #{$height-lg} - #{$toolbar-height} - 100px) !important;
+  }
 
   .summary {
     line-height: 150%;
