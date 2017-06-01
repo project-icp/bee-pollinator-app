@@ -9,15 +9,13 @@ fi
 CURRENT_STACK_COLOR=$(aws cloudformation describe-stacks \
   --profile "${ICP_AWS_PROFILE}" \
   --output text \
-  | egrep "TAGS\s+StackColor" \
-  | egrep "Blue|Green" \
-  | cut -f3 \
-  | uniq \
+  --query 'Stacks[?Tags[?Key == `StackName` && Value == `Application`] && Tags[?Key == `StackType` && Value == `Staging`]].Tags[] | [?Key == `StackColor`].Value' \
   | tr "[:upper:]" "[:lower:]")
 
-STACK_COLOR_COUNT=$(echo "${CURRENT_STACK_COLOR}" \
-  | wc -l \
-  | xargs)
+STACK_COLOR_COUNT=$(aws cloudformation describe-stacks \
+  --profile "${ICP_AWS_PROFILE}" \
+  --output json \
+  --query 'length(Stacks[?Tags[?Key == `StackName` && Value == `Application`] && Tags[?Key == `StackType` && Value == `Staging`]].Tags[] | [?Key == `StackColor`].Value)')
 
 # Determine which color stack to launch
 if [ "${STACK_COLOR_COUNT}" -gt 1 ]; then
@@ -25,7 +23,7 @@ if [ "${STACK_COLOR_COUNT}" -gt 1 ]; then
   exit 1
 elif [ "${CURRENT_STACK_COLOR}" = "blue" ]; then
   NEW_STACK_COLOR="green"
-elif [ "${CURRENT_STACK_COLOR}" = "green" ]; then
+else
   NEW_STACK_COLOR="blue"
 fi
 
