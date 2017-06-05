@@ -1,0 +1,14 @@
+envdir_home: "/etc/icp.d/env"
+
+envdir_config:
+  ICP_DB_NAME: "{{ postgresql_database }}"
+  ICP_DB_USER: "{{ postgresql_username }}"
+  ICP_DB_PASSWORD: "{{ postgresql_password }}"
+  ICP_DB_HOST: "{{ postgresql_host }}"
+  ICP_DB_PORT: "{{ postgresql_port }}"
+  ICP_STATSD_HOST: "{{ statsite_host }}"
+  ICP_CACHE_HOST: "{{ redis_host }}"
+  ICP_CACHE_PORT: "{{ redis_port }}"
+  ICP_STACK_COLOR: "{{ stack_color }}"
+  ICP_STACK_TYPE: "{{ stack_type }}"
+  ROLLBAR_SERVER_SIDE_ACCESS_TOKEN: "Unknown"

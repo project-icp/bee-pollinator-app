@@ -1,0 +1,8 @@
+[icp-worker]
+localhost ansible_user=ubuntu
+
+[workers]
+icp-worker
+
+[packer:children]
+workers

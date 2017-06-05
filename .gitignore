@@ -1,3 +1,7 @@
+# Script produced interim data
+src/icp/pollinator/src/pollinator/reclass/*.json
+src/icp/pollinator/src/pollinator/reclass/*.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -52,3 +56,43 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Ansible
+deployment/ansible/roles/azavea.*
+
+# CloudFormation
+deployment/default.yml
+
+# Vagrant
+.vagrant
+
+# NodeJS / Browserify stuff
+node_modules/
+npm-debug.log
+
+# Scala
+project/boot
+project/plugins/project
+project/plugins/target
+project/target
+target
+.ensime
+.lib
+*.aux.xml
+*.jar
+*.crc
+_SUCCESS
+.classpath
+.cache
+.settings
+.history
+.idea
+
+
+# Emacs
+\#*#
+*~
+.#*
+
+# MacOS
+.DS_Store

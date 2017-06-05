@@ -1,0 +1,14 @@
+description	"icp-app"
+
+{% if ['development', 'test'] | some_are_in(group_names) -%}
+start on (vagrant-mounted)
+{% else %}
+start on (local-filesystems and net-device-up IFACE!=lo)
+{% endif %}
+stop on shutdown
+
+respawn
+setuid icp
+chdir {{ app_home }}
+
+exec envdir /etc/icp.d/env gunicorn --config /etc/icp.d/gunicorn.py icp.wsgi >> {{ app_log }} 2>&1

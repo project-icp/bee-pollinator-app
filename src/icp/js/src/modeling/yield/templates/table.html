@@ -1,0 +1,15 @@
+{% if hasData %}
+<table class="table custom-hover" data-toggle="table">
+    <thead>
+        <tr>
+            <th data-sortable="true">Crop</th>
+            {% if not isCurrentConditions %}
+                <th class="text-left" data-sortable="true" data-sorter="window.numericSort">Baseline Yield</th>
+            {% endif %}
+            <th class="text-left" data-sortable="true" data-sorter="window.numericSort">Scenario Yield</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+{% endif %}

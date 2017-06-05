@@ -1,0 +1,8 @@
+[icp-app]
+localhost ansible_user=ubuntu
+
+[app-servers]
+icp-app
+
+[packer:children]
+app-servers

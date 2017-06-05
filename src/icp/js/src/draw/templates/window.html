@@ -1,0 +1,22 @@
+{% if not isDrawn %}
+    <h2>Select Field or Farm of Interest</h2>
+    <img src="/static/images/draw-photo.png" alt="Example field boundary sketch">
+    <p>Zoom in to your farm using the map on the left. Then outline the field or farm area of pollinator-dependent crop(s) that you would like to evaluate. Only one area of 400 acres or less can be drawn at a time. Fields or farms should not be smaller than 100 ft &times; 100 ft.</p>
+{% endif %}
+<div class="action-button">
+    {% if not isDrawing and not isDrawn %}
+        <button id="start-drawing" class="btn btn-active btn-lg btn-block" type="button">Start drawing</button>
+    {% endif %}
+    {% if isDrawing %}
+        <button id="cancel-drawing" class="btn btn-lg btn-block" type="button">Cancel drawing</button>
+    {% endif %}
+</div>
+
+{% if isDrawn %}
+    <h2>Confirm or Redraw Area</h2>
+    <p>
+        Does this selected area look correct? Are there pollinator-dependent crops in the selected area? If yes, click Confirm to continue. If you would like to change the selected area, click Redraw Area.
+    </p>
+    <a data-url="/project/new/yield" class="btn btn-active btn-lg btn-block">Confirm</a>
+    <button id="cancel-drawing" class="btn btn-secondary btn-lg btn-block" type="button">Redraw Area</button>
+{% endif %}

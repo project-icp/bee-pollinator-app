@@ -1,0 +1,28 @@
+<div class="crop-legend-dropdown dropup {{ legend }}">
+    <div class="dropdown-menu dropdown-menu-left">
+        {% for crop in cropTypes %}
+            <div class="legend-item">
+                <span class="legend-color crop-{{ crop.id }}"></span>
+                {{ crop.name }}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="leaflet-bar">
+    <a class="leaflet-bar-part leaflet-bar-part-single"
+       href="#" title="{{ action }} {{ layerName }}">
+        <span class="layer-name" style="margin-left:0.5rem">{{ layerName }}</span>
+        <input title="Drag to change opacity of overlay"
+            type="{{ inputType }}"
+            min="0"
+            max="99"
+            step="3"
+            class="slider slider-leaflet"
+            value="{{ initialOpacity }}"
+        >
+        <i class="eye-button {{ iconClass }}"></i>
+        {% if isDisplayed %}
+            <i class="legend-button {{ legend }} fa fa-th-list"></i>
+        {% endif %}
+    </a>
+</div>

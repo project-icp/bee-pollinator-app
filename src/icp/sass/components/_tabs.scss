@@ -1,0 +1,160 @@
+//Analyze Tabs
+#analyze-details-region { }
+
+//Scenario Tabs
+#scenario-wrapper {
+  position: relative;
+  width: 100%;
+
+  .nav-tabs {
+    font-weight: 500;
+    font-size: 0.6rem;
+    border-bottom: none!important;
+    background-color: $ui-secondary;
+    bottom: 0;
+    position: absolute;
+    left: 8px;
+
+    li a {
+      border-radius: 0!important;
+      border-top: none!important;
+      border-left: none!important;
+      border-right: none!important;
+      text-transform: uppercase;
+    }
+
+    li.active > a {
+      color: $ui-secondary;
+      background-color: #D0D0D0
+    }
+
+    li > a {
+      color: $ui-secondary;
+      padding: 0 1.8rem 0 0.8rem;
+      line-height: $height-md;
+      margin-right: 2px;
+      background-color: $paper-54;
+
+      &:hover {
+        background-color: $ui-light;
+        border-radius: 0!important;
+        color: $ui-secondary;
+      }
+    }
+  }
+}
+
+//Model Output Tabs
+.output-tabs-wrapper {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  .nav-tabs {
+    font-weight: 500;
+    font-size: 0.6rem;
+    border-bottom: 3px solid $black-12;
+    background-color: transparent;
+    background-color: $black-06;
+
+    li a {
+      border-radius: 0!important;
+      border-top: none!important;
+      border-left: none!important;
+      border-right: none!important;
+      text-transform: uppercase;
+    }
+
+    li.active > a {
+      color: $ui-secondary;
+      .sidebar-tab-header-label {
+        color: $brand-primary;
+        font-weight: 800;
+        &:after {
+          border-bottom-color: $brand-primary;
+        }
+      }
+    }
+
+    li > a {
+      color: $ui-secondary;
+      padding: 0 0.85rem;
+      line-height: $sidebar-tab-subheader-height;
+      background-color: transparent;
+      height: $sidebar-tab-subheader-height;
+
+      i {
+        color: $black-54;
+        position: relative;
+        top: 0.85rem;
+      }
+
+      &:hover, &:focus {
+        border-radius: 0!important;
+        color: $ui-secondary;
+        background-color: transparent;
+      }
+    }
+  }
+
+  .tab-content {
+    position: absolute;
+    top: 62px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    img {
+      width: 100%;
+      height: 200px;
+    }
+
+    .left, .right {
+      position: relative;
+      width: 100%;
+    }
+  }
+}
+
+//Compare Scenario Tabs
+#compare-wrapper {
+  position: relative;
+  width: 100%;
+
+  .nav-tabs {
+    font-weight: 500;
+    font-size: 0.6rem;
+    border-bottom: none!important;
+    background-color: $ui-secondary;
+
+    li a {
+      border-radius: 0!important;
+      border-top: none!important;
+      border-left: none!important;
+      border-right: none!important;
+      text-transform: uppercase;
+    }
+
+    li.active > a {
+      color: $paper;
+      background-color: $paper-12;
+
+    }
+
+    li > a {
+      color: $paper-54;
+      padding: 0 1.2rem;
+      line-height: $height-lg;
+      margin-right: 2px;
+      background-color: transparent;
+
+      &:hover {
+        background-color: $paper-12;
+        border-radius: 0!important;
+        color: $paper;
+      }
+    }
+  }
+}

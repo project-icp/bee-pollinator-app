@@ -1,0 +1,27 @@
+<div class="project-title">
+    <h3 class="light">{{ name }}</h3>
+    {% if editable or is_new %}
+        <div id="project-settings" class="dropdown pull-right">
+            <button class="btn btn-sm btn-icon light dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+            <i class="fa fa-caret-down"></i>
+            </button>
+            <ul class="dropdown-menu menu-right" role="menu">
+                {% if not is_new and editable %}
+                    <li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" id="share-project">Share</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" id="project-privacy">{% if is_private %}Make Public{% else %}Make Private{% endif %}</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" id="delete-project">Delete</a></li>
+                {% endif %}
+                {% if editable %}
+                    <li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" id="rename-project">Rename</a></li>
+                {% endif %}
+                {% if is_new %}
+                    <li role="presentation"><a role="menuitem" tabindex="-1" id="save-project">Save</a></li>
+                {% endif %}
+                {% if user %}
+                    <li role="separator" class="divider"></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" data-url="/projects/">My Projects</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    {% endif %}
+</div>

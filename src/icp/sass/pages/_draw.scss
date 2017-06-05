@@ -1,0 +1,58 @@
+#splash-window, #draw-window {
+  width: $sidebar-width;
+  padding: 15px;
+  position: absolute;
+  right: 0;
+  transition: all 200ms;
+  top: 44px;
+  bottom: 64px;
+  overflow-y: auto;
+
+  @media(min-width: 1040px) {
+    width: $sidebar-width-lg;
+  }
+
+  .hidden-sidebar & {
+    transform: translateX(100%);
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    margin-top: 14px;
+    font-weight: 900;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  h2, p {
+    padding: 0 0 15px;
+  }
+
+  img {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .action-button {
+    margin-left: -15px;
+    margin-right: -15px;
+    padding: 10px 15px;
+    background-color: #fff;
+    position: fixed;
+    bottom: 0;
+    width: inherit;
+    left: auto;
+  }
+
+  .btn-lg {
+    margin-top: 10px;
+  }
+
+  #get-started {
+    margin-top: 0;
+  }
+}

@@ -1,0 +1,9 @@
+---
+- name: Restart icp-app
+  service: name=icp-app state=restarted
+  when: "['app-servers'] | is_in(group_names)"
+
+- name: Restart Celery
+  service: name=celeryd state=restarted
+  when: "['workers'] | is_in(group_names)"
+

@@ -1,0 +1,90 @@
+// Generated and considerably refined from http://danielstern.ca/range.css/
+.slider {
+    -webkit-appearance: none;
+    width: 110px !important;
+    margin: auto !important;
+    margin-left: 0.5rem !important;
+    margin-right: 0.5rem important;
+    cursor: pointer;
+    &:focus {
+        outline: none;
+    }
+
+    &.slider-leaflet {
+        background-color: transparent;
+        cursor: pointer;
+        @media screen and (-webkit-min-device-pixel-ratio:0) {
+        /* Webkit only http://phrappe.com/css/conditional-css-for-webkit-based-browsers/ */
+            border-top: 11px solid transparent;
+            border-bottom: 11px solid transparent;
+        }
+        padding: 0;
+
+        &::-webkit-slider-thumb {
+            background: $black;
+            width: 12px;
+            height: 12px;
+            border: 1px solid $black;
+            border-radius: 50px;
+            margin-top: -5px;
+            -webkit-appearance: none;
+        }
+
+        &:focus::-webkit-slider-thumb {
+            background: $black;
+        }
+
+        &::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 2px;
+            cursor: pointer;
+            background: $ui-primary;
+        }
+
+        &::-moz-range-track {
+            background-color: $ui-primary;
+            height: 2px;
+        }
+        &::-moz-range-thumb {
+            background: $black;
+            width: 12px;
+            height: 12px;
+            border: 1px solid $black;
+            border-radius: 50px;
+        }
+
+        &::-ms-track {
+            color: transparent;
+            background: transparent;
+            border-color: transparent;
+            width: 100%;
+            height: 2px;
+            cursor: pointer;
+            border-top: 11px solid transparent;
+            border-bottom: 11px solid transparent;
+        }
+        &::-ms-thumb {
+            background: $black;
+            width: 12px;
+            height: 12px;
+            border: 1px solid $black;
+            border-radius: 50px;
+        }
+        &::-ms-fill-lower {
+            background: $ui-primary;
+            border: $ui-primary;
+        }
+        &::-ms-fill-upper {
+            background: $ui-primary;
+            border: $ui-primary;
+        }
+        &:focus::-ms-fill-lower {
+            background:  $ui-primary;
+            border:  $ui-primary;
+        }
+        &:focus::-ms-fill-upper {
+            background: $ui-primary;
+            border:  $ui-primary;
+        }
+    }
+}

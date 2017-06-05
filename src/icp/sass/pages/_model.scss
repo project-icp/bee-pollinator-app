@@ -1,0 +1,94 @@
+//Layout
+#model-output-wrapper {
+  position: absolute;
+  right: 0;
+  top: $height-lg * 2 + $toolbar-height;
+  bottom: 0;
+  width: $sidebar-width !important;
+  @media(min-width: 1040px) {
+    width: $sidebar-width-lg !important;
+  }
+  min-height: 300px;
+  height: auto !important;
+  background-color: $paper;
+  z-index: 100;
+  transform: translateX(0%);
+
+  .hidden-sidebar & {
+    transform: translateX(100%);
+  }
+
+  .back-button {
+      display: inline-block;
+  }
+
+  .disabled {
+      text-decoration: none;
+  }
+
+  &.analyze {
+    top: $height-lg;
+  }
+
+  .title-row {
+    background-color: $ui-light;
+    color: $ui-secondary;
+
+    .title {
+      display: inline-block;
+      position: relative;
+
+      h2 {
+        margin-top: 0.4rem!important;
+        line-height: 0.4rem;
+      }
+    }
+  }
+
+  .result-region {
+    height: 100%;
+    width: 100%;
+
+    .mean-flow {
+      font-size: 16px;
+    }
+
+    .runoff-chart-container {
+      height: 300px;
+      width: 100%;
+    }
+
+    .runoff-chart-container.current-conditions {
+      height: 300px;
+      width: 100%;
+    }
+
+    .runoff-selector-region {
+      select {
+        width: 50%;
+      }
+    }
+
+    .yield-help {
+      font-size: 0.7rem;
+    }
+  }
+
+  .tab-content {
+    overflow-y: auto;
+    padding: 1rem;
+
+    .row {
+      width: 100%;
+    }
+  }
+}
+
+.analyze-message-inner {
+  .fa-circle-o-notch {
+    float: left;
+    margin-right: 10px;
+    position: relative;
+    top: 2px;
+  }
+}

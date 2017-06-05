@@ -1,0 +1,20 @@
+<a href="#{{ cid }}" data-scenario-cid="{{ cid }}" aria-controls="home" role="tab" data-toggle="tab" class="tab-name"><span>{{ name }}</span></a>
+{% if active and editable and (not is_current_conditions or not is_new) %}
+    <div class="scenario-btn-dropdown">
+        <div class="dropdown">
+            <button class="btn btn-sm btn-icon dark dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+            <i class="fa fa-caret-down"></i>
+            </button>
+            <ul class="dropdown-menu menu-right" role="menu">
+                {% if not is_new %}
+                    <li role="presentation"><a role="menuitem" tabindex="-1" data-action="share">Share</a></li>
+                {% endif %}
+                {% if not is_current_conditions %}
+                    <li role="presentation"><a role="menuitem" tabindex="-1" data-action="rename">Rename</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" data-action="duplicate">Duplicate</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" data-action="delete">Delete</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+{% endif %}

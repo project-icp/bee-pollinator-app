@@ -1,0 +1,5 @@
+---
+dependencies:
+  - { role: "azavea.relp" }
+  - { role: "bee-pollinator.collectd" }
+  - { role: "bee-pollinator.beaver" }

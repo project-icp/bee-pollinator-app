@@ -1,0 +1,79 @@
+//General Styling
+.table {
+  width: 100%;
+  font-size: 0.7rem;
+  color: $ui-primary;
+
+  .strong {
+    font-weight: 700;
+    color: $brand-primary;
+  }
+
+  th, td {
+    padding: 0.8rem 0.4rem;
+    line-height: 1!important;
+    vertical-align: middle!important;
+    border-top: none!important;
+  }
+}
+
+//Hover Table
+.custom-hover {
+  thead {
+    border-bottom: solid 1px $black-12;
+    font-weight: 500;
+  }
+
+  tr {
+
+    &:hover {
+      background-color: $ui-light;
+    }
+  }
+}
+
+//Modification Table
+.modifications {
+  margin-bottom: 1rem;
+
+  th, td {
+    white-space: nowrap;
+
+    &:last-child {
+      padding-right: 0;
+    }
+  }
+}
+
+.fixed-table-container {
+  padding-bottom: 0px !important;
+  margin-top: 20px;
+
+  thead th .th-inner {
+    white-space: normal;
+    line-height: 1.25;
+  }
+}
+
+.fixed-table-footer tr {
+    font-weight: bold;
+
+    td:nth-child(n+2) {
+        color: $brand-primary;
+    }
+}
+
+.catchment-water-quality-table-footer,
+    .ptsrc-table-footer {
+    border-top: 1px solid #ddd;
+}
+
+.catchment-water-quality-footer-item,
+    .ptsrc-footer-item {
+    border-left: 1px solid #ddd;
+}
+
+.catchment-water-quality .catchment-water-quality-id,
+    .point-source .point-source-id {
+  cursor: pointer;
+}

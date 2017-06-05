@@ -1,0 +1,214 @@
+//General Styling
+.dropdown {
+  display: inline-block;
+  line-height: 1!important;
+
+  .dropdown-menu {
+    padding: 0;
+    border-radius: $radius-sm!important;
+    border: 1px solid $black-12;
+    box-shadow: 0 0 6px $black-24;
+
+    .divider {
+      margin: 0!important;
+    }
+
+    &.menu-left {
+      left: 0;
+    }
+
+    &.menu-right {
+      right: 0;
+      left: inherit;
+    }
+
+    li {
+
+      a {
+        color: $black-74;
+        line-height: $height-md;
+        padding: 0 0.5rem;
+        font-size: 0.7rem;
+        text-transform: capitalize!important;
+
+        &:not(.disabled) {
+          cursor: pointer;
+
+          &:hover, &:focus {
+            color: $black-74;
+            background-color: $ui-light;
+          }
+        }
+
+        &.disabled {
+            cursor: default!important;
+            color: $black-54;
+        }
+
+        i {
+          color: $black-54;
+          margin-right: 6px;
+        }
+      }
+    }
+
+    .dropdown-footer {
+      background-color: $ui-light;
+      min-height: 100px;
+
+      span {
+        color: $black-54;
+      }
+    }
+  }
+}
+
+.manual-entry {
+  min-width: 250px;
+
+  .header {
+    .header-text {
+      background-color: $ui-light;
+
+      .name, .back-button {
+        display: inline;
+      }
+    }
+
+    svg {
+      position: absolute;
+    }
+  }
+
+  .content {
+    padding: 1rem;
+
+    .form-group {
+      margin-bottom: 0;
+    }
+
+    .info-region {
+      min-height: 25px;
+
+      .info-message {
+        color: $ui-grey;
+      }
+
+      .error-message {
+        color: $ui-danger;
+      }
+    }
+
+    .amount-form {
+      margin: 10px;
+    }
+  }
+}
+
+//Drawing Tools Dropdown
+.thumb-select {
+  padding: 0!important;
+  min-width: 200px;
+  // The space below the app and project header (height-lg) and toolbar
+  // Allows scroll on thumb-container
+  max-height: calc(100vh - 2 * #{$height-lg} - #{$toolbar-height}) !important;
+
+  .thumb-container {
+      overflow-y: auto;
+      // The space below the app and project header (height-lg) and toolbar
+      // and above the summary region
+      // Allows scroll
+      max-height: calc(100vh - 2 * #{$height-lg} - #{$toolbar-height} - 100px) !important;
+  }
+
+  .summary {
+    line-height: 150%;
+  }
+
+  .select-draw-manual {
+    padding-left: 1rem;
+    padding-bottom: 0.5rem;
+  }
+
+  h2 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  ul {
+    list-style-type: none;
+    -webkit-padding-start: 0!important;
+    -moz-padding-start: 0!important;
+    display: flex;
+    flex-direction: row;
+
+    li {
+      float: left;
+      display: block;
+      width: 60px;
+      margin-bottom: 0.2rem;
+      transition: all 0.4s ease-out;
+      margin-right: 1rem;
+      text-align: center;
+      white-space: normal;
+
+      &:last-child {
+        margin-right: 0!important;
+      }
+
+      .thumb {
+        height: 60px;
+        border: solid 2px transparent;
+        background-color: $ui-light;
+        margin-bottom: 0.2rem;
+        display: block;
+
+        &:not(.disabled):hover {
+          border-color: $ui-primary;
+          cursor: pointer;
+        }
+      }
+    }
+
+    .disabled {
+      opacity: 0.4;
+    }
+  }
+}
+
+#predefined-shape {
+  ul.dropdown-menu {
+    min-width: 280px;
+  }
+}
+
+.modification-dropdown {
+  z-index: 1002;
+}
+
+.crop-legend-dropdown {
+
+  .dropdown-menu {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0.5rem;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    max-height: 8.5rem;
+    width: 100%;
+  }
+
+  .legend-color {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+    margin-bottom: -3px;
+    border: 2px solid $black-39;
+  }
+
+  .legend-item {
+    white-space: nowrap;
+  }
+}

@@ -1,0 +1,18 @@
+<div class="header">
+    <h3>Model Output</h3>
+    {% if polling %}
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+    {% endif %}
+    <div class="pull-right">
+        <select class="form-control btn btn-small btn-primary">
+            <option value="all">All Crops</option>
+            {% for crop in chartableCrops %}
+                <option value="{{ crop }}">
+                    {{ cropTypes[crop] }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+<div class="result-region"></div>
+<div class="controls-region"></div>

@@ -1,0 +1,25 @@
+{
+    "strict": true,
+    "globalstrict": true,
+    "sub": true,
+    "unused": true,
+    "browser": true,
+    "curly": true,
+    "eqeqeq": true,
+    "globals": {
+        "require": false,
+        "module": true,
+        "exports": true,
+        "config": false,
+        "console": false,
+        "test": false,
+        "suite": false,
+        "beforeEach": false,
+        "before": false,
+        "afterEach": false,
+        "after": false,
+        "done": false,
+        "it": false,
+        "describe": false
+    }
+}

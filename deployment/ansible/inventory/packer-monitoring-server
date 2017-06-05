@@ -1,0 +1,8 @@
+[icp-monitoring]
+localhost ansible_user=ubuntu
+
+[monitoring-servers]
+icp-monitoring
+
+[packer:children]
+monitoring-servers

@@ -1,0 +1,92 @@
+{
+    "almonds": {
+        "value": 35,
+        "name": "Almonds",
+        "summary": "Add a block of almonds to the farm landscape."
+    },
+    "almonds_with_cover_crop": {
+        "value": 53,
+        "name": "Almonds With Cover Crop",
+        "summary": "Add a block of almonds interplanted with cover crops to the farm landscape."
+    },
+    "apples": {
+        "value": 29,
+        "name": "Apples",
+        "summary": "Add a block of apples to the farm landscape."
+    },
+    "apples_with_cover_crop": {
+        "value": 54,
+        "name": "Apples With Cover Crop",
+        "summary": "Add a block of apples interplanted with cover crops to the farm landscape."
+    },
+    "blueberries": {
+        "value": 51,
+        "name": "Blueberries",
+        "summary": "Add a block of blueberries to the farm landscape."
+    },
+    "blueberries_with_cover_crop": {
+        "value": 55,
+        "name": "Blueberries With Cover Crop",
+        "summary": "Add a block of blueberries interplanted with cover crops to the farm landscape."
+    },
+    "cherries": {
+        "value": 27,
+        "name": "Cherries",
+        "summary": "Add a block of cherries to the farm landscape."
+    },
+    "cherries_with_cover_crop": {
+        "value": 56,
+        "name": "Cherries With Cover Crop",
+        "summary": "Add a block of cherries interplanted with cover crops to the farm landscape."
+    },
+    "raspberries": {
+        "value": 52,
+        "name": "Raspberries",
+        "summary": "Add a block of raspberries to the farm landscape."
+    },
+    "raspberries_with_cover_crop": {
+        "value": 57,
+        "name": "Raspberries With Cover Crop",
+        "summary": "Add a block of raspberries interplanted with cover crops to the farm landscape."
+    },
+    "watermelons": {
+        "value": 17,
+        "name": "Watermelons",
+        "summary": "Add a block of watermelons to the farm landscape."
+    },
+    "watermelons_with_cover_crop": {
+        "value": 58,
+        "name": "Watermelons With Cover Crop",
+        "summary": "Add a block of watermelons interplanted with cover crops to the farm landscape."
+    },
+    "pumpkins": {
+        "value": 50,
+        "name": "Pumpkins",
+        "summary": "Add a block of pumpkins to the farm landscape."
+    },
+    "pumpkins_with_cover_crop": {
+        "value": 59,
+        "name": "Pumpkins With Cover Crop",
+        "summary": "Add a block of pumpkins interplanted with cover crops to the farm landscape."
+    },
+    "grassland": {
+        "value": 11,
+        "name": "Grassland / Pasture",
+        "summary": "Add an area of grassland or pasture to the farm landscape."
+    },
+    "wildflower": {
+        "value": 60,
+        "name": "Wildflower",
+        "summary": "Wildflower planting designed to provide bees with pollen, nectar, and ground nesting sites."
+    },
+    "woody": {
+        "value": 61,
+        "name": "Woody",
+        "summary": "Flowering shrub and tree planting designed to provide bees with pollen, nectar, and ground and tunnel nesting sites."
+    },
+    "wildflower_woody_mix": {
+        "value": 62,
+        "name": "Wildflower-Woody Mix",
+        "summary": "Wildflower, flowering shrub, and tree planting designed to provide bees with pollen, nectar, and ground and tunnel nesting sites."
+    },
+}

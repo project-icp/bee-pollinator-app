@@ -1,0 +1,12 @@
+{% if hasData %}
+    <div class="bar-chart"></div>
+{% else %}
+    <div class="yield-no-data">
+        <h3>No pollinator-dependent crops found in selected area.</h3>
+        <p>Adjust the Land Cover on this field or select new area to see yield results.</p>
+    </div>
+{% endif %}
+
+{% if showDesc and hasData %}
+    <p class="yield-help">This yield graph represents the predicted crop yield relative to the potential maximum yield for that crop (e.g., a yield of 60 represents 60% of maximum yield). This yield metric is based on two main factors: how much the crop is dependent on pollination to produce fruit and the number of wild bees expected to visit the crop given the quality of wild bee habitat in the surrounding landscape. This "Current Crop Map" yield is based only on what wild bees can provide. You can add managed bees and/or pollinator plantings in new scenarios to see how they will impact yield.</p>
+{% endif %}

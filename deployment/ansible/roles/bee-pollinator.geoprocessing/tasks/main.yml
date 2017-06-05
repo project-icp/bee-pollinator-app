@@ -1,0 +1,20 @@
+---
+- name: Install scipy dependencies
+  apt: pkg={{ item }} state=present
+  with_items:
+    - "liblas-dev=1.7.*"
+    - "liblapack-dev=3.5.0*"
+    - "gfortran=4:4.8.2*"
+
+- name: Install numpy
+  pip: name=numpy version={{ numpy_version }}
+
+- name: Install pollinator model dependencies
+  pip: chdir="{{ app_home }}/requirements" requirements=model.txt
+
+- name: Create model data path
+  file: path="{{ model_data_path }}"
+        state=directory
+
+- name: Install pollinator model
+  command: python setup.py build --build-base=/tmp install chdir="{{ app_home }}/pollinator"

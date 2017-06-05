@@ -1,0 +1,209 @@
+.map-container {
+  position: absolute;
+  top: $height-lg;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transition: all 200ms;
+  // Set top of map to height of initial header.
+  // Needs a more descriptive name.
+  &.map-container-top-1 {
+    top: $height-lg;
+  }
+  // Set top of map to combined height of initial header and toolbar.
+  // Needs a more descriptive name.
+  &.map-container-top-2 {
+    top: $height-lg * 2 + $toolbar-height;
+  }
+  // Set bottom of map to height of default view, which is 0px.
+  // Needs a more descriptive name.
+  &.map-container-bottom-1 {
+    bottom: 0;
+  }
+  // Set bottom of map to height of output toolbar.
+  // Needs a more descriptive name.
+  &.map-container-bottom-2 {
+    bottom: $output-height;
+  }
+  // Set bottom of map to location description toolbar.
+  // Needs a more descriptive name.
+  &.map-container-bottom-3 {
+    bottom: $location-description-height;
+  }
+  // Set bottom of map to full standard footer height.
+  // Needs a more descriptive name.
+  &.map-container-bottom-4 {
+    bottom: $footer-height;
+  }
+  // Sets map to correct container size for sidebar.
+  &.map-container-top-sidebar {
+    top: $height-lg * 2 + $toolbar-height;
+    right: $sidebar-width;
+    @media(min-width: 1040px) {
+      right: $sidebar-width-lg !important;
+    }
+  }
+  // Sets map to correct container size for sidebar
+  // with no header.
+  &.map-container-top-sidebar-no-header {
+    top: $height-lg;
+    right: $sidebar-width;
+    @media(min-width: 1040px) {
+      right: $sidebar-width-lg !important;
+    }
+  }
+  // Sets map to correct container size for sidebar.
+  &.map-container-bottom-sidebar {
+    bottom: 0 !important;
+  }
+
+  // Sets map to correct container size for no sidebar
+  &.hidden-sidebar {
+    right: 0 !important;
+  }
+  .compare-scenarios-container & {
+    top: 0;
+  }
+}
+
+#map {
+  background-color: $black-12;
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 100%;
+}
+
+#overlay-subclass-vector .disabled, #overlay-subclass-raster .disabled {
+  color: $black-54;
+}
+
+// Override default location of Leaflet spritesheet images.
+.leaflet-draw-toolbar a {
+  background-image: url('../images/spritesheet.png');
+}
+
+.leaflet-retina .leaflet-draw-toolbar a {
+  background-image: url('../images/spritesheet-2x.png');
+}
+
+.leaflet-control-layers-toggle {
+  background-image: url('../images/layers.png');
+}
+
+.leaflet-retina .leaflet-control-layers-toggle {
+  background-image: url('../images/layers-2x.png');
+}
+
+.leaflet-control {
+  .leaflet-control-stream {
+    min-width: 220px;
+    min-height: 100px;
+    margin-right: 50px;
+    background-color: #fff;
+    display: none;
+  }
+
+  .modal-header {
+    background-color: $ui-primary;
+    color: $paper;
+    padding: 5px 15px;
+
+    .modal-title {
+      font-size: 14px;
+     }
+  }
+
+  form {
+    padding: 15px;
+  }
+
+  .close {
+    text-shadow: none;
+    color: $paper;
+    font-size: 24px;
+  }
+}
+
+.leaflet-control-layers,
+.leaflet-popup {
+  font-family: $font-family !important;
+  box-shadow: 0 0px 0px rgba(0,0,0,0);
+}
+
+.leaflet-control-overlay,
+.leaflet-control-layers {
+  background-color: $clear;
+  color: black;
+  text-decoration: none;
+  text-align: center;
+  div > a, div > a:hover {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+  .leaflet-touch & {
+      border: none;
+      .leaflet-bar a {
+          width: 100%;
+      }
+  }
+}
+
+.leaflet-bottom-right-controls {
+  display: flex;
+  flex-direction: row-reverse;
+  float: right;
+}
+
+.leaflet-control-zoom {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.leaflet-bottom.leaflet-left {
+  display: flex;
+  flex-direction: row;
+  // account for the height of the map attribution
+  // under the right controls
+  padding-bottom: 16px;
+}
+
+.leaflet-control a {
+  border-radius: 0 !important;
+}
+
+.leaflet-bar a, .leaflet-bar a:hover {
+  border-bottom: none;
+  border-right: 1px solid #ccc;
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+  i, span {
+      color: $ui-primary;
+      line-height: 30px;
+      vertical-align: middle;
+      text-align: center;
+  }
+  i {
+      margin: auto;
+      margin-right: 0.5rem;
+      margin-left: 0.5rem;
+      size: 25px;
+      cursor: pointer;
+  }
+  span {
+      margin: auto;
+  }
+  img {
+      float: left;
+      padding: 2px;
+  }
+}
+
+.leaflet-bar a:first-child {
+  border-right: none;
+}

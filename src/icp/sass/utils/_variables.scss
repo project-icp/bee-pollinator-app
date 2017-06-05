@@ -1,0 +1,49 @@
+//Base Colors
+$black-06: rgba(0,0,0,.06);
+$black-12: rgba(0,0,0,.12);
+$black-24: rgba(0,0,0,.24);
+$black-39: rgba(0,0,0,.39);
+$black-54: rgba(0,0,0,.54);
+$black-65: rgba(0,0,0,.65);
+$black-74: rgba(0,0,0,.74);
+$black: #000000;
+$paper-12: rgba(255,255,255,.12);
+$paper-54: rgba(255,255,255,.54);
+$paper-74: rgba(255,255,255,.74);
+$paper: #ffffff;
+$clear: rgba(0,0,0,0);
+
+//Custom Colors
+$ui-primary: #464648; /*Dark Grey*/
+$ui-secondary: #525659; /*Medium Grey*/
+$ui-light: #eceff1; /*Light Grey*/
+$ui-grey: #787878 ; /* Output Tab Bar */
+$ui-disabled: #a4a4a4;
+$ui-danger: #e0412d; /*Errors*/
+$active: #478aaf ; /* Blue */
+$brand-primary: #F1C40F; /* Honeycomb Yellow */
+$sky-blue: #bbe5f5; /*Sky*/
+$water: #49b8ea; /*Water*/
+
+//Type
+$font-family: 'Roboto', helvetica, arial, sans-serif;
+$font-h1: 1.8rem;
+$font-h2: 1.5rem;
+$font-h3: 1.0rem;
+
+//Heights
+$footer-height: 55%;
+$location-description-height: 68px;
+$toolbar-height: 53px;
+$output-height: 50px;
+$height-lg: 44px;
+$height-md: 36px;
+$height-sm: 28px;
+$height-xs: 18px;
+$sidebar-width: 460px;
+$sidebar-width-lg: 485px;
+$sidebar-header-height: 40px;
+$sidebar-tab-subheader-height: 60px;
+
+//Border-radius
+$radius-sm: 2px;

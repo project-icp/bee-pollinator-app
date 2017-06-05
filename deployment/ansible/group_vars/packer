@@ -1,0 +1,19 @@
+---
+django_settings_module: "icp.settings.production"
+
+postgresql_username: "icp_bees"
+postgresql_database: "icp_bees"
+
+ntp_servers:
+  - 0.amazon.pool.ntp.org
+  - 1.amazon.pool.ntp.org
+  - 2.amazon.pool.ntp.org
+  - 3.amazon.pool.ntp.org
+
+redis_host: "cache.service.icp.internal"
+postgresql_host: "database.service.icp.internal"
+relp_host: "monitoring.service.icp.internal"
+graphite_host: "monitoring.service.icp.internal"
+statsite_host: "monitoring.service.icp.internal"
+
+stack_type: "Packer"

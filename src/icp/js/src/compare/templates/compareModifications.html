@@ -1,0 +1,36 @@
+{% macro modificationsTable(caption, modifications) %}
+<table class="modifications-table">
+    <caption>{{ caption }}</caption>
+    <tbody>
+        {% for mod in modifications %}
+            <tr>
+                <td class="modification-value">
+                    {{ modConfigUtils.getHumanReadableShortName(mod.get('value')) }}
+                </td>
+                <td class="modification-area">
+                    +{{ mod.get('area').toFixed(1) }} {{ mod.get('units') }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td class="modification-value">
+                    None
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endmacro %}
+
+<table class="modifications-table">
+    <caption>Managed Hives</caption>
+    <tbody>
+        <tr>
+            <td class="modification-value">
+                {{ numberOfHives + " per acre" }}
+            </td>
+    </tbody>
+</table>
+
+{{ modificationsTable('Land Cover Changes', landCovers) }}
+{{ modificationsTable('Pollinator Plantings', enhancements) }}
