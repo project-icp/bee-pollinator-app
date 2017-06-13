@@ -365,7 +365,7 @@ BASEMAPS = [
 ]
 
 OVERLAY = {
-    'url': 'https://tiles.pollinator-modeling-app.azavea.com/{z}/{x}/{y}.png',
+    'url': 'https://{s}.tiles.azavea.com/cdl-reclass/{z}/{x}/{y}.png',
     'maxNativeZoom': 15
 }
 
