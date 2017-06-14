@@ -226,7 +226,8 @@ class Application(StackNode):
                        'architecture': 'x86_64',
                        'block-device-mapping.volume-type': 'gp2',
                        'root-device-type': 'ebs',
-                       'virtualization-type': 'hvm'}
+                       'virtualization-type': 'hvm',
+                       'tag:Environment': self.get_input('StackType')}
 
             app_server_ami_id = get_recent_ami(self.aws_profile,
                                                filters=filters)
