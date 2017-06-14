@@ -79,10 +79,12 @@ def build_stacks(icp_config, aws_profile, **kwargs):
 def destroy_stacks(icp_config, aws_profile, **kwargs):
     """Destroy stacks that are associated with stack_color"""
     region = icp_config['Region']
+    stack_type = icp_config['StackType']
     stack_color = kwargs['stack_color']
 
     cfn_conn = cfn.connect_to_region(region, profile_name=aws_profile)
+    stack_tag = ('StackType', stack_type)
     color_tag = ('StackColor', stack_color.capitalize())
 
     [stack.delete() for stack in cfn_conn.describe_stacks()
-        if color_tag in stack.tags.items()]
+     if color_tag in stack.tags.items() and stack_tag in stack.tags.items()]
