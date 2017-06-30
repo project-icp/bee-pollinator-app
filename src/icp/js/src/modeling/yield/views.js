@@ -221,7 +221,6 @@ var CompareChartView = Marionette.ItemView.extend({
                     yAxisUnit: '% of Maximum Yield',
                     barClasses: _.pluck(_.flatten(_.pluck(data, 'values')), 'class'),
                     maxBarWidth: 100,
-                    margin: {top: 20, right: 0, bottom: 40, left: 40},
                     showLegend: false,
                     disableToggle: true,
                     yAxisDomain: [0, 100],
