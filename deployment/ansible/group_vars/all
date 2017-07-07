@@ -38,5 +38,3 @@ graphite_web_version: "0.9.13-pre1"
 
 model_data_path: "/opt/icp-crop-data"
 numpy_version: "1.11.1"
-
-nginx_cache_dir: "/var/cache/nginx"

@@ -1,10 +1,3 @@
-# Protects against scenarios where DNS records for the
-# site being proxied change.
-resolver 8.8.8.8 valid=300s;
-resolver_timeout 10s;
-
-proxy_cache_path {{ nginx_cache_dir }} levels=1:2 keys_zone=OBSERVATION:10m max_size=100m;
-
 server {
   listen *:80;
   server_name _;
