@@ -24,8 +24,8 @@ if not instance_metadata:
 # HOST CONFIGURATION
 # See: https://docs.djangoproject.com/en/1.5/releases/1.5/#allowed-hosts-required-in-production  # NOQA
 ALLOWED_HOSTS = [
-    'pollinator-modeling-app.azavea.com',
-    'staging.pollinator-modeling-app.azavea.com',
+    'app.pollinationmapper.org',
+    'staging.app.pollinationmapper.org',
     '.elb.amazonaws.com',
     'localhost'
 ]
@@ -38,7 +38,7 @@ ALLOWED_HOSTS.append(instance_metadata['local-ipv4'])
 
 # EMAIL CONFIGURATION
 EMAIL_BACKEND = 'django_amazon_ses.backends.boto.EmailBackend'
-DEFAULT_FROM_EMAIL = 'noreply@pollinator-modeling-app.azavea.com'
+DEFAULT_FROM_EMAIL = 'noreply@pollinationmapper.org'
 # END EMAIL CONFIGURATION
 
 # MIDDLEWARE CONFIGURATION
