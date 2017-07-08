@@ -23,6 +23,7 @@ var _ = require('lodash'),
     scenarioMenuItemTmpl = require('./templates/scenarioMenuItem.html'),
     projectMenuTmpl = require('./templates/projectMenu.html'),
     yieldScenarioToolbarTabContentTmpl = require('./templates/yieldScenarioToolbarTabContent.html'),
+    tours = require('./tours'),
     yieldViews = require('./yield/views.js');
 
 var ENTER_KEYCODE = 13,
@@ -320,6 +321,15 @@ var ScenarioTabPanelView = Marionette.ItemView.extend({
 
     onRender: function() {
         this.$el.toggleClass('active', this.model.get('active'));
+    },
+
+    onShow: function() {
+        if (!this.model.get('active')) {
+            return;
+        }
+        var tour = this.model.get('is_current_conditions') ?
+                   tours.cropMapTour : tours.newScenarioTour;
+        tour.showTourIfNecessary();
     },
 
     ui: {

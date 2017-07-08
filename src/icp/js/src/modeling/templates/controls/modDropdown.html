@@ -1,4 +1,8 @@
-<div class="modification-dropdown {{ "dropdown open" if dropdownOpen else "dropdown" }}">
+<div class="modification-dropdown {{ "dropdown open" if dropdownOpen else "dropdown" }}"
+    {% if controlDisplayName == "Land Cover" -%} id="add-land-cover-btn"
+        {% elif controlDisplayName == "Pollinator Plantings" -%} id="add-pollinator-planting-btn"
+    {% endif %}
+>
     <button class="btn btn-sm btn-primary dropdown-button" type="button" aria-expanded="true">
         <i class="fa fa-plus-circle"></i> {{ controlDisplayName }}
     </button>

@@ -3,7 +3,7 @@
     {% if polling %}
         <i class="fa fa-circle-o-notch fa-spin"></i>
     {% endif %}
-    <div class="pull-right">
+    <div class="pull-right" id="compare-crop-dropdown">
         <select class="form-control btn btn-small btn-primary">
             <option value="all">All Crops</option>
             {% for crop in chartableCrops %}

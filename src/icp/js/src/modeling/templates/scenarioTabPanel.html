@@ -1,4 +1,8 @@
-<a href="#{{ cid }}" data-scenario-cid="{{ cid }}" aria-controls="home" role="tab" data-toggle="tab" class="tab-name"><span>{{ name }}</span></a>
+<a href="#{{ cid }}" data-scenario-cid="{{ cid }}"
+    {% if is_current_conditions -%} id="current-crop-map-tab"
+    {% elif name == "New Scenario" -%} id="new-scenario-tab"
+    {%- endif %}
+    aria-controls="home" role="tab" data-toggle="tab" class="tab-name"><span>{{ name }}</span></a>
 {% if active and editable and (not is_current_conditions or not is_new) %}
     <div class="scenario-btn-dropdown">
         <div class="dropdown">
