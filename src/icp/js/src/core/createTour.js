@@ -67,5 +67,6 @@ module.exports =  function createTour(tour) {
     tourObject.onStart = _.bind(tourObject.initTour, tourObject);
     tourObject.onNext = _.bind(tourObject.incrementStep, tourObject);
     tourObject.onEnd = _.bind(tourObject.finishTour, tourObject);
+    tourObject.onClose = _.bind(tourObject.finishTour, tourObject);
     return tourObject;
 };
