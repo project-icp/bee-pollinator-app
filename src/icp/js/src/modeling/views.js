@@ -350,8 +350,18 @@ var ScenarioTabPanelView = Marionette.ItemView.extend({
                 if (!self.model.collection.updateScenarioName(self.model, name)) {
                     self.render();
                 }
+            },
+
+            selectScenarioTabText = function() {
+                // Select scenario name's text
+                var range = document.createRange(),
+                    selection = window.getSelection();
+                range.selectNodeContents(self.ui.nameField[0]);
+                selection.removeAllRanges();
+                selection.addRange(range);
             };
 
+        selectScenarioTabText();
         this.ui.nameField.attr('contenteditable', true).focus();
 
         this.ui.nameField.on('keyup', function(e) {
@@ -369,6 +379,12 @@ var ScenarioTabPanelView = Marionette.ItemView.extend({
 
                 setScenarioName($(this).text());
             }
+        });
+
+        this.ui.nameField.on('click', function(e) {
+            // Don't let the outer <a> swallow clicks and exit rename mode
+            // Allows selecting text on double click
+            e.stopImmediatePropagation();
         });
 
         this.ui.nameField.on('blur', function() {
