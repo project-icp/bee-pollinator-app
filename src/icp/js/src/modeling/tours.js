@@ -62,6 +62,13 @@ var newScenarioTour = createTour(
                 placement: "left",
                 yOffset: -25,
             },
+            {
+                target: "login-btn",
+                content: "Login or create an account to save this project.",
+                placement: "bottom",
+                arrowOffset: 260,
+                xOffset: -265,
+            },
         ]
     }
 );

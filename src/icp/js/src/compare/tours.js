@@ -18,6 +18,12 @@ var compareTour = createTour(
                 arrowOffset: 250,
                 xOffset: -230,
             },
+            {
+                target: "back-to-model",
+                content: "Click here to return to the modeling view.",
+                placement: "top",
+                xOffset: 40,
+            },
         ]
     }
 );
