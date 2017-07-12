@@ -61,7 +61,7 @@ var Tour = {
 };
 
 module.exports =  function createTour(tour) {
-    var tourObject = Object.assign(Object.create(Tour), tour);
+    var tourObject = _.assign(Object.create(Tour), tour);
 
     // Make sure the hopscotch callbacks bind to the tour object
     tourObject.onStart = _.bind(tourObject.initTour, tourObject);
