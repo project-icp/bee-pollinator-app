@@ -5,6 +5,7 @@ var $ = require('jquery'),
     settings = require('../core/settings'),
     router = require('../router').router,
     views = require('./views'),
+    hopscotch = require('hopscotch'),
     models = require('./models');
 
 var ModelingController = {
@@ -178,6 +179,8 @@ function projectCleanUp(shouldClearMapState) {
     if (shouldClearMapState) {
         App.getMapView().clearMapState();
     }
+
+    hopscotch.endTour();
 }
 
 function updateUrl() {

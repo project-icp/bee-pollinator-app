@@ -1,8 +1,10 @@
 "use strict";
 
-var App = require('../app'),
+var hopscotch = require('hopscotch'),
+    App = require('../app'),
     router = require('../router').router,
     views = require('./views'),
+    tours = require('./tours'),
     modelingModels = require('../modeling/models.js');
 
 var CompareController = {
@@ -35,6 +37,8 @@ var CompareController = {
         }
 
         App.rootView.footerRegion.empty();
+
+        hopscotch.endTour();
     }
 };
 
@@ -65,6 +69,7 @@ function showCompareWindow() {
             model: App.currentProject
         });
     App.rootView.footerRegion.show(compareWindow);
+    tours.compareTour.showTourIfNecessary();
 }
 
 module.exports = {
