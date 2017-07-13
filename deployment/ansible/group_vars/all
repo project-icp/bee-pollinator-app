@@ -30,7 +30,7 @@ nodejs_npm_version: 2.1.17
 
 apache_version: "2.4.7-*"
 
-java_version: "7u121-*"
+java_version: "7u131-*"
 
 graphite_carbon_version: "0.9.13-pre1"
 graphite_whisper_version: "0.9.13-pre1"
