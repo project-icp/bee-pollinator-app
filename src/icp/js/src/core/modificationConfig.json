@@ -82,11 +82,11 @@
     "woody": {
         "value": 61,
         "name": "Woody",
-        "summary": "Flowering shrub and tree planting designed to provide bees with pollen, nectar, and ground and tunnel nesting sites."
+        "summary": "Flowering shrub and tree planting, such as hedgerows or riparian plantings, designed to provide bees with pollen, nectar, and ground and tunnel nesting sites."
     },
     "wildflower_woody_mix": {
         "value": 62,
         "name": "Wildflower-Woody Mix",
-        "summary": "Wildflower, flowering shrub, and tree planting designed to provide bees with pollen, nectar, and ground and tunnel nesting sites."
+        "summary": "Wildflower, flowering shrub, and tree planting, such as a hedgerow with a wildflower understory, designed to provide bees with pollen, nectar, and ground and tunnel nesting sites."
     },
 }
