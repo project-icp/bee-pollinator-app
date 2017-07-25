@@ -20,7 +20,7 @@ var compareTour = createTour(
             },
             {
                 target: "back-to-model",
-                content: "Click here to return to the modeling view.",
+                content: "Click here to return to the scenario tab.",
                 placement: "top",
                 xOffset: 40,
             },
