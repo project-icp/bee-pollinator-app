@@ -20,7 +20,7 @@ button.hopscotch-nav-button.next.hopscotch-next {
 }
 
 div.hopscotch-bubble {
-    z-index: 100;
+    z-index: 201; //Allows bubble over Compare and Scenario dropdowns
     border: none;
     filter: drop-shadow(rgba(0, 0, 0, 0.3) 0 2px 10px);
 
