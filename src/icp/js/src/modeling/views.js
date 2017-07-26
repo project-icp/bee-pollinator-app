@@ -23,6 +23,7 @@ var _ = require('lodash'),
     scenarioMenuItemTmpl = require('./templates/scenarioMenuItem.html'),
     projectMenuTmpl = require('./templates/projectMenu.html'),
     yieldScenarioToolbarTabContentTmpl = require('./templates/yieldScenarioToolbarTabContent.html'),
+    tours = require('./tours'),
     yieldViews = require('./yield/views.js');
 
 var ENTER_KEYCODE = 13,
@@ -322,6 +323,15 @@ var ScenarioTabPanelView = Marionette.ItemView.extend({
         this.$el.toggleClass('active', this.model.get('active'));
     },
 
+    onShow: function() {
+        if (!this.model.get('active')) {
+            return;
+        }
+        var tour = this.model.get('is_current_conditions') ?
+                   tours.cropMapTour : tours.newScenarioTour;
+        tour.showTourIfNecessary();
+    },
+
     ui: {
         share: '[data-action="share"]',
         destroyConfirm: '[data-action="delete"]',
@@ -350,8 +360,18 @@ var ScenarioTabPanelView = Marionette.ItemView.extend({
                 if (!self.model.collection.updateScenarioName(self.model, name)) {
                     self.render();
                 }
+            },
+
+            selectScenarioTabText = function() {
+                // Select scenario name's text
+                var range = document.createRange(),
+                    selection = window.getSelection();
+                range.selectNodeContents(self.ui.nameField[0]);
+                selection.removeAllRanges();
+                selection.addRange(range);
             };
 
+        selectScenarioTabText();
         this.ui.nameField.attr('contenteditable', true).focus();
 
         this.ui.nameField.on('keyup', function(e) {
@@ -369,6 +389,12 @@ var ScenarioTabPanelView = Marionette.ItemView.extend({
 
                 setScenarioName($(this).text());
             }
+        });
+
+        this.ui.nameField.on('click', function(e) {
+            // Don't let the outer <a> swallow clicks and exit rename mode
+            // Allows selecting text on double click
+            e.stopImmediatePropagation();
         });
 
         this.ui.nameField.on('blur', function() {

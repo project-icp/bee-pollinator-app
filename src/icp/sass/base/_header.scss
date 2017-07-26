@@ -157,7 +157,7 @@ header {
         width: 5000px;
 
         .nav-tabs a.tab-name[contenteditable=true] span {
-            border: 1px solid maroon;
+            border: 1px solid $brand-secondary;
         }
 
         .scenario-btn-dropdown {

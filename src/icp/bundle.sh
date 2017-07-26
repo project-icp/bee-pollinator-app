@@ -15,6 +15,9 @@ STATIC_CSS_DIR="${DJANGO_STATIC_ROOT}css/"
 STATIC_IMAGES_DIR="${DJANGO_STATIC_ROOT}images/"
 STATIC_FONTS_DIR="${DJANGO_STATIC_ROOT}fonts/"
 
+# The hopscotch css src looks for images in "../img"
+HOPSCOTCH_IMAGES_SYMLINK="${DJANGO_STATIC_ROOT}img"
+
 BROWSERIFY="$BIN/browserify"
 ENTRY_JS_FILES="./js/src/main.js"
 
@@ -85,23 +88,23 @@ COPY_IMAGES_COMMAND="cp -r \
     ./img/* \
     ./node_modules/leaflet/dist/images/* \
     ./node_modules/leaflet-draw/dist/images/* \
+    ./node_modules/hopscotch/dist/img/* \
     $STATIC_IMAGES_DIR"
 
 COPY_FONTS_COMMAND="cp -r \
     ./node_modules/font-awesome/fonts/* \
     $STATIC_FONTS_DIR"
 
-COPY_ZEROCLIPBOARD_COMMAND="cp \
-    ./node_modules/zeroclipboard/dist/ZeroClipboard.swf \
-    $STATIC_JS_DIR"
-
 CONCAT_VENDOR_CSS_COMMAND="cat \
     ./node_modules/leaflet/dist/leaflet.css \
     ./node_modules/leaflet-draw/dist/leaflet.draw.css \
     ./node_modules/font-awesome/css/font-awesome.min.css \
     ./node_modules/bootstrap-table/dist/bootstrap-table.min.css \
+    ./node_modules/hopscotch/dist/css/hopscotch.min.css \
     ./css/shim/nv.d3.min.css \
     > $VENDOR_CSS_FILE"
+
+SYMLINK_HOPSCOTCH_IMG_DIR_COMMAND="ln -s $STATIC_IMAGES_DIR $HOPSCOTCH_IMAGES_SYMLINK"
 
 JS_DEPS=(backbone
          backbone.marionette
@@ -109,9 +112,11 @@ JS_DEPS=(backbone
          bootstrap
          bootstrap-select
          bootstrap-table/dist/bootstrap-table.js
+         clipboard
          d3
          ./js/shim/marionette.transition-region.js
          ./js/shim/nv.d3.js
+         hopscotch
          jquery
          leaflet
          leaflet-draw
@@ -125,8 +130,7 @@ JS_DEPS=(backbone
          turf-erase
          turf-intersect
          turf-kinks
-         underscore
-         zeroclipboard)
+         underscore)
 
 BROWSERIFY_EXT=""
 BROWSERIFY_REQ=""
@@ -150,8 +154,8 @@ if [ -n "$BUILD_VENDOR_BUNDLE" ]; then
     VENDOR_COMMAND="
         $COPY_IMAGES_COMMAND &
         $COPY_FONTS_COMMAND &
-        $COPY_ZEROCLIPBOARD_COMMAND &
         $CONCAT_VENDOR_CSS_COMMAND &
+        $SYMLINK_HOPSCOTCH_IMG_DIR_COMMAND &
         $BROWSERIFY $BROWSERIFY_REQ \
             -o ${STATIC_JS_DIR}vendor.js $EXTRA_ARGS &
         $BROWSERIFY $BROWSERIFY_REQ $BROWSERIFY_TEST_REQ \

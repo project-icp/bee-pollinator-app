@@ -70,10 +70,10 @@
     li.active > a {
       color: $ui-secondary;
       .sidebar-tab-header-label {
-        color: $brand-primary;
+        color: $brand-secondary;
         font-weight: 800;
         &:after {
-          border-bottom-color: $brand-primary;
+          border-bottom-color: $brand-secondary;
         }
       }
     }
@@ -86,7 +86,7 @@
       height: $sidebar-tab-subheader-height;
 
       i {
-        color: $black-54;
+        color: $black-74;
         position: relative;
         top: 0.85rem;
       }

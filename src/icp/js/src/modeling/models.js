@@ -763,12 +763,15 @@ var ScenariosCollection = Backbone.Collection.extend({
             return model.get('name').toLowerCase() === newName.toLowerCase();
         });
 
-        if (match) {
+        if (model.get('name') === newName || !newName) {
+            return false;
+        }
+        else if (match) {
             console.log('This name is already in use.');
             modalViews.showWarning('There is another scenario with the same name. ' +
                 'Please choose a unique name for this scenario.');
             return false;
-        } else if (model.get('name') !== newName) {
+        } else {
             return model.set('name', newName);
         }
     },

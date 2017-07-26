@@ -1,0 +1,65 @@
+.hopscotch-bubble .animated {
+    animation-duration: 0.75s;
+}
+
+button.hopscotch-nav-button.next.hopscotch-next {
+    @extend .btn;
+    @extend .btn-active;
+    @extend .btn-md;
+    text-shadow: none;
+    line-height: $height-md !important;
+    height: $height-md !important;
+    box-shadow: none;
+    &:hover {
+        @extend .btn:hover;
+        @extend .btn-active:hover;
+        @extend .btn-md:hover;
+        background-image: none !important;
+        box-shadow: none;
+    }
+}
+
+div.hopscotch-bubble {
+    z-index: 201; //Allows bubble over Compare and Scenario dropdowns
+    border: none;
+    filter: drop-shadow(rgba(0, 0, 0, 0.3) 0 2px 10px);
+
+    .hopscotch-bubble-container {
+        padding: 0.66rem !important;
+    }
+}
+
+div.hopscotch-bubble .hopscotch-content {
+    @extend p;
+    margin: 0px;
+}
+
+// Don't show the arrow's thick border
+// or the tour step number
+.hopscotch-bubble-number,
+.hopscotch-bubble-arrow-border {
+    display: none !important;
+}
+
+// remove margin that was keeping room for the tour step number
+// we removed
+div.hopscotch-bubble .hopscotch-bubble-content {
+    margin: 0 0 0 5px;
+}
+
+// Without the arrow's border, the arrow is out of place
+// Adjust each of its four positions
+div.hopscotch-bubble .hopscotch-bubble-arrow-container.up .hopscotch-bubble-arrow {
+    top: 6px;
+}
+div.hopscotch-bubble .hopscotch-bubble-arrow-container.down {
+    bottom: -57px;
+}
+
+div.hopscotch-bubble .hopscotch-bubble-arrow-container.left .hopscotch-bubble-arrow {
+    left: 6px;
+    top: 0px;
+}
+div.hopscotch-bubble .hopscotch-bubble-arrow-container.right .hopscotch-bubble-arrow {
+    top: 19px;
+}

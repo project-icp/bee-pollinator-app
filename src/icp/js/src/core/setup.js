@@ -31,9 +31,3 @@ L.Icon.Default.imagePath = '/static/images/';
 
 var csrf = require('./csrf');
 $.ajaxSetup(csrf.jqueryAjaxSetupOptions);
-
-var ZeroClipboard = require('zeroclipboard');
-ZeroClipboard.config({
-    hoverClass: 'focus',
-    activeClass: 'active'
-});
