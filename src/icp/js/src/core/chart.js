@@ -135,13 +135,15 @@ function renderGroupedVerticalBarChart(chartEl, data, options) {
 
     options = options || {};
     _.defaults(options, {
-        margin: {top: 20, right: 30, bottom: 40, left: 60},
+        margin: {top: 20, right: 30, bottom: 45, left: 60},
         maxBarWidth: 150,
         showLegend: true,
         disableToggle: true,
     });
 
     nv.addGraph(function() {
+        var cropCountBeforeRotate = options.compareMode ? 2 : 3;
+
         chart.showLegend(options.showLegend)
              .showControls(false)
              .reduceXTicks(false)
@@ -150,6 +152,11 @@ function renderGroupedVerticalBarChart(chartEl, data, options) {
 
         if (options.compareMode) {
             addSvgClass($svg, 'compare');
+        }
+
+        // Rotate the labels to conserve space when there are X+ items
+        if (options.barClasses.length > cropCountBeforeRotate) {
+            chart.rotateLabels(18);
         }
 
         setChartWidth();
