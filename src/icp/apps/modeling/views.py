@@ -3,7 +3,6 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import json
-import random
 
 from rest_framework.response import Response
 from rest_framework import decorators, status
@@ -13,12 +12,8 @@ from rest_framework.permissions import (AllowAny,
 
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import now
-from django.conf import settings
 
-import celery
 from celery import chain
-
-from retry import retry
 
 from apps.core.models import Job
 from apps.core.tasks import save_job_error, save_job_result
@@ -28,10 +23,6 @@ from apps.modeling.serializers import (ProjectSerializer,
                                        ProjectListingSerializer,
                                        ProjectUpdateSerializer,
                                        ScenarioSerializer)
-
-# When CELERY_WORKER_DIRECT = True, this exchange is automatically
-# created to allow direct communication with workers.
-MAGIC_EXCHANGE = 'C.dq'
 
 
 @decorators.api_view(['GET', 'POST'])
@@ -179,39 +170,17 @@ def get_job(request, job_uuid, format=None):
     )
 
 
-def choose_worker():
-    def predicate(worker_name):
-        return settings.STACK_COLOR in worker_name or 'debug' in worker_name
-
-    @retry(Exception, delay=0.5, backoff=2, tries=3)
-    def get_list_of_workers():
-        workers = celery.current_app.control.inspect().ping()
-
-        if workers is None:
-            raise Exception('Unable to receive a PONG from any workers')
-
-        return workers.keys()
-
-    workers = filter(predicate,
-                     get_list_of_workers())
-    return random.choice(workers)
-
-
 @decorators.api_view(['POST'])
 @decorators.permission_classes((AllowAny, ))
 def start_crop_yield(request, format=None):
     user = request.user if request.user.is_authenticated() else None
     model_input = json.loads(request.POST['model_input'])
 
-    return start_celery_job([
-        tasks.calculate_yield.s(model_input).set(
-            exchange=MAGIC_EXCHANGE, routing_key=choose_worker()
-        )],
-        model_input, user)
+    return start_celery_job([tasks.calculate_yield.s(model_input)],
+                            model_input, user)
 
 
-def start_celery_job(task_list, job_input, user=None,
-                     exchange=MAGIC_EXCHANGE, routing_key=None):
+def start_celery_job(task_list, job_input, user=None):
     """
     Given a list of Celery tasks and it's input, starts a Celery async job with
     those tasks, adds save_job_result and save_job_error handlers, and returns
@@ -220,18 +189,13 @@ def start_celery_job(task_list, job_input, user=None,
     :param task_list: A list of Celery tasks to execute. Is made into a chain
     :param job_input: Input to the first task, used in recording started jobs
     :param user: The user requesting the job. Optional.
-    :param exchange: Allows restricting jobs to specific exchange. Optional.
-    :param routing_key: Allows restricting jobs to specific workers. Optional.
     :return: A Response contianing the job id, marked as 'started'
     """
     created = now()
     job = Job.objects.create(created_at=created, result='', error='',
                              traceback='', user=user, status='started')
-    routing_key = routing_key if routing_key else choose_worker()
-    success = save_job_result.s(job.id, job_input).set(exchange=exchange,
-                                                       routing_key=routing_key)
-    error = save_job_error.s(job.id).set(exchange=exchange,
-                                         routing_key=routing_key)
+    success = save_job_result.s(job.id, job_input)
+    error = save_job_error.s(job.id)
 
     task_list.append(success)
     task_chain = chain(task_list).apply_async(link_error=error)
