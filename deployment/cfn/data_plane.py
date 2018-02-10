@@ -198,7 +198,7 @@ class DataPlane(StackNode):
             DBParameterGroupName=Ref(rds_parameter_group),
             DBSubnetGroupName=Ref(rds_subnet_group),
             Engine='postgres',
-            EngineVersion='9.4.9',
+            EngineVersion='9.4.15',
             MasterUsername=Ref(self.rds_username),
             MasterUserPassword=Ref(self.rds_password),
             MultiAZ=True,
@@ -268,9 +268,9 @@ class DataPlane(StackNode):
                     'metricDatabaseServerName',
                     Name='DBInstanceIdentifier',
                     Value=Ref(rds_database)
-                    )
-                ],
-            ))
+                )
+            ],
+        ))
 
         self.add_resource(cloudwatch.Alarm(
             'alarmDatabaseServerFreeableMemory',
@@ -288,9 +288,9 @@ class DataPlane(StackNode):
                     'metricDatabaseServerName',
                     Name='DBInstanceIdentifier',
                     Value=Ref(rds_database)
-                    )
-                ],
-            ))
+                )
+            ],
+        ))
 
     def create_elasticache_replication_group(self):
         elasticache_security_group_name = 'sgCacheCluster'
@@ -319,11 +319,19 @@ class DataPlane(StackNode):
             SubnetIds=Ref(self.private_subnets)
         ))
 
+        elasticache_parameter_group = self.add_resource(ec.ParameterGroup(
+            'ecpgCacheCluster',
+            CacheParameterGroupFamily='redis2.8',
+            Description='Parameter group for the ElastiCache instances',
+            Properties={'maxmemory-policy': 'allkeys-lru'}
+        ))
+
         elasticache_group = self.add_resource(ec.ReplicationGroup(
             'CacheReplicationGroup',
             AutomaticFailoverEnabled=True,
             AutoMinorVersionUpgrade=True,
             CacheNodeType=Ref(self.elasticache_instance_type),
+            CacheParameterGroupName=Ref(elasticache_parameter_group),
             CacheSubnetGroupName=Ref(elasticache_subnet_group),
             Engine='redis',
             EngineVersion='2.8.24',
@@ -393,7 +401,7 @@ class DataPlane(StackNode):
                 r53.RecordSet(
                     'dnsDatabaseServer',
                     Name=Join('', ['database.service.',
-                              Ref(self.private_hosted_zone_name), '.']),
+                                   Ref(self.private_hosted_zone_name), '.']),
                     Type='CNAME',
                     TTL='10',
                     ResourceRecords=[
@@ -403,7 +411,7 @@ class DataPlane(StackNode):
                 r53.RecordSet(
                     'dnsCacheServer',
                     Name=Join('', ['cache.service.',
-                              Ref(self.private_hosted_zone_name), '.']),
+                                   Ref(self.private_hosted_zone_name), '.']),
                     Type='CNAME',
                     TTL='10',
                     ResourceRecords=[
