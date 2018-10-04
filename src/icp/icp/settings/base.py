@@ -321,7 +321,8 @@ LOCAL_APPS = (
     'apps.modeling',
     'apps.home',
     'apps.geocode',
-    'apps.user'
+    'apps.user',
+    'apps.beekeepers',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

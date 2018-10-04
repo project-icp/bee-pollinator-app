@@ -15,7 +15,9 @@ from apps.modeling.models import Project, Scenario
 
 
 def home_page(request):
-    return render_to_response('home/home.html', get_context(request))
+    beekeepers = 'beekeepers' in request.GET
+    template = 'beekeepers/beekeepers.html' if beekeepers else 'home/home.html'
+    return render_to_response(template, get_context(request))
 
 
 def projects(request):
