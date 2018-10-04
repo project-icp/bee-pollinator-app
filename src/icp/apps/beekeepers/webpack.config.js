@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const BundleTracker = require('webpack-bundle-tracker');
 
 const PRODUCTION = 'production';
 const DEVELOPMENT = 'development';
@@ -29,13 +29,12 @@ module.exports = ({ production }) => {
         },
         output: {
             path: outputPath,
-            publicPath: '/',
+            publicPath: production ? '/static/beekeepers/' : 'http://localhost:35729/',
             filename: '[name].bundle.[hash].js',
         },
         plugins: [
-            new HtmlWebpackPlugin({
-                title: 'Project Name',
-                template: 'template.html',
+            new BundleTracker({
+                filename: './.webpack-stats.json',
             }),
             new webpack.optimize.ModuleConcatenationPlugin(),
             new webpack.SourceMapDevToolPlugin({
@@ -129,6 +128,9 @@ module.exports = ({ production }) => {
         },
         devServer: {
             disableHostCheck: true,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+            },
             historyApiFallback: {
                 index: '/',
             },
@@ -136,6 +138,7 @@ module.exports = ({ production }) => {
     };
 
     if (!production) {
+        common.entry.app.unshift('webpack-dev-server/client?http://localhost:35729');
         return Object.assign({}, common, {
             watchOptions: {
                 poll: 1000,
