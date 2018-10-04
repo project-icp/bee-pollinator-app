@@ -284,6 +284,7 @@ DJANGO_APPS = (
 THIRD_PARTY_APPS = (
     'rest_framework',
     'registration',
+    'webpack_loader',
 )
 
 # THIRD-PARTY CONFIGURATION
@@ -304,6 +305,13 @@ ACCOUNT_ACTIVATION_DAYS = 7  # One-week activation window.
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
 ]
+
+# webpack_loader
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'STATS_FILE': join(SITE_ROOT, 'apps/beekeepers/.webpack-stats.json'),
+    }
+}
 
 # END THIRD-PARTY CONFIGURATION
 

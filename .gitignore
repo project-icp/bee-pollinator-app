@@ -96,3 +96,6 @@ _SUCCESS
 
 # MacOS
 .DS_Store
+
+# Webpack Stats used to help Django Hot Reload
+.webpack-stats.json
