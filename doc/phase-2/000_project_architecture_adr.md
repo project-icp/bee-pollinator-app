@@ -14,7 +14,7 @@ ahead planning the project's setup.
 
 ## Context
 
-Some key questions drive this discussion. 
+Some key questions drive this discussion.
 
 - Where will the code live?
 - How will Beekeeper's requests to the API be authorized and authenticated?
@@ -39,7 +39,7 @@ the Pollinaton Mapper repo. Below thinks through the implications of each.
       really attractive from an Operations perspective because the setup can be
       based on past project setups making it low effort to implement --
       potentially by devs, and not even operations themselves. Of course, this
-      set up comes with external considerations discussed below. 
+      set up comes with external considerations discussed below.
 
     - **CORS** -- Should Beekeeper be hosted on its own domain, such as would
       provide Netlify or Heroku, it will run into CORS in the browser. The API
@@ -77,6 +77,50 @@ the Pollinaton Mapper repo. Below thinks through the implications of each.
   may save valuable time. For example, the time saved to search for a file or
   some bit of code that is in reality in the other repo.
 
+Furthermore, the [current version] of `node` [installed] in the App VM
+(0.10.32) will most likely _not_ run webpack or React. The possible
+alternatives for this are:
+
+1. **Upgrade Node version in App VM**
+    - This will allow us to use React
+    - This could potentially break the UI for Pollination Mapper, and start a
+      chain reaction requiring us to update a great number of project
+      dependencies, not all of which may be compatible with each other
+
+2. **Use Backbone instead of React**
+    - This will allow us to keep the current Node version
+    - Backbone is an older technology that is not actively maintained anymore
+      (the latest version 1.3.3 is from two years ago), and we're on an even
+      older version of Backbone and Marionette
+    - Starting a new project with old technology is risky, especially as we may
+      be maintaining this project for some time to come, during which the
+      technology will age more and become harder to use
+
+3. **Make a separate single-page app for Beekeepers**
+    - This will allow us to use React and keep the current Node version of
+      Pollination Mapper
+    - The request authentication benefits (CSRF / CORS) we could get from
+      colocating the new front-end with the API on the same domain will be
+      lost. We'll have to figure out how to authenticate API calls (JWT? OAuth?
+      Simple Token?), and support it both in the front- and back-ends.
+    - Given the need to authenticate API calls, and the relative insecurity of
+      allowing API access to a specific domain or hard-coded API key, both of
+      which are available to the client, we may have to rely more on user
+      authentication. This could move the need for users to login at a much
+      earlier stage in the app workflow than previously thought.
+    - While deploying a static app may be easier, we will have to ensure
+      correspondence with the separately deployed API version
+
+4. **Use a Docker for building React JavaScript assets**
+    - Just as we have a bundle script for Pollination Mapper, we use a bundle
+      script that runs a Docker container with a proper version of Node to
+      build the assets. This Docker container is only used at build time.
+    - This will allow us to use React and not touch the existing code for
+      Pollination Mapper
+    - We will not have hot-reloading, but we wouldn't have it in a Backbone
+      version either
+    - The build pipeline will look very similar to the existing one for
+      Pollination Mapper
 
 ## Decision
 
@@ -92,6 +136,19 @@ Ultimately we don't expect high usage of either app such that sharing a load
 balancer (AWS ELB) or even resource scaling (i.e. Celery servers) becomes an
 issue.
 
+We go with **Alternative 4** from above. The new front-end files will be stored
+in a new Django app. To take advantage of modern tooling, such as webpack,
+React, and hot reloading, we need a newer version of `node` than is currently
+installed. However, updating `node` can affect the existing setup, which could
+incur significant costs, and should be avoided if possible. Since this
+toolchain only needs to execute at build time, not run time, it can be run from
+a containerized environment.
+
+The final toolchain will run a more modern version of `node` from within a
+Docker container, with the main HTML file served from Django. To allow for hot
+module reloading, the setup will employ [`webpack-bundle-tracker`] that records
+webpack output, and can be read by [`django-webpack-loader`], a Django plugin
+that reads the webpack output and pulls in new JavaScript files.
 
 ## Consequences
 
@@ -119,8 +176,16 @@ Lastly, there is already a JS front-end for Pollination Mapper. Its files are
 distributed between app root and a nested `js` folder. Because Beekeeper will
 have significant JS files and similar bundling pipeline as well, we will want
 all Beekeeper JS including the `package.json` and requirements in a nested
-folder a level down to avoid conflict. For better organization, consider
-repackaging all Pollination Mapper JS into a similarly nested folder as well.
+folder a level down to avoid conflict. For better organization, repackaging all
+Pollination Mapper JS into a similarly nested folder may be considered as well.
+
+While the Dockerized node setup will work functionally, it employs a large
+degree of indirection, with the developer starting a script in their local,
+which goes into a VM to start a Docker command, which starts a yarn command,
+which starts a shell command, which starts a webpack command. This may also
+lead to slowdowns. In case of severe slowdowns, we may have to change the
+approach, which could be expensive.
+
 
 
 [API]: https://github.com/project-icp/bee-pollinator-app
@@ -128,3 +193,7 @@ repackaging all Pollination Mapper JS into a similarly nested folder as well.
 [name-based shared web hosting]: https://en.wikipedia.org/wiki/Shared_web_hosting_service
 [wireframes]:https://app.goabstract.com/projects/1955fff0-89e6-11e8-9d27-3b6b7c64f4e5/branches/master/files/E258E310-7858-4F64-9C6F-43572DBBEB19
 [Phase 1 Bees API]: https://app.pollinationmapper.org/
+[curent version]: https://github.com/azavea/ansible-nodejs/blob/92245ba10c25b2aef53a47bb3e3efb81334617c5/defaults/main.yml#L2
+[installed]: https://github.com/project-icp/bee-pollinator-app/blob/1cf3c26d54d76ee596c33e370b48bc3722f57378/deployment/ansible/roles.yml#L7-L8
+[`webpack-bundle-tracker`]: https://github.com/owais/webpack-bundle-tracker
+[`django-webpack-loader`]: https://github.com/owais/django-webpack-loader
