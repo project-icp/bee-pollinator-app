@@ -4,7 +4,7 @@ const BundleTracker = require('webpack-bundle-tracker');
 const PRODUCTION = 'production';
 const DEVELOPMENT = 'development';
 
-const outputPath = '/usr/dist';
+const outputPath = '/usr/src/app/dist';
 
 module.exports = ({ production }) => {
     const common = {

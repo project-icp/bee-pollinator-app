@@ -5,8 +5,8 @@
   "private": true,
   "main": "main.js",
   "scripts": {
-    "bundle": "rm -rf /usr/dist/* && webpack --config webpack.config.js --env.production --colors && echo $VERSION > /usr/dist/version.txt",
-    "dev-server": "node_modules/.bin/webpack-dev-server --config webpack.config.js --env.development --inline --hot --progress --colors --host 0.0.0.0 --port 4567 --history-api-fallback",
+    "bundle": "rm -rf /usr/src/app/dist/* && webpack --config webpack.config.js --env.production --colors",
+    "dev-server": "node_modules/.bin/webpack-dev-server --config webpack.config.js --env.development --inline --hot --progress --colors --host 0.0.0.0 --port 35729 --history-api-fallback",
     "test": "echo 'Error: no test specified' && exit 1",
     "postinstall": "npm rebuild node-sass",
     "lint:webpack": "eslint webpack.config.js"
