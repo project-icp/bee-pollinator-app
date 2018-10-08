@@ -17,6 +17,7 @@
 
   roles:
     - { role: "bee-pollinator.app" }
+    - { role: "bee-pollinator.beekeepers" }
 
   post_tasks:
     - name: Revert change to /etc/hosts

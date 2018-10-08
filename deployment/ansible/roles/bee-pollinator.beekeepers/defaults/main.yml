@@ -1,0 +1,4 @@
+---
+beekeepers_home: /opt/app/apps/beekeepers
+
+beekeepers_static_root: /var/www/icp/static/beekeepers

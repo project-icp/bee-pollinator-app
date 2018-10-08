@@ -1,0 +1,23 @@
+---
+- name: Allow vagrant to run Docker
+  user: name=vagrant groups=docker append=yes
+
+- name: Fetch Node Docker Image
+  command: "docker pull node:8"
+  args:
+    chdir: "{{ beekeepers_home }}"
+
+- name: Install NPM Dependencies
+  command: "docker run --rm -v {{ beekeepers_home }}:/usr/src/app -w /usr/src/app node:8 yarn"
+  args:
+    chdir: "{{ beekeepers_home }}"
+
+- name: Generate Beekeepers Bundle
+  command: "docker run --rm -v {{ beekeepers_home }}:/usr/src/app -w /usr/src/app node:8 yarn run bundle"
+  args:
+    chdir: "{{ beekeepers_home }}"
+
+- name: Link Static Directory
+  file: path="{{ beekeepers_static_root }}"
+        src="{{ beekeepers_home }}/dist"
+        state=link
