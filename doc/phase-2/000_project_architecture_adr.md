@@ -2,15 +2,15 @@
 
 Phase II of the Pollination Project (Beekeeper) is a web app designed for
 beekeepers to be able to analyze site conditions for apiaries. They do so by
-clicking on a map, which will kick raster analysis jobs, and return data
-for identifying optimum positioning of apiaries to the user's browser.
-Previously it was decided that the app will be a front-end app (React) that
-makes requests against the [Phase 1 Bees API][] (Pollination Mapper or API) and
-this ADR takes the next steps and provides a way forward.
+clicking on a map, which will kick raster analysis jobs, and return data for
+identifying optimum positioning of apiaries to the user's browser. Previously
+it was decided that the app will be a front-end app (React) that makes requests
+against the [Phase 1 Bees API][] (Pollination Mapper or API) and this ADR takes
+the next steps and provides a way forward.
 
-While we are waiting for final [wireframes][], client feedback, and a contract, we
-don't expect breaking changes at the project architecture level and are moving
-ahead planning the project's setup.
+While we are waiting for final [wireframes][], client feedback, and a contract,
+we don't expect breaking changes at the project architecture level and are
+moving ahead planning the project's setup.
 
 ## Context
 
@@ -36,8 +36,8 @@ the Pollinaton Mapper repo. Below thinks through the implications of each.
   hosting options such as Netlify, Heroku, AWS s3, or Azure. How we host will
   have impacts on if/how Beekeeper is authorized to use the API.
 
-    - **Ease of deployment** -- Static site hosting can be as easy as a merge to
-      develop/master, where the deployment is taken care of by CI. This is
+    - **Ease of deployment** -- Static site hosting can be as easy as a merge
+      to develop/master, where the deployment is taken care of by CI. This is
       really attractive from an Operations perspective because the setup can be
       based on past project setups making it low effort to implement --
       potentially by devs, and not even operations themselves. Of course, this
@@ -51,19 +51,19 @@ the Pollinaton Mapper repo. Below thinks through the implications of each.
 
       The API is hosted on an EC2 instance with its own dedicated IP. Similarly
       to the MMW/BigCZ project, we could circumvent CORS by implementing
-      [name-based shared web hosting][] whereby the projects share an IP and the
-      existing load balancer maps the request to the correct website based on
-      its request header. This would resolve a need for CORS relaxing.
+      [name-based shared web hosting][] whereby the projects share an IP and
+      the existing load balancer maps the request to the correct website based
+      on its request header. This would resolve a need for CORS relaxing.
 
     - **CSRF and session auth** - The API's endpoints are protected by Django's
       CSRF middleware. Beekeeper will need to have an authorized Django user
       session and CSRF token to make HTTP requests to the API beyond GET
       requests, which are exempted. If the apps are separate we will have to
       open Beekeeper endpoints to be CSRF-exempt and session-exempt. This is a
-      security risk but potentially liveable since these are not popular or high
-      traffic apps by any means and we wouldn't expect abuse. In the scenario of
-      combined projects, we have direct access to the Django session and thusly
-      CSRF management.
+      security risk but potentially liveable since these are not popular or
+      high traffic apps by any means and we wouldn't expect abuse. In the
+      scenario of combined projects, we have direct access to the Django
+      session and thusly CSRF management.
 
 - **Resource needs** -- The workflow of the Beekeeper app will be quite similar
   to the Pollination API. As described in the intro the app workflow will kick
@@ -132,16 +132,16 @@ alternatives for this are:
 ## Decision
 
 Overall, combining the two projects whereby Beekeeper's code will be nested in
-[Pollination Mapper][] will provide more tangible benefit by avoiding significant
-feature accomodations to authorize access the API as well as maintaining project
-synchronicity. The potential benefit to separate projects being given up is the
-ease of static site deployment via a platform like Netlify, but the developer
-time saved with synchronicity between Beekeeper and the API is more valuable
-than the additional deployment time. The app will share a parent Django
-project, thus Beekeeper's API requests will be session and CSRF token-authorized.
-Ultimately we don't expect high usage of either app such that sharing a load
-balancer (AWS ELB) or even resource scaling (i.e. Celery servers) becomes an
-issue.
+[Pollination Mapper][] will provide more tangible benefit by avoiding
+significant feature accomodations to authorize access the API as well as
+maintaining project synchronicity. The potential benefit to separate projects
+being given up is the ease of static site deployment via a platform like
+Netlify, but the developer time saved with synchronicity between Beekeeper and
+the API is more valuable than the additional deployment time. The app will
+share a parent Django project, thus Beekeeper's API requests will be session
+and CSRF token-authorized. Ultimately we don't expect high usage of either app
+such that sharing a load balancer (AWS ELB) or even resource scaling (i.e.
+Celery servers) becomes an issue.
 
 For the implementation, we go with **Alternative 4** from above. The new
 front-end files will be stored in a new Django app. To take advantage of modern
@@ -156,20 +156,20 @@ time, it can be run from a containerized environment.
 Looking ahead, we can create the project folders for Beekeeper and scaffold a
 working app in the [API][] repo.
 
-For the backend, we can create another child Django app and get started building
-Beekeeper. Beekeeper will have user accounts, but can share the same user table
-as the API with the addition of a field specifying for which app is the account.
-Sharing a user table will make it easy if in the future the client wants SSO
-between apps. In this case, the app field on the user table can be checked off
-for both apps. The Beekeeper Django app is not anticipated to be that robust --
-we will need a user projects table unique to Beekeeper, linked to users in the
-shared user table.
+For the backend, we can create another child Django app and get started
+building Beekeeper. Beekeeper will have user accounts, but can share the same
+user table as the API with the addition of a field specifying for which app is
+the account. Sharing a user table will make it easy if in the future the client
+wants SSO between apps. In this case, the app field on the user table can be
+checked off for both apps. The Beekeeper Django app is not anticipated to be
+that robust -- we will need a user projects table unique to Beekeeper, linked
+to users in the shared user table.
 
 As we build out the API for Beekeeper, we will we want to duplicate and in some
 cases customize functionality of API endpoints for Beekeeper to consume (i.e.
-/api/beekeeper/sample-endpoint and /api/mapper/sample-endpoint or similar). This
-distinction of endpoints will primarily help keep development organized to be
-able to distinguish between app codes, and also allow better tracking of API
+/api/beekeeper/sample-endpoint and /api/mapper/sample-endpoint or similar).
+This distinction of endpoints will primarily help keep development organized to
+be able to distinguish between app codes, and also allow better tracking of API
 usage, if those metrics are so desired. Distinctive labelling should also apply
 to naming views, models, tests, etc. that live in the API.
 
@@ -177,7 +177,8 @@ Lastly, there is already a JS front-end for Pollination Mapper. Its files are
 distributed between app root and a nested `js` folder. Because Beekeeper will
 have significant JS files and similar bundling pipeline as well, we will want
 all Beekeeper JS including the `package.json` and requirements in a nested
-folder a level down to avoid conflict. The new organization will look something like this:
+folder a level down to avoid conflict. The new organization will look something
+like this:
 
 ```
 ~/src/icp
@@ -214,9 +215,9 @@ folder a level down to avoid conflict. The new organization will look something 
 
 The final toolchain will run a more modern version of `node` from within a
 Docker container, with the main HTML file served from Django. To allow for hot
-module reloading, the setup will employ [`webpack-bundle-tracker`][] that records
-webpack output, and can be read by [`django-webpack-loader`][], a Django plugin
-that reads the webpack output and pulls in new JavaScript files.
+module reloading, the setup will employ [`webpack-bundle-tracker`][] that
+records webpack output, and can be read by [`django-webpack-loader`][], a
+Django plugin that reads the webpack output and pulls in new JavaScript files.
 
 While the Dockerized node setup will work functionally, it employs a large
 degree of indirection, with the developer starting a script in their local,
