@@ -5,10 +5,10 @@ beekeepers to be able to analyze site conditions for apiaries. They do so by
 clicking on a map, which will kick raster analysis jobs, and return data
 for identifying optimum positioning of apiaries to the user's browser.
 Previously it was decided that the app will be a front-end app (React) that
-makes requests against the [Phase 1 Bees API] (Pollination Mapper or API) and
+makes requests against the [Phase 1 Bees API][] (Pollination Mapper or API) and
 this ADR takes the next steps and provides a way forward.
 
-While we are waiting for final [wireframes], client feedback, and a contract, we
+While we are waiting for final [wireframes][], client feedback, and a contract, we
 don't expect breaking changes at the project architecture level and are moving
 ahead planning the project's setup.
 
@@ -51,7 +51,7 @@ the Pollinaton Mapper repo. Below thinks through the implications of each.
 
       The API is hosted on an EC2 instance with its own dedicated IP. Similarly
       to the MMW/BigCZ project, we could circumvent CORS by implementing
-      [name-based shared web hosting] whereby the projects share an IP and the
+      [name-based shared web hosting][] whereby the projects share an IP and the
       existing load balancer maps the request to the correct website based on
       its request header. This would resolve a need for CORS relaxing.
 
@@ -81,7 +81,7 @@ the Pollinaton Mapper repo. Below thinks through the implications of each.
 
 ### Implementation Factors
 
-Furthermore, the [current version] of `node` [installed] in the App VM
+Furthermore, the [current version][] of `node` [installed][] in the App VM
 (0.10.32) will most likely _not_ run the various dependencies in the App
 Template, such as webpack and React. PWD's Garden Exemptions app required
 updating `node` from 0.10.xx to 4.xx to support React. The possible
@@ -132,7 +132,7 @@ alternatives for this are:
 ## Decision
 
 Overall, combining the two projects whereby Beekeeper's code will be nested in
-[Pollination Mapper] will provide more tangible benefit by avoiding significant
+[Pollination Mapper][] will provide more tangible benefit by avoiding significant
 feature accomodations to authorize access the API as well as maintaining project
 synchronicity. The potential benefit to separate projects being given up is the
 ease of static site deployment via a platform like Netlify, but the developer
@@ -154,7 +154,7 @@ time, it can be run from a containerized environment.
 ## Consequences
 
 Looking ahead, we can create the project folders for Beekeeper and scaffold a
-working app in the [API] repo.
+working app in the [API][] repo.
 
 For the backend, we can create another child Django app and get started building
 Beekeeper. Beekeeper will have user accounts, but can share the same user table
@@ -214,8 +214,8 @@ folder a level down to avoid conflict. The new organization will look something 
 
 The final toolchain will run a more modern version of `node` from within a
 Docker container, with the main HTML file served from Django. To allow for hot
-module reloading, the setup will employ [`webpack-bundle-tracker`] that records
-webpack output, and can be read by [`django-webpack-loader`], a Django plugin
+module reloading, the setup will employ [`webpack-bundle-tracker`][] that records
+webpack output, and can be read by [`django-webpack-loader`][], a Django plugin
 that reads the webpack output and pulls in new JavaScript files.
 
 While the Dockerized node setup will work functionally, it employs a large
