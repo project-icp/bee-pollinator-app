@@ -24,6 +24,8 @@ Some key questions drive this discussion.
 As to where the code will live, the 2 options are its own repo, or built into
 the Pollinaton Mapper repo. Below thinks through the implications of each.
 
+### Architectural Factors
+
 - **Project synchronicity** -- We can anticipate actively customizing the API
   for Beekeeper. In order for Beekeeper's staging and production sites to
   function, both projects need to be in sync with one another. This is a tricky
@@ -77,8 +79,12 @@ the Pollinaton Mapper repo. Below thinks through the implications of each.
   may save valuable time. For example, the time saved to search for a file or
   some bit of code that is in reality in the other repo.
 
+### Implementation Factors
+
 Furthermore, the [current version] of `node` [installed] in the App VM
-(0.10.32) will most likely _not_ run webpack or React. The possible
+(0.10.32) will most likely _not_ run the various dependencies in the App
+Template, such as webpack and React. PWD's Garden Exemptions app required
+updating `node` from 0.10.xx to 4.xx to support React. The possible
 alternatives for this are:
 
 1. **Upgrade Node version in App VM**
@@ -117,8 +123,9 @@ alternatives for this are:
       build the assets. This Docker container is only used at build time.
     - This will allow us to use React and not touch the existing code for
       Pollination Mapper
-    - We will not have hot-reloading, but we wouldn't have it in a Backbone
-      version either
+    - Achieving hot-reloading may be challenging as we need to serve from
+      Django and not WebPack Dev Server, but on the other hand Backbone would
+      not have had any hot reloading at all.
     - The build pipeline will look very similar to the existing one for
       Pollination Mapper
 
@@ -136,19 +143,13 @@ Ultimately we don't expect high usage of either app such that sharing a load
 balancer (AWS ELB) or even resource scaling (i.e. Celery servers) becomes an
 issue.
 
-We go with **Alternative 4** from above. The new front-end files will be stored
-in a new Django app. To take advantage of modern tooling, such as webpack,
-React, and hot reloading, we need a newer version of `node` than is currently
-installed. However, updating `node` can affect the existing setup, which could
-incur significant costs, and should be avoided if possible. Since this
-toolchain only needs to execute at build time, not run time, it can be run from
-a containerized environment.
-
-The final toolchain will run a more modern version of `node` from within a
-Docker container, with the main HTML file served from Django. To allow for hot
-module reloading, the setup will employ [`webpack-bundle-tracker`] that records
-webpack output, and can be read by [`django-webpack-loader`], a Django plugin
-that reads the webpack output and pulls in new JavaScript files.
+For the implementation, we go with **Alternative 4** from above. The new
+front-end files will be stored in a new Django app. To take advantage of modern
+tooling, such as webpack, React, and hot reloading, we need a newer version of
+`node` than is currently installed. However, updating `node` can affect the
+existing setup, which could incur significant costs, and should be avoided if
+possible. Since this toolchain only needs to execute at build time, not run
+time, it can be run from a containerized environment.
 
 ## Consequences
 
@@ -176,8 +177,46 @@ Lastly, there is already a JS front-end for Pollination Mapper. Its files are
 distributed between app root and a nested `js` folder. Because Beekeeper will
 have significant JS files and similar bundling pipeline as well, we will want
 all Beekeeper JS including the `package.json` and requirements in a nested
-folder a level down to avoid conflict. For better organization, repackaging all
-Pollination Mapper JS into a similarly nested folder may be considered as well.
+folder a level down to avoid conflict. The new organization will look something like this:
+
+```
+~/src/icp
+├── apps
+│   ├── beekeepers
+│   │   ├── dist
+│   │   │   └── ...
+│   │   ├── js
+│   │   │   └── src
+│   │   │       ├── main.jsx  (Beekeepers)
+│   │   │       └── ...
+│   │   ├── package.json      (Beekeepers)
+│   │   ├── sass
+│   │   │   └── main.scss     (Beekeepers)
+│   │   ├── webpack.config.js (Beekeepers)
+│   │   ├── yarn.lock         (Beekeepers)
+│   │   └── yarn.sh           (Beekeepers)
+│   └── ...
+├── bundle.sh                 (Pollination Mapper)
+├── ...
+├── js                        (Pollination Mapper)
+│   ├── shim
+│   │   └── ...
+│   └── src
+│       ├── app.js            (Pollination Mapper)
+│       └── ...
+├── npm-shrinkwrap.json       (Pollination Mapper)
+├── package.json              (Pollination Mapper)
+├── ...
+├── sass                      (Pollination Mapper)
+│   └── ...
+└── ...
+```
+
+The final toolchain will run a more modern version of `node` from within a
+Docker container, with the main HTML file served from Django. To allow for hot
+module reloading, the setup will employ [`webpack-bundle-tracker`] that records
+webpack output, and can be read by [`django-webpack-loader`], a Django plugin
+that reads the webpack output and pulls in new JavaScript files.
 
 While the Dockerized node setup will work functionally, it employs a large
 degree of indirection, with the developer starting a script in their local,
@@ -193,7 +232,7 @@ approach, which could be expensive.
 [name-based shared web hosting]: https://en.wikipedia.org/wiki/Shared_web_hosting_service
 [wireframes]:https://app.goabstract.com/projects/1955fff0-89e6-11e8-9d27-3b6b7c64f4e5/branches/master/files/E258E310-7858-4F64-9C6F-43572DBBEB19
 [Phase 1 Bees API]: https://app.pollinationmapper.org/
-[curent version]: https://github.com/azavea/ansible-nodejs/blob/92245ba10c25b2aef53a47bb3e3efb81334617c5/defaults/main.yml#L2
+[current version]: https://github.com/azavea/ansible-nodejs/blob/92245ba10c25b2aef53a47bb3e3efb81334617c5/defaults/main.yml#L2
 [installed]: https://github.com/project-icp/bee-pollinator-app/blob/1cf3c26d54d76ee596c33e370b48bc3722f57378/deployment/ansible/roles.yml#L7-L8
 [`webpack-bundle-tracker`]: https://github.com/owais/webpack-bundle-tracker
 [`django-webpack-loader`]: https://github.com/owais/django-webpack-loader
