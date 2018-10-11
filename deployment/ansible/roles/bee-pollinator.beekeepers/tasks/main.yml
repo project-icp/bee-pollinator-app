@@ -1,21 +1,37 @@
 ---
+- name: Add Docker dependencies for Ansible
+  pip: name="{{ item }}" state=present
+  with_items:
+    - "docker==3.5.*"
+    - "docker-compose==1.22.*"
+
 - name: Allow vagrant to run Docker
   user: name=vagrant groups=docker append=yes
 
 - name: Fetch Node Docker Image
-  command: "docker pull node:8"
-  args:
-    chdir: "{{ beekeepers_home }}"
+  docker_image: name=node tag=8 state=present
 
 - name: Install NPM Dependencies
-  command: "docker run --rm -v {{ beekeepers_home }}:/usr/src/app -w /usr/src/app node:8 yarn"
-  args:
-    chdir: "{{ beekeepers_home }}"
+  docker_container:
+    name: beekeepers-node
+    image: node:8
+    volumes:
+      - "{{ beekeepers_home }}:/usr/src/app"
+    working_dir: /usr/src/app
+    command: yarn
+    detach: no
+    cleanup: yes
 
 - name: Generate Beekeepers Bundle
-  command: "docker run --rm -v {{ beekeepers_home }}:/usr/src/app -w /usr/src/app node:8 yarn run bundle"
-  args:
-    chdir: "{{ beekeepers_home }}"
+  docker_container:
+    name: beekeepers-node
+    image: node:8
+    volumes:
+      - "{{ beekeepers_home }}:/usr/src/app"
+    working_dir: /usr/src/app
+    command: yarn run bundle
+    detach: no
+    cleanup: yes
 
 - name: Link Static Directory
   file: path="{{ beekeepers_static_root }}"
