@@ -59,6 +59,7 @@ target/
 
 # Ansible
 deployment/ansible/roles/azavea.*
+*.retry
 
 # CloudFormation
 deployment/default.yml
