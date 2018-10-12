@@ -8,7 +8,9 @@ Production: https://app.pollinationmapper.org
 
 ## Local Development
 
-A combination of Vagrant 1.6+ and Ansible 1.8+ is used to setup the development environment for this project. The project consists of the following virtual machines:
+A combination of Vagrant 2.1+ and Ansible 2.6+ is used to setup the development environment for this project. Running `vagrant box update` is recommended so you're on the latest version of the `ubuntu/trusty64` box.
+
+The project consists of the following virtual machines:
 
 - `app`
 - `services`
@@ -264,3 +266,28 @@ If you make changes to the model, and would like to reinstall it on the app with
 3. Update the app's colors and SVGs
 
     `python /vagrant/scripts/colors/update.py`
+
+
+# Beekeepers App
+
+Beekeepers is a separate front-end app that takes advantage of the API infrastructure of the Pollination Mapper, but uses a new, modern tech stack. Discussion about its architecture can be found [here](./doc/phase-2/000_project_architecture_adr.md).
+
+The app can be viewed at [http://localhost:8000/?beekeepers](http://localhost:8000/?beekeepers).
+
+To build the Beekeepers App, run:
+
+```bash
+$ ./scripts/beekeepers.sh run bundle
+```
+
+For development with hot module reloading enabled, run:
+
+```bash
+$ ./scripts/beekeepers.sh run dev-server
+```
+
+Now any changes made to the front-end within `src/icp/apps/beekeepers` will be reflected immediately.
+
+**Note**: After running `dev-server`, `bundle` must be run again to enable the front-end. This is because the template reads the `apps/beekeepers/.webpack.stats.json` file to decide which JavaScript files to include, which are generated and stored in the static files directory with `bundle`. However, `dev-server` serves those files from its own port, which is no longer active when it is shut down, so we must run `bundle` again to generate the static files.
+
+The [`beekeepers.sh`](./scripts/beekeepers.sh) script just SSH's in to the `app` VM and runs [`yarn.sh`](./src/icp/apps/beekeepers/yarn.sh), so it can take any `yarn` parameters.
