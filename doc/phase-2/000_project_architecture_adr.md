@@ -117,7 +117,7 @@ alternatives for this are:
     - While deploying a static app may be easier, we will have to ensure
       correspondence with the separately deployed API version
 
-4. **Use a Docker for building React JavaScript assets**
+4. **Use Docker for building React JavaScript assets**
     - Just as we have a bundle script for Pollination Mapper, we use a bundle
       script that runs a Docker container with a proper version of Node to
       build the assets. This Docker container is only used at build time.
