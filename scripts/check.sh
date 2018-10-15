@@ -5,4 +5,4 @@
 set -e
 set -x
 
-vagrant ssh app -c "(flake8 /vagrant/scripts/colors && flake8 /opt/app/apps --exclude migrations) || echo flake8 check failed"
+vagrant ssh app -c "(flake8 /vagrant/scripts/colors && flake8 /opt/app/apps --exclude migrations,node_modules) || echo flake8 check failed"

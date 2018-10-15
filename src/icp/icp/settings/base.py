@@ -284,6 +284,7 @@ DJANGO_APPS = (
 THIRD_PARTY_APPS = (
     'rest_framework',
     'registration',
+    'webpack_loader',
 )
 
 # THIRD-PARTY CONFIGURATION
@@ -305,6 +306,13 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
 ]
 
+# webpack_loader
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'STATS_FILE': join(SITE_ROOT, 'apps/beekeepers/.webpack-stats.json'),
+    }
+}
+
 # END THIRD-PARTY CONFIGURATION
 
 # Apps specific for this project go here.
@@ -313,7 +321,8 @@ LOCAL_APPS = (
     'apps.modeling',
     'apps.home',
     'apps.geocode',
-    'apps.user'
+    'apps.user',
+    'apps.beekeepers',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
