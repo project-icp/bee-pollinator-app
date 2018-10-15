@@ -1,0 +1,38 @@
+{
+    "name": "Facade",
+    "version": "0.2.2",
+    "description": "Front end framework for Azavea prototypes",
+    "private": true,
+    "author": "Azavea",
+    "scripts": {
+        "start": "webpack-dev-server --open --mode development",
+        "build": "webpack --mode production"
+    },
+    "browserslist": [
+        "last 2 versions"
+    ],
+    "devDependencies": {
+        "autoprefixer": "^9.1.5",
+        "clean-webpack-plugin": "^0.1.19",
+        "css-hot-loader": "^1.4.2",
+        "css-loader": "^1.0.0",
+        "cssnano": "^4.1.4",
+        "file-loader": "^2.0.0",
+        "html-loader": "^0.5.5",
+        "html-webpack-plugin": "^3.2.0",
+        "mini-css-extract-plugin": "^0.4.3",
+        "node-sass": "^4.9.3",
+        "node-sass-glob-importer": "^5.2.0",
+        "postcss-loader": "^3.0.0",
+        "sass-loader": "^7.1.0",
+        "stylelint-azavea": "azavea/stylelint-azavea",
+        "stylelint-webpack-plugin": "^0.10.5",
+        "webpack": "^4.20.2",
+        "webpack-cli": "^3.1.2",
+        "webpack-dev-server": "^3.1.9"
+    },
+    "dependencies": {
+        "focus-visible": "^4.1.5",
+        "inert-polyfill": "^0.2.5"
+    }
+}
