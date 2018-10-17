@@ -89,7 +89,8 @@
                 "sleep 5",
                 "sudo apt-get update -qq",
                 "sudo apt-get install python-pip python-dev libffi-dev libssl-dev -y",
-                "sudo pip install ansible==2.2.1.0",
+                "sudo pip install --upgrade pip",
+                "sudo pip install ansible==2.5.4.0",
                 "sudo /bin/sh -c 'echo {{user `version`}} > /srv/version.txt'"
             ]
         },
