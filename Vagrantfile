@@ -45,6 +45,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "services" do |services|
     services.vm.hostname = "services"
     services.vm.network "private_network", ip: ENV.fetch("ICP_SERVICES_IP", "33.33.34.30")
+    services.vm.synced_folder "~/.aws", "/home/vagrant/.aws"
 
     # Graphite Web
     services.vm.network "forwarded_port", {
