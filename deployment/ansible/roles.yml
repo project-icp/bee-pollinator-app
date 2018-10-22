@@ -69,3 +69,15 @@
 
 - src: azavea.docker
   version: 4.0.0
+
+- src: azavea.python
+  version: 0.1.0
+
+- src: azavea.unzip
+  version: 0.1.2
+
+- src: azavea.apache2
+  version: 0.2.4
+
+- src: azavea.memcached
+  version: 0.1.0
