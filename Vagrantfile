@@ -112,6 +112,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     app.vm.hostname = "app"
     app.vm.network "private_network", ip: ENV.fetch("ICP_APP_IP", "33.33.34.10")
 
+    app.vm.synced_folder "~/.aws", "/home/vagrant/.aws", type: "rsync"
+    app.vm.synced_folder "~/.aws", "/var/lib/icp/.aws", type: "rsync", owner: "icp", group: "icp", :mount_options =>[dmode=644,fmode=644]
+
     if Vagrant::Util::Platform.windows? || Vagrant::Util::Platform.cygwin?
       app.vm.synced_folder "src/icp", "/opt/app/", type: "rsync", rsync__exclude: ["node_modules/", "apps/"]
       app.vm.synced_folder "src/icp/apps", "/opt/app/apps"
