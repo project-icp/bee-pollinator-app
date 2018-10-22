@@ -15,12 +15,14 @@ import apps.home.urls
 import apps.home.views
 import apps.user.urls
 import apps.monitoring.urls
+import apps.beekeepers.urls
 
 admin.autodiscover()
 
 urlpatterns = patterns(
     '',
     url(r'^', include(apps.home.urls)),
+    url(r'^beekeepers/', include(apps.beekeepers.urls)),
     url(r'^health-check/', include(apps.monitoring.urls)),
     url(r'^api-auth/', include(rest_framework.urls,
                                namespace='rest_framework')),
