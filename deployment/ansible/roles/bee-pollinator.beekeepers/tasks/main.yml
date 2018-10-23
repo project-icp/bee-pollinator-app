@@ -42,6 +42,7 @@
   file: path="/var/lib/icp/.aws"
         group="icp"
         owner="icp"
+  when: "['development', 'test'] | some_are_in(group_names)"
 
 - name: Create tls certs dir
   file: path="/etc/pki/tls/certs/"
