@@ -37,3 +37,17 @@
   file: path="{{ beekeepers_static_root }}"
         src="{{ beekeepers_home }}/dist"
         state=link
+
+- name: Change AWS credentials access to the icp user
+  file: path="/var/lib/icp/.aws"
+        group="icp"
+        owner="icp"
+
+- name: Create tls certs dir
+  file: path="/etc/pki/tls/certs/"
+        state=directory
+
+- name: Symlink ca-certs
+  file: path="/etc/pki/tls/certs/ca-bundle.crt"
+        state=link
+        src="/etc/ssl/certs/ca-certificates.crt"
