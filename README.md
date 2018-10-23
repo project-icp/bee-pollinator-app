@@ -274,6 +274,9 @@ Beekeepers is a separate front-end app that takes advantage of the API infrastru
 
 The app can be viewed at [http://localhost:8000/?beekeepers](http://localhost:8000/?beekeepers).
 
+## AWS Credentials
+Raster data used by Beekeeper is stored and accessed from a private s3 bucket. To authenticate your requests, get your own IAM credentials and add them under an `icp_bees` profile to `~/.aws/credentials`. Ensure your `~/.aws/credentials` file has at least read permissions, else run `chmod -R 644 ~/.aws`. Provision your VM to mount the AWS credentials with Ansible.
+
 To build the Beekeepers App, run:
 
 ```bash
