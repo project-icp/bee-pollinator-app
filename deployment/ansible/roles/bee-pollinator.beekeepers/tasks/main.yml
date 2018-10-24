@@ -29,7 +29,7 @@
     volumes:
       - "{{ beekeepers_home }}:/usr/src/app"
     working_dir: /usr/src/app
-    command: yarn run bundle
+    command: yarn build
     detach: no
     cleanup: yes
 
