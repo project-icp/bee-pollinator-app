@@ -14,3 +14,5 @@ envdir_config:
   ROLLBAR_SERVER_SIDE_ACCESS_TOKEN: "Unknown"
   AWS_PROFILE: "{{ aws_profile }}"
   AWS_BEEKEEPERS_DATA_BUCKET: "{{ aws_beekeepers_data_bucket }}"
+  CURL_CA_BUNDLE: "{{ ubuntu_ssl_certs }}"
+  

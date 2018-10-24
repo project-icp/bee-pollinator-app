@@ -43,12 +43,3 @@
         group="icp"
         owner="icp"
   when: "['development', 'test'] | some_are_in(group_names)"
-
-- name: Create tls certs dir
-  file: path="/etc/pki/tls/certs/"
-        state=directory
-
-- name: Symlink ca-certs
-  file: path="/etc/pki/tls/certs/ca-bundle.crt"
-        state=link
-        src="/etc/ssl/certs/ca-certificates.crt"
