@@ -21,12 +21,12 @@ body {
     font: $font-base;
     font-weight: $font-weight-normal;
     background-color: #ccc;
-}
 
-#root {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    > .beekeepers-app {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
 }
 
 main {

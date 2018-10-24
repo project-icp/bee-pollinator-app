@@ -17,5 +17,5 @@ render(
             <Route exact path="/" component={App} />
         </BrowserRouter>
     </Provider>,
-    document.getElementById('root'),
+    document.querySelector('.beekeepers-app'),
 );
