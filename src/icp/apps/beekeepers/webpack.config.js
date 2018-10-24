@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const BundleTracker = require('webpack-bundle-tracker');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 const globImporter = require('node-sass-glob-importer');
 
 const PRODUCTION = 'production';
@@ -36,6 +37,10 @@ module.exports = ({ production }) => {
         plugins: [
             new BundleTracker({
                 filename: './.webpack-stats.json',
+            }),
+            new StyleLintPlugin({
+                context: 'sass',
+                fix: true,
             }),
             new webpack.optimize.ModuleConcatenationPlugin(),
             new webpack.SourceMapDevToolPlugin({

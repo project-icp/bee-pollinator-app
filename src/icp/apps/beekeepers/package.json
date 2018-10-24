@@ -72,6 +72,8 @@
     "resolve-url-loader": "~2.3.0",
     "sass-loader": "~6.0.7",
     "style-loader": "~0.20.3",
+    "stylelint-azavea": "azavea/stylelint-azavea",
+    "stylelint-webpack-plugin": "~0.10.5",
     "underscore": "~1.8.3",
     "underscore-template-loader": "~1.0.0",
     "url-loader": "~1.0.1",
