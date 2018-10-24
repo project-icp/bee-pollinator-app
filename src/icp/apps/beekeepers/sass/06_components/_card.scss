@@ -1,0 +1,62 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 4px -1px rgba(0, 0, 0, 0.5);
+
+    &:not(:last-child) {
+        margin-bottom: 1.4rem;
+    }
+
+    &__top {
+        display: flex;
+        width: 100%;
+        height: 3.6rem;
+        padding: 0.7rem 0.6rem;
+        border-bottom: 1px solid $color-grey-5;
+    }
+
+    &__bottom {
+        width: 100%;
+        height: 3.6rem;
+        padding: 0.9rem 0.4rem;
+    }
+
+    &__identification {
+        display: flex;
+        flex: 1;
+    }
+
+    &__name {
+        font-weight: 600;
+        font-size: $font-size-med;
+    }
+
+    &__benchmarklocation {
+        font-weight: 400;
+    }
+
+    &__button {
+        padding: 0.4rem;
+        color: $color-grey-3;
+        font-size: 14px;
+        line-height: 0;
+        background: none;
+        border: none;
+        cursor: pointer;
+
+        &:last-child {
+            margin-right: -0.4rem;
+        }
+    }
+
+    &__icon {
+        width: 14px;
+        height: 14px;
+    }
+
+    .marker {
+        margin-right: 0.6rem;
+    }
+}
