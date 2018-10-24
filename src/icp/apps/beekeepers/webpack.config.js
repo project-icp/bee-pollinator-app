@@ -11,7 +11,7 @@ module.exports = ({ production }) => {
     const common = {
         mode: production ? PRODUCTION : DEVELOPMENT,
         entry: {
-            app: ['babel-polyfill', './js/src/main.jsx'],
+            app: ['@babel/polyfill', './js/src/main.jsx'],
             vendor: [
                 'axios',
                 'immutability-helper',
@@ -56,12 +56,12 @@ module.exports = ({ production }) => {
                     exclude: /(node_modules|lib)/,
                     loader: 'babel-loader',
                     query: {
-                        presets: ['env', 'react'],
+                        presets: ['@babel/preset-env', '@babel/preset-react'],
                         plugins: [
                             'react-hot-loader/babel',
-                            'transform-object-assign',
-                            'transform-object-rest-spread',
-                            'syntax-dynamic-import',
+                            '@babel/plugin-transform-object-assign',
+                            '@babel/plugin-syntax-object-rest-spread',
+                            '@babel/plugin-syntax-dynamic-import',
                         ],
                     },
                 },
