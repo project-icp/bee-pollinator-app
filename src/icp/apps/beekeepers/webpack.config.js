@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const BundleTracker = require('webpack-bundle-tracker');
+const globImporter = require('node-sass-glob-importer');
 
 const PRODUCTION = 'production';
 const DEVELOPMENT = 'development';
@@ -84,12 +85,22 @@ module.exports = ({ production }) => {
                         {
                             loader: 'postcss-loader',
                             options: {
-                                // eslint-disable-next-line global-require
-                                plugins: () => [require('autoprefixer')],
+                                sourceMap: true,
+                                ident: 'postcss',
+                                /* eslint-disable global-require */
+                                plugins: () => [
+                                    require('autoprefixer'),
+                                    require('cssnano'),
+                                ],
+                                /* eslint-enable global-require */
                             },
                         },
                         {
-                            loader: 'sass-loader?sourceMap',
+                            loader: 'sass-loader',
+                            options: {
+                                sourceMap: true,
+                                importer: globImporter(),
+                            },
                         },
                     ],
                 },
