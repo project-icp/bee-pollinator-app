@@ -8,17 +8,17 @@ export default () => (
             </div>
             <ul className="navbar__items">
                 <li className="navbar__item">
-                    <button className="navbar__button">
+                    <button type="button" className="navbar__button">
                         About
                     </button>
                 </li>
                 <li className="navbar__item">
-                    <button className="navbar__button">
+                    <button type="button" className="navbar__button">
                         Methodology
                     </button>
                 </li>
                 <li className="navbar__item">
-                    <button className="navbar__button">
+                    <button type="button" className="navbar__button">
                         Account
                     </button>
                 </li>

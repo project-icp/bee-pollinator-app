@@ -38,7 +38,12 @@ export default () => (
                 <li className="card">
                     <div className="card__top">
                         <div className="card__identification">
-                            <div className="card__name">Benchmark: <span className="card__benchmarklocation">Montana County</span></div>
+                            <div className="card__name">
+                                Benchmark:
+                                <span className="card__benchmarklocation">
+                                    Montana County
+                                </span>
+                            </div>
                         </div>
                         <div className="card__buttons" />
                     </div>
@@ -74,10 +79,10 @@ export default () => (
                             <div className="card__name">423 Waltz Road</div>
                         </div>
                         <div className="card__buttons">
-                            <button className="card__button">
+                            <button type="button" className="card__button">
                                 <i className="icon-star-outline" />
                             </button>
-                            <button className="card__button">
+                            <button type="button" className="card__button">
                                 <i className="icon-trash-fill" />
                             </button>
                         </div>
@@ -114,10 +119,10 @@ export default () => (
                             <div className="card__name">423 Waltz Road</div>
                         </div>
                         <div className="card__buttons">
-                            <button className="card__button">
+                            <button type="button" className="card__button">
                                 <i className="icon-star-outline" />
                             </button>
-                            <button className="card__button">
+                            <button type="button" className="card__button">
                                 <i className="icon-trash-fill" />
                             </button>
                         </div>
@@ -154,13 +159,13 @@ export default () => (
                             <div className="card__name">423 Waltz Road</div>
                         </div>
                         <div className="card__buttons">
-                            <button className="card__button">
+                            <button type="button" className="card__button">
                                 <i className="icon-clipboard-outline" />
                             </button>
-                            <button className="card__button">
+                            <button type="button" className="card__button">
                                 <i className="icon-star-fill" />
                             </button>
-                            <button className="card__button">
+                            <button type="button" className="card__button">
                                 <i className="icon-trash-fill" />
                             </button>
                         </div>
@@ -197,13 +202,13 @@ export default () => (
                             <div className="card__name">423 Waltz Road</div>
                         </div>
                         <div className="card__buttons">
-                            <button className="card__button">
+                            <button type="button" className="card__button">
                                 <i className="icon-clipboard-fill" />
                             </button>
-                            <button className="card__button">
+                            <button type="button" className="card__button">
                                 <i className="icon-star-fill" />
                             </button>
-                            <button className="card__button">
+                            <button type="button" className="card__button">
                                 <i className="icon-trash-fill" />
                             </button>
                         </div>

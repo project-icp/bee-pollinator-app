@@ -9,7 +9,6 @@ if (process.env.NODE_ENV === 'development') {
     middlewares.push(logger);
 }
 
-const createStoreWithMiddleware =
-    applyMiddleware(...middlewares)(createStore);
+const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore);
 
 export { createStoreWithMiddleware as default };
