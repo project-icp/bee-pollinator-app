@@ -5,9 +5,9 @@ from __future__ import division
 
 from django.conf.urls import patterns, url
 
-from apps.beekeepers import tasks
+from apps.beekeepers import views
 
 urlpatterns = patterns(
     '',
-    url(r'fetch/$', tasks.fetch_data, name='fetch_data'),
+    url(r'fetch/$', views.fetch_data, name='fetch_data'),
 )
