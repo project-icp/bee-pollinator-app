@@ -3,19 +3,22 @@ import { render } from 'react-dom';
 
 import { BrowserRouter, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 import '../../sass/main.scss';
 import App from './App';
 
-import createStoreWithMiddleware from './store';
-import reducers from './reducers';
+import { store, persistor } from './store';
 
-const store = createStoreWithMiddleware(reducers);
 render(
     <Provider store={store}>
-        <BrowserRouter>
-            <Route exact path="/" component={App} />
-        </BrowserRouter>
+        {/* TODO Add Loading State
+            https://github.com/project-icp/bee-pollinator-app/issues/314 */}
+        <PersistGate loading={null} persistor={persistor}>
+            <BrowserRouter>
+                <Route exact path="/" component={App} />
+            </BrowserRouter>
+        </PersistGate>
     </Provider>,
     document.querySelector('.beekeepers-app'),
 );

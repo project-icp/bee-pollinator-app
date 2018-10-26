@@ -1,4 +1,3 @@
-import { combineReducers } from 'redux';
 import { createReducer } from 'redux-act';
 import update from 'immutability-helper';
 
@@ -61,6 +60,6 @@ const mainReducer = createReducer({
         (state, payload) => update(state, { forageRange: { $set: payload } }),
 }, initialState);
 
-export default combineReducers({
+export default {
     main: mainReducer,
-});
+};
