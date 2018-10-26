@@ -19,5 +19,6 @@ celery_number_of_workers: 2
 celery_processes_per_worker: 1
 
 aws_profile: "icp-stg"
+aws_beekeepers_data_bucket: "beekeepers-staging-data-us-east-1"
 
 stack_type: "Testing"

@@ -37,3 +37,9 @@
   file: path="{{ beekeepers_static_root }}"
         src="{{ beekeepers_home }}/dist"
         state=link
+
+- name: Change AWS credentials access to the icp user
+  file: path="/var/lib/icp/.aws"
+        group="icp"
+        owner="icp"
+  when: "['development', 'test'] | some_are_in(group_names)"

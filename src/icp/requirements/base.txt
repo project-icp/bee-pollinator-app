@@ -13,3 +13,6 @@ requests==2.9.1
 rollbar==0.12.1
 retry==0.9.1
 django-webpack-loader==0.6.0
+rasterio[s3]==1.0.8
+pyproj==1.9.5.1
+boto3==1.8.0
