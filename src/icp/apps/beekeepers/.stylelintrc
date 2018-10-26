@@ -1,0 +1,4 @@
+{
+    "extends": "stylelint-azavea",
+    "ignoreFiles": "sass/03_vendors/**/*.scss"
+}

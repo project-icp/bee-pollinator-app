@@ -1,0 +1,40 @@
+/* stylelint-disable selector-max-type */
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+html {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    color: $color-black;
+    font-size: 62.5%;
+}
+
+body {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    font: $font-base;
+    font-weight: $font-weight-normal;
+    background-color: #ccc;
+
+    > .beekeepers-app {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+}
+
+main {
+    display: flex;
+    flex: 1;
+}
+
+strong {
+    font-weight: $font-weight-bold;
+}
+/* stylelint-enable selector-max-type */

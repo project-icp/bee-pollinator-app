@@ -280,17 +280,17 @@ Raster data used by Beekeeper is stored and accessed from a private s3 bucket. T
 To build the Beekeepers App, run:
 
 ```bash
-$ ./scripts/beekeepers.sh run bundle
+$ ./scripts/beekeepers.sh build
 ```
 
 For development with hot module reloading enabled, run:
 
 ```bash
-$ ./scripts/beekeepers.sh run dev-server
+$ ./scripts/beekeepers.sh start
 ```
 
 Now any changes made to the front-end within `src/icp/apps/beekeepers` will be reflected immediately.
 
-**Note**: After running `dev-server`, `bundle` must be run again to enable the front-end. This is because the template reads the `apps/beekeepers/.webpack.stats.json` file to decide which JavaScript files to include, which are generated and stored in the static files directory with `bundle`. However, `dev-server` serves those files from its own port, which is no longer active when it is shut down, so we must run `bundle` again to generate the static files.
+**Note**: After running `start`, `build` must be run again to enable the front-end. This is because the template reads the `apps/beekeepers/.webpack.stats.json` file to decide which JavaScript files to include, which are generated and stored in the static files directory with `build`. However, `start` serves those files from its own port, which is no longer active when it is shut down, so we must run `build` again to generate the static files.
 
 The [`beekeepers.sh`](./scripts/beekeepers.sh) script just SSH's in to the `app` VM and runs [`yarn.sh`](./src/icp/apps/beekeepers/yarn.sh), so it can take any `yarn` parameters.

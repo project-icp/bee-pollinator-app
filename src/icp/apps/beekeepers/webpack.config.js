@@ -1,5 +1,7 @@
 const webpack = require('webpack');
 const BundleTracker = require('webpack-bundle-tracker');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
+const globImporter = require('node-sass-glob-importer');
 
 const PRODUCTION = 'production';
 const DEVELOPMENT = 'development';
@@ -10,7 +12,7 @@ module.exports = ({ production }) => {
     const common = {
         mode: production ? PRODUCTION : DEVELOPMENT,
         entry: {
-            app: ['babel-polyfill', './js/src/main.jsx'],
+            app: ['@babel/polyfill', './js/src/main.jsx'],
             vendor: [
                 'axios',
                 'immutability-helper',
@@ -36,6 +38,10 @@ module.exports = ({ production }) => {
             new BundleTracker({
                 filename: './.webpack-stats.json',
             }),
+            new StyleLintPlugin({
+                context: 'sass',
+                fix: true,
+            }),
             new webpack.optimize.ModuleConcatenationPlugin(),
             new webpack.SourceMapDevToolPlugin({
                 filename: '[file].map',
@@ -55,12 +61,12 @@ module.exports = ({ production }) => {
                     exclude: /(node_modules|lib)/,
                     loader: 'babel-loader',
                     query: {
-                        presets: ['env', 'react'],
+                        presets: ['@babel/preset-env', '@babel/preset-react'],
                         plugins: [
                             'react-hot-loader/babel',
-                            'transform-object-assign',
-                            'transform-object-rest-spread',
-                            'syntax-dynamic-import',
+                            '@babel/plugin-transform-object-assign',
+                            '@babel/plugin-syntax-object-rest-spread',
+                            '@babel/plugin-syntax-dynamic-import',
                         ],
                     },
                 },
@@ -84,12 +90,22 @@ module.exports = ({ production }) => {
                         {
                             loader: 'postcss-loader',
                             options: {
-                                // eslint-disable-next-line global-require
-                                plugins: () => [require('autoprefixer')],
+                                sourceMap: true,
+                                ident: 'postcss',
+                                /* eslint-disable global-require */
+                                plugins: () => [
+                                    require('autoprefixer'),
+                                    require('cssnano'),
+                                ],
+                                /* eslint-enable global-require */
                             },
                         },
                         {
-                            loader: 'sass-loader?sourceMap',
+                            loader: 'sass-loader',
+                            options: {
+                                sourceMap: true,
+                                importer: globImporter(),
+                            },
                         },
                     ],
                 },
