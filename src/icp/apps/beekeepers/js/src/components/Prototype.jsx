@@ -1,8 +1,7 @@
 import React from 'react';
 
-export default () => (
-    <main>
-        <div className="map" />
+export default function () {
+    return (
         <div className="sidebar">
             <h2 className="sidebar__header">Locations</h2>
             <div className="controls">
@@ -240,5 +239,5 @@ export default () => (
                 </li>
             </ul>
         </div>
-    </main>
-);
+    );
+}
