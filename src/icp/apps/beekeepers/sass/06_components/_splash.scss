@@ -1,0 +1,13 @@
+.splash {
+    padding: 6rem;
+    font: $font-med;
+    background-color: #fff;
+
+    &__header {
+        margin-top: 1rem;
+        margin-bottom: $font-size-xl;
+        font-weight: 900;
+        font-size: $font-size-xxl;
+        line-height: $font-size-3xl;
+    }
+}
