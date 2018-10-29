@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { hot } from 'react-hot-loader';
 
 import Header from './components/Header';
@@ -16,9 +15,4 @@ const App = () => (
     </>
 );
 
-function mapStateToProps(state) {
-    return state;
-}
-
-const hotApp = hot(module)(App);
-export default connect(mapStateToProps)(hotApp);
+export default hot(module)(App);
