@@ -1,5 +1,4 @@
-export const INC = 'INC';
+import { createAction } from 'redux-act';
 
-export function inc() {
-    return { type: INC };
-}
+export const setSort = createAction('Set Apiary Sort');
+export const setForageRange = createAction('Set Forage Range');
