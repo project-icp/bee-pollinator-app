@@ -18,7 +18,7 @@ const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore);
 const persistReducerConfig = {
     key: 'beekeepers-app',
     storage,
-    whitelist: ['main'],
+    whitelist: ['saved'],
 };
 const persistReducers = persistCombineReducers(persistReducerConfig, reducers);
 const store = createStoreWithMiddleware(persistReducers);

@@ -60,6 +60,10 @@ const mainReducer = createReducer({
         (state, payload) => update(state, { forageRange: { $set: payload } }),
 }, initialState);
 
+// Placeholder reducer for parts of state that will be persisted to localStorage
+const savedReducer = createReducer({}, {});
+
 export default {
     main: mainReducer,
+    saved: savedReducer,
 };
