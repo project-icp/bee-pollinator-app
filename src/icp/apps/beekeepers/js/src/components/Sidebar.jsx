@@ -1,6 +1,8 @@
 import React from 'react';
-import { arrayOf, object } from 'prop-types';
+import { arrayOf } from 'prop-types';
 import { connect } from 'react-redux';
+
+import { Apiary } from '../propTypes';
 
 import Splash from './Splash';
 import Prototype from './Prototype';
@@ -12,8 +14,7 @@ const Sidebar = ({ apiaries }) => (
 );
 
 Sidebar.propTypes = {
-    // TODO Replace `object` with Apiary Shape
-    apiaries: arrayOf(object).isRequired,
+    apiaries: arrayOf(Apiary).isRequired,
 };
 
 function mapStateToProps(state) {
