@@ -1,4 +1,4 @@
 import { createAction } from 'redux-act';
 
-export const setSort = createAction('Set Apiary Sort');
-export const setForageRange = createAction('Set Forage Range');
+export const setSort = createAction('Set apiary sort');
+export const setForageRange = createAction('Set forage range');
