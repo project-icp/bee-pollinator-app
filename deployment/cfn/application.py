@@ -58,6 +58,7 @@ class Application(StackNode):
         'GlobalNotificationsARN': ['global:GlobalNotificationsARN'],
         'RollbarServerSideAccessToken':
         ['global:RollbarServerSideAccessToken'],
+        'BeekeepersDataBucket': ['global:BeekeepersDataBucket'],
     }
 
     DEFAULTS = {
@@ -414,6 +415,10 @@ class Application(StackNode):
                 '    permissions: 0750\n',
                 '    owner: root:icp\n',
                 '    content: ', self.get_input('RollbarServerSideAccessToken'), '\n',  # NOQA
+                '  - path: /etc/icp.d/env/AWS_BEEKEEPERS_DATA_BUCKET\n',
+                '    permissions: 0750\n',
+                '    owner: root:icp\n',
+                '    content: ', self.get_input('BeekeepersDataBucket'), '\n'
                 ]
 
     def create_cloud_watch_resources(self, app_server_lb):
