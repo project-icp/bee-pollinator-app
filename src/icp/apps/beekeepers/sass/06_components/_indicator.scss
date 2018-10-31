@@ -1,41 +1,27 @@
 .indicator {
     display: flex;
-    padding-right: 1.4rem;
 
     &__number {
-        width: 2.4rem;
         margin-right: 0.6rem;
         font-weight: 600;
-        font-size: $font-size-med;
+        font-size: larger;
         text-align: right;
         font-feature-settings: "tnum";
     }
 
     &__name {
         color: $color-grey-3;
+        text-transform: capitalize;
     }
+}
 
-    &--hive-density {
-        width: 25%;
-    }
-
-    &--habitat {
-        width: 18%;
-    }
-
-    &--pesticide {
-        width: 20%;
-    }
-
-    &--forage {
-        width: 17%;
-    }
-
-    &--overall {
-        width: 20%;
+@include media("<=tablet") {
+    .indicator {
+        font-size: $font-size-sm;
     }
 }
 
 .indicator-container {
     display: flex;
+    justify-content: space-around;
 }
