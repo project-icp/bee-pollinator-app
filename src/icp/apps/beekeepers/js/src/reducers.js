@@ -1,19 +1,12 @@
 import { createReducer } from 'redux-act';
 import update from 'immutability-helper';
 
-import {
-    SORT_CREATED,
-    FORAGE_RANGE_3K,
-    MAP_CENTER,
-    MAP_ZOOM,
-} from './constants';
+import { SORT_CREATED, FORAGE_RANGE_3K } from './constants';
 import { setSort, setForageRange } from './actions';
 
 const initialState = {
     sortBy: SORT_CREATED,
     forageRange: FORAGE_RANGE_3K,
-    mapCenter: MAP_CENTER,
-    zoom: MAP_ZOOM,
     apiaries: [
         /* Sample Apiary Structure
         {

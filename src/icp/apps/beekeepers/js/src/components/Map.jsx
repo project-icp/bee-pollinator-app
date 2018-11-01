@@ -1,13 +1,14 @@
 import React from 'react';
 import { Map as LeafletMap, TileLayer } from 'react-leaflet';
-import { arrayOf, number } from 'prop-types';
 import { connect } from 'react-redux';
 
-const Map = ({ mapCenter, zoom }) => (
+import { MAP_CENTER, MAP_ZOOM } from '../constants';
+
+const Map = () => (
     <div className="map">
         <LeafletMap
-            center={mapCenter}
-            zoom={zoom}
+            center={MAP_CENTER}
+            zoom={MAP_ZOOM}
         >
             <TileLayer
                 attribution="&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
@@ -21,9 +22,6 @@ function mapStateToProps(state) {
     return state.main;
 }
 
-Map.propTypes = {
-    mapCenter: arrayOf(number).isRequired,
-    zoom: number.isRequired,
-};
+Map.propTypes = {};
 
 export default connect(mapStateToProps)(Map);
