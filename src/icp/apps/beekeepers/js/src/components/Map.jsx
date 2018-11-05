@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Map as LeafletMap, TileLayer, Marker } from 'react-leaflet';
 import { connect } from 'react-redux';
-import { arrayOf, object, func } from 'prop-types';
+import { arrayOf, func } from 'prop-types';
 
+import { Apiary } from '../propTypes';
 import { setApiaryList } from '../actions';
-import { MAP_CENTER, MAP_ZOOM } from '../constants';
+import { MAP_CENTER, MAP_ZOOM, RASTERS } from '../constants';
 
 class Map extends Component {
     constructor() {
@@ -16,7 +17,32 @@ class Map extends Component {
         const { apiaries, dispatch } = this.props;
         const newApiaryList = apiaries.concat({
             name: 'dummy name',
+            marker: 'F',
             location: event.latlng,
+            scores: {
+                threeKm: {
+                    [RASTERS.HIVE_DENSITY]: { data: 26, error: null },
+                    [RASTERS.HABITAT]: { data: 13, error: null },
+                    [RASTERS.PESTICIDE]: { data: 20, error: null },
+                    [RASTERS.FORAGE_SPRING]: { data: 61, error: null },
+                    [RASTERS.FORAGE_SUMMER]: { data: 54, error: null },
+                    [RASTERS.FORAGE_FALL]: { data: 45, error: null },
+                    [RASTERS.OVERALL]: { data: 45, error: null },
+                },
+                fiveKm: {
+                    [RASTERS.HIVE_DENSITY]: { data: 26, error: null },
+                    [RASTERS.HABITAT]: { data: 13, error: null },
+                    [RASTERS.PESTICIDE]: { data: 20, error: null },
+                    [RASTERS.FORAGE_SPRING]: { data: 61, error: null },
+                    [RASTERS.FORAGE_SUMMER]: { data: 54, error: null },
+                    [RASTERS.FORAGE_FALL]: { data: 45, error: null },
+                    [RASTERS.OVERALL]: { data: 45, error: null },
+                },
+            },
+            fetching: false,
+            selected: false,
+            starred: false,
+            surveyed: false,
         });
         dispatch(setApiaryList(newApiaryList));
     }
@@ -24,7 +50,7 @@ class Map extends Component {
     render() {
         const { apiaries } = this.props;
         const markers = apiaries.map((apiary, idx) => {
-            const key = apiary.name + toString(idx);
+            const key = apiary.name + String.fromCharCode(idx);
             return (
                 <Marker
                     key={key}
@@ -56,7 +82,7 @@ function mapStateToProps(state) {
 }
 
 Map.propTypes = {
-    apiaries: arrayOf(object).isRequired,
+    apiaries: arrayOf(Apiary).isRequired,
     dispatch: func.isRequired,
 };
 
