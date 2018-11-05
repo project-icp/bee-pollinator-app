@@ -1,55 +1,142 @@
 import { createReducer } from 'redux-act';
 import update from 'immutability-helper';
 
-import { SORT_CREATED, FORAGE_RANGE_3K } from './constants';
+import { SORT_CREATED, FORAGE_RANGE_3K, RASTERS } from './constants';
 import { setSort, setForageRange } from './actions';
 
 const initialState = {
     sortBy: SORT_CREATED,
     forageRange: FORAGE_RANGE_3K,
     apiaries: [
-        /* Sample Apiary Structure
+        // TODO Remove dummy data
         {
-            "name": "Sample Apiary",
-            "location": {
-                "lat": 1.0,
-                "lon": 1.0
+            name: '423 Waltz Road',
+            marker: 'A',
+            location: {
+                lat: 1.0,
+                lng: 1.0,
             },
-            "scores": {
-                "3k": {
-                    "hive_density": {
-                        "data": 26,
-                        "error": null
-                    },
-                    "forage_fall": {
-                        "data": 45,
-                        "error": null
-                    },
-                    "forage_spring": {
-                        "data": 61,
-                        "error": null
-                    },
+            scores: {
+                threeKm: {
+                    [RASTERS.HIVE_DENSITY]: { data: 26, error: null },
+                    [RASTERS.HABITAT]: { data: 13, error: null },
+                    [RASTERS.PESTICIDE]: { data: 20, error: null },
+                    [RASTERS.FORAGE_SPRING]: { data: 61, error: null },
+                    [RASTERS.FORAGE_SUMMER]: { data: 54, error: null },
+                    [RASTERS.FORAGE_FALL]: { data: 45, error: null },
+                    [RASTERS.OVERALL]: { data: 45, error: null },
                 },
-                "5k": {
-                    "hive_density": {
-                        "data": 30,
-                        "error": null
-                    },
-                    "forage_fall": {
-                        "data": 49,
-                        "error": null
-                    },
-                    "forage_spring": {
-                        "data": 65,
-                        "error": null
-                    },
-                }
+                fiveKm: {
+                    [RASTERS.HIVE_DENSITY]: { data: 26, error: null },
+                    [RASTERS.HABITAT]: { data: 13, error: null },
+                    [RASTERS.PESTICIDE]: { data: 20, error: null },
+                    [RASTERS.FORAGE_SPRING]: { data: 61, error: null },
+                    [RASTERS.FORAGE_SUMMER]: { data: 54, error: null },
+                    [RASTERS.FORAGE_FALL]: { data: 45, error: null },
+                    [RASTERS.OVERALL]: { data: 45, error: null },
+                },
             },
-            "fetching": false,
-            "starred": false,
-            "surveyed": false,
-        }
-        */
+            fetching: false,
+            selected: false,
+            starred: false,
+            surveyed: false,
+        },
+        {
+            name: '990 Spring Garden',
+            marker: 'B',
+            location: {
+                lat: 1.0,
+                lng: 1.0,
+            },
+            scores: {
+                threeKm: {
+                    [RASTERS.HIVE_DENSITY]: { data: 26, error: null },
+                    [RASTERS.HABITAT]: { data: 13, error: null },
+                    [RASTERS.PESTICIDE]: { data: 20, error: null },
+                    [RASTERS.FORAGE_SPRING]: { data: 61, error: null },
+                    [RASTERS.FORAGE_SUMMER]: { data: 54, error: null },
+                    [RASTERS.FORAGE_FALL]: { data: 45, error: null },
+                    [RASTERS.OVERALL]: { data: 45, error: null },
+                },
+                fiveKm: {
+                    [RASTERS.HIVE_DENSITY]: { data: 26, error: null },
+                    [RASTERS.HABITAT]: { data: 13, error: null },
+                    [RASTERS.PESTICIDE]: { data: 20, error: null },
+                    [RASTERS.FORAGE_SPRING]: { data: 61, error: null },
+                    [RASTERS.FORAGE_SUMMER]: { data: 54, error: null },
+                    [RASTERS.FORAGE_FALL]: { data: 45, error: null },
+                    [RASTERS.OVERALL]: { data: 45, error: null },
+                },
+            },
+            fetching: true,
+            selected: false,
+            starred: true,
+            surveyed: true,
+        },
+        {
+            name: '341 N 12th Street',
+            marker: 'C',
+            location: {
+                lat: 1.0,
+                lng: 1.0,
+            },
+            scores: {
+                threeKm: {
+                    [RASTERS.HIVE_DENSITY]: { data: 26, error: null },
+                    [RASTERS.HABITAT]: { data: 13, error: null },
+                    [RASTERS.PESTICIDE]: { data: 20, error: null },
+                    [RASTERS.FORAGE_SPRING]: { data: 61, error: null },
+                    [RASTERS.FORAGE_SUMMER]: { data: 54, error: null },
+                    [RASTERS.FORAGE_FALL]: { data: 45, error: null },
+                    [RASTERS.OVERALL]: { data: 45, error: null },
+                },
+                fiveKm: {
+                    [RASTERS.HIVE_DENSITY]: { data: 26, error: null },
+                    [RASTERS.HABITAT]: { data: 13, error: null },
+                    [RASTERS.PESTICIDE]: { data: 20, error: null },
+                    [RASTERS.FORAGE_SPRING]: { data: 61, error: null },
+                    [RASTERS.FORAGE_SUMMER]: { data: 54, error: null },
+                    [RASTERS.FORAGE_FALL]: { data: 45, error: null },
+                    [RASTERS.OVERALL]: { data: 45, error: null },
+                },
+            },
+            fetching: false,
+            selected: false,
+            starred: true,
+            surveyed: false,
+        },
+        {
+            name: '1234 Market Street',
+            marker: 'D',
+            location: {
+                lat: 1.0,
+                lng: 1.0,
+            },
+            scores: {
+                threeKm: {
+                    [RASTERS.HIVE_DENSITY]: { data: 26, error: null },
+                    [RASTERS.HABITAT]: { data: 13, error: null },
+                    [RASTERS.PESTICIDE]: { data: 20, error: null },
+                    [RASTERS.FORAGE_SPRING]: { data: 61, error: null },
+                    [RASTERS.FORAGE_SUMMER]: { data: 54, error: null },
+                    [RASTERS.FORAGE_FALL]: { data: 45, error: null },
+                    [RASTERS.OVERALL]: { data: 45, error: null },
+                },
+                fiveKm: {
+                    [RASTERS.HIVE_DENSITY]: { data: 26, error: null },
+                    [RASTERS.HABITAT]: { data: 13, error: null },
+                    [RASTERS.PESTICIDE]: { data: 20, error: null },
+                    [RASTERS.FORAGE_SPRING]: { data: 61, error: null },
+                    [RASTERS.FORAGE_SUMMER]: { data: 54, error: null },
+                    [RASTERS.FORAGE_FALL]: { data: 45, error: null },
+                    [RASTERS.OVERALL]: { data: 45, error: null },
+                },
+            },
+            fetching: false,
+            selected: true,
+            starred: false,
+            surveyed: false,
+        },
     ],
 };
 
