@@ -7,9 +7,9 @@ import {
 
 import { RASTERS } from './constants';
 
-export const LatLon = shape({
+export const LatLng = shape({
     lat: number.isRequired,
-    lon: number.isRequired,
+    lng: number.isRequired,
 });
 
 export const Score = shape({
@@ -25,7 +25,7 @@ export const Scores = shape(Object.keys(RASTERS).reduce(
 export const Apiary = shape({
     name: string.isRequired,
     marker: string.isRequired,
-    location: LatLon.isRequired,
+    location: LatLng.isRequired,
     scores: shape({
         threeKm: Scores,
         fiveKm: Scores,

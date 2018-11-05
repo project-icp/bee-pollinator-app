@@ -14,7 +14,7 @@ const initialState = {
             marker: 'A',
             location: {
                 lat: 1.0,
-                lon: 1.0,
+                lng: 1.0,
             },
             scores: {
                 threeKm: {
@@ -46,7 +46,7 @@ const initialState = {
             marker: 'B',
             location: {
                 lat: 1.0,
-                lon: 1.0,
+                lng: 1.0,
             },
             scores: {
                 threeKm: {
@@ -78,7 +78,7 @@ const initialState = {
             marker: 'C',
             location: {
                 lat: 1.0,
-                lon: 1.0,
+                lng: 1.0,
             },
             scores: {
                 threeKm: {
@@ -110,7 +110,7 @@ const initialState = {
             marker: 'D',
             location: {
                 lat: 1.0,
-                lon: 1.0,
+                lng: 1.0,
             },
             scores: {
                 threeKm: {
