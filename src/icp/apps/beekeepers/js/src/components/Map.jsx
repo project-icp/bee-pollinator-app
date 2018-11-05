@@ -3,7 +3,7 @@ import { Map as LeafletMap, TileLayer, Marker } from 'react-leaflet';
 import { connect } from 'react-redux';
 import { arrayOf, object, func } from 'prop-types';
 
-import { addApiary } from '../actions';
+import { setApiaryList } from '../actions';
 import { MAP_CENTER, MAP_ZOOM } from '../constants';
 
 class Map extends Component {
@@ -15,16 +15,23 @@ class Map extends Component {
     onClickAddMarker(event) {
         const { apiaries, dispatch } = this.props;
         const newApiaryList = apiaries.concat({
+            name: 'dummy name',
             location: event.latlng,
         });
-        dispatch(addApiary(newApiaryList));
+        dispatch(setApiaryList(newApiaryList));
     }
 
     render() {
         const { apiaries } = this.props;
-        const markers = apiaries.map(apiary => (
-            <Marker position={[apiary.location.lat, apiary.location.lng]} />
-        ));
+        const markers = apiaries.map((apiary, idx) => {
+            const key = apiary.name + toString(idx);
+            return (
+                <Marker
+                    key={key}
+                    position={[apiary.location.lat, apiary.location.lng]}
+                />
+            );
+        });
 
         return (
             <div className="map">
