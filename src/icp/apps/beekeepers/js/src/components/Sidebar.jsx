@@ -12,9 +12,12 @@ const Sidebar = ({ apiaries }) => {
         return <Splash />;
     }
 
-    const apiaryCards = apiaries.map(apiary => (
-        <ApiaryCard key={apiary.marker} apiary={apiary} />
-    ));
+    const apiaryCards = apiaries.map((apiary, idx) => {
+        // TODO: Replace unique key generator once app uses real, complete data
+        // Currently solution appeases React unique key error
+        const key = String.fromCharCode(idx);
+        return <ApiaryCard key={key} apiary={apiary} />;
+    });
 
     return (
         <div className="sidebar">

@@ -2,7 +2,8 @@ import { createReducer } from 'redux-act';
 import update from 'immutability-helper';
 
 import { SORT_CREATED, FORAGE_RANGE_3K, RASTERS } from './constants';
-import { setSort, setForageRange } from './actions';
+import { setSort, setForageRange, setApiaryList } from './actions';
+
 
 const initialState = {
     sortBy: SORT_CREATED,
@@ -145,6 +146,8 @@ const mainReducer = createReducer({
         (state, payload) => update(state, { sortBy: { $set: payload } }),
     [setForageRange]:
         (state, payload) => update(state, { forageRange: { $set: payload } }),
+    [setApiaryList]:
+        (state, payload) => update(state, { apiaries: { $set: payload } }),
 }, initialState);
 
 // Placeholder reducer for parts of state that will be persisted to localStorage
