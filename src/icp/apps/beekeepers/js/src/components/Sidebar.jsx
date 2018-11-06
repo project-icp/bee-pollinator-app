@@ -1,13 +1,15 @@
 import React from 'react';
-import { arrayOf } from 'prop-types';
+import { arrayOf, func } from 'prop-types';
 import { connect } from 'react-redux';
 
 import { Apiary } from '../propTypes';
+import { setForageRange, setSort } from '../actions';
 
 import ApiaryCard from './ApiaryCard';
+import DropdownSelector from './DropdownSelector';
 import Splash from './Splash';
 
-const Sidebar = ({ apiaries }) => {
+const Sidebar = ({ apiaries, dispatch }) => {
     if (apiaries.length === 0) {
         return <Splash />;
     }
@@ -19,26 +21,24 @@ const Sidebar = ({ apiaries }) => {
         return <ApiaryCard key={key} apiary={apiary} />;
     });
 
+    const onSelectForageRange = (selection) => {
+        dispatch(setForageRange(selection.target.value));
+    };
+
     return (
         <div className="sidebar">
             <h2 className="sidebar__header">Locations</h2>
             <div className="controls">
-                {/* TODO Implement Forage Range, Sort selectors
-                    https://github.com/project-icp/bee-pollinator-app/issues/316 */}
-                <div className="controls__select">
-                    <select>
-                        <option value="one">one</option>
-                        <option value="two">two</option>
-                        <option value="three">three</option>
-                    </select>
-                </div>
-                <div className="controls__select">
-                    <select>
-                        <option value="one">one</option>
-                        <option value="two">two</option>
-                        <option value="three">three</option>
-                    </select>
-                </div>
+                <DropdownSelector
+                    title="Forage Range:"
+                    options={['1', '2', '3']}
+                    onOptionClick={onSelectForageRange}
+                />
+                <DropdownSelector
+                    title="Sort:"
+                    options={['6', '7', '11']}
+                    onOptionClick={setSort}
+                />
             </div>
             <ul className="card-container">
                 {apiaryCards}
@@ -49,6 +49,7 @@ const Sidebar = ({ apiaries }) => {
 
 Sidebar.propTypes = {
     apiaries: arrayOf(Apiary).isRequired,
+    dispatch: func.isRequired,
 };
 
 function mapStateToProps(state) {
