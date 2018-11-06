@@ -19,14 +19,16 @@ def fetch_data(request):
     """
     Return the cell values from rasters on s3.
 
-    :param location: Dict with lat and lng values, like {lat: float, lng: float}
+    :param location: Dict with lat and lng values, i.e {lat: float, lng: float}
     :param forage_range: A string value of "3k" or "5k"
-    :param filenames: A dict of base raster filenames, like {"FORAGE": forage_range"}
+    :param filenames: A dict of base raster filenames,
+        i.e {"FORAGE": forage_range"}
     """
 
     location = request.DATA['location']
     forage_range = request.DATA['forage_range']
-    filenames = ['{}_{}.tif'.format(v, forage_range) for k,v in request.DATA['filenames'].items()]
+    filenames = ['{}_{}.tif'.format(v, forage_range)
+                 for k, v in request.DATA['filenames'].items()]
 
     resp = {}
     for filename in filenames:

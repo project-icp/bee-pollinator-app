@@ -26,6 +26,6 @@ def sample_at_point(geom, raster_path):
             # Sample the raster at the given coordinates
             value_gen = src.sample([(x, y)], indexes=[1])
             value = value_gen.next().item(0)
-    except rasterio.RasterioIOError as e:
-        value = e
+    except rasterio.RasterioIOError:
+        return 0
     return value
