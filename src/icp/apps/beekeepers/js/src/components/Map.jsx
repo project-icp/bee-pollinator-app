@@ -50,6 +50,8 @@ class Map extends Component {
     render() {
         const { apiaries } = this.props;
         const markers = apiaries.map((apiary, idx) => {
+            // TODO: Replace unique key generator once app uses real, complete data
+            // Currently solution appeases React unique key error
             const key = apiary.name + String.fromCharCode(idx);
             return (
                 <Marker
