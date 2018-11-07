@@ -1,13 +1,13 @@
 import { createReducer } from 'redux-act';
 import update from 'immutability-helper';
 
-import { SORT_CREATED, FORAGE_RANGE_3K, INDICATORS } from './constants';
+import { SORT_CREATED, FORAGE_RANGE_3KM, INDICATORS } from './constants';
 import { setSort, setForageRange, setApiaryList } from './actions';
 
 
 const initialState = {
     sortBy: SORT_CREATED,
-    forageRange: FORAGE_RANGE_3K,
+    forageRange: FORAGE_RANGE_3KM,
     apiaries: [
         // TODO Remove dummy data
         {
@@ -26,11 +26,11 @@ const initialState = {
                     [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
                 },
                 fiveKm: {
-                    [INDICATORS.NESTING_QUALITY]: { data: 26, error: null },
-                    [INDICATORS.PESTICIDE]: { data: 20, error: null },
-                    [INDICATORS.FORAGE_SPRING]: { data: 61, error: null },
-                    [INDICATORS.FORAGE_SUMMER]: { data: 54, error: null },
-                    [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
+                    [INDICATORS.NESTING_QUALITY]: { data: 36, error: null },
+                    [INDICATORS.PESTICIDE]: { data: 30, error: null },
+                    [INDICATORS.FORAGE_SPRING]: { data: 71, error: null },
+                    [INDICATORS.FORAGE_SUMMER]: { data: 64, error: null },
+                    [INDICATORS.FORAGE_FALL]: { data: 55, error: null },
                 },
             },
             fetching: false,
@@ -54,11 +54,11 @@ const initialState = {
                     [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
                 },
                 fiveKm: {
-                    [INDICATORS.NESTING_QUALITY]: { data: 26, error: null },
-                    [INDICATORS.PESTICIDE]: { data: 20, error: null },
-                    [INDICATORS.FORAGE_SPRING]: { data: 61, error: null },
-                    [INDICATORS.FORAGE_SUMMER]: { data: 54, error: null },
-                    [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
+                    [INDICATORS.NESTING_QUALITY]: { data: 36, error: null },
+                    [INDICATORS.PESTICIDE]: { data: 30, error: null },
+                    [INDICATORS.FORAGE_SPRING]: { data: 71, error: null },
+                    [INDICATORS.FORAGE_SUMMER]: { data: 64, error: null },
+                    [INDICATORS.FORAGE_FALL]: { data: 55, error: null },
                 },
             },
             fetching: true,
@@ -82,11 +82,11 @@ const initialState = {
                     [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
                 },
                 fiveKm: {
-                    [INDICATORS.NESTING_QUALITY]: { data: 26, error: null },
-                    [INDICATORS.PESTICIDE]: { data: 20, error: null },
-                    [INDICATORS.FORAGE_SPRING]: { data: 61, error: null },
-                    [INDICATORS.FORAGE_SUMMER]: { data: 54, error: null },
-                    [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
+                    [INDICATORS.NESTING_QUALITY]: { data: 36, error: null },
+                    [INDICATORS.PESTICIDE]: { data: 30, error: null },
+                    [INDICATORS.FORAGE_SPRING]: { data: 71, error: null },
+                    [INDICATORS.FORAGE_SUMMER]: { data: 64, error: null },
+                    [INDICATORS.FORAGE_FALL]: { data: 55, error: null },
                 },
             },
             fetching: false,
@@ -110,11 +110,11 @@ const initialState = {
                     [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
                 },
                 fiveKm: {
-                    [INDICATORS.NESTING_QUALITY]: { data: 26, error: null },
-                    [INDICATORS.PESTICIDE]: { data: 20, error: null },
-                    [INDICATORS.FORAGE_SPRING]: { data: 61, error: null },
-                    [INDICATORS.FORAGE_SUMMER]: { data: 54, error: null },
-                    [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
+                    [INDICATORS.NESTING_QUALITY]: { data: 36, error: null },
+                    [INDICATORS.PESTICIDE]: { data: 30, error: null },
+                    [INDICATORS.FORAGE_SPRING]: { data: 71, error: null },
+                    [INDICATORS.FORAGE_SUMMER]: { data: 64, error: null },
+                    [INDICATORS.FORAGE_FALL]: { data: 55, error: null },
                 },
             },
             fetching: false,

@@ -1,20 +1,26 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { string } from 'prop-types';
 
 import { Apiary } from '../propTypes';
-import { INDICATORS } from '../constants';
+import { INDICATORS, FORAGE_RANGES } from '../constants';
 
 import CardButton from './CardButton';
 import ScoresLabel from './ScoresLabel';
 
-const ApiaryCard = ({ apiary }) => {
+const ApiaryCard = ({ apiary, forageRange }) => {
+    const range = FORAGE_RANGES[forageRange];
+
     const {
         marker,
         name,
         selected,
         starred,
         surveyed,
-        scores: { threeKm },
+        scores,
     } = apiary;
+
+    const values = scores[range];
 
     const markerMod = (() => {
         if (surveyed) {
@@ -49,18 +55,18 @@ const ApiaryCard = ({ apiary }) => {
                 <div className="indicator-container">
                     <ScoresLabel
                         raster={INDICATORS.NESTING_QUALITY}
-                        scores={[threeKm[INDICATORS.NESTING_QUALITY]]}
+                        scores={[values[INDICATORS.NESTING_QUALITY]]}
                     />
                     <ScoresLabel
                         raster={INDICATORS.PESTICIDE}
-                        scores={[threeKm[INDICATORS.PESTICIDE]]}
+                        scores={[values[INDICATORS.PESTICIDE]]}
                     />
                     <ScoresLabel
                         raster="forage"
                         scores={[
-                            threeKm[INDICATORS.FORAGE_SPRING],
-                            threeKm[INDICATORS.FORAGE_SUMMER],
-                            threeKm[INDICATORS.FORAGE_FALL],
+                            values[INDICATORS.FORAGE_SPRING],
+                            values[INDICATORS.FORAGE_SUMMER],
+                            values[INDICATORS.FORAGE_FALL],
                         ]}
                     />
                 </div>
@@ -71,6 +77,11 @@ const ApiaryCard = ({ apiary }) => {
 
 ApiaryCard.propTypes = {
     apiary: Apiary.isRequired,
+    forageRange: string.isRequired,
 };
 
-export default ApiaryCard;
+function mapStateToProps(state) {
+    return state.main;
+}
+
+export default connect(mapStateToProps)(ApiaryCard);

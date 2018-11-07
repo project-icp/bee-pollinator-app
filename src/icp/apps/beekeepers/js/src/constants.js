@@ -1,5 +1,10 @@
-export const FORAGE_RANGE_3K = '3k';
-export const FORAGE_RANGE_5K = '5k';
+export const FORAGE_RANGE_3KM = '3km';
+export const FORAGE_RANGE_5KM = '5km';
+
+export const FORAGE_RANGES = {
+    '3km': 'threeKm',
+    '5km': 'fiveKm',
+};
 
 export const SORT_CREATED = 'SORT_CREATED';
 
@@ -13,3 +18,5 @@ export const INDICATORS = {
 
 export const MAP_CENTER = [37.899, -97.079];
 export const MAP_ZOOM = 10;
+
+export const SORT_OPTIONS = ['default', 'alphabetical'];

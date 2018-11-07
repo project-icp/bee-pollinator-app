@@ -13,7 +13,6 @@ const DropdownSelector = ({ title, options, onOptionClick }) => {
                 <select
                     onChange={onOptionClick}
                     className="controls__select"
-                    id="dropdown-select"
                     name="dropdown-select"
                 >
                     {selectOptions}
