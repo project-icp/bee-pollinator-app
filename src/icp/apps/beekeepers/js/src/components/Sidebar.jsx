@@ -22,24 +22,30 @@ const Sidebar = ({ apiaries, dispatch }) => {
         return <ApiaryCard key={key} apiary={apiary} />;
     });
 
+    const onSelectSort = (selection) => {
+        dispatch(setSort(selection.target.value));
+    };
+
     const onSelectForageRange = (selection) => {
         dispatch(setForageRange(selection.target.value));
     };
 
     return (
         <div className="sidebar">
-            <h2 className="sidebar__header">Locations</h2>
-            <div className="controls">
-                <DropdownSelector
-                    title="Forage Range:"
-                    options={Object.keys(FORAGE_RANGES)}
-                    onOptionClick={onSelectForageRange}
-                />
-                <DropdownSelector
-                    title="Sort:"
-                    options={SORT_OPTIONS}
-                    onOptionClick={setSort}
-                />
+            <div className="sidebar__header">
+                <h2>Locations</h2>
+                <div className="sidebar__header__controls">
+                    <DropdownSelector
+                        title="Sort by:"
+                        options={SORT_OPTIONS}
+                        onOptionClick={onSelectSort}
+                    />
+                    <DropdownSelector
+                        title="Forage range:"
+                        options={Object.keys(FORAGE_RANGES)}
+                        onOptionClick={onSelectForageRange}
+                    />
+                </div>
             </div>
             <ul className="card-container">
                 {apiaryCards}
