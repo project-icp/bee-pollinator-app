@@ -48,12 +48,8 @@ const ApiaryCard = ({ apiary }) => {
             <div className="card__bottom">
                 <div className="indicator-container">
                     <ScoresLabel
-                        raster={RASTERS.HIVE_DENSITY}
-                        scores={[threeKm[RASTERS.HIVE_DENSITY]]}
-                    />
-                    <ScoresLabel
-                        raster={RASTERS.HABITAT}
-                        scores={[threeKm[RASTERS.HABITAT]]}
+                        raster={RASTERS.NESTING_QUALITY}
+                        scores={[threeKm[RASTERS.NESTING_QUALITY]]}
                     />
                     <ScoresLabel
                         raster={RASTERS.PESTICIDE}
@@ -66,10 +62,6 @@ const ApiaryCard = ({ apiary }) => {
                             threeKm[RASTERS.FORAGE_SUMMER],
                             threeKm[RASTERS.FORAGE_FALL],
                         ]}
-                    />
-                    <ScoresLabel
-                        raster={RASTERS.OVERALL}
-                        scores={[threeKm[RASTERS.OVERALL]]}
                     />
                 </div>
             </div>
