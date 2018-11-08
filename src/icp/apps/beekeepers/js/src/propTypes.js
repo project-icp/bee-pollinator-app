@@ -5,7 +5,7 @@ import {
     string,
 } from 'prop-types';
 
-import { RASTERS } from './constants';
+import { INDICATORS } from './constants';
 
 export const LatLng = shape({
     lat: number.isRequired,
@@ -17,8 +17,8 @@ export const Score = shape({
     error: string,
 });
 
-export const Scores = shape(Object.keys(RASTERS).reduce(
-    (map, r) => Object.assign(map, { [RASTERS[r]]: Score.isRequired }),
+export const Scores = shape(Object.keys(INDICATORS).reduce(
+    (map, r) => Object.assign(map, { [INDICATORS[r]]: Score.isRequired }),
     {},
 ));
 

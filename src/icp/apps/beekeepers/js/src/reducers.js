@@ -1,7 +1,7 @@
 import { createReducer } from 'redux-act';
 import update from 'immutability-helper';
 
-import { SORT_CREATED, FORAGE_RANGE_3K, RASTERS } from './constants';
+import { SORT_CREATED, FORAGE_RANGE_3K, INDICATORS } from './constants';
 import { setSort, setForageRange, setApiaryList } from './actions';
 
 
@@ -19,18 +19,18 @@ const initialState = {
             },
             scores: {
                 threeKm: {
-                    [RASTERS.NESTING_QUALITY]: { data: 26, error: null },
-                    [RASTERS.PESTICIDE]: { data: 20, error: null },
-                    [RASTERS.FORAGE_SPRING]: { data: 61, error: null },
-                    [RASTERS.FORAGE_SUMMER]: { data: 54, error: null },
-                    [RASTERS.FORAGE_FALL]: { data: 45, error: null },
+                    [INDICATORS.NESTING_QUALITY]: { data: 26, error: null },
+                    [INDICATORS.PESTICIDE]: { data: 20, error: null },
+                    [INDICATORS.FORAGE_SPRING]: { data: 61, error: null },
+                    [INDICATORS.FORAGE_SUMMER]: { data: 54, error: null },
+                    [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
                 },
                 fiveKm: {
-                    [RASTERS.NESTING_QUALITY]: { data: 26, error: null },
-                    [RASTERS.PESTICIDE]: { data: 20, error: null },
-                    [RASTERS.FORAGE_SPRING]: { data: 61, error: null },
-                    [RASTERS.FORAGE_SUMMER]: { data: 54, error: null },
-                    [RASTERS.FORAGE_FALL]: { data: 45, error: null },
+                    [INDICATORS.NESTING_QUALITY]: { data: 26, error: null },
+                    [INDICATORS.PESTICIDE]: { data: 20, error: null },
+                    [INDICATORS.FORAGE_SPRING]: { data: 61, error: null },
+                    [INDICATORS.FORAGE_SUMMER]: { data: 54, error: null },
+                    [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
                 },
             },
             fetching: false,
@@ -47,18 +47,18 @@ const initialState = {
             },
             scores: {
                 threeKm: {
-                    [RASTERS.NESTING_QUALITY]: { data: 26, error: null },
-                    [RASTERS.PESTICIDE]: { data: 20, error: null },
-                    [RASTERS.FORAGE_SPRING]: { data: 61, error: null },
-                    [RASTERS.FORAGE_SUMMER]: { data: 54, error: null },
-                    [RASTERS.FORAGE_FALL]: { data: 45, error: null },
+                    [INDICATORS.NESTING_QUALITY]: { data: 26, error: null },
+                    [INDICATORS.PESTICIDE]: { data: 20, error: null },
+                    [INDICATORS.FORAGE_SPRING]: { data: 61, error: null },
+                    [INDICATORS.FORAGE_SUMMER]: { data: 54, error: null },
+                    [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
                 },
                 fiveKm: {
-                    [RASTERS.NESTING_QUALITY]: { data: 26, error: null },
-                    [RASTERS.PESTICIDE]: { data: 20, error: null },
-                    [RASTERS.FORAGE_SPRING]: { data: 61, error: null },
-                    [RASTERS.FORAGE_SUMMER]: { data: 54, error: null },
-                    [RASTERS.FORAGE_FALL]: { data: 45, error: null },
+                    [INDICATORS.NESTING_QUALITY]: { data: 26, error: null },
+                    [INDICATORS.PESTICIDE]: { data: 20, error: null },
+                    [INDICATORS.FORAGE_SPRING]: { data: 61, error: null },
+                    [INDICATORS.FORAGE_SUMMER]: { data: 54, error: null },
+                    [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
                 },
             },
             fetching: true,
@@ -75,18 +75,18 @@ const initialState = {
             },
             scores: {
                 threeKm: {
-                    [RASTERS.NESTING_QUALITY]: { data: 26, error: null },
-                    [RASTERS.PESTICIDE]: { data: 20, error: null },
-                    [RASTERS.FORAGE_SPRING]: { data: 61, error: null },
-                    [RASTERS.FORAGE_SUMMER]: { data: 54, error: null },
-                    [RASTERS.FORAGE_FALL]: { data: 45, error: null },
+                    [INDICATORS.NESTING_QUALITY]: { data: 26, error: null },
+                    [INDICATORS.PESTICIDE]: { data: 20, error: null },
+                    [INDICATORS.FORAGE_SPRING]: { data: 61, error: null },
+                    [INDICATORS.FORAGE_SUMMER]: { data: 54, error: null },
+                    [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
                 },
                 fiveKm: {
-                    [RASTERS.NESTING_QUALITY]: { data: 26, error: null },
-                    [RASTERS.PESTICIDE]: { data: 20, error: null },
-                    [RASTERS.FORAGE_SPRING]: { data: 61, error: null },
-                    [RASTERS.FORAGE_SUMMER]: { data: 54, error: null },
-                    [RASTERS.FORAGE_FALL]: { data: 45, error: null },
+                    [INDICATORS.NESTING_QUALITY]: { data: 26, error: null },
+                    [INDICATORS.PESTICIDE]: { data: 20, error: null },
+                    [INDICATORS.FORAGE_SPRING]: { data: 61, error: null },
+                    [INDICATORS.FORAGE_SUMMER]: { data: 54, error: null },
+                    [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
                 },
             },
             fetching: false,
@@ -103,18 +103,18 @@ const initialState = {
             },
             scores: {
                 threeKm: {
-                    [RASTERS.NESTING_QUALITY]: { data: 26, error: null },
-                    [RASTERS.PESTICIDE]: { data: 20, error: null },
-                    [RASTERS.FORAGE_SPRING]: { data: 61, error: null },
-                    [RASTERS.FORAGE_SUMMER]: { data: 54, error: null },
-                    [RASTERS.FORAGE_FALL]: { data: 45, error: null },
+                    [INDICATORS.NESTING_QUALITY]: { data: 26, error: null },
+                    [INDICATORS.PESTICIDE]: { data: 20, error: null },
+                    [INDICATORS.FORAGE_SPRING]: { data: 61, error: null },
+                    [INDICATORS.FORAGE_SUMMER]: { data: 54, error: null },
+                    [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
                 },
                 fiveKm: {
-                    [RASTERS.NESTING_QUALITY]: { data: 26, error: null },
-                    [RASTERS.PESTICIDE]: { data: 20, error: null },
-                    [RASTERS.FORAGE_SPRING]: { data: 61, error: null },
-                    [RASTERS.FORAGE_SUMMER]: { data: 54, error: null },
-                    [RASTERS.FORAGE_FALL]: { data: 45, error: null },
+                    [INDICATORS.NESTING_QUALITY]: { data: 26, error: null },
+                    [INDICATORS.PESTICIDE]: { data: 20, error: null },
+                    [INDICATORS.FORAGE_SPRING]: { data: 61, error: null },
+                    [INDICATORS.FORAGE_SUMMER]: { data: 54, error: null },
+                    [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
                 },
             },
             fetching: false,

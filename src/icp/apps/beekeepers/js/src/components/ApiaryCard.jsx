@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Apiary } from '../propTypes';
-import { RASTERS } from '../constants';
+import { INDICATORS } from '../constants';
 
 import CardButton from './CardButton';
 import ScoresLabel from './ScoresLabel';
@@ -48,19 +48,19 @@ const ApiaryCard = ({ apiary }) => {
             <div className="card__bottom">
                 <div className="indicator-container">
                     <ScoresLabel
-                        raster={RASTERS.NESTING_QUALITY}
-                        scores={[threeKm[RASTERS.NESTING_QUALITY]]}
+                        raster={INDICATORS.NESTING_QUALITY}
+                        scores={[threeKm[INDICATORS.NESTING_QUALITY]]}
                     />
                     <ScoresLabel
-                        raster={RASTERS.PESTICIDE}
-                        scores={[threeKm[RASTERS.PESTICIDE]]}
+                        raster={INDICATORS.PESTICIDE}
+                        scores={[threeKm[INDICATORS.PESTICIDE]]}
                     />
                     <ScoresLabel
                         raster="forage"
                         scores={[
-                            threeKm[RASTERS.FORAGE_SPRING],
-                            threeKm[RASTERS.FORAGE_SUMMER],
-                            threeKm[RASTERS.FORAGE_FALL],
+                            threeKm[INDICATORS.FORAGE_SPRING],
+                            threeKm[INDICATORS.FORAGE_SUMMER],
+                            threeKm[INDICATORS.FORAGE_FALL],
                         ]}
                     />
                 </div>
