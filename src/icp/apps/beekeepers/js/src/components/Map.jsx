@@ -1,6 +1,11 @@
 import React, { Component, createRef } from 'react';
-import { Map as LeafletMap, TileLayer, Marker } from 'react-leaflet';
 import * as esri from 'esri-leaflet-geocoder';
+import {
+    Map as LeafletMap,
+    TileLayer,
+    Marker,
+    ZoomControl,
+} from 'react-leaflet';
 import { connect } from 'react-redux';
 import { arrayOf, func } from 'prop-types';
 
@@ -24,19 +29,26 @@ class Map extends Component {
     componentDidMount() {
         const geocoderUrl = 'https://utility.arcgis.com/usrsvcs/appservices/OvpAtyJwoLLdQcLC/rest/services/World/GeocodeServer/';
         const map = this.mapRef.current.leafletElement;
-        new esri.Geosearch({
+        const geocoder = new esri.Geosearch({
             providers: [
                 new esri.ArcgisOnlineProvider({
                     url: geocoderUrl,
-                    maxResults: 5,
+                    maxResults: 7,
                     categories: ['Address', 'Postal'],
                 }),
             ],
             placeholder: 'Find location',
             expanded: true,
-            collapseAfterResult: true,
+            collapseAfterResult: false,
             position: 'topleft',
         }).addTo(map);
+
+        geocoder.on('results', ({ results }) => {
+            const selectedResult = results && results[0];
+            if (selectedResult) {
+                map.panTo(selectedResult.latlng);
+            }
+        });
     }
 
     onClickAddMarker(event) {
@@ -88,6 +100,7 @@ class Map extends Component {
                 <LeafletMap
                     center={MAP_CENTER}
                     zoom={MAP_ZOOM}
+                    zoomControl={false}
                     onClick={this.onClickAddMarker}
                     ref={this.mapRef}
                 >
@@ -95,6 +108,7 @@ class Map extends Component {
                         attribution="&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
+                    <ZoomControl position="bottomleft" />
                     {markers}
                 </LeafletMap>
             </div>

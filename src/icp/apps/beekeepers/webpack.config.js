@@ -15,6 +15,7 @@ module.exports = ({ production }) => {
             app: ['@babel/polyfill', './js/src/main.jsx'],
             vendor: [
                 'axios',
+                'esri-leaflet-geocoder',
                 'immutability-helper',
                 'leaflet',
                 'react',
