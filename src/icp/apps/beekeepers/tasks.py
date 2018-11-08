@@ -21,11 +21,17 @@ def sample_at_point(geom, raster_path):
         with rasterio.open(raster_path, mode='r') as src:
             # reproject latlon to coords in the same SRS as the target raster
             to_proj = Proj(src.crs)
-            x, y = to_proj(geom['lon'], geom['lat'])
+            x, y = to_proj(geom['lng'], geom['lat'])
 
             # Sample the raster at the given coordinates
             value_gen = src.sample([(x, y)], indexes=[1])
             value = value_gen.next().item(0)
     except rasterio.RasterioIOError as e:
-        value = e
-    return value
+        return ({
+            "data": None,
+            "error": e.message
+        })
+    return ({
+        "data": value,
+        "error": None
+    })
