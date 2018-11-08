@@ -32,20 +32,18 @@ const Sidebar = ({ apiaries, dispatch }) => {
 
     return (
         <div className="sidebar">
-            <div className="sidebar__header">
-                <h2>Locations</h2>
-                <div className="sidebar__header__controls">
-                    <DropdownSelector
-                        title="Sort by:"
-                        options={SORT_OPTIONS}
-                        onOptionClick={onSelectSort}
-                    />
-                    <DropdownSelector
-                        title="Forage range:"
-                        options={Object.keys(FORAGE_RANGES)}
-                        onOptionClick={onSelectForageRange}
-                    />
-                </div>
+            <h2 className="sidebar__header">Locations</h2>
+            <div className="controls">
+                <DropdownSelector
+                    title="Sort:"
+                    options={SORT_OPTIONS}
+                    onOptionClick={onSelectSort}
+                />
+                <DropdownSelector
+                    title="Forage Range:"
+                    options={FORAGE_RANGES}
+                    onOptionClick={onSelectForageRange}
+                />
             </div>
             <ul className="card-container">
                 {apiaryCards}

@@ -1,7 +1,12 @@
 import { createReducer } from 'redux-act';
 import update from 'immutability-helper';
 
-import { SORT_CREATED, FORAGE_RANGE_3KM, INDICATORS } from './constants';
+import {
+    SORT_CREATED,
+    FORAGE_RANGE_3KM,
+    INDICATORS,
+    FORAGE_RANGE_5KM,
+} from './constants';
 import { setSort, setForageRange, setApiaryList } from './actions';
 
 
@@ -18,14 +23,14 @@ const initialState = {
                 lng: 1.0,
             },
             scores: {
-                threeKm: {
+                [FORAGE_RANGE_3KM]: {
                     [INDICATORS.NESTING_QUALITY]: { data: 26, error: null },
                     [INDICATORS.PESTICIDE]: { data: 20, error: null },
                     [INDICATORS.FORAGE_SPRING]: { data: 61, error: null },
                     [INDICATORS.FORAGE_SUMMER]: { data: 54, error: null },
                     [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
                 },
-                fiveKm: {
+                [FORAGE_RANGE_5KM]: {
                     [INDICATORS.NESTING_QUALITY]: { data: 36, error: null },
                     [INDICATORS.PESTICIDE]: { data: 30, error: null },
                     [INDICATORS.FORAGE_SPRING]: { data: 71, error: null },
@@ -46,14 +51,14 @@ const initialState = {
                 lng: 1.0,
             },
             scores: {
-                threeKm: {
+                [FORAGE_RANGE_3KM]: {
                     [INDICATORS.NESTING_QUALITY]: { data: 26, error: null },
                     [INDICATORS.PESTICIDE]: { data: 20, error: null },
                     [INDICATORS.FORAGE_SPRING]: { data: 61, error: null },
                     [INDICATORS.FORAGE_SUMMER]: { data: 54, error: null },
                     [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
                 },
-                fiveKm: {
+                [FORAGE_RANGE_5KM]: {
                     [INDICATORS.NESTING_QUALITY]: { data: 36, error: null },
                     [INDICATORS.PESTICIDE]: { data: 30, error: null },
                     [INDICATORS.FORAGE_SPRING]: { data: 71, error: null },
@@ -74,14 +79,14 @@ const initialState = {
                 lng: 1.0,
             },
             scores: {
-                threeKm: {
+                [FORAGE_RANGE_3KM]: {
                     [INDICATORS.NESTING_QUALITY]: { data: 26, error: null },
                     [INDICATORS.PESTICIDE]: { data: 20, error: null },
                     [INDICATORS.FORAGE_SPRING]: { data: 61, error: null },
                     [INDICATORS.FORAGE_SUMMER]: { data: 54, error: null },
                     [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
                 },
-                fiveKm: {
+                [FORAGE_RANGE_5KM]: {
                     [INDICATORS.NESTING_QUALITY]: { data: 36, error: null },
                     [INDICATORS.PESTICIDE]: { data: 30, error: null },
                     [INDICATORS.FORAGE_SPRING]: { data: 71, error: null },
@@ -102,14 +107,14 @@ const initialState = {
                 lng: 1.0,
             },
             scores: {
-                threeKm: {
+                [FORAGE_RANGE_3KM]: {
                     [INDICATORS.NESTING_QUALITY]: { data: 26, error: null },
                     [INDICATORS.PESTICIDE]: { data: 20, error: null },
                     [INDICATORS.FORAGE_SPRING]: { data: 61, error: null },
                     [INDICATORS.FORAGE_SUMMER]: { data: 54, error: null },
                     [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
                 },
-                fiveKm: {
+                [FORAGE_RANGE_5KM]: {
                     [INDICATORS.NESTING_QUALITY]: { data: 36, error: null },
                     [INDICATORS.PESTICIDE]: { data: 30, error: null },
                     [INDICATORS.FORAGE_SPRING]: { data: 71, error: null },

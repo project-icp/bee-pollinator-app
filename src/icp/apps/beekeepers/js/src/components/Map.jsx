@@ -5,7 +5,13 @@ import { arrayOf, func } from 'prop-types';
 
 import { Apiary } from '../propTypes';
 import { setApiaryList } from '../actions';
-import { MAP_CENTER, MAP_ZOOM, INDICATORS } from '../constants';
+import {
+    MAP_CENTER,
+    MAP_ZOOM,
+    INDICATORS,
+    FORAGE_RANGE_3KM,
+    FORAGE_RANGE_5KM,
+} from '../constants';
 
 class Map extends Component {
     constructor() {
@@ -20,14 +26,14 @@ class Map extends Component {
             marker: 'F',
             location: event.latlng,
             scores: {
-                threeKm: {
+                [FORAGE_RANGE_3KM]: {
                     [INDICATORS.NESTING_QUALITY]: { data: 26, error: null },
                     [INDICATORS.PESTICIDE]: { data: 20, error: null },
                     [INDICATORS.FORAGE_SPRING]: { data: 61, error: null },
                     [INDICATORS.FORAGE_SUMMER]: { data: 54, error: null },
                     [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
                 },
-                fiveKm: {
+                [FORAGE_RANGE_5KM]: {
                     [INDICATORS.NESTING_QUALITY]: { data: 26, error: null },
                     [INDICATORS.PESTICIDE]: { data: 20, error: null },
                     [INDICATORS.FORAGE_SPRING]: { data: 61, error: null },

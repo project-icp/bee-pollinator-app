@@ -5,7 +5,7 @@ import {
     string,
 } from 'prop-types';
 
-import { INDICATORS } from './constants';
+import { INDICATORS, FORAGE_RANGE_3KM, FORAGE_RANGE_5KM } from './constants';
 
 export const LatLng = shape({
     lat: number.isRequired,
@@ -27,8 +27,8 @@ export const Apiary = shape({
     marker: string.isRequired,
     location: LatLng.isRequired,
     scores: shape({
-        threeKm: Scores,
-        fiveKm: Scores,
+        [FORAGE_RANGE_3KM]: Scores,
+        [FORAGE_RANGE_5KM]: Scores,
     }).isRequired,
     fetching: bool.isRequired,
     selected: bool.isRequired,

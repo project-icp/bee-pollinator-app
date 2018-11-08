@@ -3,14 +3,12 @@ import { connect } from 'react-redux';
 import { string } from 'prop-types';
 
 import { Apiary } from '../propTypes';
-import { INDICATORS, FORAGE_RANGES } from '../constants';
+import { INDICATORS } from '../constants';
 
 import CardButton from './CardButton';
 import ScoresLabel from './ScoresLabel';
 
 const ApiaryCard = ({ apiary, forageRange }) => {
-    const range = FORAGE_RANGES[forageRange];
-
     const {
         marker,
         name,
@@ -20,7 +18,7 @@ const ApiaryCard = ({ apiary, forageRange }) => {
         scores,
     } = apiary;
 
-    const values = scores[range];
+    const values = scores[forageRange];
 
     const markerMod = (() => {
         if (surveyed) {

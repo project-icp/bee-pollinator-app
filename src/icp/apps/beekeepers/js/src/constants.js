@@ -1,11 +1,7 @@
 export const FORAGE_RANGE_3KM = '3km';
 export const FORAGE_RANGE_5KM = '5km';
 
-export const FORAGE_RANGES = {
-    '3km': 'threeKm',
-    '5km': 'fiveKm',
-};
-
+export const FORAGE_RANGES = [FORAGE_RANGE_3KM, FORAGE_RANGE_5KM];
 export const SORT_CREATED = 'SORT_CREATED';
 
 export const INDICATORS = {
