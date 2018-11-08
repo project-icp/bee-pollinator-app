@@ -14,10 +14,9 @@
         margin-bottom: 1.6rem;
         font-weight: 900;
         font-size: $font-size-xl;
+    }
 
-        &__controls {
-            display: flex;
-            font: $font-base;
-        }
+    &__controls {
+        display: flex;
     }
 }

@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 
 import { Apiary } from '../propTypes';
 import { setForageRange, setSort } from '../actions';
-import { FORAGE_RANGES, SORT_OPTIONS } from '../constants';
+import { FORAGE_RANGES, INDICATORS } from '../constants';
+import { toSpacedString } from '../utils';
 
 import ApiaryCard from './ApiaryCard';
 import DropdownSelector from './DropdownSelector';
@@ -30,20 +31,24 @@ const Sidebar = ({ apiaries, dispatch }) => {
         dispatch(setForageRange(selection.target.value));
     };
 
+    const sortOptions = Object.values(INDICATORS).map(indicator => toSpacedString(indicator));
+
     return (
         <div className="sidebar">
-            <h2 className="sidebar__header">Locations</h2>
-            <div className="controls">
-                <DropdownSelector
-                    title="Sort:"
-                    options={SORT_OPTIONS}
-                    onOptionClick={onSelectSort}
-                />
-                <DropdownSelector
-                    title="Forage Range:"
-                    options={FORAGE_RANGES}
-                    onOptionClick={onSelectForageRange}
-                />
+            <div className="sidebar__header">
+                <h2>Locations</h2>
+                <div className="sidebar__controls">
+                    <DropdownSelector
+                        title="Sort by:"
+                        options={sortOptions}
+                        onOptionClick={onSelectSort}
+                    />
+                    <DropdownSelector
+                        title="Forage range:"
+                        options={FORAGE_RANGES}
+                        onOptionClick={onSelectForageRange}
+                    />
+                </div>
             </div>
             <ul className="card-container">
                 {apiaryCards}

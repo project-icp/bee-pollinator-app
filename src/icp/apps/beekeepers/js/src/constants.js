@@ -14,5 +14,3 @@ export const INDICATORS = {
 
 export const MAP_CENTER = [37.899, -97.079];
 export const MAP_ZOOM = 10;
-
-export const SORT_OPTIONS = ['Default', 'Alphabetical'];

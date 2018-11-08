@@ -7,12 +7,12 @@ const DropdownSelector = ({ title, options, onOptionClick }) => {
     ));
 
     return (
-        <form>
-            <label htmlFor="dropdown-select">
+        <form className="dropdown">
+            <label className="dropdown__label" htmlFor="dropdown-select">
                 {title}
                 <select
+                    className="dropdown__selector"
                     onChange={onOptionClick}
-                    className="controls__select"
                     name="dropdown-select"
                 >
                     {selectOptions}
