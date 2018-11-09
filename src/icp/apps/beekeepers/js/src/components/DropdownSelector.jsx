@@ -1,16 +1,16 @@
 import React from 'react';
 import { func, string, arrayOf } from 'prop-types';
-import { toSpacedString } from '../utils';
+import { toSpacedString, toTitleCase } from '../utils';
 
 const DropdownSelector = ({ title, options, onOptionClick }) => {
-    const selectOptions = options.map(option => (
-        <option
-            value={option}
-            key={option}
-        >
-            {toSpacedString(option)}
-        </option>
-    ));
+    const selectOptions = options.map((option) => {
+        const label = toTitleCase(toSpacedString(option));
+        return (
+            <option value={option} key={option}>
+                {label}
+            </option>
+        );
+    });
 
     return (
         <form className="dropdown">
