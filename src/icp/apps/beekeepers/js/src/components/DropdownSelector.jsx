@@ -7,7 +7,6 @@ const DropdownSelector = ({ title, options, onOptionClick }) => {
         <option
             value={option}
             key={option}
-            className="dropdown__option"
         >
             {toSpacedString(option)}
         </option>

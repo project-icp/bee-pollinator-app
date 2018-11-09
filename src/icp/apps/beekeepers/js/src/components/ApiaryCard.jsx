@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { string } from 'prop-types';
 
 import { Apiary } from '../propTypes';
@@ -78,8 +77,4 @@ ApiaryCard.propTypes = {
     forageRange: string.isRequired,
 };
 
-function mapStateToProps(state) {
-    return state.main;
-}
-
-export default connect(mapStateToProps)(ApiaryCard);
+export default ApiaryCard;

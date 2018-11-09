@@ -37,7 +37,13 @@ const Sidebar = ({
         // TODO: Replace unique key generator once app uses real, complete data
         // Currently solution appeases React unique key error
         const key = String.fromCharCode(idx);
-        return <ApiaryCard key={key} apiary={apiary} />;
+        return (
+            <ApiaryCard
+                key={key}
+                apiary={apiary}
+                forageRange={forageRange}
+            />
+        );
     });
 
     const onSelectSort = (selection) => {
