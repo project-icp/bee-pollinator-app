@@ -52,15 +52,15 @@ const ApiaryCard = ({ apiary, forageRange }) => {
             <div className="card__bottom">
                 <div className="indicator-container">
                     <ScoresLabel
-                        raster={INDICATORS.NESTING_QUALITY}
+                        indicator={INDICATORS.NESTING_QUALITY}
                         scores={[values[INDICATORS.NESTING_QUALITY]]}
                     />
                     <ScoresLabel
-                        raster={INDICATORS.PESTICIDE}
+                        indicator={INDICATORS.PESTICIDE}
                         scores={[values[INDICATORS.PESTICIDE]]}
                     />
                     <ScoresLabel
-                        raster="forage"
+                        indicator="forage"
                         scores={[
                             values[INDICATORS.FORAGE_SPRING],
                             values[INDICATORS.FORAGE_SUMMER],
