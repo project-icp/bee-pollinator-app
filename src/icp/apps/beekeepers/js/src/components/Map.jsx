@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { Map as LeafletMap, TileLayer, Marker } from 'react-leaflet';
+import * as esri from 'esri-leaflet-geocoder';
 import { connect } from 'react-redux';
 import { arrayOf, func } from 'prop-types';
 
@@ -17,6 +18,25 @@ class Map extends Component {
     constructor() {
         super();
         this.onClickAddMarker = this.onClickAddMarker.bind(this);
+        this.mapRef = createRef();
+    }
+
+    componentDidMount() {
+        const geocoderUrl = 'https://utility.arcgis.com/usrsvcs/appservices/OvpAtyJwoLLdQcLC/rest/services/World/GeocodeServer/';
+        const map = this.mapRef.current.leafletElement;
+        new esri.Geosearch({
+            providers: [
+                new esri.ArcgisOnlineProvider({
+                    url: geocoderUrl,
+                    maxResults: 5,
+                    categories: ['Address', 'Postal'],
+                }),
+            ],
+            placeholder: 'Find location',
+            expanded: true,
+            collapseAfterResult: true,
+            position: 'topleft',
+        }).addTo(map);
     }
 
     onClickAddMarker(event) {
@@ -69,6 +89,7 @@ class Map extends Component {
                     center={MAP_CENTER}
                     zoom={MAP_ZOOM}
                     onClick={this.onClickAddMarker}
+                    ref={this.mapRef}
                 >
                     <TileLayer
                         attribution="&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
