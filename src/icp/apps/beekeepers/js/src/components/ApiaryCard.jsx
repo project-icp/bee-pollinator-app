@@ -1,4 +1,5 @@
 import React from 'react';
+import { string } from 'prop-types';
 
 import { Apiary } from '../propTypes';
 import { INDICATORS } from '../constants';
@@ -6,15 +7,17 @@ import { INDICATORS } from '../constants';
 import CardButton from './CardButton';
 import ScoresLabel from './ScoresLabel';
 
-const ApiaryCard = ({ apiary }) => {
+const ApiaryCard = ({ apiary, forageRange }) => {
     const {
         marker,
         name,
         selected,
         starred,
         surveyed,
-        scores: { threeKm },
+        scores,
     } = apiary;
+
+    const values = scores[forageRange];
 
     const markerMod = (() => {
         if (surveyed) {
@@ -48,19 +51,19 @@ const ApiaryCard = ({ apiary }) => {
             <div className="card__bottom">
                 <div className="indicator-container">
                     <ScoresLabel
-                        raster={INDICATORS.NESTING_QUALITY}
-                        scores={[threeKm[INDICATORS.NESTING_QUALITY]]}
+                        indicator={INDICATORS.NESTING_QUALITY}
+                        scores={[values[INDICATORS.NESTING_QUALITY]]}
                     />
                     <ScoresLabel
-                        raster={INDICATORS.PESTICIDE}
-                        scores={[threeKm[INDICATORS.PESTICIDE]]}
+                        indicator={INDICATORS.PESTICIDE}
+                        scores={[values[INDICATORS.PESTICIDE]]}
                     />
                     <ScoresLabel
-                        raster="forage"
+                        indicator="forage"
                         scores={[
-                            threeKm[INDICATORS.FORAGE_SPRING],
-                            threeKm[INDICATORS.FORAGE_SUMMER],
-                            threeKm[INDICATORS.FORAGE_FALL],
+                            values[INDICATORS.FORAGE_SPRING],
+                            values[INDICATORS.FORAGE_SUMMER],
+                            values[INDICATORS.FORAGE_FALL],
                         ]}
                     />
                 </div>
@@ -71,6 +74,7 @@ const ApiaryCard = ({ apiary }) => {
 
 ApiaryCard.propTypes = {
     apiary: Apiary.isRequired,
+    forageRange: string.isRequired,
 };
 
 export default ApiaryCard;

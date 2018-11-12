@@ -8,9 +8,15 @@
     background-color: #f8f9fb;
 
     &__header {
+        display: flex;
+        justify-content: space-between;
         margin-top: 1rem;
         margin-bottom: 1.6rem;
         font-weight: 900;
         font-size: $font-size-xl;
+    }
+
+    &__controls {
+        display: flex;
     }
 }

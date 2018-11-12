@@ -4,17 +4,17 @@ import { arrayOf, string } from 'prop-types';
 import { Score } from '../propTypes';
 import { toDashedString, toSpacedString } from '../utils';
 
-const ScoresLabel = ({ raster, scores }) => (
-    <div className={`indicator indicator--${toDashedString(raster)}`}>
+const ScoresLabel = ({ indicator, scores }) => (
+    <div className={`indicator indicator--${toDashedString(indicator)}`}>
         <div className="indicator__number">
             {scores.map(({ data, error }) => (error ? '!' : data)).join('/')}
         </div>
-        <div className="indicator__name">{toSpacedString(raster)}</div>
+        <div className="indicator__name">{toSpacedString(indicator)}</div>
     </div>
 );
 
 ScoresLabel.propTypes = {
-    raster: string.isRequired,
+    indicator: string.isRequired,
     scores: arrayOf(Score).isRequired,
 };
 
