@@ -7,14 +7,13 @@ import {
     ZoomControl,
 } from 'react-leaflet';
 import { connect } from 'react-redux';
-import { arrayOf, func } from 'prop-types';
+import { arrayOf, func, string } from 'prop-types';
 
 import { Apiary } from '../propTypes';
-import { setApiaryList } from '../actions';
+import { fetchApiaryScores } from '../actions';
 import {
     MAP_CENTER,
     MAP_ZOOM,
-    INDICATORS,
     FORAGE_RANGE_3KM,
     FORAGE_RANGE_5KM,
 } from '../constants';
@@ -59,33 +58,22 @@ class Map extends Component {
     }
 
     onClickAddMarker(event) {
-        const { apiaries, dispatch } = this.props;
-        const newApiaryList = apiaries.concat({
+        const { forageRange, dispatch } = this.props;
+        const newApiary = {
             name: 'dummy name',
             marker: 'F',
             location: event.latlng,
             scores: {
-                [FORAGE_RANGE_3KM]: {
-                    [INDICATORS.NESTING_QUALITY]: { data: 26, error: null },
-                    [INDICATORS.PESTICIDE]: { data: 20, error: null },
-                    [INDICATORS.FORAGE_SPRING]: { data: 61, error: null },
-                    [INDICATORS.FORAGE_SUMMER]: { data: 54, error: null },
-                    [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
-                },
-                [FORAGE_RANGE_5KM]: {
-                    [INDICATORS.NESTING_QUALITY]: { data: 26, error: null },
-                    [INDICATORS.PESTICIDE]: { data: 20, error: null },
-                    [INDICATORS.FORAGE_SPRING]: { data: 61, error: null },
-                    [INDICATORS.FORAGE_SUMMER]: { data: 54, error: null },
-                    [INDICATORS.FORAGE_FALL]: { data: 45, error: null },
-                },
+                [FORAGE_RANGE_3KM]: {},
+                [FORAGE_RANGE_5KM]: {},
             },
             fetching: false,
             selected: false,
             starred: false,
             surveyed: false,
-        });
-        dispatch(setApiaryList(newApiaryList));
+        };
+        // const newApiaryList = apiaries.concat(newApiary);
+        dispatch(fetchApiaryScores(newApiary, forageRange));
     }
 
     render() {
@@ -129,6 +117,7 @@ function mapStateToProps(state) {
 
 Map.propTypes = {
     apiaries: arrayOf(Apiary).isRequired,
+    forageRange: string.isRequired,
     dispatch: func.isRequired,
 };
 
