@@ -5,7 +5,7 @@ import { Score } from '../propTypes';
 import { toDashedString, toSpacedString } from '../utils';
 
 const ScoresLabel = ({ indicator, scores }) => {
-    const score = scores[0] ? scores.map(({ data, error }) => (error ? '!' : Math.round(data))).join('/') : '!';
+    const score = scores[0] ? scores.map(({ data, error }) => (error ? NaN : Math.round(data))).join('/') : '!';
     return (
         <div className={`indicator indicator--${toDashedString(indicator)}`}>
             <div className="indicator__number">

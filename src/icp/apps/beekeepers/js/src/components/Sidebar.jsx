@@ -33,18 +33,13 @@ const Sidebar = ({
         ));
     }
 
-    const apiaryCards = sortedApiaries.map((apiary, idx) => {
-        // TODO: Replace unique key generator once app uses real, complete data
-        // Currently solution appeases React unique key error
-        const key = String.fromCharCode(idx);
-        return (
-            <ApiaryCard
-                key={key}
-                apiary={apiary}
-                forageRange={forageRange}
-            />
-        );
-    });
+    const apiaryCards = sortedApiaries.map(apiary => (
+        <ApiaryCard
+            key={apiary.location}
+            apiary={apiary}
+            forageRange={forageRange}
+        />
+    ));
 
     const onSelectSort = (selection) => {
         dispatch(setSort(selection.target.value));

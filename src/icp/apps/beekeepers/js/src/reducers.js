@@ -27,6 +27,7 @@ const mainReducer = createReducer({
         (state, payload) => update(state, { forageRange: { $set: payload } }),
     [setApiaryList]:
         (state, payload) => update(state, { apiaries: { $set: payload } }),
+    // TODO: Replace reducers below with real behavior
     [startFetchApiaryScores]: state => update(state, { apiaries: { fetching: { $set: true } } }),
     [failFetchApiaryScores]: state => update(state, { apiaries: { fetching: { $set: false } } }),
     [completeFetchApiaryScores]: state => update(state, { apiaries: { fetching: { $set: true } } }),
