@@ -35,6 +35,26 @@ const ApiaryCard = ({ apiary, forageRange }) => {
         return '';
     })();
 
+    if (!apiary.scores[forageRange]) {
+        return (
+            <li className="card">
+                <div className="card__top">
+                    <div className="card__identification">
+                        <div className={`marker ${markerMod}`}>{marker}</div>
+                        <div className="card__name">{name}</div>
+                    </div>
+                    <div className="card__buttons">
+                        <CardButton icon="star" filled={starred} />
+                        <CardButton icon="clipboard" filled={surveyed} />
+                        <CardButton icon="trash" filled />
+                    </div>
+                </div>
+                <div className="card__bottom">
+                    Spinner
+                </div>
+            </li>
+        );
+    }
     return (
         <li className="card">
             <div className="card__top">

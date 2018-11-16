@@ -14,5 +14,5 @@ export const INDICATORS = {
 
 export const SORT_OPTIONS = [DEFAULT_SORT].concat(Object.values(INDICATORS));
 
-export const MAP_CENTER = [37.899, -97.079];
+export const MAP_CENTER = [40.0, -76.079];
 export const MAP_ZOOM = 10;

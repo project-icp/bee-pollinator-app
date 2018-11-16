@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { arrayOf, func, string } from 'prop-types';
 
 import { Apiary } from '../propTypes';
-import { fetchApiaryScores } from '../actions';
+import { fetchApiaryScores, setApiaryList } from '../actions';
 import {
     MAP_CENTER,
     MAP_ZOOM,
@@ -58,7 +58,7 @@ class Map extends Component {
     }
 
     onClickAddMarker(event) {
-        const { forageRange, dispatch } = this.props;
+        const { forageRange, apiaries, dispatch } = this.props;
         const newApiary = {
             name: 'dummy name',
             marker: 'F',
@@ -72,7 +72,8 @@ class Map extends Component {
             starred: false,
             surveyed: false,
         };
-        // const newApiaryList = apiaries.concat(newApiary);
+        const newApiaryList = apiaries.concat(newApiary);
+        dispatch(setApiaryList(newApiaryList));
         dispatch(fetchApiaryScores(newApiary, forageRange));
     }
 
