@@ -40,12 +40,8 @@ export function fetchApiaryScores(apiary, forageRange) {
                 indicators: Object.values(INDICATORS),
             })
             .then(({ data }) => {
-                const apiaryWithData = Object.assign(apiary,
-                    {
-                        scores: {
-                            [forageRange]: data,
-                        },
-                    });
+                const updatedApiary = Object.assign({}, apiary);
+                updatedApiary.scores[forageRange] = data;
 
                 // TODO: Authenticated user should save apiaryWithData to
                 // the database and update the redux store of apiaries
@@ -56,7 +52,7 @@ export function fetchApiaryScores(apiary, forageRange) {
                 const removedApiaryList = apiaries.filter(a => (
                     a.location !== apiary.location
                 ));
-                const newList = removedApiaryList.concat(apiaryWithData);
+                const newList = removedApiaryList.concat(updatedApiary);
 
                 dispatch(completeFetchApiaryScores());
                 dispatch(setApiaryList(newList));

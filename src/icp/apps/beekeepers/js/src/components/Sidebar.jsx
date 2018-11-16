@@ -28,9 +28,12 @@ const Sidebar = ({
             return 0;
         });
     } else {
-        sortedApiaries = apiaries.sort((a, b) => (
-            b.scores[forageRange][sortBy].data - a.scores[forageRange][sortBy].data
-        ));
+        sortedApiaries = apiaries.sort((a, b) => {
+            if (!b.scores[forageRange][sortBy] || !a.scores[forageRange][sortBy]) {
+                return 0;
+            }
+            return b.scores[forageRange][sortBy].data - a.scores[forageRange][sortBy].data;
+        });
     }
 
     const apiaryCards = sortedApiaries.map(apiary => (
