@@ -41,6 +41,13 @@ class Map extends Component {
             expanded: true,
             collapseAfterResult: false,
             position: 'topleft',
+            /*
+                The geocoder and leaflet error without `useMapBounds` and
+                `zoomToResult` set to false.
+                See: https://github.com/Esri/esri-leaflet-geocoder/issues/209
+            */
+            useMapBounds: false,
+            zoomToResult: false,
         }).addTo(map);
 
         geocoder.on('results', ({ results }) => {
