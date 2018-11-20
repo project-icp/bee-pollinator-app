@@ -13,25 +13,32 @@ class Apiary(models.Model):
     where multiple honeybee colonies are located.
     """
     created_at = models.DateTimeField(
-        auto_now_add=True)
-    lat = models.FloatField()
-    lng = models.FloatField()
+        auto_now_add=True,
+        null=False)
+    lat = models.FloatField(
+        null=False)
+    lng = models.FloatField(
+        null=False)
     marker = models.CharField(
         max_length=255,
+        null=False,
         help_text='Code displayed on textual marker symbol')
     name = models.CharField(
         max_length=255,
+        null=False,
         help_text='Short text identifier for apiary')
     scores = models.TextField(
         null=True,
         help_text='JSON representation of raster values at lat/lng')
     starred = models.BooleanField(
         default=False,
+        null=False,
         help_text='Has the apiary been starred in the UI?')
     surveyed = models.BooleanField(
         default=False,
+        null=False,
         help_text='Has the apiary been designated as requiring surveys?')
-    updateded_at = models.DateTimeField(
+    updated_at = models.DateTimeField(
         auto_now=True,
         null=True)
     user = models.ForeignKey(

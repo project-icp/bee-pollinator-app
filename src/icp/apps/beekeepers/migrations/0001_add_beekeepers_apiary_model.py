@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
                 ('scores', models.TextField(help_text='JSON representation of raster values at lat/lng', null=True)),
                 ('starred', models.BooleanField(default=False, help_text='Has the apiary been starred in the UI?')),
                 ('surveyed', models.BooleanField(default=False, help_text='Has the apiary been designated as requiring surveys?')),
-                ('updateded_at', models.DateTimeField(auto_now=True, null=True)),
+                ('updated_at', models.DateTimeField(auto_now=True, null=True)),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
         ),
