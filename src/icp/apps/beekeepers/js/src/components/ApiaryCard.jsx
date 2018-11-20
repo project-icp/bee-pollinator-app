@@ -1,15 +1,13 @@
 import React from 'react';
-import { string, func } from 'prop-types';
-import { connect } from 'react-redux';
+import { string } from 'prop-types';
 
 import { Apiary } from '../propTypes';
 import { INDICATORS } from '../constants';
-import { fetchApiaryScores } from '../actions';
 
 import CardButton from './CardButton';
 import ScoresLabel from './ScoresLabel';
 
-const ApiaryCard = ({ apiary, forageRange, dispatch }) => {
+const ApiaryCard = ({ apiary, forageRange }) => {
     const {
         marker,
         name,
@@ -37,27 +35,29 @@ const ApiaryCard = ({ apiary, forageRange, dispatch }) => {
         return '';
     })();
 
-    if (!Object.keys(apiary.scores[forageRange]).length) {
-        dispatch(fetchApiaryScores(apiary, forageRange));
-        return (
-            <li className="card">
-                <div className="card__top">
-                    <div className="card__identification">
-                        <div className={`marker ${markerMod}`}>{marker}</div>
-                        <div className="card__name">{name}</div>
-                    </div>
-                    <div className="card__buttons">
-                        <CardButton icon="star" filled={starred} />
-                        <CardButton icon="clipboard" filled={surveyed} />
-                        <CardButton icon="trash" filled />
-                    </div>
-                </div>
-                <div className="card__bottom">
-                    TODO: Insert spinner
-                </div>
-            </li>
+    const scoresBody = !Object.keys(apiary.scores[forageRange]).length
+        ? 'TODO: Insert spinner'
+        : (
+            <div className="indicator-container">
+                <ScoresLabel
+                    indicator={INDICATORS.NESTING_QUALITY}
+                    scores={[values[INDICATORS.NESTING_QUALITY]]}
+                />
+                <ScoresLabel
+                    indicator={INDICATORS.PESTICIDE}
+                    scores={[values[INDICATORS.PESTICIDE]]}
+                />
+                <ScoresLabel
+                    indicator="forage"
+                    scores={[
+                        values[INDICATORS.FORAGE_SPRING],
+                        values[INDICATORS.FORAGE_SUMMER],
+                        values[INDICATORS.FORAGE_FALL],
+                    ]}
+                />
+            </div>
         );
-    }
+
     return (
         <li className="card">
             <div className="card__top">
@@ -72,24 +72,7 @@ const ApiaryCard = ({ apiary, forageRange, dispatch }) => {
                 </div>
             </div>
             <div className="card__bottom">
-                <div className="indicator-container">
-                    <ScoresLabel
-                        indicator={INDICATORS.NESTING_QUALITY}
-                        scores={[values[INDICATORS.NESTING_QUALITY]]}
-                    />
-                    <ScoresLabel
-                        indicator={INDICATORS.PESTICIDE}
-                        scores={[values[INDICATORS.PESTICIDE]]}
-                    />
-                    <ScoresLabel
-                        indicator="forage"
-                        scores={[
-                            values[INDICATORS.FORAGE_SPRING],
-                            values[INDICATORS.FORAGE_SUMMER],
-                            values[INDICATORS.FORAGE_FALL],
-                        ]}
-                    />
-                </div>
+                {scoresBody}
             </div>
         </li>
     );
@@ -98,11 +81,6 @@ const ApiaryCard = ({ apiary, forageRange, dispatch }) => {
 ApiaryCard.propTypes = {
     apiary: Apiary.isRequired,
     forageRange: string.isRequired,
-    dispatch: func.isRequired,
 };
 
-function mapStateToProps(state) {
-    return state.main;
-}
-
-export default connect(mapStateToProps)(ApiaryCard);
+export default ApiaryCard;

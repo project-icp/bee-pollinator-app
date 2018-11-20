@@ -11,21 +11,20 @@ export const completeFetchApiaryScores = createAction('Completed fetching apiary
 
 export function fetchApiaryScores(apiary, forageRange) {
     return (dispatch, getState) => {
-        dispatch(startFetchApiaryScores());
-
         if (!apiary || !forageRange) {
             const err = !apiary
                 ? 'No apiary provided' : 'No forage range provided';
             window.console.warn(err);
-            return dispatch(failFetchApiaryScores(err));
+            return false;
         }
 
         // check if data for that apiary already exists
         // return the scores and complete the action loop if it exists
-        // TODO?: perform this sooner, perhaps here or in the component
         if (apiary.scores[forageRange].data) {
-            return dispatch(completeFetchApiaryScores());
+            return true;
         }
+
+        dispatch(startFetchApiaryScores());
 
         const {
             main: {
@@ -50,7 +49,7 @@ export function fetchApiaryScores(apiary, forageRange) {
                 // For unauthenticated user relying purely on redux/
                 // localStorage, manually update the apiary listing with data
                 const removedApiaryList = apiaries.filter(a => (
-                    a.location !== apiary.location
+                    !a.location.equals(apiary.location)
                 ));
                 const newList = removedApiaryList.concat(updatedApiary);
 
