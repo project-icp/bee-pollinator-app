@@ -38,15 +38,14 @@ class Sidebar extends Component {
             return <Splash />;
         }
 
-        let sortedApiaries;
         if (sortBy === DEFAULT_SORT) {
-            sortedApiaries = apiaries.sort((a, b) => {
+            apiaries.sort((a, b) => {
                 if (a.marker < b.marker) { return -1; }
                 if (a.marker > b.marker) { return 1; }
                 return 0;
             });
         } else {
-            sortedApiaries = apiaries.sort((a, b) => {
+            apiaries.sort((a, b) => {
                 if (!b.scores[forageRange][sortBy] || !a.scores[forageRange][sortBy]) {
                     return 0;
                 }
@@ -54,7 +53,7 @@ class Sidebar extends Component {
             });
         }
 
-        const apiaryCards = sortedApiaries.map(apiary => (
+        const apiaryCards = apiaries.map(apiary => (
             <ApiaryCard
                 key={apiary.location}
                 apiary={apiary}

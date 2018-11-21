@@ -59,6 +59,13 @@ class Map extends Component {
 
     onClickAddMarker(event) {
         const { forageRange, apiaries, dispatch } = this.props;
+
+        // Traffic cop, prevent simultaneous, clobbered updates to the state
+        // by only allowing 1 new apiary at a time
+        if (apiaries.find(a => !!a.fetching)) {
+            return;
+        }
+
         const newApiary = {
             name: 'dummy name',
             marker: 'F',
@@ -67,7 +74,7 @@ class Map extends Component {
                 [FORAGE_RANGE_3KM]: {},
                 [FORAGE_RANGE_5KM]: {},
             },
-            fetching: false,
+            fetching: true,
             selected: false,
             starred: false,
             surveyed: false,

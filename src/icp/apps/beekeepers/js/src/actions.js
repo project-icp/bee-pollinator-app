@@ -40,13 +40,7 @@ export function fetchApiaryScores(apiary, forageRange) {
                 indicators: Object.values(INDICATORS),
             })
             .then(({ data }) => {
-                const updatedApiary = update(apiary, {
-                    scores: {
-                        [forageRange]: { $set: data },
-                    },
-                });
-
-                // TODO: Authenticated user should save apiaryWithData to
+                // TODO: Authenticated user should save updatedApiary to
                 // the database and update the redux store of apiaries
                 // from a GET/list call
 
@@ -55,15 +49,31 @@ export function fetchApiaryScores(apiary, forageRange) {
                 const removedApiaryList = apiaries.filter(a => (
                     !a.location.equals(apiary.location)
                 ));
+                const updatedApiary = update(apiary, {
+                    scores: {
+                        [forageRange]: { $set: data },
+                    },
+                    fetching: { $set: false },
+                });
                 const newList = removedApiaryList.concat(updatedApiary);
 
                 dispatch(completeFetchApiaryScores());
                 dispatch(setApiaryList(newList));
             })
             .catch((error) => {
-                window.console.warn(error);
+                const removedApiaryList = apiaries.filter(a => (
+                    !a.location.equals(apiary.location)
+                ));
+                const updatedApiary = update(apiary, {
+                    fetching: { $set: false },
+                });
+                const newList = removedApiaryList.concat(updatedApiary);
+
+                dispatch(setApiaryList(newList));
+
                 // enclose error in a response object
-                return dispatch(failFetchApiaryScores(error));
+                window.console.warn(error);
+                dispatch(failFetchApiaryScores(error));
             });
     };
 }
