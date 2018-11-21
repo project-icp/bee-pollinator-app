@@ -1,4 +1,5 @@
 import { createAction } from 'redux-act';
+import update from 'immutability-helper';
 import axios from 'axios';
 import { INDICATORS } from './constants';
 
@@ -39,8 +40,11 @@ export function fetchApiaryScores(apiary, forageRange) {
                 indicators: Object.values(INDICATORS),
             })
             .then(({ data }) => {
-                const updatedApiary = Object.assign({}, apiary);
-                updatedApiary.scores[forageRange] = data;
+                const updatedApiary = update(apiary, {
+                    scores: {
+                        [forageRange]: { $set: data },
+                    },
+                });
 
                 // TODO: Authenticated user should save apiaryWithData to
                 // the database and update the redux store of apiaries
