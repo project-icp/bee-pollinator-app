@@ -4,8 +4,13 @@ import { arrayOf, string } from 'prop-types';
 import { Score } from '../propTypes';
 import { toDashedString, toSpacedString } from '../utils';
 
+
+function generateScore(data, error) {
+    return error ? NaN : Math.round(data);
+}
+
 const ScoresLabel = ({ indicator, scores }) => {
-    const formattedScores = scores.map(({ data, error }) => (error ? NaN : Math.round(data))).join('/');
+    const formattedScores = scores.map(({ data, err }) => generateScore(data, err)).join('/');
     const score = formattedScores[0] ? formattedScores : '!';
     return (
         <div className={`indicator indicator--${toDashedString(indicator)}`}>
