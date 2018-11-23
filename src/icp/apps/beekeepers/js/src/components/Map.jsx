@@ -81,7 +81,7 @@ class Map extends Component {
         };
         const newApiaryList = apiaries.concat(newApiary);
         dispatch(setApiaryList(newApiaryList));
-        dispatch(fetchApiaryScores(newApiary, forageRange));
+        dispatch(fetchApiaryScores([newApiary], forageRange));
     }
 
     render() {

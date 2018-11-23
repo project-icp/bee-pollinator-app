@@ -19,20 +19,29 @@ def fetch_data(request):
     """
     Return the cell values from rasters on s3 and any errors.
 
-    :param location: Dict with lat and lng values, i.e {lat: float, lng: float}
+    :param locations: List of dicts with lat and lng values,
+        i.e [{lat: float, lng: float}]
     :param forage_range: A string value of "3km" or "5km"
     :param indicators: An array of indicator names corresponding to s3 rasters
     """
 
-    location = request.DATA['location']
+    locations = request.DATA['locations']
     forage_range = request.DATA['forage_range']
     indicators = request.DATA['indicators']
 
     resp = {}
-    for indicator in indicators:
-        s3_filename = '{}_{}.tif'.format(indicator, forage_range)
-        s3_url = 's3://{}/{}/{}'.format(DATA_BUCKET, forage_range, s3_filename)
-        data = sample_at_point(location, s3_url)
-        resp.update({indicator: data})
+    for location in locations:
+        lat_lng_name = '{0:.10f}{1:.10f}'.format(
+            location['lat'], location['lng'])
+        resp.update({lat_lng_name: {}})
+        for indicator in indicators:
+            s3_filename = '{}_{}.tif'.format(indicator, forage_range)
+            s3_url = 's3://{}/{}/{}'.format(
+                DATA_BUCKET,
+                forage_range,
+                s3_filename
+            )
+            data = sample_at_point(location, s3_url)
+            resp[lat_lng_name].update({indicator: data})
 
     return Response(resp)

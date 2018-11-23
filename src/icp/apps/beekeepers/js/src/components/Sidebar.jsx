@@ -17,12 +17,12 @@ class Sidebar extends Component {
         const { forageRange, dispatch } = this.props;
 
         if (forageRange !== nextForageRange) {
-            apiaries.forEach((apiary) => {
-                if (!Object.keys(apiary.scores[nextForageRange]).length) {
-                    dispatch(fetchApiaryScores(apiary, nextForageRange));
-                }
-            });
+            const apiariesSansData = apiaries.filter(apiary => (
+                !Object.keys(apiary.scores[nextForageRange]).length
+            ));
+            dispatch(fetchApiaryScores(apiariesSansData, nextForageRange));
         }
+
         return nextProps;
     }
 
