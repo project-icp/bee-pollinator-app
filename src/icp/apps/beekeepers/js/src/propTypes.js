@@ -18,7 +18,7 @@ export const Score = shape({
 });
 
 export const Scores = shape(Object.keys(INDICATORS).reduce(
-    (map, r) => Object.assign(map, { [INDICATORS[r]]: Score.isRequired }),
+    (map, r) => Object.assign(map, { [INDICATORS[r]]: Score }),
     {},
 ));
 

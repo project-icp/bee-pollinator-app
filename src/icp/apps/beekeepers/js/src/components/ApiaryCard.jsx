@@ -35,6 +35,29 @@ const ApiaryCard = ({ apiary, forageRange }) => {
         return '';
     })();
 
+    const scoresBody = !Object.keys(apiary.scores[forageRange]).length
+        ? 'TODO: Insert spinner'
+        : (
+            <div className="indicator-container">
+                <ScoresLabel
+                    indicator={INDICATORS.NESTING_QUALITY}
+                    scores={[values[INDICATORS.NESTING_QUALITY]]}
+                />
+                <ScoresLabel
+                    indicator={INDICATORS.PESTICIDE}
+                    scores={[values[INDICATORS.PESTICIDE]]}
+                />
+                <ScoresLabel
+                    indicator="forage"
+                    scores={[
+                        values[INDICATORS.FORAGE_SPRING],
+                        values[INDICATORS.FORAGE_SUMMER],
+                        values[INDICATORS.FORAGE_FALL],
+                    ]}
+                />
+            </div>
+        );
+
     return (
         <li className="card">
             <div className="card__top">
@@ -49,24 +72,7 @@ const ApiaryCard = ({ apiary, forageRange }) => {
                 </div>
             </div>
             <div className="card__bottom">
-                <div className="indicator-container">
-                    <ScoresLabel
-                        indicator={INDICATORS.NESTING_QUALITY}
-                        scores={[values[INDICATORS.NESTING_QUALITY]]}
-                    />
-                    <ScoresLabel
-                        indicator={INDICATORS.PESTICIDE}
-                        scores={[values[INDICATORS.PESTICIDE]]}
-                    />
-                    <ScoresLabel
-                        indicator="forage"
-                        scores={[
-                            values[INDICATORS.FORAGE_SPRING],
-                            values[INDICATORS.FORAGE_SUMMER],
-                            values[INDICATORS.FORAGE_FALL],
-                        ]}
-                    />
-                </div>
+                {scoresBody}
             </div>
         </li>
     );
