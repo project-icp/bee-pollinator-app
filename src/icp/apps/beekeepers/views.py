@@ -29,11 +29,9 @@ def fetch_data(request):
     forage_range = request.DATA['forage_range']
     indicators = request.DATA['indicators']
 
-    resp = {}
+    resp = []
     for location in locations:
-        lat_lng_name = '{0:.10f}{1:.10f}'.format(
-            location['lat'], location['lng'])
-        resp.update({lat_lng_name: {}})
+        all_location_data = {}
         for indicator in indicators:
             s3_filename = '{}_{}.tif'.format(indicator, forage_range)
             s3_url = 's3://{}/{}/{}'.format(
@@ -42,6 +40,7 @@ def fetch_data(request):
                 s3_filename
             )
             data = sample_at_point(location, s3_url)
-            resp[lat_lng_name].update({indicator: data})
+            all_location_data.update({indicator: data})
+        resp.append(all_location_data)
 
     return Response(resp)

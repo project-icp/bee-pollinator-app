@@ -48,6 +48,7 @@ export function fetchApiaryScores(apiaryList, forageRange) {
             }
             return apiary;
         });
+        dispatch(setApiaryList(fetchingApiaries));
 
         const locationList = apiaryList.map(apiary => apiary.location);
 
@@ -65,16 +66,14 @@ export function fetchApiaryScores(apiaryList, forageRange) {
                 // For unauthenticated user relying purely on redux/
                 // localStorage, manually update the apiary listings with data
                 const nonFetchingApiaryList = fetchingApiaries.filter(a => !a.fetching);
-                const apiaryListWithData = apiaryList.map((apiary) => {
-                    const latLngName = String(apiary.location.lat.toFixed(10))
-                        + String(apiary.location.lng.toFixed(10));
-                    return update(apiary, {
+                const apiaryListWithData = apiaryList.map((apiary, idx) => (
+                    update(apiary, {
                         scores: {
-                            [forageRange]: { $set: data[latLngName] },
+                            [forageRange]: { $set: data[idx] },
                         },
                         fetching: { $set: false },
-                    });
-                });
+                    })
+                ));
 
                 const newList = nonFetchingApiaryList.concat(apiaryListWithData);
 

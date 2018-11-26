@@ -74,7 +74,7 @@ class Map extends Component {
                 [FORAGE_RANGE_3KM]: {},
                 [FORAGE_RANGE_5KM]: {},
             },
-            fetching: true,
+            fetching: false,
             selected: false,
             starred: false,
             surveyed: false,
