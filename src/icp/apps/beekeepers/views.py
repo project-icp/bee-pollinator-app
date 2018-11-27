@@ -3,10 +3,12 @@ from __future__ import division
 
 import os
 
-from rest_framework import decorators
+from rest_framework import decorators, viewsets
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from models import Apiary
+from serializers import ApiarySerializer
 from tasks import sample_at_point
 
 
@@ -44,3 +46,12 @@ def fetch_data(request):
         resp.append(all_location_data)
 
     return Response(resp)
+
+
+class ApiaryViewSet(viewsets.ModelViewSet):
+    queryset = Apiary.objects.all()
+    serializer_class = ApiarySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Apiary.objects.filter(user=self.request.user)
