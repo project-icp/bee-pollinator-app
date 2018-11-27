@@ -47,3 +47,42 @@ class Apiary(models.Model):
 
     def __unicode__(self):
         return unicode('{}:{}'.format(self.user.username, self.name))
+
+
+class Survey(models.Model):
+    """Survey of questions for an Apiary for a given month"""
+    APRIL = 'APRIL'
+    NOVEMBER = 'NOVEMBER'
+    MONTHLY = 'MONTHLY'
+
+    SURVEY_TYPES = (
+        (APRIL, 'April'),
+        (NOVEMBER, 'November'),
+        (MONTHLY, 'Monthly'),
+    )
+
+    month_year = models.CharField(
+        max_length=255,
+        null=False,
+        help_text='MMYYYY formatted value indicating the month of this survey')
+    num_colonies = models.IntegerField(
+        null=False,
+        help_text='Number of colonies in this survey')
+    apiary = models.ForeignKey(
+        Apiary,
+        related_name='surveys',
+        null=False)
+    created_at = models.DateTimeField(
+        auto_now=False,
+        auto_now_add=True)
+    survey_type = models.CharField(
+        choices=SURVEY_TYPES,
+        max_length=255,
+        null=False,
+        help_text='The kind of survey this is')
+
+    class Meta:
+        unique_together = ('month_year', 'apiary')
+
+    def __unicode__(self):
+        return self.month_year
