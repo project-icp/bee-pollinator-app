@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             name='UserProfile',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('app', django.contrib.postgres.fields.ArrayField(default=[(b'POLL', b'Pollinator')], size=None, base_field=models.CharField(max_length=255, choices=[(b'POLL', b'Pollinator'), (b'BEEK', b'Beekeepers')]), blank=True)),
+                ('origin_app', models.CharField(default=(b'POLLINATORS', b'Pollinators'), help_text=b'Record on which app the user signed up', max_length=255, choices=[(b'POLLINATORS', b'Pollinators'), (b'BEEKEEPERS', b'Beekeepers')])),
                 ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
             ],
         )

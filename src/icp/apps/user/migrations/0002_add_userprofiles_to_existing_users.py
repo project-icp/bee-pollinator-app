@@ -16,7 +16,7 @@ def create_user_profiles_for_existing_users(apps, schema_editor):
 class Migration(migrations.Migration):
     
     dependencies = [
-        ('user', '0001_initial')
+        ('user', '0001_create_user_profile_model')
     ]
 
     operations = [

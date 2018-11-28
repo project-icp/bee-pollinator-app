@@ -9,17 +9,17 @@ AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 class UserProfile(models.Model):
     """For additional user properties."""
 
-    # App options
-    POLL = ('POLL', 'Pollinator')
-    BEEK = ('BEEK', 'Beekeepers')
-    APP_CHOICES = (POLL, BEEK)
+    POLLINATORS = ('POLLINATORS', 'Pollinators')
+    BEEKEEPERS = ('BEEKEEPERS', 'Beekeepers')
+    APP_CHOICES = (POLLINATORS, BEEKEEPERS,)
 
     user = models.OneToOneField(AUTH_USER_MODEL)
-    app = ArrayField(
-        models.CharField(
-            max_length=255,
-            choices=APP_CHOICES,
-        ),
-        default=[POLL],
-        blank=True,
+    origin_app = models.CharField(
+        max_length=255,
+        choices=APP_CHOICES,
+        default=POLLINATORS,
+        help_text="Record on which app the user signed up"
     )
+
+    def __unicode__(self):
+        return self.user.username
