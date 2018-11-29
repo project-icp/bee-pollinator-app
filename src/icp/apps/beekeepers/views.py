@@ -3,9 +3,13 @@ from __future__ import division
 
 import os
 
+from django.shortcuts import get_object_or_404
+from django.utils.timezone import now
+
 from rest_framework import decorators, viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.status import HTTP_204_NO_CONTENT
 
 from models import Apiary
 from serializers import ApiarySerializer
@@ -54,4 +58,16 @@ class ApiaryViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Apiary.objects.filter(user=self.request.user)
+        return Apiary.objects.filter(user=self.request.user, deleted_at=None)
+
+    def destroy(self, request, pk=None):
+        """Soft deletes Apiaries from user's account"""
+        apiary = get_object_or_404(Apiary,
+                                   id=pk,
+                                   user=request.user,
+                                   deleted_at=None)
+
+        apiary.deleted_at = now()
+        apiary.save()
+
+        return Response(status=HTTP_204_NO_CONTENT)
