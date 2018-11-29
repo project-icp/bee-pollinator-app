@@ -1,6 +1,7 @@
 ---
 dependencies:
   - { role: "bee-pollinator.base" }
+  - { role: "azavea.swapfile" }
   - { role: "azavea.python", python_development: True }
   - { role: "azavea.pip" }
   - { role: "azavea.nodejs" }

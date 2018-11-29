@@ -81,3 +81,6 @@
 
 - src: azavea.memcached
   version: 0.1.0
+
+- src: azavea.swapfile
+  version: 0.1.0
