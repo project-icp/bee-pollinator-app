@@ -16,3 +16,4 @@ django-webpack-loader==0.6.0
 rasterio[s3]==1.0.8
 pyproj==1.9.5.1
 boto3==1.8.0
+redis==2.10.6
