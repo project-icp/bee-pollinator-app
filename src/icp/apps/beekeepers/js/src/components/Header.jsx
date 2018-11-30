@@ -18,8 +18,8 @@ export default () => (
                     </button>
                 </li>
                 <li className="navbar__item">
-                    <button type="button" className="navbar__button">
-                        Account
+                    <button type="button" className="navbar__button--auth">
+                        Participate in study
                     </button>
                 </li>
             </ul>

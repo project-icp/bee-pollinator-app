@@ -22,5 +22,11 @@
         font-size: 14px;
         background: none;
         border: none;
+
+        &--auth {
+            padding: 9px;
+            color: $color-white;
+            background: $color-primary;
+        }
     }
 }
