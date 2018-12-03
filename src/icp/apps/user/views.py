@@ -16,6 +16,8 @@ from rest_framework import decorators, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
+from apps.user.models import UserProfile
+
 
 @decorators.api_view(['POST', 'GET'])
 @decorators.permission_classes((AllowAny, ))
@@ -117,6 +119,20 @@ def sign_up(request):
 
     if form.is_valid():
         user = view.register(request, form)
+
+        # Create a user profile with correct origin app
+        # TODO: Correct the check for the beekeepers app
+        if request.META['HTTP_REFERER'] is 'http://localhost:8000/?beekeepers':
+            UserProfile.objects.create(
+                user=user,
+                origin_app=UserProfile.BEEKEEPERS
+            )
+        else:
+            UserProfile.objects.create(
+                user=user,
+                origin_app=UserProfile.POLLINATION
+            )
+
         response_data = {'result': 'success',
                          'username': user.username,
                          'guest': False}
