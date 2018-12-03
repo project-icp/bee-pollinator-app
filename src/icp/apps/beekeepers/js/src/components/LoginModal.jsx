@@ -11,31 +11,43 @@ const LoginModal = ({ isLoginModalOpen, dispatch }) => (
         {close => (
             <div className="authModal">
                 <div className="authModal__header">
-                    <div>Log in to your account</div>
-                    <button type="button" onClick={close}>
+                    <div>Log in</div>
+                    <button type="button" className="button" onClick={close}>
                         &times;
                     </button>
                 </div>
                 <div className="authModal__content">
-                    <div className="title">Sign up for the study</div>
+                    <div className="title">Log in to your account</div>
                 </div>
-                <button
-                    type="button"
-                    className="button"
-                    onClick={close}
-                >
-                    I forgot my password
-                </button>
-                <button
-                    type="button"
-                    className="button"
-                    onClick={() => {
-                        close();
-                        dispatch(openSignUpModal());
-                    }}
-                >
-                    I need to sign up
-                </button>
+                <div className="authModal__footer">
+                    <button
+                        type="button"
+                        className="button--long"
+                        onClick={close}
+                    >
+                        Log in
+                    </button>
+                    <span>
+                        <button
+                            type="button"
+                            className="button"
+                            onClick={close}
+                        >
+                            I forgot my password
+                        </button>
+                        &#9900;
+                        <button
+                            type="button"
+                            className="button"
+                            onClick={() => {
+                                close();
+                                dispatch(openSignUpModal());
+                            }}
+                        >
+                            I need to sign up
+                        </button>
+                    </span>
+                </div>
             </div>
         )}
     </Popup>
