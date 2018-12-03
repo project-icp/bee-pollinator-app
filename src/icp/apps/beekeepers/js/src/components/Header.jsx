@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { func } from 'prop-types';
 
-import { openSignUpModal } from '../actions';
+import { openParticipateModal } from '../actions';
 
 const Header = ({ dispatch }) => (
     <header className="header">
@@ -25,7 +25,7 @@ const Header = ({ dispatch }) => (
                     <button
                         type="button"
                         className="navbar__button--auth"
-                        onClick={() => dispatch(openSignUpModal())}
+                        onClick={() => dispatch(openParticipateModal())}
                     >
                             Participate in study
                     </button>

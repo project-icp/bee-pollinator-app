@@ -14,6 +14,8 @@ export const openSignUpModal = createAction('Open sign up modal');
 export const closeSignUpModal = createAction('Close sign up modal');
 export const openLoginModal = createAction('Open log in modal');
 export const closeLoginModal = createAction('Close log in modal');
+export const openParticipateModal = createAction('Open participate modal');
+export const closeParticipateModal = createAction('Close participate modal');
 
 export function fetchApiaryScores(apiaryList, forageRange) {
     return (dispatch, getState) => {

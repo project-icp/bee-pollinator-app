@@ -13,6 +13,8 @@ import {
     closeSignUpModal,
     openLoginModal,
     closeLoginModal,
+    openParticipateModal,
+    closeParticipateModal,
 } from './actions';
 
 const initialState = {
@@ -21,6 +23,7 @@ const initialState = {
     apiaries: [],
     isSignUpModalOpen: false,
     isLoginModalOpen: false,
+    isParticipateModalOpen: false,
 };
 
 const mainReducer = createReducer({
@@ -38,6 +41,10 @@ const mainReducer = createReducer({
         state => update(state, { isLoginModalOpen: { $set: true } }),
     [closeLoginModal]:
         state => update(state, { isLoginModalOpen: { $set: false } }),
+    [openParticipateModal]:
+        state => update(state, { isParticipateModalOpen: { $set: true } }),
+    [closeParticipateModal]:
+        state => update(state, { isParticipateModalOpen: { $set: false } }),
 }, initialState);
 
 // Placeholder reducer for parts of state that will be persisted to localStorage
