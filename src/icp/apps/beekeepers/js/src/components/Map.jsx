@@ -69,7 +69,8 @@ class Map extends Component {
         const newApiary = {
             name: 'dummy name',
             marker: 'F',
-            location: event.latlng,
+            lat: event.latlng.lat,
+            lng: event.latlng.lng,
             scores: {
                 [FORAGE_RANGE_3KM]: {},
                 [FORAGE_RANGE_5KM]: {},
@@ -93,7 +94,7 @@ class Map extends Component {
             return (
                 <Marker
                     key={key}
-                    position={[apiary.location.lat, apiary.location.lng]}
+                    position={[apiary.lat, apiary.lng]}
                 />
             );
         });
