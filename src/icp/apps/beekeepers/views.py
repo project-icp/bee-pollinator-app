@@ -71,3 +71,33 @@ class ApiaryViewSet(viewsets.ModelViewSet):
         apiary.save()
 
         return Response(status=HTTP_204_NO_CONTENT)
+
+    @decorators.list_route(methods=['post'],
+                           permission_classes=[IsAuthenticated])
+    def upsert(self, request):
+        """Given a list of apiaries, updates those with ids and inserts others.
+           Returns the list of upserted apiaries."""
+        items = request.data
+        apiaries = []
+
+        for item in items:
+            apiary = None
+
+            if item.get('id'):
+                try:
+                    apiary = Apiary.objects.get(id=item.get('id'),
+                                                user=request.user,
+                                                deleted_at=None)
+                except Apiary.DoesNotExist:
+                    apiary = None
+
+            serializer = ApiarySerializer(apiary,
+                                          data=item,
+                                          context={'request': request})
+
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
+            apiaries.append(serializer.data)
+
+        return Response(apiaries)
