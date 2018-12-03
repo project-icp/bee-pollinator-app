@@ -1,6 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { func } from 'prop-types';
 
-export default () => (
+import { openSignUpModal } from '../actions';
+
+const Header = ({ dispatch }) => (
     <header className="header">
         <div className="navbar">
             <div className="navbar__logo">
@@ -18,11 +22,25 @@ export default () => (
                     </button>
                 </li>
                 <li className="navbar__item">
-                    <button type="button" className="navbar__button--auth">
-                        Participate in study
+                    <button
+                        type="button"
+                        className="navbar__button--auth"
+                        onClick={() => dispatch(openSignUpModal())}
+                    >
+                            Participate in study
                     </button>
                 </li>
             </ul>
         </div>
     </header>
 );
+
+function mapStateToProps(state) {
+    return state.main;
+}
+
+Header.propTypes = {
+    dispatch: func.isRequired,
+};
+
+export default connect(mapStateToProps)(Header);
