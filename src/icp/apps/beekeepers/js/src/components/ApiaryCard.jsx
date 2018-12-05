@@ -36,7 +36,7 @@ const ApiaryCard = ({ apiary, forageRange }) => {
     })();
 
     const scoresBody = !Object.keys(apiary.scores[forageRange]).length
-        ? 'TODO: Insert spinner'
+        ? <div className="spinner" />
         : (
             <div className="indicator-container">
                 <ScoresLabel
