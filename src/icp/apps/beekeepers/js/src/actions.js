@@ -16,6 +16,7 @@ export const openLoginModal = createAction('Open log in modal');
 export const closeLoginModal = createAction('Close log in modal');
 export const openParticipateModal = createAction('Open participate modal');
 export const closeParticipateModal = createAction('Close participate modal');
+export const setAuthState = createAction('Set auth information to the state');
 
 
 export function fetchApiaryScores(apiaryList, forageRange) {
@@ -111,11 +112,19 @@ export function login(form) {
         csrfRequest
             .post('/user/login', form)
             .then(({ data }) => {
-                window.console.log(data);
+                dispatch(setAuthState({
+                    username: data.username,
+                    error: '',
+                    userId: data.id,
+                }));
                 dispatch(closeLoginModal());
             })
             .catch((error) => {
-                window.console.warn(error);
+                dispatch(setAuthState({
+                    username: '',
+                    error,
+                    userId: NaN,
+                }));
             });
     };
 }

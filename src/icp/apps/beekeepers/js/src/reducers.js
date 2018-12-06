@@ -15,6 +15,7 @@ import {
     closeLoginModal,
     openParticipateModal,
     closeParticipateModal,
+    setAuthState,
 } from './actions';
 
 const initialState = {
@@ -50,7 +51,19 @@ const mainReducer = createReducer({
 // Placeholder reducer for parts of state that will be persisted to localStorage
 const savedReducer = createReducer({}, {});
 
+const initialAuthState = {
+    username: '',
+    userId: NaN,
+    error: '',
+};
+
+const authReducer = createReducer({
+    [setAuthState]:
+        (state, payload) => update(state, { $set: payload }),
+}, initialAuthState);
+
 export default {
     main: mainReducer,
     saved: savedReducer,
+    auth: authReducer,
 };
