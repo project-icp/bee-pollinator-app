@@ -1,7 +1,7 @@
 import { createAction } from 'redux-act';
 import update from 'immutability-helper';
-import axios from 'axios';
 
+import csrfRequest from './csrfRequest';
 import { INDICATORS } from './constants';
 
 export const setSort = createAction('Set apiary sort');
@@ -16,6 +16,7 @@ export const openLoginModal = createAction('Open log in modal');
 export const closeLoginModal = createAction('Close log in modal');
 export const openParticipateModal = createAction('Open participate modal');
 export const closeParticipateModal = createAction('Close participate modal');
+
 
 export function fetchApiaryScores(apiaryList, forageRange) {
     return (dispatch, getState) => {
@@ -61,7 +62,7 @@ export function fetchApiaryScores(apiaryList, forageRange) {
             lng: apiary.lng,
         }));
 
-        return axios
+        return csrfRequest
             .post('/beekeepers/fetch/', {
                 locations: locationList,
                 forage_range: forageRange,
@@ -101,6 +102,20 @@ export function fetchApiaryScores(apiaryList, forageRange) {
                 window.console.warn(error);
                 dispatch(failFetchApiaryScores(error));
                 dispatch(setApiaryList(newList));
+            });
+    };
+}
+
+export function login(form) {
+    return (dispatch) => {
+        csrfRequest
+            .post('/user/login', form)
+            .then(({ data }) => {
+                window.console.log(data);
+                dispatch(closeLoginModal());
+            })
+            .catch((error) => {
+                window.console.warn(error);
             });
     };
 }
