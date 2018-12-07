@@ -4,19 +4,13 @@ import Popup from 'reactjs-popup';
 import { connect } from 'react-redux';
 
 import { closeLoginModal, openSignUpModal, login } from '../actions';
+import { parseFormToObject } from '../utils';
 
 
 const LoginModal = ({ isLoginModalOpen, dispatch }) => {
     const submitForm = (event) => {
-        let form = {};
-        let i;
-        for (i = 0; i < event.currentTarget.elements.length; i += 1) {
-            const inputValue = event.currentTarget.elements[i].value;
-            const inputName = event.currentTarget.elements[i].name;
-            const newElement = { [inputName]: inputValue };
-            form = Object.assign(newElement, form);
-        }
-        dispatch(login(form));
+        // Send form data to backend for validation and prevent modal from closing
+        dispatch(login(parseFormToObject(event)));
         event.preventDefault();
     };
 
