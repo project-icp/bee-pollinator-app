@@ -106,6 +106,7 @@ class Map extends Component {
                     zoomControl={false}
                     onClick={this.onClickAddMarker}
                     ref={this.mapRef}
+                    maxZoom={18}
                 >
                     <TileLayer
                         attribution="Tiles &copy; Esri"
