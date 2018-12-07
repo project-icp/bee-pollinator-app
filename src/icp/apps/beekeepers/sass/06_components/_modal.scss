@@ -9,6 +9,19 @@
 }
 
 .authModal {
+    .button {
+        color: $color-primary;
+        border: none;
+
+        &--long {
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px;
+            color: $color-white;
+            background: $color-primary;
+        }
+    }
+
     &__header {
         display: flex;
         justify-content: space-between;
@@ -20,6 +33,7 @@
 
         > .button {
             padding: 0;
+            color: $color-black;
             font: $font-xl;
             border: none;
         }
@@ -38,20 +52,26 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-top: 20px;
         padding: 15px;
+    }
+}
 
-        .button {
-            margin-top: 20px;
-            color: $color-primary;
-            border: none;
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-            &--long {
-                width: 100%;
-                padding: 15px;
-                color: $color-white;
-                background: $color-primary;
-            }
-        }
+    &__group {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        font: $font-size-base;
+        font-weight: $font-weight-bold;
+    }
+
+    &__control {
+        padding: 8px;
+        font: $font-med;
+        border: $color-grey-3 solid 0.1px;
     }
 }
