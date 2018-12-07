@@ -1,21 +1,39 @@
 import React from 'react';
-import { bool, func } from 'prop-types';
+import { bool, func, string } from 'prop-types';
 import Popup from 'reactjs-popup';
 import { connect } from 'react-redux';
 
-import { closeLoginModal, openSignUpModal, login } from '../actions';
+import {
+    closeLoginModal,
+    openSignUpModal,
+    login,
+    clearAuthError,
+} from '../actions';
 import { parseFormToObject } from '../utils';
 
 
-const LoginModal = ({ isLoginModalOpen, dispatch }) => {
+const LoginModal = ({ isLoginModalOpen, dispatch, authError }) => {
     const submitForm = (event) => {
         // Send form data to backend for validation and prevent modal from closing
         dispatch(login(parseFormToObject(event)));
         event.preventDefault();
     };
 
+    const errorWarning = authError ? (
+        <div className="form__group--error">
+            {authError}
+        </div>
+    ) : null;
+
     return (
-        <Popup open={isLoginModalOpen} onClose={() => dispatch(closeLoginModal())} modal>
+        <Popup
+            open={isLoginModalOpen}
+            onClose={() => {
+                dispatch(clearAuthError());
+                dispatch(closeLoginModal());
+            }}
+            modal
+        >
             {close => (
                 <div className="authModal">
                     <div className="authModal__header">
@@ -27,6 +45,7 @@ const LoginModal = ({ isLoginModalOpen, dispatch }) => {
                     <div className="authModal__content">
                         <div className="title">Log in to your account</div>
                         <form className="form" onSubmit={submitForm}>
+                            {errorWarning}
                             <div className="form__group">
                                 <label htmlFor="username">Username</label>
                                 <input
@@ -81,12 +100,17 @@ const LoginModal = ({ isLoginModalOpen, dispatch }) => {
 };
 
 function mapStateToProps(state) {
-    return state.main;
+    return {
+        isLoginModalOpen: state.main.isLoginModalOpen,
+        dispatch: state.main.dispatch,
+        authError: state.auth.authError,
+    };
 }
 
 LoginModal.propTypes = {
     isLoginModalOpen: bool.isRequired,
     dispatch: func.isRequired,
+    authError: string.isRequired,
 };
 
 export default connect(mapStateToProps)(LoginModal);

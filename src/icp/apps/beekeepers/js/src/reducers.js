@@ -16,6 +16,7 @@ import {
     openParticipateModal,
     closeParticipateModal,
     setAuthState,
+    clearAuthError,
 } from './actions';
 
 const initialState = {
@@ -54,12 +55,14 @@ const savedReducer = createReducer({}, {});
 const initialAuthState = {
     username: '',
     userId: NaN,
-    error: '',
+    authError: '',
 };
 
 const authReducer = createReducer({
     [setAuthState]:
         (state, payload) => update(state, { $set: payload }),
+    [clearAuthError]:
+        state => update(state, { authError: { $set: '' } }),
 }, initialAuthState);
 
 export default {

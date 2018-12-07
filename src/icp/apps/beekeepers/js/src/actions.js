@@ -17,6 +17,7 @@ export const closeLoginModal = createAction('Close log in modal');
 export const openParticipateModal = createAction('Open participate modal');
 export const closeParticipateModal = createAction('Close participate modal');
 export const setAuthState = createAction('Set auth information to the state');
+export const clearAuthError = createAction('Clear saved auth error');
 
 
 export function fetchApiaryScores(apiaryList, forageRange) {
@@ -114,7 +115,7 @@ export function login(form) {
             .then(({ data }) => {
                 dispatch(setAuthState({
                     username: data.username,
-                    error: '',
+                    authError: '',
                     userId: data.id,
                 }));
                 dispatch(closeLoginModal());
@@ -122,7 +123,7 @@ export function login(form) {
             .catch((error) => {
                 dispatch(setAuthState({
                     username: '',
-                    error,
+                    authError: error.response.data.errors[0],
                     userId: NaN,
                 }));
             });

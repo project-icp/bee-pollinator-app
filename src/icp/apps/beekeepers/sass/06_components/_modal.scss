@@ -67,6 +67,10 @@
         width: 100%;
         font: $font-size-base;
         font-weight: $font-weight-bold;
+
+        &--error {
+            color: $color-starred;
+        }
     }
 
     &__control {

@@ -26,8 +26,10 @@ def login(request):
     status_code = status.HTTP_200_OK
 
     if request.method == 'POST':
-        username = request.REQUEST.get('username') or request.DATA.get('username')
-        password = request.REQUEST.get('password') or request.DATA.get('password')
+        username = (request.REQUEST.get('username') or
+                    request.DATA.get('username'))
+        password = (request.REQUEST.get('password') or
+                    request.DATA.get('password'))
         user = authenticate(username=username,
                             password=password)
 
