@@ -134,13 +134,16 @@ export function fetchApiaryScores(apiaryList, forageRange) {
 
 export function login(form) {
     return (dispatch) => {
-        csrfRequest
-            .post('/user/login', form)
+        const request = form
+            ? csrfRequest.post('/user/login', form)
+            : csrfRequest.get('/user/login');
+
+        return request
             .then(({ data }) => {
                 dispatch(setAuthState({
-                    username: data.username,
+                    username: data.username || '',
                     authError: '',
-                    userId: data.id,
+                    userId: data.id || null,
                 }));
                 dispatch(closeLoginModal());
             })
