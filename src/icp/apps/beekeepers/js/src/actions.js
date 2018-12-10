@@ -41,7 +41,7 @@ export function fetchApiaryScores(apiaryList, forageRange) {
 
         // mark apiaries from input list as fetching data
         const fetchingApiaries = apiaries.map((apiary) => {
-            if (apiaryList.find(a => Object.is(a.location, apiary.location))) {
+            if (apiaryList.find(a => a.lat === apiary.lat && a.lng === apiary.lng)) {
                 return update(apiary, {
                     fetching: { $set: true },
                 });
@@ -50,7 +50,10 @@ export function fetchApiaryScores(apiaryList, forageRange) {
         });
         dispatch(setApiaryList(fetchingApiaries));
 
-        const locationList = apiaryList.map(apiary => apiary.location);
+        const locationList = apiaryList.map(apiary => ({
+            lat: apiary.lat,
+            lng: apiary.lng,
+        }));
 
         return axios
             .post('/beekeepers/fetch/', {

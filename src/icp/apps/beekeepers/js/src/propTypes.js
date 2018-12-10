@@ -7,11 +7,6 @@ import {
 
 import { INDICATORS, FORAGE_RANGE_3KM, FORAGE_RANGE_5KM } from './constants';
 
-export const LatLng = shape({
-    lat: number.isRequired,
-    lng: number.isRequired,
-});
-
 export const Score = shape({
     data: number,
     error: string,
@@ -25,7 +20,8 @@ export const Scores = shape(Object.keys(INDICATORS).reduce(
 export const Apiary = shape({
     name: string.isRequired,
     marker: string.isRequired,
-    location: LatLng.isRequired,
+    lat: number.isRequired,
+    lng: number.isRequired,
     scores: shape({
         [FORAGE_RANGE_3KM]: Scores,
         [FORAGE_RANGE_5KM]: Scores,

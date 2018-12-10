@@ -44,6 +44,9 @@ class Apiary(models.Model):
     user = models.ForeignKey(
         AUTH_USER_MODEL,
         null=False)
+    deleted_at = models.DateTimeField(
+        null=True,
+        help_text='When was the Apiary deleted')
 
     def __unicode__(self):
         return unicode('{}:{}'.format(self.user.username, self.name))
