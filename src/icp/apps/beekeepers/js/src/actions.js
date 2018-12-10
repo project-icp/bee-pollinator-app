@@ -124,7 +124,7 @@ export function login(form) {
                 dispatch(setAuthState({
                     username: '',
                     authError: error.response.data.errors[0],
-                    userId: NaN,
+                    userId: null,
                 }));
             });
     };

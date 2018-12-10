@@ -54,7 +54,7 @@ const savedReducer = createReducer({}, {});
 
 const initialAuthState = {
     username: '',
-    userId: NaN,
+    userId: null,
     authError: '',
 };
 
