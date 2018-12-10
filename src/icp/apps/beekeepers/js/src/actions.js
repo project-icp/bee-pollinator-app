@@ -21,6 +21,9 @@ export const clearAuthError = createAction('Clear saved auth error');
 export const startSavingApiaryList = createAction('Start saving apiary list');
 export const completeSavingApiaryList = createAction('Complete saving apiary list');
 export const failSavingApiaryList = createAction('Fail saving apiary list');
+export const startFetchingApiaryList = createAction('Start fetching apiary list');
+export const completeFetchingApiaryList = createAction('Complete fetching apiary list');
+export const failFetchingApiaryList = createAction('Fail fetching apiary list');
 
 
 export function fetchApiaryScores(apiaryList, forageRange) {
@@ -154,5 +157,26 @@ export function login(form) {
                     userId: null,
                 }));
             });
+    };
+}
+
+export function fetchUserApiaries() {
+    return (dispatch) => {
+        dispatch(startFetchingApiaryList());
+
+        csrfRequest
+            .get('/beekeepers/apiary/')
+            .then(({ data }) => {
+                const apiaryListWithData = data.map(apiary => (
+                    update(apiary, {
+                        fetching: { $set: false },
+                        selected: { $set: false },
+                    })
+                ));
+
+                dispatch(completeFetchingApiaryList());
+                dispatch(setApiaryList(apiaryListWithData));
+            })
+            .catch(error => dispatch(failFetchingApiaryList(error)));
     };
 }
