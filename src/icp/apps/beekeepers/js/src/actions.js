@@ -10,6 +10,12 @@ export const setApiaryList = createAction('Set the apiary list');
 export const startFetchApiaryScores = createAction('Start fetching apiary scores');
 export const failFetchApiaryScores = createAction('Failed to fetch apiary scores');
 export const completeFetchApiaryScores = createAction('Completed fetching apiary scores');
+export const openSignUpModal = createAction('Open sign up modal');
+export const closeSignUpModal = createAction('Close sign up modal');
+export const openLoginModal = createAction('Open log in modal');
+export const closeLoginModal = createAction('Close log in modal');
+export const openParticipateModal = createAction('Open participate modal');
+export const closeParticipateModal = createAction('Close participate modal');
 
 export function fetchApiaryScores(apiaryList, forageRange) {
     return (dispatch, getState) => {

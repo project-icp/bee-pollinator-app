@@ -21,6 +21,7 @@ module.exports = ({ production }) => {
                 'react',
                 'react-dom',
                 'react-leaflet',
+                'reactjs-popup',
                 'react-redux',
                 'react-router',
                 'react-router-dom',

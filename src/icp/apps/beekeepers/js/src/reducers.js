@@ -9,12 +9,21 @@ import {
     setSort,
     setForageRange,
     setApiaryList,
+    openSignUpModal,
+    closeSignUpModal,
+    openLoginModal,
+    closeLoginModal,
+    openParticipateModal,
+    closeParticipateModal,
 } from './actions';
 
 const initialState = {
     sortBy: DEFAULT_SORT,
     forageRange: FORAGE_RANGE_3KM,
     apiaries: [],
+    isSignUpModalOpen: false,
+    isLoginModalOpen: false,
+    isParticipateModalOpen: false,
 };
 
 const mainReducer = createReducer({
@@ -24,6 +33,18 @@ const mainReducer = createReducer({
         (state, payload) => update(state, { forageRange: { $set: payload } }),
     [setApiaryList]:
         (state, payload) => update(state, { apiaries: { $set: payload } }),
+    [openSignUpModal]:
+        state => update(state, { isSignUpModalOpen: { $set: true } }),
+    [closeSignUpModal]:
+        state => update(state, { isSignUpModalOpen: { $set: false } }),
+    [openLoginModal]:
+        state => update(state, { isLoginModalOpen: { $set: true } }),
+    [closeLoginModal]:
+        state => update(state, { isLoginModalOpen: { $set: false } }),
+    [openParticipateModal]:
+        state => update(state, { isParticipateModalOpen: { $set: true } }),
+    [closeParticipateModal]:
+        state => update(state, { isParticipateModalOpen: { $set: false } }),
 }, initialState);
 
 // Placeholder reducer for parts of state that will be persisted to localStorage

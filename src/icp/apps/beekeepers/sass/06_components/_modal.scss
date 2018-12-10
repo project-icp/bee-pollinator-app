@@ -1,0 +1,57 @@
+.popup-overlay {
+    z-index: 1001 !important;
+}
+
+.popup-content {
+    top: -15%;
+    width: 380px !important;
+    padding: 0 !important;
+}
+
+.authModal {
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 15px;
+        font: $font-med;
+        font-weight: $font-weight-bold;
+        border-bottom: 1px solid $color-grey-4;
+
+        > .button {
+            padding: 0;
+            font: $font-xl;
+            border: none;
+        }
+    }
+
+    &__content {
+        padding: 15px;
+
+        .title {
+            font: $font-xxl;
+            font-weight: $font-weight-bold;
+        }
+    }
+
+    &__footer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+        padding: 15px;
+
+        .button {
+            margin-top: 20px;
+            color: $color-primary;
+            border: none;
+
+            &--long {
+                width: 100%;
+                padding: 15px;
+                color: $color-white;
+                background: $color-primary;
+            }
+        }
+    }
+}
