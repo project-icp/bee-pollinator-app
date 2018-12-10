@@ -1,13 +1,15 @@
 import React from 'react';
-import { string } from 'prop-types';
+import { func, string } from 'prop-types';
+import { connect } from 'react-redux';
 
 import { Apiary } from '../propTypes';
 import { INDICATORS } from '../constants';
+import { setApiaryStar } from '../actions';
 
 import CardButton from './CardButton';
 import ScoresLabel from './ScoresLabel';
 
-const ApiaryCard = ({ apiary, forageRange }) => {
+const ApiaryCard = ({ apiary, forageRange, dispatch }) => {
     const {
         marker,
         name,
@@ -58,6 +60,8 @@ const ApiaryCard = ({ apiary, forageRange }) => {
             </div>
         );
 
+    const onStar = () => dispatch(setApiaryStar(apiary));
+
     return (
         <li className="card">
             <div className="card__top">
@@ -66,7 +70,7 @@ const ApiaryCard = ({ apiary, forageRange }) => {
                     <div className="card__name">{name}</div>
                 </div>
                 <div className="card__buttons">
-                    <CardButton icon="star" filled={starred} />
+                    <CardButton icon="star" filled={starred} onClick={onStar} />
                     <CardButton icon="clipboard" filled={surveyed} />
                     <CardButton icon="trash" filled />
                 </div>
@@ -81,6 +85,7 @@ const ApiaryCard = ({ apiary, forageRange }) => {
 ApiaryCard.propTypes = {
     apiary: Apiary.isRequired,
     forageRange: string.isRequired,
+    dispatch: func.isRequired,
 };
 
-export default ApiaryCard;
+export default connect()(ApiaryCard);

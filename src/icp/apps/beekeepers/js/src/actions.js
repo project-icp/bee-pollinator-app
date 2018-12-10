@@ -24,6 +24,9 @@ export const failSavingApiaryList = createAction('Fail saving apiary list');
 export const startFetchingApiaryList = createAction('Start fetching apiary list');
 export const completeFetchingApiaryList = createAction('Complete fetching apiary list');
 export const failFetchingApiaryList = createAction('Fail fetching apiary list');
+export const startUpdatingApiary = createAction('Start updating apiary');
+export const completeUpdatingApiary = createAction('Complete updating apiary');
+export const failUpdatingApiary = createAction('Fail updating apiary');
 
 
 export function fetchApiaryScores(apiaryList, forageRange) {
@@ -178,5 +181,41 @@ export function fetchUserApiaries() {
                 dispatch(setApiaryList(apiaryListWithData));
             })
             .catch(error => dispatch(failFetchingApiaryList(error)));
+    };
+}
+
+export function setApiaryStar(apiary) {
+    return (dispatch, getState) => {
+        const {
+            main: {
+                apiaries,
+            },
+            auth: {
+                userId,
+            },
+        } = getState();
+
+        const newList = apiaries.map((a) => {
+            if (a.lat === apiary.lat && a.lng === apiary.lng) {
+                return update(apiary, {
+                    starred: { $set: !apiary.starred },
+                });
+            }
+
+            return a;
+        });
+
+        dispatch(setApiaryList(newList));
+
+        if (userId && apiary.id) {
+            dispatch(startUpdatingApiary());
+
+            csrfRequest
+                .patch(`/beekeepers/apiary/${apiary.id}/`, {
+                    starred: !apiary.starred,
+                })
+                .then(() => dispatch(completeUpdatingApiary()))
+                .catch(error => dispatch(failUpdatingApiary(error)));
+        }
     };
 }
