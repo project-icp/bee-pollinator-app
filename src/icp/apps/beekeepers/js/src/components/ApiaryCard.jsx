@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { Apiary } from '../propTypes';
 import { INDICATORS } from '../constants';
-import { setApiaryStar } from '../actions';
+import { setApiaryStar, deleteApiary } from '../actions';
 
 import CardButton from './CardButton';
 import ScoresLabel from './ScoresLabel';
@@ -61,6 +61,7 @@ const ApiaryCard = ({ apiary, forageRange, dispatch }) => {
         );
 
     const onStar = () => dispatch(setApiaryStar(apiary));
+    const onDelete = () => dispatch(deleteApiary(apiary));
 
     return (
         <li className="card">
@@ -72,7 +73,7 @@ const ApiaryCard = ({ apiary, forageRange, dispatch }) => {
                 <div className="card__buttons">
                     <CardButton icon="star" filled={starred} onClick={onStar} />
                     <CardButton icon="clipboard" filled={surveyed} />
-                    <CardButton icon="trash" filled />
+                    <CardButton icon="trash" filled onClick={onDelete} />
                 </div>
             </div>
             <div className="card__bottom">
