@@ -18,6 +18,9 @@ export const openParticipateModal = createAction('Open participate modal');
 export const closeParticipateModal = createAction('Close participate modal');
 export const setAuthState = createAction('Set auth information to the state');
 export const clearAuthError = createAction('Clear saved auth error');
+export const startSavingApiaryList = createAction('Start saving apiary list');
+export const completeSavingApiaryList = createAction('Complete saving apiary list');
+export const failSavingApiaryList = createAction('Fail saving apiary list');
 
 
 export function fetchApiaryScores(apiaryList, forageRange) {
@@ -42,6 +45,9 @@ export function fetchApiaryScores(apiaryList, forageRange) {
         const {
             main: {
                 apiaries,
+            },
+            auth: {
+                userId,
             },
         } = getState();
 
@@ -71,25 +77,43 @@ export function fetchApiaryScores(apiaryList, forageRange) {
                 indicators: Object.values(INDICATORS),
             })
             .then(({ data }) => {
-                // TODO: Authenticated user should save apiaryListWithData to
-                // the database and update the redux store of apiaries
-                // from a GET/list call
-
-                // For unauthenticated user relying purely on redux/
-                // localStorage, manually update the apiary listings with data
-                const nonFetchingApiaryList = fetchingApiaries.filter(a => !a.fetching);
                 const apiaryListWithData = apiaryList.map((apiary, idx) => (
                     update(apiary, {
                         scores: {
                             [forageRange]: { $set: data[idx] },
                         },
-                        fetching: { $set: false },
                     })
                 ));
 
+                dispatch(completeFetchApiaryScores());
+
+                if (userId) {
+                    dispatch(startSavingApiaryList());
+
+                    return csrfRequest
+                        .post('/beekeepers/apiary/upsert/', apiaryListWithData)
+                        .then(({ data: upsertResponse }) => {
+                            dispatch(completeSavingApiaryList());
+                            return upsertResponse;
+                        })
+                        .catch(error => dispatch(failSavingApiaryList(error)));
+                }
+
+                // For unauthenticated user relying purely on redux/
+                // localStorage, manually update the apiary listings with data
+                return apiaryListWithData;
+            })
+            .then((upsertResponse) => {
+                // Add `fetching` and `selected` flags to upsert response.
+                // The response doesn't include these as they are UI only.
+                const apiaryListWithData = upsertResponse.map(apiary => update(apiary, {
+                    fetching: { $set: false },
+                    selected: { $set: false },
+                }));
+
+                const nonFetchingApiaryList = fetchingApiaries.filter(a => !a.fetching);
                 const newList = nonFetchingApiaryList.concat(apiaryListWithData);
 
-                dispatch(completeFetchApiaryScores());
                 dispatch(setApiaryList(newList));
             })
             .catch((error) => {
