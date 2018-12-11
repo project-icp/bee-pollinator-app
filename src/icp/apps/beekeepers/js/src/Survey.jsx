@@ -6,7 +6,7 @@ import SignUpModal from './components/SignUpModal';
 import LoginModal from './components/LoginModal';
 import ParticipateModal from './components/ParticipateModal';
 
-const Surveys = () => (
+const Survey = () => (
     <>
         <Header />
         <main>
@@ -17,4 +17,4 @@ const Surveys = () => (
     </>
 );
 
-export default hot(module)(Surveys);
+export default hot(module)(Survey);

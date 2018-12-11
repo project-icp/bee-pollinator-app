@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 import { func, string } from 'prop-types';
 
 import { openParticipateModal, openLoginModal } from '../actions';
@@ -43,6 +44,8 @@ const Header = ({ dispatch, username }) => {
             <div className="navbar">
                 <div className="navbar__logo">
                     Landscape4Bees
+                    <NavLink exact to="/" className="navbar__item">Location finder</NavLink>
+                    <NavLink to="/survey" className="navbar__item">Survey</NavLink>
                 </div>
                 <ul className="navbar__items">
                     <li className="navbar__item">

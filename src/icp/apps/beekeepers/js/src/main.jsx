@@ -7,7 +7,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import '../../sass/main.scss';
 import App from './App';
-import Surveys from './Surveys';
+import Survey from './Survey';
 
 import { store, persistor } from './store';
 
@@ -19,7 +19,7 @@ render(
             <BrowserRouter>
                 <Switch>
                     <Route exact path="/" component={App} />
-                    <Route path="/surveys" component={Surveys} />
+                    <Route path="/survey" component={Survey} />
                 </Switch>
             </BrowserRouter>
         </PersistGate>
