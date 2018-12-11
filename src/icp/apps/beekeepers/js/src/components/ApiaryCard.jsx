@@ -50,9 +50,9 @@ const ApiaryCard = ({ apiary, forageRange }) => {
                 <ScoresLabel
                     indicator="forage"
                     scores={[
-                        values[INDICATORS.FORAGE_SPRING],
-                        values[INDICATORS.FORAGE_SUMMER],
-                        values[INDICATORS.FORAGE_FALL],
+                        values[INDICATORS.FLORAL_SPRING],
+                        values[INDICATORS.FLORAL_SUMMER],
+                        values[INDICATORS.FLORAL_FALL],
                     ]}
                 />
             </div>
