@@ -89,3 +89,34 @@ class Survey(models.Model):
 
     def __unicode__(self):
         return self.month_year
+
+
+class AprilSurvey(models.Model):
+    """
+    A short survey taken in April by all users.
+
+    Has only one question:
+      - What do you think the most likely cause of colony loss was?
+
+    The answers can be:
+      - varroa mites
+      - inadequate food stores
+      - poor queens
+      - poor weather conditions
+      - colony too small in November
+      - pesticide exposure
+      - other (fillable field)
+
+    Multiple selections are possible, and will be separated by a semicolon.
+    Answers to "other" will be prefixed with OTHER- to indicate so. E.g.
+
+    "VARROA_MITES;INADEQUATE_FOOD_STORES;OTHER-negligence"
+    """
+
+    survey = models.OneToOneField(
+        Survey,
+        primary_key=True,
+        related_name='april')
+    colony_loss_reason = models.TextField(
+        null=False,
+        help_text='The most likely causes for colony loss')
