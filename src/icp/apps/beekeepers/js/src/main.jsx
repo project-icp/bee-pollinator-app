@@ -1,12 +1,13 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import '../../sass/main.scss';
 import App from './App';
+import Surveys from './Surveys';
 
 import { store, persistor } from './store';
 
@@ -16,7 +17,10 @@ render(
             https://github.com/project-icp/bee-pollinator-app/issues/314 */}
         <PersistGate loading={null} persistor={persistor}>
             <BrowserRouter>
-                <Route exact path="/" component={App} />
+                <Switch>
+                    <Route exact path="/" component={App} />
+                    <Route path="/surveys" component={Surveys} />
+                </Switch>
             </BrowserRouter>
         </PersistGate>
     </Provider>,
