@@ -85,7 +85,7 @@ class Survey(models.Model):
         help_text='The kind of survey this is')
 
     class Meta:
-        unique_together = ('month_year', 'apiary')
+        unique_together = ('month_year', 'apiary', 'survey_type')
 
     def __unicode__(self):
         return self.month_year
