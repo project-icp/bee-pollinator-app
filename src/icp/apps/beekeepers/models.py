@@ -202,3 +202,106 @@ class NovemberSurvey(models.Model):
         null=True,
         help_text='What methods of mite management do you use? '
                   'Select all that apply.')
+
+
+class MonthlySurvey(models.Model):
+    """
+    A long survey taken every month by Pro users.
+
+    This survey corresponds to a single colony in an apiary. Users can submit
+    the monthly survey for up to three colonies per apiary.
+    """
+
+    SAME_QUEEN_CHOICES = (
+        ('YES', 'Yes'),
+        ('NO_BEEKEEPER_REPLACED', 'No. Beekeeper Replaced.'),
+        ('NO_SWARM', 'No. Swarm.'),
+        ('NO_SUPERSEDURE', 'No. Supersedure.'),
+        ('NO_QUEEN_DEATH', 'No. Queen Death.'),
+    )
+
+    QUEEN_SOURCES = (
+        ('NON_LOCAL_COMMERCIAL', 'Non-local commercial breeder'),
+        ('LOCAL_COMMERCIAL', 'Local commercial breeder'),
+        ('REQUEENED', 'Colony requeened itself'),
+        ('PACKAGE', 'Package'),
+        ('FERAL', 'Feral colony or swarm'),
+    )
+
+    survey = models.ForeignKey(
+        Survey,
+        related_name='monthlies')
+    inspection_date = models.DateField(
+        null=False,
+        help_text='Date of Inspection')
+    colony_name = models.CharField(
+        max_length=255,
+        null=False,
+        help_text='Colony Name')
+    colony_alive = models.BooleanField(
+        null=False,
+        help_text='Is the colony alive?')
+    colony_loss_reason = models.TextField(
+        null=False,
+        help_text='The most likely causes for colony loss')
+    num_bodies_supers_deep = models.IntegerField(
+        null=True,
+        help_text='Total number of hive bodies and supers (deep)')
+    num_bodies_supers_medium = models.IntegerField(
+        null=True,
+        help_text='Total number of hive bodies and supers (medium)')
+    num_bodies_supers_shallow = models.IntegerField(
+        null=True,
+        help_text='Total number of hive bodies and supers (shallow)')
+    activity_since_last = models.CharField(
+        # REMOVED_HONEY;REMOVED_BROOD;FED_POLLEN_PROTEIN;FED_SUGAR
+        max_length=255,
+        null=True,
+        help_text='Since the last assessment have you: '
+                  'removed honey, removed brood, '
+                  'fed pollen or protein, fed sugar? '
+                  'Select all that apply.')
+    queenright = models.BooleanField(
+        null=False,
+        help_text='Is the colony queenright?')
+    same_queen = models.CharField(
+        max_length=255,
+        null=False,
+        choices=SAME_QUEEN_CHOICES,
+        help_text='Is this the same queen from the last assessment?')
+    queen_stock = models.CharField(
+        max_length=255,
+        null=True,
+        help_text='To the best of your knowledge, '
+                  'what is the stock of the queen?')
+    queen_source = models.CharField(
+        max_length=255,
+        null=False,
+        choices=QUEEN_SOURCES,
+        help_text='Where did the queen come from?')
+    varroa_count_performed = models.BooleanField(
+        null=False,
+        help_text='Did you do a Varroa count?')
+    varroa_count_technique = models.CharField(
+        # ALCOHOL_WASH;SUGAR_SHAKE;STICKY_BOARDS;OTHER-
+        max_length=255,
+        null=True,
+        help_text='How did you do a Varroa count?')
+    varroa_count_result = models.IntegerField(
+        null=True,
+        help_text='Number of mites per 300 bees (1/2 cup)')
+    varroa_treatment = models.TextField(
+        # CHEMICAL_FORMIC_ACID_MAQS;CHEMICAL_FORMIC_ACID_FORMIC_PRO;
+        # CHEMICAL_OXALIC_ACID_VAPORIZATION;CHEMICAL_OXALIC_ACID_DRIBBLE;
+        # CHEMICAL_THYMOL_MENTHOL_APILIFE;CHEMICAL_THYMOL_MENTHOL_APIGUARD;
+        # CHEMICAL_SYNTHETIC_APIVAR;CHEMICAL_SYNTHETIC_APISTAN;
+        # CHEMICAL_SYNTHETIC_CHECKMITE_PLUS;CHEMICAL_OTHER_ORGANIC-
+        # MECHANICAL_DRONE_BROOD_REMOVAL;MECHANICAL_QUEEN_MANIPULATION;
+        # MECHANICAL_OTHER-
+        # OTHER-
+        null=True,
+        help_text='What methods of mite management do you use? '
+                  'Select all that apply.')
+
+    class Meta:
+        unique_together = ('survey', 'colony_name')
