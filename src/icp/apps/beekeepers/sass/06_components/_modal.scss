@@ -3,7 +3,6 @@
 }
 
 .popup-content {
-    top: -15%;
     width: 380px !important;
     padding: 0 !important;
 }
@@ -11,6 +10,7 @@
 .authModal {
     .button {
         color: $color-primary;
+        background-color: $color-white;
         border: none;
 
         &--long {
@@ -19,6 +19,7 @@
             padding: 15px;
             color: $color-white;
             background: $color-primary;
+            border: none;
         }
     }
 

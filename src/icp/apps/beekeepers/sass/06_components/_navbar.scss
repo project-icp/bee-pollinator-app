@@ -18,19 +18,21 @@
 
     &__item {
         margin-left: 1.4rem;
-        color: $color-black;
+        color: $color-grey-2;
         font-weight: normal;
         font-size: 14px;
         text-decoration: none;
         list-style: none;
 
         &.active {
+            color: $color-black;
             text-decoration: underline;
         }
     }
 
     &__button {
         padding: 0;
+        color: $color-grey-2;
         font-size: 14px;
         background: none;
         border: none;
@@ -39,6 +41,7 @@
             padding: 9px;
             color: $color-white;
             background: $color-primary;
+            border: none;
         }
     }
 }
