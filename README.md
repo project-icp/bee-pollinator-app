@@ -312,5 +312,8 @@ has been created using the following steps:
 gdalbuildvrt pesticide_3km.vrt PA_pesticide_3km.tif IL_pesticide_3km.tif
 ```
 
+A convenience script has been added to `scripts/make-vrts.sh` which contains the `gdalbuildvrt`
+commands used to generate the existing IN, IL & PA VRTs.  It can be modified to regenerate
+with additional states in the future.
 Once a VRT has been created for each layer/radius, both VRT and tifs are uploaded
 to the data bucket under a folder indicating 3km or 5km.
