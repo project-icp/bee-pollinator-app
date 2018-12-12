@@ -1,16 +1,14 @@
 import React from 'react';
+import { Route, Switch } from 'react-router-dom';
 import { func, number } from 'prop-types';
 import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
 
-import Header from './components/Header';
 import Map from './components/Map';
 import Sidebar from './components/Sidebar';
-import SignUpModal from './components/SignUpModal';
-import LoginModal from './components/LoginModal';
-import ParticipateModal from './components/ParticipateModal';
 
 import { login, fetchUserApiaries } from './actions';
+import Survey from './Survey';
 
 class App extends React.Component {
     componentDidMount() {
@@ -28,17 +26,17 @@ class App extends React.Component {
     }
 
     render() {
-        return (
+        const locationFinder = () => (
             <>
-                <Header />
-                <main>
-                    <ParticipateModal />
-                    <SignUpModal />
-                    <LoginModal />
-                    <Map />
-                    <Sidebar />
-                </main>
+                <Map />
+                <Sidebar />
             </>
+        );
+        return (
+            <Switch>
+                <Route exact path="/" component={locationFinder} />
+                <Route path="/survey" component={Survey} />
+            </Switch>
         );
     }
 }
