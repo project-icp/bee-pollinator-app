@@ -187,8 +187,8 @@ export function fetchUserApiaries() {
     };
 }
 
-export function setApiaryStar(apiary) {
-    return (dispatch, getState) => {
+function toggleApiaryFlag(flag) {
+    return apiary => (dispatch, getState) => {
         const {
             main: {
                 apiaries,
@@ -201,7 +201,7 @@ export function setApiaryStar(apiary) {
         const newList = apiaries.map((a) => {
             if (a.lat === apiary.lat && a.lng === apiary.lng) {
                 return update(apiary, {
-                    starred: { $set: !apiary.starred },
+                    [flag]: { $set: !apiary[flag] },
                 });
             }
 
@@ -215,13 +215,16 @@ export function setApiaryStar(apiary) {
 
             csrfRequest
                 .patch(`/beekeepers/apiary/${apiary.id}/`, {
-                    starred: !apiary.starred,
+                    [flag]: !apiary[flag],
                 })
                 .then(() => dispatch(completeUpdatingApiary()))
                 .catch(error => dispatch(failUpdatingApiary(error)));
         }
     };
 }
+
+export const setApiaryStar = toggleApiaryFlag('starred');
+export const setApiarySurvey = toggleApiaryFlag('surveyed');
 
 export function deleteApiary(apiary) {
     return (dispatch, getState) => {
