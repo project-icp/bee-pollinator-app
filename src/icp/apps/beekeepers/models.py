@@ -305,3 +305,107 @@ class MonthlySurvey(models.Model):
 
     class Meta:
         unique_together = ('survey', 'colony_name')
+
+
+class UserSurvey(models.Model):
+    """
+    A survey that all users have to take
+    """
+
+    user = models.OneToOneField(
+        AUTH_USER_MODEL,
+        related_name='beekeeper_user_survey')
+    contribution_level = models.CharField(
+        max_length=255,
+        null=False,
+        choices=(
+            ('PRO', 'Pro'),
+            ('LIGHT', 'Light'),
+        ),
+        help_text='What level will you contribute at? '
+                  'Light users fill out a brief survey in April, '
+                  'and a detailed on in November. '
+                  'Pro users have to additionally fill out monthly surveys.')
+    email = models.CharField(
+        max_length=255,
+        null=False,
+        help_text='Email')
+    phone = models.CharField(
+        max_length=255,
+        null=False,
+        help_text='Phone')
+    preferred_contact = models.CharField(
+        max_length=10,
+        null=False,
+        choices=(
+            ('EMAIL', 'Email'),
+            ('PHONE', 'Phone'),
+        ),
+        help_text='Do you prefer email or phone?')
+    year_began = models.PositiveIntegerField(
+        null=False,
+        help_text='What year did you start keeping bees?')
+    organization = models.TextField(
+        null=True,
+        help_text='Are you part of a Beekeeper\'s Organization or Club? '
+                  'Which one?')
+    total_colonies = models.CharField(
+        max_length=255,
+        null=False,
+        choices=(
+            ('BETWEEN_1_AND_3', '1-3'),
+            ('BETWEEN_4_AND_7', '4-7'),
+            ('BETWEEN_8_AND_25', '8-25'),
+            ('BETWEEN_26_AND_59', '26-59'),
+            ('BETWEEN_60_AND_99', '100-499'),
+            ('BETWEEN_500_AND_2000', '500-2000'),
+            ('MORE_THAN_2000', 'More than 2000'),
+        ),
+        help_text='How many total colonies do you manage?')
+    relocate = models.BooleanField(
+        null=False,
+        help_text='Do you relocate your colonies throughout the year?')
+    income = models.CharField(
+        # RENT_COLONIES_FOR_POLLINATION; SELL_HONEY; SELL_NUCS_PACKAGES;
+        # SELL_QUEENS; NO_INCOME
+        max_length=255,
+        null=False,
+        help_text='Do you obtain income for your bees? '
+                  'What do you receive income from? '
+                  'Check all that apply.')
+    practice = models.CharField(
+        max_length=255,
+        null=False,
+        choices=(
+            ('CONVENTIONAL', 'Conventional'),
+            ('ORGANIC', 'Organic'),
+            ('NATURAL', 'Natural'),
+        ),
+        help_text='What best describes your beekeeping practice?')
+    varroa_management = models.BooleanField(
+        null=False,
+        help_text='Do you manage for Varroa?')
+    varroa_management_trigger = models.TextField(
+        null=True,
+        help_text='How do you decide when to manage for Varroa?')
+    purchased_queens = models.BooleanField(
+        null=False,
+        help_text='Do you buy queens, nucs or packages?')
+    purchased_queens_sources = models.TextField(
+        null=True,
+        help_text='Please provide the state(s) '
+                  'where your purchased bees originated from')
+    resistant_queens = models.BooleanField(
+        null=False,
+        help_text='Do you use Varroa-resistant queens?')
+    resistant_queens_genetics = models.TextField(
+        null=True,
+        help_text='Describe their genetics')
+    rear_queens = models.BooleanField(
+        null=False,
+        help_text='Do you rear queens?')
+    equipment = models.TextField(
+        # 8_FRAME_LANGSTROTH; 10_FRAME_LANGSTROTH; TOP_BAR; OTHER-
+        null=False,
+        help_text='What kind of equipment do you use?'
+                  'Check all that apply.')
