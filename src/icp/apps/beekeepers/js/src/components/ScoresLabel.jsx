@@ -6,7 +6,12 @@ import { toDashedString, toSpacedString } from '../utils';
 
 
 function generateScore(data, error) {
-    return error ? NaN : Math.round(data);
+    // Handle nodata values by representing as a 'double-dash'
+    if (data < 0) {
+        return '--';
+    }
+
+    return error ? NaN : Math.round(data * 100);
 }
 
 const ScoresLabel = ({ indicator, scores }) => {

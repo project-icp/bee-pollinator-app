@@ -5,11 +5,11 @@ export const FORAGE_RANGES = [FORAGE_RANGE_3KM, FORAGE_RANGE_5KM];
 export const DEFAULT_SORT = 'default';
 
 export const INDICATORS = {
-    NESTING_QUALITY: 'nesting_quality',
+    NESTING_QUALITY: 'nesting',
     PESTICIDE: 'pesticide',
-    FORAGE_SPRING: 'forage_spring',
-    FORAGE_SUMMER: 'forage_summer',
-    FORAGE_FALL: 'forage_fall',
+    FLORAL_SPRING: 'floral_spring',
+    FLORAL_SUMMER: 'floral_summer',
+    FLORAL_FALL: 'floral_fall',
 };
 
 export const SORT_OPTIONS = [DEFAULT_SORT].concat(Object.values(INDICATORS));

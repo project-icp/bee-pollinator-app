@@ -39,7 +39,7 @@ def fetch_data(request):
     for location in locations:
         all_location_data = {}
         for indicator in indicators:
-            s3_filename = '{}_{}.tif'.format(indicator, forage_range)
+            s3_filename = '{}_{}.vrt'.format(indicator, forage_range)
             s3_url = 's3://{}/{}/{}'.format(
                 DATA_BUCKET,
                 forage_range,
