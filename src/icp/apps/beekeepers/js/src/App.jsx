@@ -1,11 +1,16 @@
 import React from 'react';
 import { func, number } from 'prop-types';
 import { hot } from 'react-hot-loader';
+import {
+    Switch,
+    Route,
+} from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import Header from './components/Header';
 import Map from './components/Map';
+import Header from './components/Header';
 import Sidebar from './components/Sidebar';
+import Survey from './Survey';
 import SignUpModal from './components/SignUpModal';
 import LoginModal from './components/LoginModal';
 import ParticipateModal from './components/ParticipateModal';
@@ -28,6 +33,12 @@ class App extends React.Component {
     }
 
     render() {
+        const locationFinder = () => (
+            <>
+                <Map />
+                <Sidebar />
+            </>
+        );
         return (
             <>
                 <Header />
@@ -35,8 +46,10 @@ class App extends React.Component {
                     <ParticipateModal />
                     <SignUpModal />
                     <LoginModal />
-                    <Map />
-                    <Sidebar />
+                    <Switch>
+                        <Route path="/survey" component={Survey} />
+                        <Route render={locationFinder} />
+                    </Switch>
                 </main>
             </>
         );

@@ -16,7 +16,7 @@ render(
             https://github.com/project-icp/bee-pollinator-app/issues/314 */}
         <PersistGate loading={null} persistor={persistor}>
             <BrowserRouter>
-                <Route exact path="/" component={App} />
+                <Route component={App} />
             </BrowserRouter>
         </PersistGate>
     </Provider>,
