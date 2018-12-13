@@ -1,10 +1,7 @@
 import React from 'react';
-import { hot } from 'react-hot-loader';
 
 const Survey = () => (
-    <div>
-        Survey component
-    </div>
+    <div>Survey</div>
 );
 
-export default hot(module)(Survey);
+export default Survey;

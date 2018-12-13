@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import { func, string } from 'prop-types';
 
 import { openParticipateModal, openLoginModal } from '../actions';
@@ -74,4 +74,4 @@ Header.propTypes = {
     username: string.isRequired,
 };
 
-export default connect(mapStateToProps)(Header);
+export default withRouter(connect(mapStateToProps)(Header));
