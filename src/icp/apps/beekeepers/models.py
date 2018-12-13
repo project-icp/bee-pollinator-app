@@ -88,7 +88,11 @@ class Survey(models.Model):
         unique_together = ('month_year', 'apiary', 'survey_type')
 
     def __unicode__(self):
-        return self.month_year
+        return unicode('{}:{}:{}:{}'.format(
+            self.apiary.user.username,
+            self.apiary.name,
+            self.month_year,
+            self.survey_type))
 
 
 class AprilSurvey(models.Model):
@@ -120,6 +124,12 @@ class AprilSurvey(models.Model):
     colony_loss_reason = models.TextField(
         null=False,
         help_text='The most likely causes for colony loss')
+
+    def __unicode__(self):
+        return unicode('{}:{}:{}'.format(
+            self.survey.apiary.user.username,
+            self.survey.apiary.name,
+            self.survey.month_year))
 
 
 class NovemberSurvey(models.Model):
@@ -202,6 +212,12 @@ class NovemberSurvey(models.Model):
         null=True,
         help_text='What methods of mite management do you use? '
                   'Select all that apply.')
+
+    def __unicode__(self):
+        return unicode('{}:{}:{}'.format(
+            self.survey.apiary.user.username,
+            self.survey.apiary.name,
+            self.survey.month_year))
 
 
 class MonthlySurvey(models.Model):
@@ -306,6 +322,12 @@ class MonthlySurvey(models.Model):
     class Meta:
         unique_together = ('survey', 'colony_name')
 
+    def __unicode__(self):
+        return unicode('{}:{}:{}'.format(
+            self.survey.apiary.user.username,
+            self.survey.apiary.name,
+            self.survey.month_year))
+
 
 class UserSurvey(models.Model):
     """
@@ -409,3 +431,6 @@ class UserSurvey(models.Model):
         null=False,
         help_text='What kind of equipment do you use?'
                   'Check all that apply.')
+
+    def __unicode__(self):
+        return unicode('{}'.format(self.user.username))
