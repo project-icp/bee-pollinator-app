@@ -60,6 +60,11 @@ class Map extends Component {
     onClickAddMarker(event) {
         const { forageRange, apiaries, dispatch } = this.props;
 
+        // Ignore clicks when using a map control
+        if (event.originalEvent.target.className.includes('control')) {
+            return;
+        }
+
         // Traffic cop, prevent simultaneous, clobbered updates to the state
         // by only allowing 1 new apiary at a time
         if (apiaries.find(a => !!a.fetching)) {
