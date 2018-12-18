@@ -6,6 +6,7 @@ import {
     Marker,
     ZoomControl,
 } from 'react-leaflet';
+import * as L from 'leaflet';
 import { connect } from 'react-redux';
 import { arrayOf, func, string } from 'prop-types';
 
@@ -23,6 +24,10 @@ class Map extends Component {
         super();
         this.onClickAddMarker = this.onClickAddMarker.bind(this);
         this.mapRef = createRef();
+
+        // click-differentiating handlers
+        this.mapClickCount = 0;
+        this.timeoutId = null;
     }
 
     componentDidMount() {
@@ -60,34 +65,46 @@ class Map extends Component {
     onClickAddMarker(event) {
         const { forageRange, apiaries, dispatch } = this.props;
 
-        // Ignore clicks when using a map control
+        // Ignore clicks on a map control
         if (event.originalEvent.target.className.includes('control')) {
             return;
         }
 
-        // Traffic cop, prevent simultaneous, clobbered updates to the state
-        // by only allowing 1 new apiary at a time
-        if (apiaries.find(a => !!a.fetching)) {
-            return;
+        // Listen for double click before creating apiary
+        // Direct implementation of https://github.com/azavea/Leaflet.favorDoubleClick
+        this.mapClickCount += 1;
+        if (this.mapClickCount > 1) {
+            clearTimeout(this.timeoutId);
+            L.DomEvent.stopPropagation(event);
         }
+        this.timeoutId = setTimeout(() => {
+            if (this.mapClickCount === 1) {
+                // Traffic cop, prevent simultaneous, clobbered updates to the state
+                // by only allowing 1 new apiary at a time
+                if (apiaries.find(a => !!a.fetching)) {
+                    return;
+                }
 
-        const newApiary = {
-            name: 'dummy name',
-            marker: 'F',
-            lat: event.latlng.lat,
-            lng: event.latlng.lng,
-            scores: {
-                [FORAGE_RANGE_3KM]: {},
-                [FORAGE_RANGE_5KM]: {},
-            },
-            fetching: false,
-            selected: false,
-            starred: false,
-            surveyed: false,
-        };
-        const newApiaryList = apiaries.concat(newApiary);
-        dispatch(setApiaryList(newApiaryList));
-        dispatch(fetchApiaryScores([newApiary], forageRange));
+                const newApiary = {
+                    name: 'dummy name',
+                    marker: 'F',
+                    lat: event.latlng.lat,
+                    lng: event.latlng.lng,
+                    scores: {
+                        [FORAGE_RANGE_3KM]: {},
+                        [FORAGE_RANGE_5KM]: {},
+                    },
+                    fetching: false,
+                    selected: false,
+                    starred: false,
+                    surveyed: false,
+                };
+                const newApiaryList = apiaries.concat(newApiary);
+                dispatch(setApiaryList(newApiaryList));
+                dispatch(fetchApiaryScores([newApiary], forageRange));
+            }
+            this.mapClickCount = 0;
+        }, 300);
     }
 
     render() {
