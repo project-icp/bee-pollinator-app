@@ -437,3 +437,10 @@ class UserSurvey(models.Model):
 
     def __unicode__(self):
         return unicode('{}'.format(self.user.username))
+
+
+SUBSURVEY_MODELS = {
+    'APRIL': AprilSurvey,
+    'NOVEMBER': NovemberSurvey,
+    'MONTHLY': MonthlySurvey,
+}

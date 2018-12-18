@@ -11,8 +11,12 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.status import HTTP_204_NO_CONTENT
 
-from models import Apiary, Survey
-from serializers import ApiarySerializer, SurveySerializer
+from models import Apiary, Survey, SUBSURVEY_MODELS
+from serializers import (
+    ApiarySerializer,
+    SurveySerializer,
+    SUBSURVEY_SERIALIZERS,
+)
 from tasks import sample_at_point
 
 
@@ -55,26 +59,48 @@ def fetch_data(request):
 @decorators.api_view(['POST'])
 @decorators.permission_classes((IsAuthenticated, ))
 def create_survey(request, apiary_id=None):
-        request.data.get('apiary_id')
-        apiary = Apiary.objects.get(id=apiary_id)
-        serialized_data = SurveySerializer(data=request.data)
+        """Create a survey and subsurvey from subsurvey form data
+        Request data expected as {"survey: {...}, ...}
+        """
+        # validate survey data
+        survey_data = request.data['survey']
+        serialized_survey = SurveySerializer(data=survey_data)
 
-        if serialized_data.is_valid():
+        if serialized_survey.is_valid():
             try:
-                serialized_data.save()
-                return Response(serialized_data.data, status=201)
+                survey_type = survey_data['survey_type']
+                subsurvey_serializer = SUBSURVEY_SERIALIZERS[survey_type]
+                subsurvey_data = request.data
+                subsurvey_data['survey'] = serialized_survey.data
+                serialized_subsurvey = subsurvey_serializer(
+                    data=subsurvey_data
+                )
+
+                if serialized_subsurvey.is_valid():
+                    try:
+                        serialized_subsurvey.save()
+                        return Response(serialized_subsurvey.data, status=201)
+                    except Exception as e:
+                        return Response(str(e), status=400)
             except:
-                Response(serialized_data.errors, status=400)
-        return Response(serialized_data.errors, status=400)
+                return Response(serialized_survey.errors, status=400)
+
+        return Response(serialized_survey.errors, status=400)
 
 
 @decorators.api_view(['GET'])
 @decorators.permission_classes((IsAuthenticated, ))
 def get_survey(request, apiary_id=None, survey_id=None):
+    """Retrieve a survey and its subsurvey."""
     survey = get_object_or_404(Survey,
                                apiary=apiary_id,
                                id=survey_id)
-    serialized_data = SurveySerializer(survey)
+    survey_type = survey.survey_type
+    subsurvey = get_object_or_404(SUBSURVEY_MODELS[survey_type],
+                                  survey__apiary=apiary_id,
+                                  survey=survey_id)
+    serializer = SUBSURVEY_SERIALIZERS[survey_type]
+    serialized_data = serializer(subsurvey)
     return Response(serialized_data.data)
 
 
