@@ -12,8 +12,13 @@ from apps.beekeepers import views
 router = routers.DefaultRouter()
 router.register(r'apiary', views.ApiaryViewSet)
 
+
 urlpatterns = patterns(
     '',
-    url(r'^', include(router.urls)),
     url(r'fetch/$', views.fetch_data, name='fetch_data'),
+    url(r'^apiary/(?P<apiary_id>[0-9]+)/survey/$',
+        views.create_survey, name='survey-create'),
+    url(r'^apiary/(?P<apiary_id>[0-9]+)/survey/(?P<survey_id>[0-9]+)/$',
+        views.get_survey, name='survey-get'),
+    url(r'^', include(router.urls)),
 )

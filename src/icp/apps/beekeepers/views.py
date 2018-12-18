@@ -11,8 +11,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.status import HTTP_204_NO_CONTENT
 
-from models import Apiary
-from serializers import ApiarySerializer
+from models import Apiary, Survey
+from serializers import ApiarySerializer, SurveySerializer
 from tasks import sample_at_point
 
 
@@ -50,6 +50,32 @@ def fetch_data(request):
         resp.append(all_location_data)
 
     return Response(resp)
+
+
+@decorators.api_view(['POST'])
+@decorators.permission_classes((IsAuthenticated, ))
+def create_survey(request, apiary_id=None):
+        request.data.get('apiary_id')
+        apiary = Apiary.objects.get(id=apiary_id)
+        serialized_data = SurveySerializer(data=request.data)
+
+        if serialized_data.is_valid():
+            try:
+                serialized_data.save()
+                return Response(serialized_data.data, status=201)
+            except:
+                Response(serialized_data.errors, status=400)
+        return Response(serialized_data.errors, status=400)
+
+
+@decorators.api_view(['GET'])
+@decorators.permission_classes((IsAuthenticated, ))
+def get_survey(request, apiary_id=None, survey_id=None):
+    survey = get_object_or_404(Survey,
+                               apiary=apiary_id,
+                               id=survey_id)
+    serialized_data = SurveySerializer(survey)
+    return Response(serialized_data.data)
 
 
 class ApiaryViewSet(viewsets.ModelViewSet):
