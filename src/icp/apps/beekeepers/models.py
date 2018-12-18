@@ -48,6 +48,9 @@ class Apiary(models.Model):
         null=True,
         help_text='When was the Apiary deleted')
 
+    class Meta:
+        unique_together = ('user', 'lat', 'lng')
+
     def __unicode__(self):
         return unicode('{}:{}'.format(self.user.username, self.name))
 
