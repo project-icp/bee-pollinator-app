@@ -19,7 +19,7 @@ import {
     FORAGE_RANGE_3KM,
     FORAGE_RANGE_5KM,
 } from '../constants';
-import { isSameLocation } from '../utils';
+import { getNextInSequence, isSameLocation } from '../utils';
 
 class Map extends Component {
     constructor() {
@@ -94,9 +94,19 @@ class Map extends Component {
                     return;
                 }
 
+                const marker = (() => {
+                    if (apiaries.length === 0) {
+                        return 'A';
+                    }
+
+                    const lastMarker = apiaries[apiaries.length - 1].marker;
+
+                    return getNextInSequence(lastMarker);
+                })();
+
                 const newApiary = {
                     name: 'Apiary',
-                    marker: 'F',
+                    marker,
                     lat: event.latlng.lat,
                     lng: event.latlng.lng,
                     scores: {
