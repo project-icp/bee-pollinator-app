@@ -85,11 +85,18 @@ class Map extends Component {
                     return;
                 }
 
+                // Ignore clicks where an apiary exists
+                const eventLat = event.latlng.lat;
+                const eventLng = event.latlng.lng;
+                if (apiaries.find(a => a.lat === eventLat && a.lng === eventLng)) {
+                    return;
+                }
+
                 const newApiary = {
                     name: 'dummy name',
                     marker: 'F',
-                    lat: event.latlng.lat,
-                    lng: event.latlng.lng,
+                    lat: eventLat,
+                    lng: eventLng,
                     scores: {
                         [FORAGE_RANGE_3KM]: {},
                         [FORAGE_RANGE_5KM]: {},
