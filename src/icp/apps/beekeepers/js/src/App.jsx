@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import Map from './components/Map';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
-import Survey from './Survey';
+import Survey from './components/Survey';
 import SignUpModal from './components/SignUpModal';
 import LoginModal from './components/LoginModal';
 import ParticipateModal from './components/ParticipateModal';
