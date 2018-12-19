@@ -3,6 +3,7 @@ import update from 'immutability-helper';
 
 import csrfRequest from './csrfRequest';
 import { INDICATORS } from './constants';
+import { isSameLocation } from './utils';
 
 export const setSort = createAction('Set apiary sort');
 export const setForageRange = createAction('Set forage range');
@@ -65,7 +66,7 @@ export function fetchApiaryScores(apiaryList, forageRange) {
 
         // mark apiaries from input list as fetching data
         const fetchingApiaries = apiaries.map((apiary) => {
-            if (apiaryList.find(a => a.lat === apiary.lat && a.lng === apiary.lng)) {
+            if (apiaryList.find(a => isSameLocation(a, apiary))) {
                 return update(apiary, {
                     fetching: { $set: true },
                 });
@@ -199,7 +200,7 @@ function toggleApiaryFlag(flag) {
         } = getState();
 
         const newList = apiaries.map((a) => {
-            if (a.lat === apiary.lat && a.lng === apiary.lng) {
+            if (isSameLocation(a, apiary)) {
                 return update(apiary, {
                     [flag]: { $set: !apiary[flag] },
                 });
@@ -237,7 +238,7 @@ export function deleteApiary(apiary) {
             },
         } = getState();
 
-        const newList = apiaries.filter(a => a.lat !== apiary.lat || a.lng !== apiary.lng);
+        const newList = apiaries.filter(a => !isSameLocation(a, apiary));
 
         dispatch(setApiaryList(newList));
 

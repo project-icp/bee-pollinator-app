@@ -12,3 +12,7 @@ export function toTitleCase(value) {
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join('');
 }
+
+export function isSameLocation(a, b) {
+    return a.lat === b.lat && a.lng === b.lng;
+}
