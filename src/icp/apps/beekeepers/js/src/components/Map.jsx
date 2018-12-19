@@ -1,5 +1,6 @@
 import React, { Component, createRef } from 'react';
 import * as esri from 'esri-leaflet-geocoder';
+import update from 'immutability-helper';
 import {
     Map as LeafletMap,
     TileLayer,
@@ -11,19 +12,21 @@ import { connect } from 'react-redux';
 import { arrayOf, func, string } from 'prop-types';
 
 import { Apiary } from '../propTypes';
-import { fetchApiaryScores, setApiaryList } from '../actions';
+import { fetchApiaryScores, setApiaryList, updateApiary } from '../actions';
 import {
     MAP_CENTER,
     MAP_ZOOM,
     FORAGE_RANGE_3KM,
     FORAGE_RANGE_5KM,
 } from '../constants';
+import { isSameLocation } from '../utils';
 
 class Map extends Component {
     constructor() {
         super();
         this.onClickAddMarker = this.onClickAddMarker.bind(this);
         this.mapRef = createRef();
+        this.addressLookup = (new esri.GeocodeService()).reverse();
 
         // click-differentiating handlers
         this.mapClickCount = 0;
@@ -77,6 +80,7 @@ class Map extends Component {
             clearTimeout(this.timeoutId);
             L.DomEvent.stopPropagation(event);
         }
+
         this.timeoutId = setTimeout(() => {
             if (this.mapClickCount === 1) {
                 // Traffic cop, prevent simultaneous, clobbered updates to the state
@@ -86,30 +90,41 @@ class Map extends Component {
                 }
 
                 // Ignore clicks where an apiary exists
-                const eventLat = event.latlng.lat;
-                const eventLng = event.latlng.lng;
-                if (apiaries.find(a => a.lat === eventLat && a.lng === eventLng)) {
+                if (apiaries.find(a => isSameLocation(a, event.latlng))) {
                     return;
                 }
 
                 const newApiary = {
-                    name: 'dummy name',
+                    name: 'Apiary',
                     marker: 'F',
-                    lat: eventLat,
-                    lng: eventLng,
+                    lat: event.latlng.lat,
+                    lng: event.latlng.lng,
                     scores: {
                         [FORAGE_RANGE_3KM]: {},
                         [FORAGE_RANGE_5KM]: {},
                     },
-                    fetching: false,
+                    fetching: true,
                     selected: false,
                     starred: false,
                     surveyed: false,
                 };
                 const newApiaryList = apiaries.concat(newApiary);
                 dispatch(setApiaryList(newApiaryList));
-                dispatch(fetchApiaryScores([newApiary], forageRange));
+
+                this.addressLookup.latlng(event.latlng).run((error, result) => {
+                    const name = result && result.address
+                        ? result.address.Match_addr
+                        : 'Apiary';
+
+                    const apiary = update(newApiary, {
+                        name: { $set: name },
+                    });
+
+                    dispatch(updateApiary(apiary));
+                    dispatch(fetchApiaryScores([apiary], forageRange));
+                });
             }
+
             this.mapClickCount = 0;
         }, 300);
     }
