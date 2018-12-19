@@ -188,8 +188,8 @@ export function fetchUserApiaries() {
     };
 }
 
-function toggleApiaryFlag(flag) {
-    return apiary => (dispatch, getState) => {
+export function updateApiary(apiary) {
+    return (dispatch, getState) => {
         const {
             main: {
                 apiaries,
@@ -201,9 +201,7 @@ function toggleApiaryFlag(flag) {
 
         const newList = apiaries.map((a) => {
             if (isSameLocation(a, apiary)) {
-                return update(apiary, {
-                    [flag]: { $set: !apiary[flag] },
-                });
+                return apiary;
             }
 
             return a;
@@ -215,12 +213,22 @@ function toggleApiaryFlag(flag) {
             dispatch(startUpdatingApiary());
 
             csrfRequest
-                .patch(`/beekeepers/apiary/${apiary.id}/`, {
-                    [flag]: !apiary[flag],
-                })
+                .patch(`/beekeepers/apiary/${apiary.id}/`, apiary)
                 .then(() => dispatch(completeUpdatingApiary()))
                 .catch(error => dispatch(failUpdatingApiary(error)));
         }
+    };
+}
+
+function toggleApiaryFlag(flag) {
+    return apiary => (dispatch) => {
+        const toggled = update(apiary, {
+            [flag]: {
+                $set: !apiary[flag],
+            },
+        });
+
+        dispatch(updateApiary(toggled));
     };
 }
 
