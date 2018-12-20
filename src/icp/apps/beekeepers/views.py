@@ -62,30 +62,20 @@ def create_survey(request, apiary_id=None):
         """Create a survey and subsurvey from subsurvey form data
         Request data expected as {"survey: {...}, ...}
         """
-        # validate survey data
+        # validated survey data is required by the subsurvey serializer
         survey_data = request.data['survey']
         serialized_survey = SurveySerializer(data=survey_data)
+        serialized_survey.is_valid(raise_exception=True)
 
-        if serialized_survey.is_valid():
-            try:
-                survey_type = survey_data['survey_type']
-                subsurvey_serializer = SUBSURVEY_SERIALIZERS[survey_type]
-                subsurvey_data = request.data
-                subsurvey_data['survey'] = serialized_survey.data
-                serialized_subsurvey = subsurvey_serializer(
-                    data=subsurvey_data
-                )
+        survey_type = survey_data['survey_type']
+        subsurvey_serializer = SUBSURVEY_SERIALIZERS[survey_type]
+        subsurvey_data = request.data
+        subsurvey_data['survey'] = serialized_survey.data
+        serialized_subsurvey = subsurvey_serializer(data=subsurvey_data)
+        serialized_subsurvey.is_valid(raise_exception=True)
 
-                if serialized_subsurvey.is_valid():
-                    try:
-                        serialized_subsurvey.save()
-                        return Response(serialized_subsurvey.data, status=201)
-                    except Exception as e:
-                        return Response(str(e), status=400)
-            except:
-                return Response(serialized_survey.errors, status=400)
-
-        return Response(serialized_survey.errors, status=400)
+        serialized_subsurvey.save()
+        return Response(serialized_subsurvey.data, status=201)
 
 
 @decorators.api_view(['GET'])
