@@ -40,9 +40,13 @@ class Sidebar extends Component {
 
         if (sortBy === DEFAULT_SORT) {
             apiaries.sort((a, b) => {
-                if (a.marker < b.marker) { return -1; }
-                if (a.marker > b.marker) { return 1; }
-                return 0;
+                if (a.marker.length === b.marker.length) {
+                    if (a.marker < b.marker) { return -1; }
+                    if (a.marker > b.marker) { return 1; }
+                    return 0;
+                }
+
+                return a.marker.length - b.marker.length;
             });
         } else {
             apiaries.sort((a, b) => {
