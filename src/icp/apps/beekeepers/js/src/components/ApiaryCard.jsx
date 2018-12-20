@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Apiary } from '../propTypes';
 import { INDICATORS } from '../constants';
 import { setApiaryStar, setApiarySurvey, deleteApiary } from '../actions';
+import { getMarkerClass } from '../utils';
 
 import CardButton from './CardButton';
 import ScoresLabel from './ScoresLabel';
@@ -13,7 +14,6 @@ const ApiaryCard = ({ apiary, forageRange, dispatch }) => {
     const {
         marker,
         name,
-        selected,
         starred,
         surveyed,
         scores,
@@ -21,21 +21,7 @@ const ApiaryCard = ({ apiary, forageRange, dispatch }) => {
 
     const values = scores[forageRange];
 
-    const markerMod = (() => {
-        if (surveyed) {
-            return 'marker--starred-survey';
-        }
-
-        if (starred) {
-            return 'marker--starred';
-        }
-
-        if (selected) {
-            return 'marker--selected';
-        }
-
-        return '';
-    })();
+    const markerClass = getMarkerClass(apiary);
 
     const scoresBody = !Object.keys(apiary.scores[forageRange]).length
         ? <div className="spinner" />
@@ -68,7 +54,7 @@ const ApiaryCard = ({ apiary, forageRange, dispatch }) => {
         <li className="card">
             <div className="card__top">
                 <div className="card__identification">
-                    <div className={`marker ${markerMod}`}>{marker}</div>
+                    <div className={`marker ${markerClass}`}>{marker}</div>
                     <div className="card__name">{name}</div>
                 </div>
                 <div className="card__buttons">
