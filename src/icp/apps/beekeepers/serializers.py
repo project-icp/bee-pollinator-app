@@ -2,6 +2,7 @@
 
 import json
 
+from django.db import transaction
 from rest_framework.serializers import (
     BaseSerializer,
     CurrentUserDefault,
@@ -9,7 +10,7 @@ from rest_framework.serializers import (
     PrimaryKeyRelatedField,
 )
 
-from models import Apiary, Survey
+from models import Apiary, Survey, AprilSurvey, NovemberSurvey, MonthlySurvey
 
 
 class JsonField(BaseSerializer):
@@ -23,6 +24,39 @@ class JsonField(BaseSerializer):
 class SurveySerializer(ModelSerializer):
     class Meta:
         model = Survey
+
+
+class SubSurveySerializer(ModelSerializer):
+    survey = SurveySerializer(many=False)
+
+    @transaction.atomic
+    def create(self, validated_data):
+        survey = Survey.objects.create(**validated_data['survey'])
+        validated_data['survey'] = survey
+        subsurvey = self.Meta.model.objects.create(**validated_data)
+        return subsurvey
+
+
+class AprilSurveySerializer(SubSurveySerializer):
+    class Meta:
+        model = AprilSurvey
+
+
+class NovemberSurveySerializer(SubSurveySerializer):
+    class Meta:
+        model = NovemberSurvey
+
+
+class MonthlySurveySerializer(SubSurveySerializer):
+    class Meta:
+        model = MonthlySurvey
+
+
+SUBSURVEY_SERIALIZERS = {
+    'APRIL': AprilSurveySerializer,
+    'NOVEMBER': NovemberSurveySerializer,
+    'MONTHLY': MonthlySurveySerializer,
+}
 
 
 class ApiarySerializer(ModelSerializer):
