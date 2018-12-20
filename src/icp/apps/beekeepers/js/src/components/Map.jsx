@@ -1,4 +1,5 @@
 import React, { Component, createRef } from 'react';
+import { renderToString } from 'react-dom/server';
 import * as esri from 'esri-leaflet-geocoder';
 import update from 'immutability-helper';
 import {
@@ -20,6 +21,8 @@ import {
     FORAGE_RANGE_5KM,
 } from '../constants';
 import { getNextInSequence, isSameLocation } from '../utils';
+
+import ApiaryMarker from './ApiaryMarker';
 
 class Map extends Component {
     constructor() {
@@ -145,10 +148,15 @@ class Map extends Component {
             // TODO: Replace unique key generator once app uses real, complete data
             // Currently solution appeases React unique key error
             const key = apiary.name + String.fromCharCode(idx);
+            const icon = L.divIcon({
+                className: 'custom icon',
+                html: renderToString(<ApiaryMarker apiary={apiary} />),
+            });
             return (
                 <Marker
                     key={key}
                     position={[apiary.lat, apiary.lng]}
+                    icon={icon}
                 />
             );
         });
