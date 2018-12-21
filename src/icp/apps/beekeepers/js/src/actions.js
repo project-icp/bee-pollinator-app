@@ -3,6 +3,7 @@ import update from 'immutability-helper';
 
 import csrfRequest from './csrfRequest';
 import { INDICATORS } from './constants';
+import { isSameLocation } from './utils';
 
 export const setSort = createAction('Set apiary sort');
 export const setForageRange = createAction('Set forage range');
@@ -65,7 +66,7 @@ export function fetchApiaryScores(apiaryList, forageRange) {
 
         // mark apiaries from input list as fetching data
         const fetchingApiaries = apiaries.map((apiary) => {
-            if (apiaryList.find(a => a.lat === apiary.lat && a.lng === apiary.lng)) {
+            if (apiaryList.find(a => isSameLocation(a, apiary))) {
                 return update(apiary, {
                     fetching: { $set: true },
                 });
@@ -187,8 +188,8 @@ export function fetchUserApiaries() {
     };
 }
 
-function toggleApiaryFlag(flag) {
-    return apiary => (dispatch, getState) => {
+export function updateApiary(apiary) {
+    return (dispatch, getState) => {
         const {
             main: {
                 apiaries,
@@ -199,10 +200,8 @@ function toggleApiaryFlag(flag) {
         } = getState();
 
         const newList = apiaries.map((a) => {
-            if (a.lat === apiary.lat && a.lng === apiary.lng) {
-                return update(apiary, {
-                    [flag]: { $set: !apiary[flag] },
-                });
+            if (isSameLocation(a, apiary)) {
+                return apiary;
             }
 
             return a;
@@ -214,12 +213,22 @@ function toggleApiaryFlag(flag) {
             dispatch(startUpdatingApiary());
 
             csrfRequest
-                .patch(`/beekeepers/apiary/${apiary.id}/`, {
-                    [flag]: !apiary[flag],
-                })
+                .patch(`/beekeepers/apiary/${apiary.id}/`, apiary)
                 .then(() => dispatch(completeUpdatingApiary()))
                 .catch(error => dispatch(failUpdatingApiary(error)));
         }
+    };
+}
+
+function toggleApiaryFlag(flag) {
+    return apiary => (dispatch) => {
+        const toggled = update(apiary, {
+            [flag]: {
+                $set: !apiary[flag],
+            },
+        });
+
+        dispatch(updateApiary(toggled));
     };
 }
 
@@ -237,7 +246,7 @@ export function deleteApiary(apiary) {
             },
         } = getState();
 
-        const newList = apiaries.filter(a => a.lat !== apiary.lat || a.lng !== apiary.lng);
+        const newList = apiaries.filter(a => !isSameLocation(a, apiary));
 
         dispatch(setApiaryList(newList));
 
