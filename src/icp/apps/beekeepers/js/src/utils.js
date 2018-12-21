@@ -57,3 +57,19 @@ export function getNextInSequence(s) {
 
     return prefix + getNextLetter(final);
 }
+
+export function getMarkerClass({ selected, starred, surveyed }) {
+    if (surveyed) {
+        return 'marker--starred-survey';
+    }
+
+    if (starred) {
+        return 'marker--starred';
+    }
+
+    if (selected) {
+        return 'marker--selected';
+    }
+
+    return '';
+}
