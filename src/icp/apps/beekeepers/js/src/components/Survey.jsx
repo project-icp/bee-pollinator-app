@@ -5,14 +5,14 @@ import { Link } from 'react-router-dom';
 import { arrayOf, number, func } from 'prop-types';
 import { Apiary } from '../propTypes';
 
-import { openParticipateModal } from '../actions';
+import { openSignUpModal } from '../actions';
 
 const Survey = ({ dispatch, userId, apiaries }) => {
     if (!userId) {
         return (
             <div className="survey empty">
                 <div className="survey__header empty">
-                    Sign up to participate
+                    Sign up to participate in our study to get better info about hive locations
                 </div>
                 <div className="survey__body">
                     <div>
@@ -24,9 +24,9 @@ const Survey = ({ dispatch, userId, apiaries }) => {
                     <button
                         type="button"
                         className="survey__button"
-                        onClick={() => dispatch(openParticipateModal())}
+                        onClick={() => dispatch(openSignUpModal())}
                     >
-                        Participate in study
+                        Sign up
                     </button>
                 </div>
             </div>
