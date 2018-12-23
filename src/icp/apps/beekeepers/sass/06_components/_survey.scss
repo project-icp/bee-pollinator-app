@@ -1,0 +1,47 @@
+.survey {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background-color: $color-grey-5;
+
+    &.empty {
+        align-items: center;
+    }
+
+    &__header {
+        width: 500px;
+        margin-top: 3rem;
+        font: $font-xxl;
+        font-weight: $font-weight-bold;
+
+        &.empty {
+            margin-top: 8rem;
+        }
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        width: 500px;
+        margin: 2rem 0;
+        font: $font-med;
+
+        &--section {
+            margin: 2rem 0;
+            font: $font-lg;
+            font-weight: $font-weight-bold;
+        }
+    }
+
+    &__button {
+        max-width: max-content;
+        margin: 2rem 0;
+        padding: 15px;
+        color: $color-white;
+        font-size: 14px;
+        text-decoration: none;
+        background: $color-primary;
+        border: none;
+    }
+}
