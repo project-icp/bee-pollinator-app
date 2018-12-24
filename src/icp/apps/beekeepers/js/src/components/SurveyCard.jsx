@@ -3,15 +3,19 @@ import { connect } from 'react-redux';
 
 import { Apiary } from '../propTypes';
 
+import { listMonthYearsSinceCreation } from '../utils';
+
 const SurveyCard = ({ apiary }) => {
     const {
         name,
         // surveyed,
         // monthyear,
     } = apiary;
-    
-    const surveyedMonthYears = apiary.surveys.map(s => (
-        <a href="/">{s.month_year}</a>
+
+    const monthYears = listMonthYearsSinceCreation(apiary);
+
+    const surveyedMonthYears = monthYears.map(m => (
+        <a href="/">{m}</a>
     ));
 
     return (
