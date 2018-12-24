@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100%;
+    height: max-content;
     background-color: $color-grey-5;
 
     &.empty {
@@ -10,7 +10,7 @@
     }
 
     &__header {
-        width: 500px;
+        width: 600px;
         margin-top: 3rem;
         font: $font-xxl;
         font-weight: $font-weight-bold;
@@ -23,7 +23,7 @@
     &__body {
         display: flex;
         flex-direction: column;
-        width: 500px;
+        width: 600px;
         margin: 2rem 0;
         font: $font-med;
 
@@ -43,5 +43,39 @@
         text-decoration: none;
         background: $color-primary;
         border: none;
+    }
+}
+
+.surveyCard {
+    display: flex;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 4px -1px rgba(0, 0, 0, 0.5);
+
+    &:not(:last-child) {
+        margin-bottom: 1.4rem;
+    }
+
+    &__map {
+        width: 200px;
+        height: 200px;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    &__title {
+        font: $font-lg;
+        font-weight: $font-weight-bold;
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        font: $font-med;
+        text-decoration: none;
     }
 }
