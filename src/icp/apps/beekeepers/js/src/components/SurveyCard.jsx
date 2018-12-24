@@ -13,10 +13,21 @@ const SurveyCard = ({ apiary }) => {
     } = apiary;
 
     const monthYears = listMonthYearsSinceCreation(apiary);
-
+    const icon = 'star';
     const surveyedMonthYears = monthYears.map(m => (
-        <a href="/">{m}</a>
+        <div className="listing">
+            <i className={`icon-${icon}-fill listing__icon`} />
+            <a className="listing__monthYear" href="/">{m}</a>
+            <a className="listing__start" href="/">Start survey</a>
+        </div>
     ));
+
+
+    // TODO: Create correct monthyear link styles
+
+    // TODO: Sort surveys into 3 buckets
+
+    // TODO: or pinch off the map into a separate card ?
 
     return (
         <li className="surveyCard">
