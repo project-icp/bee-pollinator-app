@@ -68,6 +68,7 @@
     }
 
     &__title {
+        margin: 10px 0;
         font: $font-lg;
         font-weight: $font-weight-bold;
     }
@@ -95,5 +96,16 @@
     &__start {
         color: $color-primary;
         text-decoration: none;
+    }
+}
+
+.button {
+    &--long {
+        width: 150px;
+        margin-top: 20px;
+        padding: 15px;
+        color: $color-white;
+        background: $color-primary;
+        border: none;
     }
 }

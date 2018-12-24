@@ -6,7 +6,13 @@ import { Apiary } from '../propTypes';
 import SurveyCard from './SurveyCard';
 
 const SurveyView = ({ apiaries }) => {
-    const surveyCards = apiaries.map(a => <SurveyCard apiary={a} />);
+    const surveyCards = apiaries.map(a => (
+        a.surveyed ? <SurveyCard apiary={a} /> : null
+    ));
+
+    const noSurveyCards = apiaries.map(a => (
+        !a.surveyed ? <SurveyCard apiary={a} surveyed={false} /> : null
+    ));
 
     return (
         <div className="survey">
@@ -27,6 +33,7 @@ const SurveyView = ({ apiaries }) => {
                 </div>
                 <div className="survey__body--section">
                     This is not in the study
+                    {noSurveyCards}
                 </div>
             </div>
         </div>
