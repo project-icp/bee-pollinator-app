@@ -34,6 +34,8 @@ export const failDeletingApiary = createAction('Fail deleting apiary');
 export const showCropLayer = createAction('Show crop layer');
 export const hideCropLayer = createAction('Hide crop layer');
 export const setCropLayerOpacity = createAction('Set crop layer opacity');
+export const openUserSurveyModal = createAction('Open user survey modal');
+export const closeUserSurveyModal = createAction('Close user survey modal');
 
 
 export function fetchApiaryScores(apiaryList, forageRange) {
@@ -157,6 +159,7 @@ export function login(form) {
                     username: data.username || '',
                     authError: '',
                     userId: data.id || null,
+                    userSurvey: data.beekeeper_survey,
                 }));
                 dispatch(closeLoginModal());
             })
@@ -165,6 +168,7 @@ export function login(form) {
                     username: '',
                     authError: error.response.data.errors[0],
                     userId: null,
+                    userSurvey: false,
                 }));
             });
     };

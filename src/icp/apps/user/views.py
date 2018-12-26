@@ -32,7 +32,7 @@ def login(request):
                     request.DATA.get('password'))
         user = authenticate(username=username,
                             password=password)
-
+        user_survey = hasattr(user, 'beekeeper_user_survey')
         if user is not None:
             if user.is_active:
                 auth_login(request, user)
@@ -40,7 +40,8 @@ def login(request):
                     'result': 'success',
                     'username': user.username,
                     'guest': False,
-                    'id': user.id
+                    'id': user.id,
+                    'beekeeper_survey': user_survey
                 }
             else:
                 response_data = {
