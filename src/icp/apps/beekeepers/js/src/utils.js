@@ -86,8 +86,7 @@ export function monthToText(month) {
 export function listMonthYearsSinceCreation(apiary) {
     // Count months from 0-11, where January is 0
     const createdYear = Number(apiary.created_at.substring(0, 4));
-    // TODO: why the +1 ??
-    const createdMonth = Number(apiary.created_at.substring(5, 7)) + 1;
+    const createdMonth = Number(apiary.created_at.substring(5, 7)) - 1;
 
     // The Date API counts months from 0
     const timeNow = new Date();
