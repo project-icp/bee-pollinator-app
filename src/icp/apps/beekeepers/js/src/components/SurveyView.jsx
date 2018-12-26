@@ -18,14 +18,16 @@ const SurveyView = ({ apiaries }) => {
             const year = s.month_year.substring(2, 6);
             return `${monthName}-${year}`;
         });
+        const surveyCard = <SurveyCard apiary={a} key={a.name} />;
         if (monthYearsSinceCreation.every(date => apiarySurveyDates.find(d => d === date))) {
-            return surveyCards.complete.push(<SurveyCard apiary={a} />);
+            surveyCards.complete.push(surveyCard);
+        } else {
+            surveyCards.incomplete.push(surveyCard);
         }
-        return surveyCards.incomplete.push(<SurveyCard apiary={a} completed={false} />);
     });
 
     const noSurveyCards = apiaries.map(a => (
-        !a.surveyed ? <SurveyCard apiary={a} /> : null
+        !a.surveyed ? <SurveyCard apiary={a} key={a.name} /> : null
     ));
 
     return (

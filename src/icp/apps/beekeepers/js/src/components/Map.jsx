@@ -144,17 +144,14 @@ class Map extends Component {
 
     render() {
         const { apiaries } = this.props;
-        const markers = apiaries.map((apiary, idx) => {
-            // TODO: Replace unique key generator once app uses real, complete data
-            // Currently solution appeases React unique key error
-            const key = apiary.name + String.fromCharCode(idx);
+        const markers = apiaries.map((apiary) => {
             const icon = L.divIcon({
                 className: 'custom icon',
                 html: renderToString(<ApiaryMarker apiary={apiary} />),
             });
             return (
                 <Marker
-                    key={key}
+                    key={apiary.name}
                     position={[apiary.lat, apiary.lng]}
                     icon={icon}
                 />

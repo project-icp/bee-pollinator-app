@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { bool, func } from 'prop-types';
+import { func } from 'prop-types';
 import { Apiary } from '../propTypes';
 
-import { listMonthYearsSinceCreation } from '../utils';
+import { listMonthYearsSinceCreation, monthToText } from '../utils';
 import { setApiarySurvey } from '../actions';
 
-const SurveyCard = ({ apiary, dispatch, completed }) => {
+const SurveyCard = ({ apiary, dispatch }) => {
     const {
         name,
         surveyed,
@@ -19,7 +19,7 @@ const SurveyCard = ({ apiary, dispatch, completed }) => {
         const onSurvey = () => dispatch(setApiarySurvey(apiary));
         cardBody = (
             <>
-                <div className="listing">
+                <div className="listing" key={name}>
                     This apiary is not in the study.
                 </div>
                 <button
@@ -34,27 +34,34 @@ const SurveyCard = ({ apiary, dispatch, completed }) => {
     } else {
         const monthYears = listMonthYearsSinceCreation(apiary);
         const lastFourMonthYears = monthYears.slice(0, 4);
-        if (completed) {
-            cardBody = lastFourMonthYears.map(m => (
-                <div className="listing">
-                    <div className="listing__icon--completed">✓</div>
-                    <a className="listing__monthYear" href="/">{m}</a>
-                </div>
-            ));
-        } else {
-            cardBody = lastFourMonthYears.map(m => (
-                <div className="listing">
+        const apiarySurveyDates = apiary.surveys.map((s) => {
+            const monthName = monthToText(Number(s.month_year.substring(0, 2)) - 1);
+            const year = s.month_year.substring(2, 6);
+            return `${monthName}-${year}`;
+        });
+        cardBody = lastFourMonthYears.map((m) => {
+            const i = apiarySurveyDates.findIndex(date => date === m);
+            if (i >= 0) {
+                return (
+                    <div className="listing" key={name + m}>
+                        <div className="listing__icon--completed">✓</div>
+                        <a className="listing__monthYear" href="/">{m}</a>
+                    </div>
+                );
+            }
+            return (
+                <div className="listing" key={name + m}>
                     <div className="listing__icon">◯</div>
                     <a className="listing__monthYear" href="/">{m}</a>
                     <a className="listing__start" href="/">Start survey</a>
                 </div>
-            ));
-        }
+            );
+        });
 
         if (monthYears.length > 4) {
             cardFooter = (
                 <div className="surveyCard__footer">
-                    <button type="button" className="button" onClick="">View full history</button>
+                    <button type="button" className="button">View full history</button>
                     <div>...</div>
                 </div>
             );
@@ -69,7 +76,7 @@ const SurveyCard = ({ apiary, dispatch, completed }) => {
     }
 
     return (
-        <div className="surveyCard">
+        <div className="surveyCard" key={name}>
             <div className="surveyCard__content">
                 <div className="surveyCard__title">{name}</div>
                 <div className="surveyCard__body">
@@ -84,11 +91,6 @@ const SurveyCard = ({ apiary, dispatch, completed }) => {
 SurveyCard.propTypes = {
     apiary: Apiary.isRequired,
     dispatch: func.isRequired,
-    completed: bool,
-};
-
-SurveyCard.defaultProps = {
-    completed: true,
 };
 
 export default connect()(SurveyCard);
