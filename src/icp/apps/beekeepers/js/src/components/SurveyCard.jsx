@@ -33,15 +33,16 @@ const SurveyCard = ({ apiary, dispatch, completed }) => {
         );
     } else {
         const monthYears = listMonthYearsSinceCreation(apiary);
+        const lastFourMonthYears = monthYears.slice(0, 4);
         if (completed) {
-            cardBody = monthYears.map(m => (
+            cardBody = lastFourMonthYears.map(m => (
                 <div className="listing">
                     <div className="listing__icon--completed">✓</div>
                     <a className="listing__monthYear" href="/">{m}</a>
                 </div>
             ));
         } else {
-            cardBody = monthYears.map(m => (
+            cardBody = lastFourMonthYears.map(m => (
                 <div className="listing">
                     <div className="listing__icon">◯</div>
                     <a className="listing__monthYear" href="/">{m}</a>
@@ -53,7 +54,7 @@ const SurveyCard = ({ apiary, dispatch, completed }) => {
         if (monthYears.length > 4) {
             cardFooter = (
                 <div className="surveyCard__footer">
-                    <button type="button" onClick="">View full history</button>
+                    <button type="button" className="button" onClick="">View full history</button>
                     <div>...</div>
                 </div>
             );

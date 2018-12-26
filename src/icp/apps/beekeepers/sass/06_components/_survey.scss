@@ -48,6 +48,17 @@
     }
 }
 
+.button {
+    &--long {
+        width: 150px;
+        margin-top: 20px;
+        padding: 15px;
+        color: $color-white;
+        background: $color-primary;
+        border: none;
+    }
+}
+
 .surveyCard {
     display: flex;
     flex-direction: column;
@@ -85,6 +96,11 @@
         display: flex;
         justify-content: space-between;
         width: 100%;
+
+        .button {
+            font: $font-sm;
+            border: none;
+        }
     }
 }
 
@@ -110,16 +126,5 @@
     &__start {
         color: $color-primary;
         text-decoration: none;
-    }
-}
-
-.button {
-    &--long {
-        width: 150px;
-        margin-top: 20px;
-        padding: 15px;
-        color: $color-white;
-        background: $color-primary;
-        border: none;
     }
 }
