@@ -4,14 +4,28 @@ import { arrayOf } from 'prop-types';
 import { Apiary } from '../propTypes';
 
 import SurveyCard from './SurveyCard';
+import { listMonthYearsSinceCreation, monthToText } from '../utils';
 
 const SurveyView = ({ apiaries }) => {
-    const surveyCards = apiaries.map(a => (
-        a.surveyed ? <SurveyCard apiary={a} /> : null
-    ));
+    const surveyedApiaries = apiaries.filter(a => a.surveyed);
+
+    const surveyCards = { complete: [], incomplete: [] };
+
+    surveyedApiaries.forEach((a) => {
+        const monthYearsSinceCreation = listMonthYearsSinceCreation(a);
+        const apiarySurveyDates = a.surveys.map((s) => {
+            const monthName = monthToText(Number(s.month_year.substring(0, 2)) - 1);
+            const year = s.month_year.substring(2, 6);
+            return `${monthName}-${year}`;
+        });
+        if (monthYearsSinceCreation.every(date => apiarySurveyDates.find(d => d === date))) {
+            return surveyCards.complete.push(<SurveyCard apiary={a} />);
+        }
+        return surveyCards.incomplete.push(<SurveyCard apiary={a} completed={false} />);
+    });
 
     const noSurveyCards = apiaries.map(a => (
-        !a.surveyed ? <SurveyCard apiary={a} surveyed={false} /> : null
+        !a.surveyed ? <SurveyCard apiary={a} /> : null
     ));
 
     return (
@@ -26,10 +40,11 @@ const SurveyView = ({ apiaries }) => {
                 </div>
                 <div className="survey__body--section">
                     Response needed
-                    {surveyCards}
+                    {surveyCards.incomplete}
                 </div>
                 <div className="survey__body--section">
                     Up to date
+                    {surveyCards.complete}
                 </div>
                 <div className="survey__body--section">
                     This is not in the study

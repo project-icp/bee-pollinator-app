@@ -2,7 +2,9 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: max-content;
+    height: auto;
+    min-height: max-content;
+    padding-left: 20px;
     background-color: $color-grey-5;
 
     &.empty {
@@ -48,17 +50,16 @@
 
 .surveyCard {
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 200px;
+    padding: 10px 15px;
     background-color: #fff;
     border-radius: 4px;
     box-shadow: 0 0 4px -1px rgba(0, 0, 0, 0.5);
 
     &:not(:last-child) {
         margin-bottom: 1.4rem;
-    }
-
-    &__map {
-        width: 200px;
-        height: 200px;
     }
 
     &__content {
@@ -79,12 +80,25 @@
         font: $font-med;
         text-decoration: none;
     }
+
+    &__footer {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
 }
 
 .listing {
+    display: flex;
+
     &__icon {
         padding-right: 10px;
-        color: #19cb35;
+        color: #de9b00;
+
+        &--completed {
+            padding-right: 10px;
+            color: #19cb35;
+        }
     }
 
     &__monthYear {
