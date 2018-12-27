@@ -351,10 +351,6 @@ class UserSurvey(models.Model):
                   'Light users fill out a brief survey in April, '
                   'and a detailed on in November. '
                   'Pro users have to additionally fill out monthly surveys.')
-    email = models.CharField(
-        max_length=255,
-        null=False,
-        help_text='Email')
     phone = models.CharField(
         max_length=255,
         null=False,

@@ -4,6 +4,7 @@ import Popup from 'reactjs-popup';
 import { connect } from 'react-redux';
 
 import { closeUserSurveyModal, login } from '../actions';
+import { arrayToSemicolonDelimitedString } from '../utils';
 
 /* eslint-disable camelcase */
 class UserSurveyModal extends Component {
@@ -17,33 +18,75 @@ class UserSurveyModal extends Component {
             year_began: '',
             organization: '',
             total_colonies: '',
-            relocate: '',
-            income: '',
-            practice: '',
-            varroa_management: '',
+            relocate: false,
+            income: [],
+            income_rent: '',
+            income_sell_honey: '',
+            income_sell_nucs: '',
+            income_sell_queens: '',
+            income_none: '',
+            practice: false,
+            varroa_management: false,
             varroa_management_trigger: '',
-            purchased_queens: '',
+            purchased_queens: false,
             purchased_queens_sources: '',
-            resistant_queens: '',
+            resistant_queens: false,
             resistant_queens_genetics: '',
-            rear_queens: '',
-            equipment: '',
+            rear_queens: false,
+            equipment: [],
+            equipment_8_frame: '',
+            equipment_10_frame: '',
+            equipment_top_bar: '',
+            equipment_other: '',
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange(event) {
-        this.setState({ [event.currentTarget.name]: event.currentTarget.value });
+        const target = event.currentTarget;
+        const { value } = target;
+        let finalValue = value;
+        if (target.type === 'checkbox') {
+            if (value === 'on') {
+                finalValue = target.checked;
+            } else {
+                finalValue = target.checked ? value : '';
+            }
+        }
+        this.setState({ [target.name]: finalValue });
     }
 
     handleSubmit(event) {
         // Send form data to backend for validation and prevent modal from closing
+        event.preventDefault();
         const {
             dispatch,
         } = this.props;
-        dispatch(login(this.state));
-        event.preventDefault();
+
+        const {
+            income_rent,
+            income_sell_honey,
+            income_sell_nucs,
+            income_sell_queens,
+            income_none,
+            equipment_8_frame,
+            equipment_10_frame,
+            equipment_top_bar,
+            equipment_other,
+        } = this.state;
+
+        const income = arrayToSemicolonDelimitedString(
+            [income_none, income_rent, income_sell_honey, income_sell_nucs, income_sell_queens],
+        );
+        const prepended_equipment_other = equipment_other.length ? `OTHER-${equipment_other}` : '';
+        const equipment = arrayToSemicolonDelimitedString(
+            [equipment_8_frame, equipment_10_frame, equipment_top_bar, prepended_equipment_other],
+        );
+        const form = Object.assign({}, this.state);
+        form.income = income;
+        form.equipment = equipment;
+        dispatch(login(form));
     }
 
     render() {
@@ -60,7 +103,11 @@ class UserSurveyModal extends Component {
             organization,
             total_colonies,
             relocate,
-            income,
+            income_rent,
+            income_sell_honey,
+            income_sell_nucs,
+            income_sell_queens,
+            income_none,
             practice,
             varroa_management,
             varroa_management_trigger,
@@ -69,7 +116,10 @@ class UserSurveyModal extends Component {
             resistant_queens,
             resistant_queens_genetics,
             rear_queens,
-            equipment,
+            equipment_8_frame,
+            equipment_10_frame,
+            equipment_top_bar,
+            equipment_other,
         } = this.state;
 
         return (
@@ -86,7 +136,7 @@ class UserSurveyModal extends Component {
                     </div>
                     <div className="authModal__content">
                         <div className="title">Fill our your user survey</div>
-                        <form className="form">
+                        <form className="form" onSubmit={this.handleSubmit}>
                             <div className="form__group">
                                 <label htmlFor="contribution_level">
                                     What level will you contribute at?
@@ -179,11 +229,10 @@ class UserSurveyModal extends Component {
                                     type="checkbox"
                                     className="form__control"
                                     name="relocate"
-                                    value={relocate}
+                                    checked={relocate}
                                     onChange={this.handleChange}
                                 />
                             </div>
-                            {/* TODO: fix the data capture for multi choice */}
                             <div className="form__group">
                                 <label htmlFor="income">
                                     Do you obtain income from your bees?
@@ -193,47 +242,52 @@ class UserSurveyModal extends Component {
                                 <input
                                     type="checkbox"
                                     className="form__control"
-                                    name="income"
-                                    value={income}
+                                    name="income_rent"
+                                    checked={income_rent}
                                     onChange={this.handleChange}
+                                    value="RENT_COLONIES_FOR_POLLINATION"
                                 />
-                                RENT_COLONIES_FOR_POLLINATION
+                                Rent colonies for pollination
                                 <br />
                                 <input
                                     type="checkbox"
                                     className="form__control"
-                                    name="income"
-                                    value={income}
+                                    name="income_sell_honey"
+                                    checked={income_sell_honey}
                                     onChange={this.handleChange}
+                                    value="SELL_HONEY"
                                 />
-                                SELL_HONEY
+                                Sell honey
                                 <br />
                                 <input
                                     type="checkbox"
                                     className="form__control"
-                                    name="income"
-                                    value={income}
+                                    name="income_sell_nucs"
+                                    checked={income_sell_nucs}
                                     onChange={this.handleChange}
+                                    value="SELL_NUCS_PACKAGES"
                                 />
-                                SELL_NUCS_PACKAGES
+                                Sell nucs packages
                                 <br />
                                 <input
                                     type="checkbox"
                                     className="form__control"
-                                    name="income"
-                                    value={income}
+                                    name="income_sell_queens"
+                                    checked={income_sell_queens}
                                     onChange={this.handleChange}
+                                    value="SELL_QUEENS"
                                 />
-                                SELL_QUEENS
+                                Sell queens
                                 <br />
                                 <input
                                     type="checkbox"
                                     className="form__control"
-                                    name="income"
-                                    value={income}
+                                    name="income_none"
+                                    checked={income_none}
                                     onChange={this.handleChange}
+                                    value="NO_INCOME"
                                 />
-                                NO_INCOME
+                                No income
                             </div>
                             <div className="form__group">
                                 <label htmlFor="practice">
@@ -259,7 +313,7 @@ class UserSurveyModal extends Component {
                                     type="checkbox"
                                     className="form__control"
                                     name="varroa_management"
-                                    value={varroa_management}
+                                    checked={varroa_management}
                                     onChange={this.handleChange}
                                 />
                             </div>
@@ -342,38 +396,41 @@ class UserSurveyModal extends Component {
                                 <input
                                     type="checkbox"
                                     className="form__control"
-                                    name="equipment"
-                                    value={equipment}
+                                    name="equipment_8_frame"
+                                    checked={equipment_8_frame}
                                     onChange={this.handleChange}
+                                    value="8_FRAME_LANGSTROTH"
                                 />
-                                8_FRAME_LANGSTROTH
+                                8 frame langstroth
                                 <br />
                                 <input
                                     type="checkbox"
                                     className="form__control"
-                                    name="equipment"
-                                    value={equipment}
+                                    name="equipment_10_frame"
+                                    checked={equipment_10_frame}
                                     onChange={this.handleChange}
+                                    value="10_FRAME_LANGSTROTH"
                                 />
-                                10_FRAME_LANGSTROTH
+                                10 frame langstroth
                                 <br />
                                 <input
                                     type="checkbox"
                                     className="form__control"
-                                    name="equipment"
-                                    value={equipment}
+                                    name="equipment_top_bar"
+                                    checked={equipment_top_bar}
                                     onChange={this.handleChange}
+                                    value="TOP_BAR"
                                 />
-                                TOP_BAR
+                                Top bar
                                 <br />
                                 <input
-                                    type="checkbox"
+                                    type="text"
                                     className="form__control"
-                                    name="equipment"
-                                    value={equipment}
+                                    name="equipment_other"
+                                    value={equipment_other}
                                     onChange={this.handleChange}
                                 />
-                                OTHER
+                                Other
                                 <br />
                             </div>
                             <button
