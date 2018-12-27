@@ -2,7 +2,9 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100%;
+    height: auto;
+    min-height: max-content;
+    padding-left: 20px;
     background-color: $color-grey-5;
 
     &.empty {
@@ -10,7 +12,7 @@
     }
 
     &__header {
-        width: 500px;
+        width: 600px;
         margin-top: 3rem;
         font: $font-xxl;
         font-weight: $font-weight-bold;
@@ -23,7 +25,7 @@
     &__body {
         display: flex;
         flex-direction: column;
-        width: 500px;
+        width: 600px;
         margin: 2rem 0;
         font: $font-med;
 
@@ -43,5 +45,86 @@
         text-decoration: none;
         background: $color-primary;
         border: none;
+    }
+}
+
+.button {
+    &--long {
+        width: 150px;
+        margin-top: 20px;
+        padding: 15px;
+        color: $color-white;
+        background: $color-primary;
+        border: none;
+    }
+}
+
+.surveyCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 200px;
+    padding: 10px 15px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 4px -1px rgba(0, 0, 0, 0.5);
+
+    &:not(:last-child) {
+        margin-bottom: 1.4rem;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    &__title {
+        margin: 10px 0;
+        font: $font-lg;
+        font-weight: $font-weight-bold;
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        font: $font-med;
+        text-decoration: none;
+    }
+
+    &__footer {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        .button {
+            font: $font-sm;
+            border: none;
+        }
+    }
+}
+
+.listing {
+    display: flex;
+
+    &__icon {
+        padding-right: 10px;
+        color: #de9b00;
+
+        &--completed {
+            padding-right: 10px;
+            color: #19cb35;
+        }
+    }
+
+    &__monthYear {
+        padding-right: 10px;
+        color: $color-black;
+        text-decoration: none;
+    }
+
+    &__start {
+        color: $color-primary;
+        text-decoration: none;
     }
 }

@@ -59,7 +59,7 @@ class Sidebar extends Component {
 
         const apiaryCards = apiaries.map(apiary => (
             <ApiaryCard
-                key={apiary.lat.toString() + apiary.lng.toString()}
+                key={apiary.marker}
                 apiary={apiary}
                 forageRange={forageRange}
             />
