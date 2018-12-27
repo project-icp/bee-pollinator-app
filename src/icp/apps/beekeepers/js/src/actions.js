@@ -31,6 +31,8 @@ export const failUpdatingApiary = createAction('Fail updating apiary');
 export const startDeletingApiary = createAction('Start deleting apiary');
 export const completeDeletingApiary = createAction('Complete deleting apiary');
 export const failDeletingApiary = createAction('Fail deleting apiary');
+export const showCropLayer = createAction('Show crop layer');
+export const hideCropLayer = createAction('Hide crop layer');
 
 
 export function fetchApiaryScores(apiaryList, forageRange) {

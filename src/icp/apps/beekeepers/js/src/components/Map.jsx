@@ -8,12 +8,24 @@ import {
     Marker,
     ZoomControl,
 } from 'react-leaflet';
+import Control from 'react-leaflet-control';
 import * as L from 'leaflet';
 import { connect } from 'react-redux';
-import { arrayOf, func, string } from 'prop-types';
+import {
+    arrayOf,
+    bool,
+    func,
+    string,
+} from 'prop-types';
 
 import { Apiary } from '../propTypes';
-import { fetchApiaryScores, setApiaryList, updateApiary } from '../actions';
+import {
+    fetchApiaryScores,
+    setApiaryList,
+    updateApiary,
+    showCropLayer,
+    hideCropLayer,
+} from '../actions';
 import {
     MAP_CENTER,
     MAP_ZOOM,
@@ -28,6 +40,7 @@ class Map extends Component {
     constructor() {
         super();
         this.onClickAddMarker = this.onClickAddMarker.bind(this);
+        this.toggleCropLayer = this.toggleCropLayer.bind(this);
         this.mapRef = createRef();
         this.addressLookup = (new esri.GeocodeService()).reverse();
 
@@ -142,8 +155,18 @@ class Map extends Component {
         }, 300);
     }
 
+    toggleCropLayer() {
+        const { isCropLayerActive, dispatch } = this.props;
+
+        if (isCropLayerActive) {
+            dispatch(hideCropLayer());
+        } else {
+            dispatch(showCropLayer());
+        }
+    }
+
     render() {
-        const { apiaries } = this.props;
+        const { apiaries, isCropLayerActive } = this.props;
         const markers = apiaries.map((apiary) => {
             const icon = L.divIcon({
                 className: 'custom icon',
@@ -157,6 +180,12 @@ class Map extends Component {
                 />
             );
         });
+        const cropLayer = !isCropLayerActive ? null : (
+            <TileLayer
+                url="https://{s}.tiles.azavea.com/cdl-reclass/{z}/{x}/{y}.png"
+                subdomains="abcd"
+            />
+        );
 
         return (
             <div className="map">
@@ -168,15 +197,19 @@ class Map extends Component {
                     ref={this.mapRef}
                     maxZoom={18}
                 >
+                    {cropLayer}
                     <TileLayer
                         attribution="Tiles &copy; Esri"
                         url="https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
                     />
-                    <TileLayer
-                        attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                        url="https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png"
-                        subdomains="abcd"
-                    />
+                    <Control position="bottomleft" className="leaflet-bar">
+                        {/* Uses <a> instead of <button> to take advantage of
+                            native leaflet styling */}
+                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                        <a href="#" role="button" onClick={this.toggleCropLayer}>
+                            CDL
+                        </a>
+                    </Control>
                     <ZoomControl position="bottomleft" />
                     {markers}
                 </LeafletMap>
@@ -192,6 +225,7 @@ function mapStateToProps(state) {
 Map.propTypes = {
     apiaries: arrayOf(Apiary).isRequired,
     forageRange: string.isRequired,
+    isCropLayerActive: bool.isRequired,
     dispatch: func.isRequired,
 };
 

@@ -17,6 +17,8 @@ import {
     closeParticipateModal,
     setAuthState,
     clearAuthError,
+    showCropLayer,
+    hideCropLayer,
 } from './actions';
 
 const initialState = {
@@ -26,6 +28,7 @@ const initialState = {
     isSignUpModalOpen: false,
     isLoginModalOpen: false,
     isParticipateModalOpen: false,
+    isCropLayerActive: false,
 };
 
 const mainReducer = createReducer({
@@ -47,6 +50,10 @@ const mainReducer = createReducer({
         state => update(state, { isParticipateModalOpen: { $set: true } }),
     [closeParticipateModal]:
         state => update(state, { isParticipateModalOpen: { $set: false } }),
+    [showCropLayer]:
+        state => update(state, { isCropLayerActive: { $set: true } }),
+    [hideCropLayer]:
+        state => update(state, { isCropLayerActive: { $set: false } }),
 }, initialState);
 
 // Placeholder reducer for parts of state that will be persisted to localStorage
