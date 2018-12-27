@@ -18,7 +18,7 @@ const SurveyView = ({ apiaries }) => {
             const year = s.month_year.substring(2, 6);
             return `${monthName}-${year}`;
         });
-        const surveyCard = <SurveyCard apiary={a} key={a.name} />;
+        const surveyCard = <SurveyCard apiary={a} key={a.marker} />;
         if (monthYearsSinceCreation.every(date => apiarySurveyDates.find(d => d === date))) {
             surveyCards.complete.push(surveyCard);
         } else {
@@ -27,7 +27,7 @@ const SurveyView = ({ apiaries }) => {
     });
 
     const noSurveyCards = apiaries.map(a => (
-        !a.surveyed ? <SurveyCard apiary={a} key={a.name} /> : null
+        !a.surveyed ? <SurveyCard apiary={a} key={a.marker} /> : null
     ));
 
     return (

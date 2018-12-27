@@ -151,7 +151,7 @@ class Map extends Component {
             });
             return (
                 <Marker
-                    key={apiary.name}
+                    key={apiary.marker}
                     position={[apiary.lat, apiary.lng]}
                     icon={icon}
                 />
