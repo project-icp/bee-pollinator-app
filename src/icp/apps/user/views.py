@@ -17,6 +17,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
 from apps.user.models import UserProfile
+from apps.beekeepers.serializers import UserSurveySerializer
 
 
 @decorators.api_view(['POST', 'GET'])
@@ -32,10 +33,14 @@ def login(request):
                     request.DATA.get('password'))
         user = authenticate(username=username,
                             password=password)
-        user_survey = hasattr(user, 'beekeeper_user_survey')
+        
         if user is not None:
             if user.is_active:
                 auth_login(request, user)
+                user_survey = None
+                if hasattr(user, 'beekeeper_user_survey'):
+                    user_survey = UserSurveySerializer(user.beekeeper_user_survey).data
+
                 response_data = {
                     'result': 'success',
                     'username': user.username,
@@ -62,11 +67,16 @@ def login(request):
         user = request.user
 
         if user.is_authenticated() and user.is_active:
+            user_survey = None
+            if hasattr(user, 'beekeeper_user_survey'):
+                user_survey = UserSurveySerializer(user.beekeeper_user_survey).data
+
             response_data = {
                 'result': 'success',
                 'username': user.username,
                 'guest': False,
-                'id': user.id
+                'id': user.id,
+                'beekeeper_survey': user_survey
             }
         else:
             response_data = {

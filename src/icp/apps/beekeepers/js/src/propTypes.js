@@ -33,7 +33,7 @@ export const Apiary = shape({
 });
 
 export const UserSurvey = shape({
-    user: string.isRequired,
+    user: number.isRequired,
     contribution_level: string.isRequired,
     phone: string,
     preferred_contact: string,
