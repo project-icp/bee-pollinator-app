@@ -8,7 +8,6 @@ import {
     Marker,
     ZoomControl,
 } from 'react-leaflet';
-import Control from 'react-leaflet-control';
 import * as L from 'leaflet';
 import { connect } from 'react-redux';
 import {
@@ -23,8 +22,6 @@ import {
     fetchApiaryScores,
     setApiaryList,
     updateApiary,
-    showCropLayer,
-    hideCropLayer,
 } from '../actions';
 import {
     MAP_CENTER,
@@ -35,12 +32,12 @@ import {
 import { getNextInSequence, isSameLocation } from '../utils';
 
 import ApiaryMarker from './ApiaryMarker';
+import CropLayerControl from './CropLayerControl';
 
 class Map extends Component {
     constructor() {
         super();
         this.onClickAddMarker = this.onClickAddMarker.bind(this);
-        this.toggleCropLayer = this.toggleCropLayer.bind(this);
         this.mapRef = createRef();
         this.addressLookup = (new esri.GeocodeService()).reverse();
 
@@ -155,16 +152,6 @@ class Map extends Component {
         }, 300);
     }
 
-    toggleCropLayer() {
-        const { isCropLayerActive, dispatch } = this.props;
-
-        if (isCropLayerActive) {
-            dispatch(hideCropLayer());
-        } else {
-            dispatch(showCropLayer());
-        }
-    }
-
     render() {
         const { apiaries, isCropLayerActive } = this.props;
         const markers = apiaries.map((apiary) => {
@@ -202,14 +189,7 @@ class Map extends Component {
                         attribution="Tiles &copy; Esri"
                         url="https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
                     />
-                    <Control position="bottomleft" className="leaflet-bar">
-                        {/* Uses <a> instead of <button> to take advantage of
-                            native leaflet styling */}
-                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                        <a href="#" role="button" onClick={this.toggleCropLayer}>
-                            CDL
-                        </a>
-                    </Control>
+                    <CropLayerControl position="bottomleft" />
                     <ZoomControl position="bottomleft" />
                     {markers}
                 </LeafletMap>
