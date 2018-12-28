@@ -12,6 +12,10 @@ class CropLayerControl extends Component {
         this.toggleCropLayer = this.toggleCropLayer.bind(this);
     }
 
+    componentDidMount() {
+        this.forceUpdate();
+    }
+
     toggleCropLayer() {
         const { isCropLayerActive, dispatch } = this.props;
 
