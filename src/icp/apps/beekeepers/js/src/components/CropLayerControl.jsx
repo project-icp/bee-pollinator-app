@@ -1,19 +1,31 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { bool, func, string } from 'prop-types';
+import {
+    bool,
+    func,
+    number,
+    string,
+} from 'prop-types';
 import Control from 'react-leaflet-control';
 
-import { showCropLayer, hideCropLayer } from '../actions';
+import { showCropLayer, hideCropLayer, setCropLayerOpacity } from '../actions';
 
 
 class CropLayerControl extends Component {
     constructor() {
         super();
         this.toggleCropLayer = this.toggleCropLayer.bind(this);
+        this.setOpacity = this.setOpacity.bind(this);
     }
 
     componentDidMount() {
         this.forceUpdate();
+    }
+
+    setOpacity(e) {
+        const { dispatch } = this.props;
+
+        dispatch(setCropLayerOpacity(Number(e.target.value)));
     }
 
     toggleCropLayer() {
@@ -27,16 +39,17 @@ class CropLayerControl extends Component {
     }
 
     render() {
-        const { position, isCropLayerActive } = this.props;
+        const { position, cropLayerOpacity, isCropLayerActive } = this.props;
         const slider = !isCropLayerActive ? null : (
             <input
                 title="Drag to change opacity of overlay"
                 type="range"
-                min="0"
-                max="99"
-                step="3"
+                min={0.0}
+                max={1.0}
+                step={0.03}
                 className="layercontrol__slider"
-                value="50"
+                defaultValue={cropLayerOpacity}
+                onChange={this.setOpacity}
             />
         );
 
@@ -64,6 +77,7 @@ function mapStateToProps(state) {
 
 CropLayerControl.propTypes = {
     position: string.isRequired,
+    cropLayerOpacity: number.isRequired,
     isCropLayerActive: bool.isRequired,
     dispatch: func.isRequired,
 };

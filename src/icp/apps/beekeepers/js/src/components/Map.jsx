@@ -14,6 +14,7 @@ import {
     arrayOf,
     bool,
     func,
+    number,
     string,
 } from 'prop-types';
 
@@ -153,7 +154,7 @@ class Map extends Component {
     }
 
     render() {
-        const { apiaries, isCropLayerActive } = this.props;
+        const { apiaries, cropLayerOpacity, isCropLayerActive } = this.props;
         const markers = apiaries.map((apiary) => {
             const icon = L.divIcon({
                 className: 'custom icon',
@@ -171,6 +172,7 @@ class Map extends Component {
             <TileLayer
                 url="https://{s}.tiles.azavea.com/cdl-reclass/{z}/{x}/{y}.png"
                 subdomains="abcd"
+                opacity={cropLayerOpacity}
             />
         );
 
@@ -206,6 +208,7 @@ Map.propTypes = {
     apiaries: arrayOf(Apiary).isRequired,
     forageRange: string.isRequired,
     isCropLayerActive: bool.isRequired,
+    cropLayerOpacity: number.isRequired,
     dispatch: func.isRequired,
 };
 

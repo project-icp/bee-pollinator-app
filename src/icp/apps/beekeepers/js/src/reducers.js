@@ -19,6 +19,7 @@ import {
     clearAuthError,
     showCropLayer,
     hideCropLayer,
+    setCropLayerOpacity,
 } from './actions';
 
 const initialState = {
@@ -29,6 +30,7 @@ const initialState = {
     isLoginModalOpen: false,
     isParticipateModalOpen: false,
     isCropLayerActive: false,
+    cropLayerOpacity: 0.5,
 };
 
 const mainReducer = createReducer({
@@ -54,6 +56,8 @@ const mainReducer = createReducer({
         state => update(state, { isCropLayerActive: { $set: true } }),
     [hideCropLayer]:
         state => update(state, { isCropLayerActive: { $set: false } }),
+    [setCropLayerOpacity]:
+        (state, payload) => update(state, { cropLayerOpacity: { $set: payload } }),
 }, initialState);
 
 // Placeholder reducer for parts of state that will be persisted to localStorage
