@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { bool, func } from 'prop-types';
+import { bool, func, string } from 'prop-types';
 import Popup from 'reactjs-popup';
 import { connect } from 'react-redux';
 
-import { closeUserSurveyModal, login } from '../actions';
+import { createUserSurvey } from '../actions';
 import { arrayToSemicolonDelimitedString } from '../utils';
 
 /* eslint-disable camelcase */
@@ -12,20 +12,20 @@ class UserSurveyModal extends Component {
         super(props);
         this.state = {
             // each form input corresponds to a state var
-            contribution_level: '',
+            contribution_level: 'PRO',
             phone: '',
-            preferred_contact: '',
+            preferred_contact: 'EMAIL',
             year_began: '',
             organization: '',
-            total_colonies: '',
+            total_colonies: 'BETWEEN_1_AND_3',
             relocate: false,
-            income: [],
+            income: '',
             income_rent: '',
             income_sell_honey: '',
             income_sell_nucs: '',
             income_sell_queens: '',
             income_none: '',
-            practice: false,
+            practice: 'CONVENTIONAL',
             varroa_management: false,
             varroa_management_trigger: '',
             purchased_queens: false,
@@ -33,7 +33,7 @@ class UserSurveyModal extends Component {
             resistant_queens: false,
             resistant_queens_genetics: '',
             rear_queens: false,
-            equipment: [],
+            equipment: '',
             equipment_8_frame: '',
             equipment_10_frame: '',
             equipment_top_bar: '',
@@ -86,13 +86,13 @@ class UserSurveyModal extends Component {
         const form = Object.assign({}, this.state);
         form.income = income;
         form.equipment = equipment;
-        dispatch(login(form));
+        dispatch(createUserSurvey(form));
     }
 
     render() {
         const {
+            authError,
             isUserSurveyModalOpen,
-            dispatch,
         } = this.props;
 
         const {
@@ -122,10 +122,15 @@ class UserSurveyModal extends Component {
             equipment_other,
         } = this.state;
 
+        const errorWarning = authError ? (
+            <div className="form__group--error">
+                {authError}
+            </div>
+        ) : null;
+
         return (
             <Popup
                 open={isUserSurveyModalOpen}
-                onClose={() => dispatch(closeUserSurveyModal())}
                 closeOnEscape={false}
                 closeOnDocumentClick={false}
                 modal
@@ -137,6 +142,7 @@ class UserSurveyModal extends Component {
                     <div className="authModal__content">
                         <div className="title">Fill our your user survey</div>
                         <form className="form" onSubmit={this.handleSubmit}>
+                            {errorWarning}
                             <div className="form__group">
                                 <label htmlFor="contribution_level">
                                     What level will you contribute at?
@@ -185,6 +191,7 @@ class UserSurveyModal extends Component {
                                     name="year_began"
                                     value={year_began}
                                     onChange={this.handleChange}
+                                    required
                                 />
                             </div>
                             <div className="form__group">
@@ -343,7 +350,7 @@ class UserSurveyModal extends Component {
                             </div>
                             <div className="form__group">
                                 <label htmlFor="purchased_queens_sources">
-                                    From what state(s) did your purhcased bees originate?
+                                    From what state(s) did your purchased bees originate?
                                 </label>
                                 <input
                                     type="text"
@@ -452,12 +459,17 @@ class UserSurveyModal extends Component {
 /* eslint-enable camelcase */
 
 function mapStateToProps(state) {
-    return state.main;
+    return {
+        isUserSurveyModalOpen: state.main.isUserSurveyModalOpen,
+        dispatch: state.main.dispatch,
+        authError: state.auth.authError,
+    };
 }
 
 UserSurveyModal.propTypes = {
     isUserSurveyModalOpen: bool.isRequired,
     dispatch: func.isRequired,
+    authError: string.isRequired,
 };
 
 export default connect(mapStateToProps)(UserSurveyModal);

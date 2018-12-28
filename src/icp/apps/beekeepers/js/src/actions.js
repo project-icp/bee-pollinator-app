@@ -185,6 +185,38 @@ export function logout() {
     });
 }
 
+
+export function createUserSurvey(form) {
+    return (dispatch, getState) => {
+        const {
+            auth: {
+                username,
+                userId,
+            },
+        } = getState();
+
+        return csrfRequest.post('/beekeepers/user_survey/', form)
+            .then(({ data }) => {
+                dispatch(setAuthState({
+                    username,
+                    authError: '',
+                    userId,
+                    userSurvey: data.beekeeper_survey,
+                }));
+                dispatch(closeUserSurveyModal());
+            })
+            .catch(() => {
+                dispatch(setAuthState({
+                    username,
+                    authError: 'Error submitting user survey. Check the fields and try again.',
+                    userId,
+                    userSurvey: false,
+                }));
+            });
+    };
+}
+
+
 export function fetchUserApiaries() {
     return (dispatch) => {
         dispatch(startFetchingApiaryList());
