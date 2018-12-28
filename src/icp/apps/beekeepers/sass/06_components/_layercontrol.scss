@@ -1,11 +1,118 @@
 .layercontrol {
+    display: flex;
+    flex-direction: row;
+    background-color: $color-white;
+
     &__button {
         width: 30px;
         height: 30px;
         padding: 0;
-        color: #000;
+        color: $color-black;
         line-height: 30px;
         text-align: center;
+        background-color: transparent;
+        border-width: 0;
         border-radius: 2px;
+    }
+
+    &__slider {
+
+        /* stylelint-disable media-feature-name-no-vendor-prefix */
+
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            /* Webkit only http://phrappe.com/css/conditional-css-for-webkit-based-browsers/ */
+            border-top: 11px solid transparent;
+            border-bottom: 11px solid transparent;
+        }
+
+        /* stylelint-enable */
+
+        width: 19.3rem;
+        margin: auto;
+        margin-right: 0.5rem;
+        margin-left: 0.5rem;
+        padding: 0 0.5rem;
+        background-color: transparent;
+        cursor: pointer;
+        /* stylelint-disable-next-line property-no-vendor-prefix */
+        -webkit-appearance: none;
+
+        &::-webkit-slider-thumb {
+            width: 12px;
+            height: 12px;
+            margin-top: -5px;
+            background: $color-black;
+            border: 1px solid $color-black;
+            border-radius: 50px;
+            /* stylelint-disable-next-line property-no-vendor-prefix */
+            -webkit-appearance: none;
+        }
+
+        &::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 2px;
+            background: $color-black;
+            cursor: pointer;
+        }
+
+        &::-moz-range-track {
+            height: 2px;
+            background-color: $color-black;
+        }
+
+        &::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            background: $color-black;
+            border: 1px solid $color-black;
+            border-radius: 50px;
+        }
+
+        &::-ms-track {
+            width: 100%;
+            height: 2px;
+            color: transparent;
+            background: transparent;
+            border-color: transparent;
+            border-top: 11px solid transparent;
+            border-bottom: 11px solid transparent;
+            cursor: pointer;
+        }
+
+        &::-ms-thumb {
+            width: 12px;
+            height: 12px;
+            background: $color-black;
+            border: 1px solid $color-black;
+            border-radius: 50px;
+        }
+
+        &::-ms-fill-lower {
+            background: $color-black;
+            border: $color-black;
+        }
+
+        &::-ms-fill-upper {
+            background: $color-black;
+            border: $color-black;
+        }
+
+        &:focus {
+            outline: none;
+        }
+
+        &:focus::-ms-fill-lower {
+            background: $color-black;
+            border: $color-black;
+        }
+
+        &:focus::-ms-fill-upper {
+            background: $color-black;
+            border: $color-black;
+        }
+
+        &:focus::-webkit-slider-thumb {
+            background: $color-black;
+        }
     }
 }

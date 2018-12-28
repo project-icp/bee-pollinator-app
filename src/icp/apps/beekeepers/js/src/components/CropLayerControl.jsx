@@ -27,7 +27,18 @@ class CropLayerControl extends Component {
     }
 
     render() {
-        const { position } = this.props;
+        const { position, isCropLayerActive } = this.props;
+        const slider = !isCropLayerActive ? null : (
+            <input
+                title="Drag to change opacity of overlay"
+                type="range"
+                min="0"
+                max="99"
+                step="3"
+                className="layercontrol__slider"
+                value="50"
+            />
+        );
 
         return (
             <Control
@@ -41,6 +52,7 @@ class CropLayerControl extends Component {
                 >
                     <i className="icon-layers" />
                 </button>
+                {slider}
             </Control>
         );
     }
