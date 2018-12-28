@@ -168,7 +168,7 @@ export function login(form) {
                     username: '',
                     authError: error.response.data.errors[0],
                     userId: null,
-                    userSurvey: false,
+                    userSurvey: null,
                 }));
             });
     };
@@ -206,11 +206,12 @@ export function createUserSurvey(form) {
                 dispatch(closeUserSurveyModal());
             })
             .catch(() => {
+                const errorMsg = 'Error submitting user survey. Check the fields and try again, or try again later.';
                 dispatch(setAuthState({
                     username,
-                    authError: 'Error submitting user survey. Check the fields and try again.',
+                    authError: errorMsg,
                     userId,
-                    userSurvey: false,
+                    userSurvey: null,
                 }));
             });
     };

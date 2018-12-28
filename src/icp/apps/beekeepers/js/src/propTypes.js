@@ -31,3 +31,24 @@ export const Apiary = shape({
     starred: bool.isRequired,
     surveyed: bool.isRequired,
 });
+
+export const UserSurvey = shape({
+    user: string.isRequired,
+    contribution_level: string.isRequired,
+    phone: string,
+    preferred_contact: string,
+    year_began: number,
+    organization: string,
+    total_colonies: string,
+    relocate: bool.isRequired,
+    income: string,
+    practice: string,
+    varroa_management: bool.isRequired,
+    varroa_management_trigger: string,
+    purchased_queens: bool.isRequired,
+    purchased_queens_sources: string,
+    resistant_queens: bool.isRequired,
+    resistant_queens_genetics: string,
+    rear_queens: bool.isRequired,
+    equipment: string,
+});

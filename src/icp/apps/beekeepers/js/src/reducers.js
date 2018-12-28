@@ -74,7 +74,7 @@ const initialAuthState = {
     username: '',
     userId: null,
     authError: '',
-    userSurvey: false,
+    userSurvey: null,
 };
 
 const authReducer = createReducer({

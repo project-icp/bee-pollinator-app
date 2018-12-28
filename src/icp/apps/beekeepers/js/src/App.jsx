@@ -1,5 +1,5 @@
 import React from 'react';
-import { func, number, bool } from 'prop-types';
+import { func, number } from 'prop-types';
 import { hot } from 'react-hot-loader';
 import {
     Switch,
@@ -16,6 +16,7 @@ import LoginModal from './components/LoginModal';
 import ParticipateModal from './components/ParticipateModal';
 import UserSurveyModal from './components/UserSurveyModal';
 
+import { UserSurvey } from './propTypes';
 import { login, fetchUserApiaries, openUserSurveyModal } from './actions';
 
 class App extends React.Component {
@@ -73,12 +74,12 @@ function mapStateToProps(state) {
 App.propTypes = {
     dispatch: func.isRequired,
     userId: number,
-    userSurvey: bool,
+    userSurvey: UserSurvey,
 };
 
 App.defaultProps = {
     userId: null,
-    userSurvey: false,
+    userSurvey: null,
 };
 
 export default hot(module)(connect(mapStateToProps)(App));
