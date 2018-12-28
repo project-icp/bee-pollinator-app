@@ -10,7 +10,14 @@ from rest_framework.serializers import (
     PrimaryKeyRelatedField,
 )
 
-from models import Apiary, Survey, AprilSurvey, NovemberSurvey, MonthlySurvey
+from models import (
+    Apiary,
+    Survey,
+    AprilSurvey,
+    NovemberSurvey,
+    MonthlySurvey,
+    UserSurvey
+)
 
 
 class JsonField(BaseSerializer):
@@ -57,6 +64,13 @@ SUBSURVEY_SERIALIZERS = {
     'NOVEMBER': NovemberSurveySerializer,
     'MONTHLY': MonthlySurveySerializer,
 }
+
+
+class UserSurveySerializer(ModelSerializer):
+    class Meta:
+        model = UserSurvey
+
+    user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
 
 
 class ApiarySerializer(ModelSerializer):

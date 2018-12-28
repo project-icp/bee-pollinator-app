@@ -11,11 +11,12 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.status import HTTP_204_NO_CONTENT
 
-from models import Apiary, Survey, SUBSURVEY_MODELS
+from models import Apiary, Survey, UserSurvey, SUBSURVEY_MODELS
 from serializers import (
     ApiarySerializer,
     SurveySerializer,
     SUBSURVEY_SERIALIZERS,
+    UserSurveySerializer,
 )
 from tasks import sample_at_point
 
@@ -92,6 +93,15 @@ def get_survey(request, apiary_id=None, survey_id=None):
     serializer = SUBSURVEY_SERIALIZERS[survey_type]
     serialized_data = serializer(subsurvey)
     return Response(serialized_data.data)
+
+
+class UserSurveyViewSet(viewsets.ModelViewSet):
+    queryset = UserSurvey.objects.all()
+    serializer_class = UserSurveySerializer
+    permissions_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        return UserSurvey.objects.filter(user=self.request.user)
 
 
 class ApiaryViewSet(viewsets.ModelViewSet):

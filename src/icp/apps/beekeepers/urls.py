@@ -11,6 +11,7 @@ from apps.beekeepers import views
 
 router = routers.DefaultRouter()
 router.register(r'apiary', views.ApiaryViewSet)
+router.register('user_survey', views.UserSurveyViewSet)
 
 
 urlpatterns = patterns(
