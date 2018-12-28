@@ -39,6 +39,8 @@ class Map extends Component {
     constructor() {
         super();
         this.onClickAddMarker = this.onClickAddMarker.bind(this);
+        this.enableMapZoom = this.enableMapZoom.bind(this);
+        this.disableMapZoom = this.disableMapZoom.bind(this);
         this.mapRef = createRef();
         this.addressLookup = (new esri.GeocodeService()).reverse();
 
@@ -153,6 +155,14 @@ class Map extends Component {
         }, 300);
     }
 
+    enableMapZoom() {
+        this.mapRef.current.leafletElement.scrollWheelZoom.enable();
+    }
+
+    disableMapZoom() {
+        this.mapRef.current.leafletElement.scrollWheelZoom.disable();
+    }
+
     render() {
         const { apiaries, cropLayerOpacity, isCropLayerActive } = this.props;
         const markers = apiaries.map((apiary) => {
@@ -191,7 +201,11 @@ class Map extends Component {
                         attribution="Tiles &copy; Esri"
                         url="https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
                     />
-                    <CropLayerControl position="bottomleft" />
+                    <CropLayerControl
+                        position="bottomleft"
+                        enableMapZoom={this.enableMapZoom}
+                        disableMapZoom={this.disableMapZoom}
+                    />
                     <ZoomControl position="bottomleft" />
                     {markers}
                 </LeafletMap>

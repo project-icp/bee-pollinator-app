@@ -8,7 +8,10 @@ import {
 } from 'prop-types';
 import Control from 'react-leaflet-control';
 
+import cropTypes from '../cropTypes.json';
+
 import { showCropLayer, hideCropLayer, setCropLayerOpacity } from '../actions';
+import { sortByValue } from '../utils';
 
 
 class CropLayerControl extends Component {
@@ -16,6 +19,8 @@ class CropLayerControl extends Component {
         super();
         this.toggleCropLayer = this.toggleCropLayer.bind(this);
         this.setOpacity = this.setOpacity.bind(this);
+        this.cropTypes = Object.entries(cropTypes);
+        this.cropTypes.sort(sortByValue);
     }
 
     componentDidMount() {
@@ -39,7 +44,13 @@ class CropLayerControl extends Component {
     }
 
     render() {
-        const { position, cropLayerOpacity, isCropLayerActive } = this.props;
+        const {
+            position,
+            cropLayerOpacity,
+            isCropLayerActive,
+            enableMapZoom,
+            disableMapZoom,
+        } = this.props;
         const slider = !isCropLayerActive ? null : (
             <input
                 title="Drag to change opacity of overlay"
@@ -51,6 +62,25 @@ class CropLayerControl extends Component {
                 defaultValue={cropLayerOpacity}
                 onChange={this.setOpacity}
             />
+        );
+        const legendItems = !isCropLayerActive
+            ? []
+            : this.cropTypes.map(([key, value]) => (
+                <div className="legenditem" key={key}>
+                    <span className={`legenditem__color crop-${key}`} />
+                    {value}
+                </div>
+            ));
+        const legend = !isCropLayerActive ? null : (
+            <div
+                className="layercontrol__legend"
+                onMouseOver={disableMapZoom}
+                onFocus={disableMapZoom}
+                onMouseOut={enableMapZoom}
+                onBlur={enableMapZoom}
+            >
+                {legendItems}
+            </div>
         );
 
         return (
@@ -66,6 +96,7 @@ class CropLayerControl extends Component {
                     <i className="icon-layers" />
                 </button>
                 {slider}
+                {legend}
             </Control>
         );
     }
@@ -77,6 +108,8 @@ function mapStateToProps(state) {
 
 CropLayerControl.propTypes = {
     position: string.isRequired,
+    enableMapZoom: func.isRequired,
+    disableMapZoom: func.isRequired,
     cropLayerOpacity: number.isRequired,
     isCropLayerActive: bool.isRequired,
     dispatch: func.isRequired,

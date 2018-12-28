@@ -115,4 +115,42 @@
             background: $color-black;
         }
     }
+
+    &__legend {
+        position: absolute;
+        bottom: 4.1rem;
+        left: 4.1rem;
+        width: 19.4rem;
+        height: 14rem;
+        padding: 0.5rem;
+        overflow-y: scroll;
+        background: $color-white;
+        background-clip: padding-box;
+        border: 2px solid #0003;
+        border-radius: 4px;
+
+        .legenditem {
+            display: block;
+
+            &__color {
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                margin-right: 4px;
+                margin-bottom: -3px;
+                border: 2px solid #0003;
+                border-radius: 2px;
+            }
+        }
+    }
+}
+
+@for $i from 1 through 62 {
+    .crop-#{$i} {
+        background: map-get($cropColors, $i);
+    }
+
+    .crop-fill-#{$i} {
+        fill: map-get($cropColors, $i);
+    }
 }
