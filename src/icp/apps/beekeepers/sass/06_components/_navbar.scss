@@ -10,6 +10,17 @@
         font-weight: 900;
     }
 
+    &__options {
+        position: absolute;
+        top: 45px;
+        right: 0;
+        display: none;
+        padding: 0 1rem;
+        background: $color-white;
+        border-bottom: 1px solid #d8d8d8;
+        border-left: 1px solid #d8d8d8;
+    }
+
     &__items {
         display: flex;
         flex: 1;
@@ -27,6 +38,12 @@
         &.active {
             color: $color-black;
             text-decoration: underline;
+        }
+
+        &--user:hover {
+            .navbar__options {
+                display: block;
+            }
         }
     }
 
