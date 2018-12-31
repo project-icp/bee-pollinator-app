@@ -147,6 +147,28 @@ export function fetchApiaryScores(apiaryList, forageRange) {
     };
 }
 
+export function signUp(form) {
+    return dispatch => csrfRequest.post('/user/sign_up', form)
+        .then(({ data: { result } }) => {
+            if (result === 'success') {
+                dispatch(closeSignUpModal());
+                dispatch(setAuthState({
+                    username: '',
+                    authError: 'Please click the validation link in your email and then log in.',
+                    userId: null,
+                }));
+                dispatch(openLoginModal());
+            }
+        })
+        .catch((error) => {
+            dispatch(setAuthState({
+                username: '',
+                authError: error.response.data.errors[0],
+                userId: null,
+            }));
+        });
+}
+
 export function login(form) {
     return (dispatch) => {
         const request = form

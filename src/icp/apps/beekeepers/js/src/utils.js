@@ -132,3 +132,10 @@ export function sortByValue(a, b) {
 export function arrayToSemicolonDelimitedString(arrayOfStrings) {
     return arrayOfStrings.filter(s => s.length > 0).join(';');
 }
+
+// Converts JSON data to Form Data since some back-end endpoints require that
+export function toFormData(json) {
+    const formData = new FormData();
+    Object.entries(json).forEach(([key, value]) => formData.append(key, value));
+    return formData;
+}
