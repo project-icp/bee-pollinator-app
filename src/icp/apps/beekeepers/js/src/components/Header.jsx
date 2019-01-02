@@ -16,6 +16,14 @@ const Header = ({ dispatch, username }) => {
                     {username}
                     ▾
                 </button>
+                {/* Hidden Log Out button for screen readers */}
+                <button
+                    type="button"
+                    className="sr-only"
+                    onClick={() => dispatch(logout())}
+                >
+                    Log Out
+                </button>
                 <ul className="navbar__options">
                     <li>
                         <button
