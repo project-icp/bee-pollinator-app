@@ -10,10 +10,20 @@ import {
 } from 'react-leaflet';
 import * as L from 'leaflet';
 import { connect } from 'react-redux';
-import { arrayOf, func, string } from 'prop-types';
+import {
+    arrayOf,
+    bool,
+    func,
+    number,
+    string,
+} from 'prop-types';
 
 import { Apiary } from '../propTypes';
-import { fetchApiaryScores, setApiaryList, updateApiary } from '../actions';
+import {
+    fetchApiaryScores,
+    setApiaryList,
+    updateApiary,
+} from '../actions';
 import {
     MAP_CENTER,
     MAP_ZOOM,
@@ -23,11 +33,14 @@ import {
 import { getNextInSequence, isSameLocation } from '../utils';
 
 import ApiaryMarker from './ApiaryMarker';
+import CropLayerControl from './CropLayerControl';
 
 class Map extends Component {
     constructor() {
         super();
         this.onClickAddMarker = this.onClickAddMarker.bind(this);
+        this.enableMapZoom = this.enableMapZoom.bind(this);
+        this.disableMapZoom = this.disableMapZoom.bind(this);
         this.mapRef = createRef();
         this.addressLookup = (new esri.GeocodeService()).reverse();
 
@@ -142,8 +155,16 @@ class Map extends Component {
         }, 300);
     }
 
+    enableMapZoom() {
+        this.mapRef.current.leafletElement.scrollWheelZoom.enable();
+    }
+
+    disableMapZoom() {
+        this.mapRef.current.leafletElement.scrollWheelZoom.disable();
+    }
+
     render() {
-        const { apiaries } = this.props;
+        const { apiaries, cropLayerOpacity, isCropLayerActive } = this.props;
         const markers = apiaries.map((apiary) => {
             const icon = L.divIcon({
                 className: 'custom icon',
@@ -157,6 +178,13 @@ class Map extends Component {
                 />
             );
         });
+        const cropLayer = !isCropLayerActive ? null : (
+            <TileLayer
+                url="https://{s}.tiles.azavea.com/cdl-reclass/{z}/{x}/{y}.png"
+                subdomains="abcd"
+                opacity={cropLayerOpacity}
+            />
+        );
 
         return (
             <div className="map">
@@ -168,14 +196,15 @@ class Map extends Component {
                     ref={this.mapRef}
                     maxZoom={18}
                 >
+                    {cropLayer}
                     <TileLayer
                         attribution="Tiles &copy; Esri"
                         url="https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
                     />
-                    <TileLayer
-                        attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                        url="https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png"
-                        subdomains="abcd"
+                    <CropLayerControl
+                        position="bottomleft"
+                        enableMapZoom={this.enableMapZoom}
+                        disableMapZoom={this.disableMapZoom}
                     />
                     <ZoomControl position="bottomleft" />
                     {markers}
@@ -192,6 +221,8 @@ function mapStateToProps(state) {
 Map.propTypes = {
     apiaries: arrayOf(Apiary).isRequired,
     forageRange: string.isRequired,
+    isCropLayerActive: bool.isRequired,
+    cropLayerOpacity: number.isRequired,
     dispatch: func.isRequired,
 };
 

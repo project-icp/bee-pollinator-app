@@ -114,3 +114,18 @@ export function listMonthYearsSinceCreation(apiary) {
 
     return monthYears;
 }
+
+export function sortByValue(a, b) {
+    const valA = a[1].toUpperCase();
+    const valB = b[1].toUpperCase();
+
+    if (valA < valB) {
+        return -1;
+    }
+
+    if (valA > valB) {
+        return 1;
+    }
+
+    return 0;
+}

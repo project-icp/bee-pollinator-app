@@ -120,11 +120,6 @@ module.exports = ({ production }) => {
                     loader: 'url-loader?limit=25000&name=img/[name].[ext]',
                 },
                 {
-                    test: /.*\.(json)$/,
-                    exclude: /node_modules/,
-                    loader: 'json-loader',
-                },
-                {
                     test: /\.(html)$/,
                     loader: 'html-loader?name=[name].[ext]',
                 },
