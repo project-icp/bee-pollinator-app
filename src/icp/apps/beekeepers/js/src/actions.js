@@ -167,6 +167,17 @@ export function login(form) {
     };
 }
 
+export function logout() {
+    return dispatch => csrfRequest.get('/user/logout').then(() => {
+        dispatch(setAuthState({
+            username: '',
+            authError: '',
+            userId: null,
+        }));
+        dispatch(setApiaryList([]));
+    });
+}
+
 export function fetchUserApiaries() {
     return (dispatch) => {
         dispatch(startFetchingApiaryList());

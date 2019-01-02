@@ -3,18 +3,38 @@ import { connect } from 'react-redux';
 import { NavLink, withRouter } from 'react-router-dom';
 import { func, string } from 'prop-types';
 
-import { openParticipateModal, openLoginModal } from '../actions';
+import { openParticipateModal, openLoginModal, logout } from '../actions';
 
 const Header = ({ dispatch, username }) => {
     const authButtons = username
         ? (
-            <li className="navbar__item">
+            <li className="navbar__item navbar__item--user">
                 <button
                     type="button"
                     className="navbar__button"
                 >
                     {username}
+                    ▾
                 </button>
+                {/* Hidden Log Out button for screen readers */}
+                <button
+                    type="button"
+                    className="sr-only"
+                    onClick={() => dispatch(logout())}
+                >
+                    Log Out
+                </button>
+                <ul className="navbar__options">
+                    <li>
+                        <button
+                            type="button"
+                            className="navbar__button"
+                            onClick={() => dispatch(logout())}
+                        >
+                            Log Out
+                        </button>
+                    </li>
+                </ul>
             </li>
         )
         : (
