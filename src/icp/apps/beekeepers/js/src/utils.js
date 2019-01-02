@@ -130,11 +130,5 @@ export function sortByValue(a, b) {
 }
 
 export function arrayToSemicolonDelimitedString(arrayOfStrings) {
-    let string = '';
-    arrayOfStrings.forEach((s) => {
-        if (s.length) {
-            string = `${string}${s};`;
-        }
-    });
-    return string;
+    return arrayOfStrings.filter(s => s.length > 0).join(';');
 }

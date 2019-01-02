@@ -98,7 +98,7 @@ def get_survey(request, apiary_id=None, survey_id=None):
 class UserSurveyViewSet(viewsets.ModelViewSet):
     queryset = UserSurvey.objects.all()
     serializer_class = UserSurveySerializer
-    permissions_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return UserSurvey.objects.filter(user=self.request.user)

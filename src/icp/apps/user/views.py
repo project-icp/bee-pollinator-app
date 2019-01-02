@@ -33,13 +33,15 @@ def login(request):
                     request.DATA.get('password'))
         user = authenticate(username=username,
                             password=password)
-        
+
         if user is not None:
             if user.is_active:
                 auth_login(request, user)
                 user_survey = None
                 if hasattr(user, 'beekeeper_user_survey'):
-                    user_survey = UserSurveySerializer(user.beekeeper_user_survey).data
+                    user_survey = UserSurveySerializer(
+                        user.beekeeper_user_survey
+                    ).data
 
                 response_data = {
                     'result': 'success',
@@ -69,7 +71,9 @@ def login(request):
         if user.is_authenticated() and user.is_active:
             user_survey = None
             if hasattr(user, 'beekeeper_user_survey'):
-                user_survey = UserSurveySerializer(user.beekeeper_user_survey).data
+                user_survey = UserSurveySerializer(
+                    user.beekeeper_user_survey
+                ).data
 
             response_data = {
                 'result': 'success',

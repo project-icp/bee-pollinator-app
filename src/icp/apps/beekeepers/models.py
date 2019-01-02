@@ -365,7 +365,7 @@ class UserSurvey(models.Model):
         ),
         help_text='Do you prefer email or phone?')
     year_began = models.PositiveIntegerField(
-        null=True,
+        null=False,
         help_text='What year did you start keeping bees?')
     organization = models.TextField(
         null=True,

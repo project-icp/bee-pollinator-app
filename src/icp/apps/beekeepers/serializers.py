@@ -69,6 +69,12 @@ SUBSURVEY_SERIALIZERS = {
 class UserSurveySerializer(ModelSerializer):
     class Meta:
         model = UserSurvey
+        fields = ('user', 'contribution_level', 'phone', 'preferred_contact',
+                  'year_began', 'organization', 'total_colonies', 'relocate',
+                  'income', 'practice', 'varroa_management',
+                  'varroa_management_trigger', 'purchased_queens',
+                  'purchased_queens_sources', 'resistant_queens',
+                  'resistant_queens_genetics', 'rear_queens', 'equipment',)
 
     user = PrimaryKeyRelatedField(read_only=True, default=CurrentUserDefault())
 
