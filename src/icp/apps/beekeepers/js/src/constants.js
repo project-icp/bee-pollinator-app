@@ -16,3 +16,10 @@ export const SORT_OPTIONS = [DEFAULT_SORT].concat(Object.values(INDICATORS));
 
 export const MAP_CENTER = [40.0, -76.079];
 export const MAP_ZOOM = 10;
+
+export const CONTRIBUTION_LEVEL_LIGHT = 'LIGHT';
+export const CONTRIBUTION_LEVEL_PRO = 'PRO';
+
+export const SURVEY_TYPE_NOVEMBER = 'NOVEMBER';
+export const SURVEY_TYPE_APRIL = 'APRIL';
+export const SURVEY_TYPE_MONTHLY = 'MONTHLY';
