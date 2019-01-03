@@ -333,3 +333,70 @@ export function deleteApiary(apiary) {
         }
     };
 }
+
+export function saveAndFetchApiaries() {
+    return (dispatch, getState) => {
+        const {
+            main: {
+                apiaries,
+            },
+            auth: {
+                userId,
+            },
+        } = getState();
+
+        if (!userId) {
+            return;
+        }
+
+        if (apiaries.length > 0) {
+            /* There are client-side unsaved apiaries. Save them if the user
+               does not have any saved on server-side. If they do  have server-
+               side saved apiaries, then discard the client-side ones. */
+
+            dispatch(startFetchingApiaryList());
+
+            csrfRequest
+                .get('/beekeepers/apiary/')
+                .then(({ data }) => {
+                    if (data.length === 0) {
+                        /* No apiaries from server. Upsert client ones. */
+
+                        dispatch(startSavingApiaryList());
+
+                        csrfRequest
+                            .post('/beekeepers/apiary/upsert/', apiaries)
+                            .then(({ data: upsertResponse }) => {
+                                const apiaryListWithData = upsertResponse.map(apiary => (
+                                    update(apiary, {
+                                        fetching: { $set: false },
+                                        selected: { $set: false },
+                                    })
+                                ));
+
+                                dispatch(setApiaryList(apiaryListWithData));
+                                dispatch(completeSavingApiaryList());
+                            })
+                            .catch(error => dispatch(failSavingApiaryList(error)));
+                    } else {
+                        /* Server has apiaries. Discard client ones. */
+
+                        const apiaryListWithData = data.map(apiary => (
+                            update(apiary, {
+                                fetching: { $set: false },
+                                selected: { $set: false },
+                            })
+                        ));
+
+                        dispatch(setApiaryList(apiaryListWithData));
+                        dispatch(completeFetchingApiaryList());
+                    }
+                })
+                .catch(error => dispatch(failFetchingApiaryList(error)));
+        } else {
+            /* No client-side apiaries. Just fetch from server. */
+
+            dispatch(fetchUserApiaries());
+        }
+    };
+}
