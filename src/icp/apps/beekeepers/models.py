@@ -351,13 +351,10 @@ class UserSurvey(models.Model):
                   'Light users fill out a brief survey in April, '
                   'and a detailed on in November. '
                   'Pro users have to additionally fill out monthly surveys.')
-    email = models.CharField(
-        max_length=255,
-        null=False,
-        help_text='Email')
     phone = models.CharField(
         max_length=255,
         null=False,
+        blank=True,
         help_text='Phone')
     preferred_contact = models.CharField(
         max_length=10,
@@ -372,6 +369,7 @@ class UserSurvey(models.Model):
         help_text='What year did you start keeping bees?')
     organization = models.TextField(
         null=True,
+        blank=True,
         help_text='Are you part of a Beekeeper\'s Organization or Club? '
                   'Which one?')
     total_colonies = models.CharField(
@@ -382,7 +380,8 @@ class UserSurvey(models.Model):
             ('BETWEEN_4_AND_7', '4-7'),
             ('BETWEEN_8_AND_25', '8-25'),
             ('BETWEEN_26_AND_59', '26-59'),
-            ('BETWEEN_60_AND_99', '100-499'),
+            ('BETWEEN_60_AND_99', '60-99'),
+            ('BETWEEN_100_AND_499', '100-499'),
             ('BETWEEN_500_AND_2000', '500-2000'),
             ('MORE_THAN_2000', 'More than 2000'),
         ),
@@ -395,6 +394,7 @@ class UserSurvey(models.Model):
         # SELL_QUEENS; NO_INCOME
         max_length=255,
         null=False,
+        blank=True,
         help_text='Do you obtain income for your bees? '
                   'What do you receive income from? '
                   'Check all that apply.')
@@ -412,12 +412,14 @@ class UserSurvey(models.Model):
         help_text='Do you manage for Varroa?')
     varroa_management_trigger = models.TextField(
         null=True,
+        blank=True,
         help_text='How do you decide when to manage for Varroa?')
     purchased_queens = models.BooleanField(
         null=False,
         help_text='Do you buy queens, nucs or packages?')
     purchased_queens_sources = models.TextField(
         null=True,
+        blank=True,
         help_text='Please provide the state(s) '
                   'where your purchased bees originated from')
     resistant_queens = models.BooleanField(
@@ -425,6 +427,7 @@ class UserSurvey(models.Model):
         help_text='Do you use Varroa-resistant queens?')
     resistant_queens_genetics = models.TextField(
         null=True,
+        blank=True,
         help_text='Describe their genetics')
     rear_queens = models.BooleanField(
         null=False,
@@ -432,6 +435,7 @@ class UserSurvey(models.Model):
     equipment = models.TextField(
         # 8_FRAME_LANGSTROTH; 10_FRAME_LANGSTROTH; TOP_BAR; OTHER-
         null=False,
+        blank=True,
         help_text='What kind of equipment do you use?'
                   'Check all that apply.')
 

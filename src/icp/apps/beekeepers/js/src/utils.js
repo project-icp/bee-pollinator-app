@@ -82,7 +82,6 @@ export function monthToText(month) {
     return monthNames[month];
 }
 
-
 export function listMonthYearsSinceCreation(apiary) {
     // Count months from 0-11, where January is 0
     const createdYear = Number(apiary.created_at.substring(0, 4));
@@ -128,4 +127,8 @@ export function sortByValue(a, b) {
     }
 
     return 0;
+}
+
+export function arrayToSemicolonDelimitedString(arrayOfStrings) {
+    return arrayOfStrings.filter(s => s.length > 0).join(';');
 }

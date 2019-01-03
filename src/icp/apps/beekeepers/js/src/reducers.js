@@ -20,6 +20,8 @@ import {
     showCropLayer,
     hideCropLayer,
     setCropLayerOpacity,
+    openUserSurveyModal,
+    closeUserSurveyModal,
 } from './actions';
 
 const initialState = {
@@ -31,6 +33,7 @@ const initialState = {
     isParticipateModalOpen: false,
     isCropLayerActive: false,
     cropLayerOpacity: 0.5,
+    isUserSurveyModalOpen: false,
 };
 
 const mainReducer = createReducer({
@@ -58,6 +61,10 @@ const mainReducer = createReducer({
         state => update(state, { isCropLayerActive: { $set: false } }),
     [setCropLayerOpacity]:
         (state, payload) => update(state, { cropLayerOpacity: { $set: payload } }),
+    [openUserSurveyModal]:
+        state => update(state, { isUserSurveyModalOpen: { $set: true } }),
+    [closeUserSurveyModal]:
+        state => update(state, { isUserSurveyModalOpen: { $set: false } }),
 }, initialState);
 
 // Placeholder reducer for parts of state that will be persisted to localStorage
@@ -67,6 +74,7 @@ const initialAuthState = {
     username: '',
     userId: null,
     authError: '',
+    userSurvey: null,
 };
 
 const authReducer = createReducer({

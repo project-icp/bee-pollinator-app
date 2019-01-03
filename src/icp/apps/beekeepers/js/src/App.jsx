@@ -14,8 +14,10 @@ import Survey from './components/Survey';
 import SignUpModal from './components/SignUpModal';
 import LoginModal from './components/LoginModal';
 import ParticipateModal from './components/ParticipateModal';
+import UserSurveyModal from './components/UserSurveyModal';
 
-import { login, fetchUserApiaries } from './actions';
+import { UserSurvey } from './propTypes';
+import { login, fetchUserApiaries, openUserSurveyModal } from './actions';
 
 class App extends React.Component {
     componentDidMount() {
@@ -25,10 +27,14 @@ class App extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { dispatch, userId } = this.props;
+        const { dispatch, userId, userSurvey } = this.props;
 
         if (userId && userId !== prevProps.userId) {
-            dispatch(fetchUserApiaries());
+            if (userSurvey) {
+                dispatch(fetchUserApiaries());
+            } else {
+                dispatch(openUserSurveyModal());
+            }
         }
     }
 
@@ -43,6 +49,7 @@ class App extends React.Component {
             <>
                 <Header />
                 <main>
+                    <UserSurveyModal />
                     <ParticipateModal />
                     <SignUpModal />
                     <LoginModal />
@@ -60,16 +67,19 @@ function mapStateToProps(state) {
     return {
         dispatch: state.main.dispatch,
         userId: state.auth.userId,
+        userSurvey: state.auth.userSurvey,
     };
 }
 
 App.propTypes = {
     dispatch: func.isRequired,
     userId: number,
+    userSurvey: UserSurvey,
 };
 
 App.defaultProps = {
     userId: null,
+    userSurvey: null,
 };
 
 export default hot(module)(connect(mapStateToProps)(App));
