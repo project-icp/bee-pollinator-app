@@ -17,7 +17,7 @@ import ParticipateModal from './components/ParticipateModal';
 import UserSurveyModal from './components/UserSurveyModal';
 
 import { UserSurvey } from './propTypes';
-import { login, fetchUserApiaries, openUserSurveyModal } from './actions';
+import { login, saveAndFetchApiaries, openUserSurveyModal } from './actions';
 
 class App extends React.Component {
     componentDidMount() {
@@ -30,9 +30,9 @@ class App extends React.Component {
         const { dispatch, userId, userSurvey } = this.props;
 
         if (userId && userId !== prevProps.userId) {
-            if (userSurvey) {
-                dispatch(fetchUserApiaries());
-            } else {
+            dispatch(saveAndFetchApiaries());
+
+            if (!userSurvey) {
                 dispatch(openUserSurveyModal());
             }
         }

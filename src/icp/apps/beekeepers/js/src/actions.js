@@ -147,6 +147,28 @@ export function fetchApiaryScores(apiaryList, forageRange) {
     };
 }
 
+export function signUp(form) {
+    return dispatch => csrfRequest.post('/user/sign_up?beekeepers', form)
+        .then(({ data: { result } }) => {
+            if (result === 'success') {
+                dispatch(closeSignUpModal());
+                dispatch(setAuthState({
+                    username: '',
+                    authError: 'Please click the validation link in your email and then log in.',
+                    userId: null,
+                }));
+                dispatch(openLoginModal());
+            }
+        })
+        .catch((error) => {
+            dispatch(setAuthState({
+                username: '',
+                authError: error.response.data.errors[0],
+                userId: null,
+            }));
+        });
+}
+
 export function login(form) {
     return (dispatch) => {
         const request = form
@@ -308,6 +330,73 @@ export function deleteApiary(apiary) {
                 .delete(`/beekeepers/apiary/${apiary.id}/`)
                 .then(() => dispatch(completeDeletingApiary()))
                 .catch(error => dispatch(failDeletingApiary(error)));
+        }
+    };
+}
+
+export function saveAndFetchApiaries() {
+    return (dispatch, getState) => {
+        const {
+            main: {
+                apiaries,
+            },
+            auth: {
+                userId,
+            },
+        } = getState();
+
+        if (!userId) {
+            return;
+        }
+
+        if (apiaries.length > 0) {
+            /* There are client-side unsaved apiaries. Save them if the user
+               does not have any saved on server-side. If they do  have server-
+               side saved apiaries, then discard the client-side ones. */
+
+            dispatch(startFetchingApiaryList());
+
+            csrfRequest
+                .get('/beekeepers/apiary/')
+                .then(({ data }) => {
+                    if (data.length === 0) {
+                        /* No apiaries from server. Upsert client ones. */
+
+                        dispatch(startSavingApiaryList());
+
+                        csrfRequest
+                            .post('/beekeepers/apiary/upsert/', apiaries)
+                            .then(({ data: upsertResponse }) => {
+                                const apiaryListWithData = upsertResponse.map(apiary => (
+                                    update(apiary, {
+                                        fetching: { $set: false },
+                                        selected: { $set: false },
+                                    })
+                                ));
+
+                                dispatch(setApiaryList(apiaryListWithData));
+                                dispatch(completeSavingApiaryList());
+                            })
+                            .catch(error => dispatch(failSavingApiaryList(error)));
+                    } else {
+                        /* Server has apiaries. Discard client ones. */
+
+                        const apiaryListWithData = data.map(apiary => (
+                            update(apiary, {
+                                fetching: { $set: false },
+                                selected: { $set: false },
+                            })
+                        ));
+
+                        dispatch(setApiaryList(apiaryListWithData));
+                        dispatch(completeFetchingApiaryList());
+                    }
+                })
+                .catch(error => dispatch(failFetchingApiaryList(error)));
+        } else {
+            /* No client-side apiaries. Just fetch from server. */
+
+            dispatch(fetchUserApiaries());
         }
     };
 }
