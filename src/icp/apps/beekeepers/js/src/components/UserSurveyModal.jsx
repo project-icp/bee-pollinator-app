@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { createUserSurvey } from '../actions';
 import { arrayToSemicolonDelimitedString } from '../utils';
 
-/* eslint-disable camelcase */
 class UserSurveyModal extends Component {
     constructor(props) {
         super(props);
@@ -475,7 +474,6 @@ class UserSurveyModal extends Component {
     }
 }
 
-/* eslint-enable camelcase */
 
 function mapStateToProps(state) {
     return {

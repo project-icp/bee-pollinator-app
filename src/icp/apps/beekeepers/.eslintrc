@@ -11,6 +11,7 @@
         "react"
     ],
     "rules": {
+        "camelcase": 0,
         "indent": [2, 4, { "SwitchCase": 1, "VariableDeclarator": 2 }],
         "react/jsx-indent": [2, 4],
         "react/jsx-indent-props": [2, 4],
