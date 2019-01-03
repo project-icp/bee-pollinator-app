@@ -138,19 +138,14 @@ def sign_up(request):
 
     if form.is_valid():
         user = view.register(request, form)
+        origin_app = \
+            UserProfile.BEEKEEPERS if 'beekeepers' in request.GET else \
+            UserProfile.POLLINATION
 
-        # Create a user profile with correct origin app
-        # TODO: Correct the check for the beekeepers app
-        if request.META['HTTP_REFERER'] is 'http://localhost:8000/?beekeepers':
-            UserProfile.objects.create(
-                user=user,
-                origin_app=UserProfile.BEEKEEPERS
-            )
-        else:
-            UserProfile.objects.create(
-                user=user,
-                origin_app=UserProfile.POLLINATION
-            )
+        UserProfile.objects.create(
+            user=user,
+            origin_app=origin_app
+        )
 
         response_data = {'result': 'success',
                          'username': user.username,

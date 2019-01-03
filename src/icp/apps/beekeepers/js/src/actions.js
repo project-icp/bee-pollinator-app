@@ -148,7 +148,7 @@ export function fetchApiaryScores(apiaryList, forageRange) {
 }
 
 export function signUp(form) {
-    return dispatch => csrfRequest.post('/user/sign_up', form)
+    return dispatch => csrfRequest.post('/user/sign_up?beekeepers', form)
         .then(({ data: { result } }) => {
             if (result === 'success') {
                 dispatch(closeSignUpModal());
