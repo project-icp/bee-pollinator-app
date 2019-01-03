@@ -359,7 +359,7 @@ class UserSurveyModal extends Component {
                                     className="form__control"
                                     id="purchased_queens"
                                     name="purchased_queens"
-                                    value={purchased_queens}
+                                    checked={purchased_queens}
                                     onChange={this.handleChange}
                                 />
                             </div>
@@ -385,7 +385,7 @@ class UserSurveyModal extends Component {
                                     className="form__control"
                                     id="resistant_queens"
                                     name="resistant_queens"
-                                    value={resistant_queens}
+                                    checked={resistant_queens}
                                     onChange={this.handleChange}
                                 />
                             </div>
@@ -411,7 +411,7 @@ class UserSurveyModal extends Component {
                                     className="form__control"
                                     id="rear_queens"
                                     name="rear_queens"
-                                    value={rear_queens}
+                                    checked={rear_queens}
                                     onChange={this.handleChange}
                                 />
                             </div>
