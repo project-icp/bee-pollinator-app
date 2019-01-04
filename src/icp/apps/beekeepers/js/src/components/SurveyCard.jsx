@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { arrayOf, func } from 'prop-types';
+import Popup from 'reactjs-popup';
 
 import { Apiary, Survey } from '../propTypes';
 import { setApiarySurvey } from '../actions';
 
+import ApiarySurveyListing from './ApiarySurveyListing';
 import SurveyCardListing from './SurveyCardListing';
 
 const SurveyCard = ({ apiary, dispatch, surveys }) => {
@@ -45,7 +47,19 @@ const SurveyCard = ({ apiary, dispatch, surveys }) => {
         if (surveys.length > 4) {
             cardFooter = (
                 <div className="surveyCard__footer">
-                    <button type="button" className="button">View full history</button>
+                    <Popup
+                        modal
+                        trigger={(
+                            <button
+                                type="button"
+                                className="button"
+                            >
+                                View full history
+                            </button>
+                        )}
+                    >
+                        <ApiarySurveyListing apiary={apiary} surveyItems={surveyItems} />
+                    </Popup>
                     <div>...</div>
                 </div>
             );
