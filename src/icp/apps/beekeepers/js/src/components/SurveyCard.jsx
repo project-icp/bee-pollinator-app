@@ -44,33 +44,29 @@ const SurveyCard = ({ apiary, dispatch, surveys }) => {
             />
         ));
 
-        if (surveys.length > 4) {
-            cardFooter = (
-                <div className="surveyCard__footer">
-                    <Popup
-                        modal
-                        trigger={(
-                            <button
-                                type="button"
-                                className="button"
-                            >
-                                View full history
-                            </button>
-                        )}
-                    >
-                        <ApiarySurveyListing apiary={apiary} surveyItems={surveyItems} />
-                    </Popup>
-                    <div>...</div>
-                </div>
-            );
-        } else {
-            cardFooter = (
-                <div className="surveyCard__footer">
-                    <div />
-                    <div>...</div>
-                </div>
-            );
-        }
+        const cardDetailTrigger = (
+            <button
+                type="button"
+                className="button"
+            >
+                View full history
+            </button>
+        );
+        const cardDetails = surveys.length <= 4 ? null : (
+            <Popup
+                modal
+                trigger={cardDetailTrigger}
+            >
+                <ApiarySurveyListing apiary={apiary} surveys={surveys} />
+            </Popup>
+        );
+
+        cardFooter = (
+            <div className="surveyCard__footer">
+                {cardDetails}
+                <div>...</div>
+            </div>
+        );
     }
 
     return (
