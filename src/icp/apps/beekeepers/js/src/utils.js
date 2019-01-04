@@ -80,10 +80,7 @@ export function getMarkerClass({ selected, starred, surveyed }) {
     return '';
 }
 
-export const monthNames = ['January', 'February', 'March', 'April', 'May',
-    'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-export const monthNames2 = {
+export const monthNames = {
     '01': 'January',
     '02': 'February',
     '03': 'March',
@@ -97,43 +94,6 @@ export const monthNames2 = {
     11: 'November',
     12: 'December',
 };
-
-export function monthToText(month) {
-    // Counts months from 0-11
-    return monthNames[month];
-}
-
-export function listMonthYearsSinceCreation(apiary) {
-    // Count months from 0-11, where January is 0
-    const createdYear = Number(apiary.created_at.substring(0, 4));
-    const createdMonth = Number(apiary.created_at.substring(5, 7)) - 1;
-
-    // The Date API counts months from 0
-    const timeNow = new Date();
-    const monthNow = timeNow.getMonth();
-    const yearNow = timeNow.getFullYear();
-
-    let months = 0;
-    months = (yearNow - createdYear) * 12;
-    months -= createdMonth;
-    months += monthNow;
-    const monthDiff = months <= 0 ? 0 : months;
-
-    let monthCounter = monthNow;
-    let yearCounter = yearNow;
-    const monthYears = [];
-    let i = 0;
-    for (i = 0; i < monthDiff + 1; i += 1) {
-        monthYears.push(`${monthToText(monthCounter)}-${String(yearCounter)}`);
-        monthCounter -= 1;
-        if (monthCounter < 1) {
-            yearCounter -= 1;
-            monthCounter = 11;
-        }
-    }
-
-    return monthYears;
-}
 
 export function sortByValue(a, b) {
     const valA = a[1].toUpperCase();
