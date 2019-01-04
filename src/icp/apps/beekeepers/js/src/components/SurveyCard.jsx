@@ -1,12 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { arrayOf, func } from 'prop-types';
-import { Apiary, Survey } from '../propTypes';
 
-import {
-    monthNames2,
-} from '../utils';
+import { Apiary, Survey } from '../propTypes';
 import { setApiarySurvey } from '../actions';
+
+import SurveyCardListing from './SurveyCardListing';
 
 const SurveyCard = ({ apiary, dispatch, surveys }) => {
     const {
@@ -36,21 +35,11 @@ const SurveyCard = ({ apiary, dispatch, surveys }) => {
     } else {
         const shownSurveys = surveys.slice(0, 4);
 
-        cardBody = shownSurveys.map(({ month_year, survey_type, completed }) => (
-            <div className="listing" key={name + month_year + survey_type}>
-                <div className={`listing__icon${completed ? '--completed' : ''}`}>
-                    {completed ? '✓' : '◯'}
-                </div>
-                <a className="listing__monthYear" href="/">
-                    {monthNames2[month_year.slice(0, 2)]}
-                    {' '}
-                    {month_year.slice(-4)}
-                    {' '}
-                    (
-                    {survey_type}
-                    )
-                </a>
-            </div>
+        cardBody = shownSurveys.map(survey => (
+            <SurveyCardListing
+                key={name + survey.month_year + survey.survey_type}
+                survey={survey}
+            />
         ));
 
         if (surveys.length > 4) {
