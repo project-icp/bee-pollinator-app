@@ -3,6 +3,8 @@ import {
     SURVEY_TYPE_APRIL,
     SURVEY_TYPE_MONTHLY,
 } from './constants';
+import csrfRequest from './csrfRequest';
+
 
 export function toDashedString(value) {
     return value.toLowerCase().replace('_', '-');
@@ -271,4 +273,12 @@ export function sortSurveysByMonthYearDescending(a, b) {
     }
 
     return Number(yearB) - Number(yearA);
+}
+
+export function getOrCreateSurveyRequest({ apiaryId, surveyId, form }) {
+    const request = surveyId
+        ? csrfRequest.get(`/beekeepers/apiary/${apiaryId}/survey/${surveyId}/`)
+        : csrfRequest.post(`/beekeepers/apiary/${apiaryId}/survey/`, form);
+
+    return request;
 }

@@ -400,11 +400,3 @@ export function saveAndFetchApiaries() {
         }
     };
 }
-
-export function getOrCreateSurveyRequest({ apiaryId, surveyId, form }) {
-    const request = surveyId
-        ? csrfRequest.get(`/beekeepers/apiary/${apiaryId}/survey/${surveyId}/`)
-        : csrfRequest.post(`/beekeepers/apiary/${apiaryId}/survey/`, form);
-
-    return request;
-}
