@@ -12,13 +12,13 @@ class AprilSurveyModal extends Component {
         this.state = {
             // each form input corresponds to a state var
             num_colonies: '',
-            colony_loss_reason_other: '',
-            colony_loss_reason_varroa: '',
-            colony_loss_reason_starvation: '',
-            colony_loss_reason_queens: '',
-            colony_loss_reason_weather: '',
-            colony_loss_reason_population: '',
-            colony_loss_reason_pesticide: '',
+            colony_loss_reason_OTHER: '',
+            colony_loss_reason_VARROA_MITES: false,
+            colony_loss_reason_INADEQUETE_FOOD_STORES: false,
+            colony_loss_reason_POOR_QUEENS: false,
+            colony_loss_reason_POOR_WEATHER_CONDITIONS: false,
+            colony_loss_reason_COLONY_TOO_SMALL: false,
+            colony_loss_reason_PESTICIDE_EXPOSURE: false,
             completedSurvey: '',
             error: '',
         };
@@ -35,8 +35,19 @@ class AprilSurveyModal extends Component {
             getOrCreateSurveyRequest({
                 apiaryId,
                 surveyId,
-            }).then(({ data }) => this.setState({ completedSurvey: data }))
-                .catch(error => this.setState({ error }));
+            }).then(({ data }) => {
+                const keys = data.colony_loss_reason.split(';')
+                    .map(s => `colony_loss_reason_${s}`);
+                const newState = keys.reduce((acc, key) => {
+                    acc[key] = true;
+
+                    return acc;
+                }, {
+                    completedSurvey: data,
+                    num_colonies: data.survey.num_colonies,
+                });
+                this.setState(newState);
+            }).catch(error => this.setState({ error }));
         }
     }
 
@@ -58,7 +69,8 @@ class AprilSurveyModal extends Component {
 
 
     handleSubmit(event) {
-        // Send form data to backend for validation and prevent modal from closing
+        /* eslint-disable react/destructuring-assignment */
+        // Send form data to backend for validation/save and prevent modal from closing
         event.preventDefault();
         const {
             apiaryId,
@@ -66,29 +78,25 @@ class AprilSurveyModal extends Component {
 
         const {
             num_colonies,
-            colony_loss_reason_other,
-            colony_loss_reason_varroa,
-            colony_loss_reason_starvation,
-            colony_loss_reason_queens,
-            colony_loss_reason_weather,
-            colony_loss_reason_population,
-            colony_loss_reason_pesticide,
         } = this.state;
 
-        const prepended_colony_loss_reason_other = colony_loss_reason_other.length
-            ? `OTHER-${colony_loss_reason_other}`
-            : '';
-        const colony_loss_reason = arrayToSemicolonDelimitedString(
-            [
-                colony_loss_reason_varroa,
-                colony_loss_reason_starvation,
-                colony_loss_reason_queens,
-                colony_loss_reason_weather,
-                colony_loss_reason_population,
-                colony_loss_reason_pesticide,
-                prepended_colony_loss_reason_other,
-            ],
-        );
+        const multipleChoiceKeys = ['colony_loss_reason'];
+        const multipleChoiceState = {};
+        multipleChoiceKeys.forEach((key) => {
+            const keys = Object
+                .entries(this.state)
+                .filter(option => option[1] && option[0].startsWith(key))
+                .map(o => o[0].split(`${key}_`)[1])
+                .filter(k => k !== 'OTHER');
+
+            if (`${key}_OTHER`.length) {
+                const otherKey = `${key}_OTHER`;
+                keys.push(`OTHER-${this.state[otherKey]}`);
+            }
+            multipleChoiceState[key] = arrayToSemicolonDelimitedString(keys);
+        });
+        /* eslint-enable react/destructuring-assignment */
+
         const survey = {
             num_colonies,
             apiary: apiaryId,
@@ -96,48 +104,39 @@ class AprilSurveyModal extends Component {
             survey_type: 'APRIL',
         };
 
-        const form = Object.assign({}, this.state, {
-            colony_loss_reason,
-            survey,
-        });
+        const form = Object.assign({}, this.state, multipleChoiceState, { survey });
 
-        // TODO close modal on complete else show error on
         getOrCreateSurveyRequest({ apiaryId, form })
-            .then(({ data }) => window.console.log(data))
-            .catch(error => window.console.log(error));
+            .then(({ data }) => {
+                this.setState({
+                    completedSurvey: data,
+                    error: 'Success!',
+                });
+            })
+            .catch(error => this.setState({ error: error.response.statusText }));
     }
 
     render() {
         const {
             num_colonies,
-            colony_loss_reason_other,
-            colony_loss_reason_varroa,
-            colony_loss_reason_starvation,
-            colony_loss_reason_queens,
-            colony_loss_reason_weather,
-            colony_loss_reason_population,
-            colony_loss_reason_pesticide,
+            colony_loss_reason_OTHER,
+            colony_loss_reason_VARROA_MITES,
+            colony_loss_reason_INADEQUETE_FOOD_STORES,
+            colony_loss_reason_POOR_QUEENS,
+            colony_loss_reason_POOR_WEATHER_CONDITIONS,
+            colony_loss_reason_COLONY_TOO_SMALL,
+            colony_loss_reason_PESTICIDE_EXPOSURE,
             completedSurvey,
             error,
         } = this.state;
 
-        const errorWarning = error.length ? (
+        const userMessage = error.length ? (
             <div className="form__group--error">
                 {error}
             </div>
         ) : null;
 
-        const submitButton = completedSurvey
-            ? (
-                <button
-                    type="submit"
-                    value="Submit"
-                    className="button--long"
-                    disabled
-                >
-                    Submit
-                </button>
-            )
+        const submitButton = completedSurvey ? null
             : (
                 <button
                     type="submit"
@@ -163,80 +162,82 @@ class AprilSurveyModal extends Component {
                             name="num_colonies"
                             onChange={this.handleChange}
                             value={num_colonies}
+                            disabled={!!completedSurvey}
                             required
                         />
                         <label htmlFor="colony_loss_reason">
                             What do you think the most likely cause of colony loss was?
                             Check all that apply.
                         </label>
-                        <label htmlFor="colony_loss_reason_varroa">Varroa mites</label>
+                        <label htmlFor="colony_loss_reason_VARROA_MITES">Varroa mites</label>
                         <input
                             type="checkbox"
                             className="form__control"
-                            id="colony_loss_reason_varroa"
-                            name="colony_loss_reason_varroa"
-                            checked={colony_loss_reason_varroa}
+                            id="colony_loss_reason_VARROA_MITES"
+                            name="colony_loss_reason_VARROA_MITES"
+                            checked={colony_loss_reason_VARROA_MITES}
                             onChange={this.handleChange}
-                            value="VARROA_MITES"
+                            disabled={!!completedSurvey}
                         />
-                        <label htmlFor="colony_loss_reason_starvation">Inadequate food stores</label>
+                        <label htmlFor="colony_loss_reason_INADEQUETE_FOOD_STORES">Inadequate food stores</label>
                         <input
                             type="checkbox"
                             className="form__control"
-                            id="colony_loss_reason_starvation"
-                            name="colony_loss_reason_starvation"
-                            checked={colony_loss_reason_starvation}
+                            id="colony_loss_reason_INADEQUETE_FOOD_STORES"
+                            name="colony_loss_reason_INADEQUETE_FOOD_STORES"
+                            checked={colony_loss_reason_INADEQUETE_FOOD_STORES}
                             onChange={this.handleChange}
-                            value="INADEQUATE_FOOD_STORES"
+                            disabled={!!completedSurvey}
                         />
-                        <label htmlFor="colony_loss_reason_queens">Poor queens</label>
+                        <label htmlFor="colony_loss_reason_POOR_QUEENS">Poor queens</label>
                         <input
                             type="checkbox"
                             className="form__control"
-                            id="colony_loss_reason_queens"
-                            name="colony_loss_reason_queens"
-                            checked={colony_loss_reason_queens}
+                            id="colony_loss_reason_POOR_QUEENS"
+                            name="colony_loss_reason_POOR_QUEENS"
+                            checked={colony_loss_reason_POOR_QUEENS}
                             onChange={this.handleChange}
-                            value="POOR_QUEENS"
+                            disabled={!!completedSurvey}
                         />
-                        <label htmlFor="colony_loss_reason_weather">Poor weather conditions</label>
+                        <label htmlFor="colony_loss_reason_POOR_WEATHER_CONDITIONS">Poor weather conditions</label>
                         <input
                             type="checkbox"
                             className="form__control"
-                            id="colony_loss_reason_weather"
-                            name="colony_loss_reason_weather"
-                            checked={colony_loss_reason_weather}
+                            id="colony_loss_reason_POOR_WEATHER_CONDITIONS"
+                            name="colony_loss_reason_POOR_WEATHER_CONDITIONS"
+                            checked={colony_loss_reason_POOR_WEATHER_CONDITIONS}
                             onChange={this.handleChange}
-                            value="POOR_WEATHER_CONDITIONS"
+                            disabled={!!completedSurvey}
                         />
-                        <label htmlFor="colony_loss_reason_population">Colony too small in November</label>
+                        <label htmlFor="colony_loss_reason_COLONY_TOO_SMALL">Colony too small in November</label>
                         <input
                             type="checkbox"
                             className="form__control"
-                            id="colony_loss_reason_population"
-                            name="colony_loss_reason_population"
-                            checked={colony_loss_reason_population}
+                            id="colony_loss_reason_COLONY_TOO_SMALL"
+                            name="colony_loss_reason_COLONY_TOO_SMALL"
+                            checked={colony_loss_reason_COLONY_TOO_SMALL}
                             onChange={this.handleChange}
-                            value="COLONY_TOO_SMALL"
+                            disabled={!!completedSurvey}
                         />
-                        <label htmlFor="colony_loss_reason_pesticide">Pesticide exposure</label>
+                        <label htmlFor="colony_loss_reason_PESTICIDE_EXPOSURE">Pesticide exposure</label>
                         <input
                             type="checkbox"
                             className="form__control"
-                            id="colony_loss_reason_pesticide"
-                            name="colony_loss_reason_pesticide"
-                            checked={colony_loss_reason_pesticide}
+                            id="colony_loss_reason_PESTICIDE_EXPOSURE"
+                            name="colony_loss_reason_PESTICIDE_EXPOSURE"
+                            checked={colony_loss_reason_PESTICIDE_EXPOSURE}
                             onChange={this.handleChange}
-                            value="PESTICIDE_EXPOSURE"
+                            disabled={!!completedSurvey}
                         />
-                        <label htmlFor="colony_loss_reason_other">Other</label>
+                        <label htmlFor="colony_loss_reason_OTHER">OTHER</label>
                         <input
                             type="text"
                             className="form__control"
-                            id="colony_loss_reason_other"
-                            name="colony_loss_reason_other"
-                            value={colony_loss_reason_other}
+                            id="colony_loss_reason_OTHER"
+                            name="colony_loss_reason_OTHER"
+                            value={colony_loss_reason_OTHER}
                             onChange={this.handleChange}
+                            disabled={!!completedSurvey}
                         />
                     </div>
                     {submitButton}
@@ -244,6 +245,8 @@ class AprilSurveyModal extends Component {
             </>
         );
 
+        // request to survey endpoint should happen when the popup opens (not before, as is now)
+        // potential solution? move popup to parent, close handling to parent too
         return (
             <Popup
                 trigger={<button type="button" className="button"> Open Modal </button>}
@@ -251,7 +254,6 @@ class AprilSurveyModal extends Component {
             >
                 {close => (
                     <div className="authModal">
-                        {errorWarning}
                         <div className="authModal__header">
                             <div>April survey</div>
                             <button type="button" className="button" onClick={close}>
@@ -259,6 +261,7 @@ class AprilSurveyModal extends Component {
                             </button>
                         </div>
                         <div className="authModal__content">
+                            {userMessage}
                             {surveyForm}
                         </div>
                         <div className="authModal__footer" />
