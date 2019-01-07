@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { number } from 'prop-types';
-import Popup from 'reactjs-popup';
 
-import { getOrCreateSurveyRequest } from '../actions';
-import { arrayToSemicolonDelimitedString } from '../utils';
+import { arrayToSemicolonDelimitedString, getOrCreateSurveyRequest } from '../utils';
 
 /* eslint-disable camelcase */
-class AprilSurveyModal extends Component {
+class AprilSurveyForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -70,7 +68,7 @@ class AprilSurveyModal extends Component {
 
     handleSubmit(event) {
         /* eslint-disable react/destructuring-assignment */
-        // Send form data to backend for validation/save and prevent modal from closing
+        // Send form data to backend for validation/save and prevent form from closing modal
         event.preventDefault();
         const {
             apiaryId,
@@ -147,9 +145,13 @@ class AprilSurveyModal extends Component {
                 </button>
             );
 
+        const title = completedSurvey
+            ? 'Survey results'
+            : 'Fill out this survey about your apiary';
+
         const surveyForm = (
             <>
-                <div className="title">Fill out this survey about your apiary</div>
+                <div className="title">{title}</div>
                 <form className="form" onSubmit={this.handleSubmit}>
                     <div className="form__group">
                         <label htmlFor="num_colonies">
@@ -248,39 +250,29 @@ class AprilSurveyModal extends Component {
         // request to survey endpoint should happen when the popup opens (not before, as is now)
         // potential solution? move popup to parent, close handling to parent too
         return (
-            <Popup
-                trigger={<button type="button" className="button"> Open Modal </button>}
-                modal
-            >
-                {close => (
-                    <div className="authModal">
-                        <div className="authModal__header">
-                            <div>April survey</div>
-                            <button type="button" className="button" onClick={close}>
-                                &times;
-                            </button>
-                        </div>
-                        <div className="authModal__content">
-                            {userMessage}
-                            {surveyForm}
-                        </div>
-                        <div className="authModal__footer" />
-                    </div>
-                )}
-            </Popup>
+            <div className="authModal">
+                <div className="authModal__header">
+                    <div>April survey</div>
+                </div>
+                <div className="authModal__content">
+                    {userMessage}
+                    {surveyForm}
+                </div>
+                <div className="authModal__footer" />
+            </div>
         );
     }
 }
 
 /* eslint-enable camelcase */
 
-AprilSurveyModal.propTypes = {
+AprilSurveyForm.propTypes = {
     apiaryId: number.isRequired,
     surveyId: number,
 };
 
-AprilSurveyModal.defaultProps = {
+AprilSurveyForm.defaultProps = {
     surveyId: null,
 };
 
-export default AprilSurveyModal;
+export default AprilSurveyForm;
