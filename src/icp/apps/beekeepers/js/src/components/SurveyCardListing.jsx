@@ -6,6 +6,7 @@ import { monthNames } from '../utils';
 import {
     SURVEY_TYPE_NOVEMBER,
     SURVEY_TYPE_APRIL,
+    SURVEY_TYPE_MONTHLY,
 } from '../constants';
 
 import AprilSurveyForm from './AprilSurveyForm';
@@ -29,9 +30,11 @@ const SurveyCardListing = ({
         case SURVEY_TYPE_NOVEMBER:
             formComponent = <div />; // replace with nov form component
             break;
-        default:
+        case SURVEY_TYPE_MONTHLY:
             formComponent = <div />; // replace with monthly form component
             break;
+        default:
+            throw new Error(`Unknown survey type: ${survey_type}`);
     }
     return (
         <div className="listing">

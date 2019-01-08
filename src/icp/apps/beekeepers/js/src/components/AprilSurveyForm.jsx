@@ -262,8 +262,6 @@ class AprilSurveyForm extends Component {
             </>
         );
 
-        // request to survey endpoint should happen when the popup opens (not before, as is now)
-        // potential solution? move popup to parent, close handling to parent too
         return (
             <div className="authModal">
                 <div className="authModal__header">
