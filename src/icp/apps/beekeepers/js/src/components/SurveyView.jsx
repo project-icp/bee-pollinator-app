@@ -1,19 +1,14 @@
 import React from 'react';
-
 import { arrayOf, bool } from 'prop-types';
-import { Apiary } from '../propTypes';
-
-import Popup from 'reactjs-popup';
 
 import { Apiary } from '../propTypes';
-import SurveyCard from './SurveyCard';
 import {
     getNovemberSurveys,
     getAprilSurveys,
     getMonthlySurveys,
     sortSurveysByMonthYearDescending,
 } from '../utils';
-import AprilSurveyForm from './AprilSurveyForm';
+import SurveyCard from './SurveyCard';
 
 const SurveyView = ({ apiaries, isProUser }) => {
     const surveyedApiaries = [];
@@ -63,12 +58,6 @@ const SurveyView = ({ apiaries, isProUser }) => {
             <div className="survey__header">
                 Survey
             </div>
-            <Popup
-                trigger={<button type="button" className="button"> Open Modal </button>}
-                modal
-            >
-                <AprilSurveyForm apiaryId={1} />
-            </Popup>
             <div className="survey__body">
                 <div>
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do

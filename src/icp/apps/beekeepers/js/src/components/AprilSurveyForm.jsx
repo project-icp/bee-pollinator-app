@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { number } from 'prop-types';
+import { connect } from 'react-redux';
+import { number, string, func } from 'prop-types';
 
+import { fetchUserApiaries } from '../actions';
+import { SURVEY_TYPE_APRIL } from '../constants';
 import { arrayToSemicolonDelimitedString, getOrCreateSurveyRequest } from '../utils';
 
 /* eslint-disable camelcase */
@@ -82,6 +85,8 @@ class AprilSurveyForm extends Component {
         event.preventDefault();
         const {
             apiaryId,
+            month_year,
+            dispatch,
         } = this.props;
 
         const {
@@ -108,8 +113,8 @@ class AprilSurveyForm extends Component {
         const survey = {
             num_colonies,
             apiary: apiaryId,
-            month_year: '042019',
-            survey_type: 'APRIL',
+            month_year,
+            survey_type: SURVEY_TYPE_APRIL,
         };
 
         const form = Object.assign({}, this.state, multipleChoiceState, { survey });
@@ -120,6 +125,7 @@ class AprilSurveyForm extends Component {
                     completedSurvey: data,
                     error: '',
                 });
+                dispatch(fetchUserApiaries());
             })
             .catch(error => this.setState({ error: error.response.statusText }));
     }
@@ -276,13 +282,19 @@ class AprilSurveyForm extends Component {
 
 /* eslint-enable camelcase */
 
+function mapStateToProps(state) {
+    return state.main;
+}
+
 AprilSurveyForm.propTypes = {
     apiaryId: number.isRequired,
     surveyId: number,
+    month_year: string.isRequired,
+    dispatch: func.isRequired,
 };
 
 AprilSurveyForm.defaultProps = {
     surveyId: null,
 };
 
-export default AprilSurveyForm;
+export default connect(mapStateToProps)(AprilSurveyForm);
