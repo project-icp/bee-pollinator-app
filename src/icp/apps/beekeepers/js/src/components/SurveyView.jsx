@@ -1,34 +1,58 @@
 import React from 'react';
 
-import { arrayOf } from 'prop-types';
+import { arrayOf, bool } from 'prop-types';
 import { Apiary } from '../propTypes';
 
 import SurveyCard from './SurveyCard';
-import { listMonthYearsSinceCreation, monthToText } from '../utils';
+import {
+    getNovemberSurveys,
+    getAprilSurveys,
+    getMonthlySurveys,
+    sortSurveysByMonthYearDescending,
+} from '../utils';
 
-const SurveyView = ({ apiaries }) => {
-    const surveyedApiaries = apiaries.filter(a => a.surveyed);
+const SurveyView = ({ apiaries, isProUser }) => {
+    const surveyedApiaries = [];
+    const unsurveyedApiaries = [];
 
-    const surveyCards = { complete: [], incomplete: [] };
-
-    surveyedApiaries.forEach((a) => {
-        const monthYearsSinceCreation = listMonthYearsSinceCreation(a);
-        const apiarySurveyDates = a.surveys.map((s) => {
-            const monthName = monthToText(Number(s.month_year.substring(0, 2)) - 1);
-            const year = s.month_year.substring(2, 6);
-            return `${monthName}-${year}`;
-        });
-        const surveyCard = <SurveyCard apiary={a} key={a.marker} />;
-        if (monthYearsSinceCreation.every(date => apiarySurveyDates.find(d => d === date))) {
-            surveyCards.complete.push(surveyCard);
+    apiaries.forEach((a) => {
+        if (a.surveyed) {
+            surveyedApiaries.push(a);
         } else {
-            surveyCards.incomplete.push(surveyCard);
+            unsurveyedApiaries.push(a);
         }
     });
 
-    const noSurveyCards = apiaries.map(a => (
-        !a.surveyed ? <SurveyCard apiary={a} key={a.marker} /> : null
+    const unsurveyedCards = unsurveyedApiaries.map(a => (
+        <SurveyCard apiary={a} key={a.marker} surveys={[]} />
     ));
+
+    const completedSurveyCards = [];
+    const incompleteSurveyCards = [];
+
+    surveyedApiaries.forEach((apiary) => {
+        const monthlySurveys = isProUser
+            ? getMonthlySurveys(apiary)
+            : [];
+        const surveys = monthlySurveys.concat(
+            getNovemberSurveys(apiary),
+            getAprilSurveys(apiary),
+        ).sort(sortSurveysByMonthYearDescending);
+
+        const surveyCard = (
+            <SurveyCard
+                apiary={apiary}
+                key={apiary.marker}
+                surveys={surveys}
+            />
+        );
+
+        if (surveys.every(s => s.completed)) {
+            completedSurveyCards.push(surveyCard);
+        } else {
+            incompleteSurveyCards.push(surveyCard);
+        }
+    });
 
     return (
         <div className="survey">
@@ -42,15 +66,15 @@ const SurveyView = ({ apiaries }) => {
                 </div>
                 <div className="survey__body--section">
                     Response needed
-                    {surveyCards.incomplete}
+                    {incompleteSurveyCards}
                 </div>
                 <div className="survey__body--section">
                     Up to date
-                    {surveyCards.complete}
+                    {completedSurveyCards}
                 </div>
                 <div className="survey__body--section">
                     This is not in the study
-                    {noSurveyCards}
+                    {unsurveyedCards}
                 </div>
             </div>
         </div>
@@ -59,6 +83,7 @@ const SurveyView = ({ apiaries }) => {
 
 SurveyView.propTypes = {
     apiaries: arrayOf(Apiary).isRequired,
+    isProUser: bool.isRequired,
 };
 
 export default SurveyView;

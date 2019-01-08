@@ -1,3 +1,9 @@
+import {
+    SURVEY_TYPE_NOVEMBER,
+    SURVEY_TYPE_APRIL,
+    SURVEY_TYPE_MONTHLY,
+} from './constants';
+
 export function toDashedString(value) {
     return value.toLowerCase().replace('_', '-');
 }
@@ -74,45 +80,20 @@ export function getMarkerClass({ selected, starred, surveyed }) {
     return '';
 }
 
-export const monthNames = ['January', 'February', 'March', 'April', 'May',
-    'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-export function monthToText(month) {
-    // Counts months from 0-11
-    return monthNames[month];
-}
-
-export function listMonthYearsSinceCreation(apiary) {
-    // Count months from 0-11, where January is 0
-    const createdYear = Number(apiary.created_at.substring(0, 4));
-    const createdMonth = Number(apiary.created_at.substring(5, 7)) - 1;
-
-    // The Date API counts months from 0
-    const timeNow = new Date();
-    const monthNow = timeNow.getMonth();
-    const yearNow = timeNow.getFullYear();
-
-    let months = 0;
-    months = (yearNow - createdYear) * 12;
-    months -= createdMonth;
-    months += monthNow;
-    const monthDiff = months <= 0 ? 0 : months;
-
-    let monthCounter = monthNow;
-    let yearCounter = yearNow;
-    const monthYears = [];
-    let i = 0;
-    for (i = 0; i < monthDiff + 1; i += 1) {
-        monthYears.push(`${monthToText(monthCounter)}-${String(yearCounter)}`);
-        monthCounter -= 1;
-        if (monthCounter < 1) {
-            yearCounter -= 1;
-            monthCounter = 11;
-        }
-    }
-
-    return monthYears;
-}
+export const monthNames = {
+    '01': 'January',
+    '02': 'February',
+    '03': 'March',
+    '04': 'April',
+    '05': 'May',
+    '06': 'June',
+    '07': 'July',
+    '08': 'August',
+    '09': 'September',
+    10: 'October',
+    11: 'November',
+    12: 'December',
+};
 
 export function sortByValue(a, b) {
     const valA = a[1].toUpperCase();
@@ -138,4 +119,156 @@ export function toFormData(json) {
     const formData = new FormData();
     Object.entries(json).forEach(([key, value]) => formData.append(key, value));
     return formData;
+}
+
+/**
+ * Given a list of surveys, returns a function that takes a month_year and
+ * returns true the survey if found, otherwise null.
+ *
+ * @param {arrayOf(Survey)} surveys
+ */
+function makeSurveyMatcher(surveys) {
+    return (month_year) => {
+        const survey = surveys.find(s => s.month_year === month_year);
+        if (survey) {
+            survey.completed = true;
+            return survey;
+        }
+
+        return null;
+    };
+}
+
+/**
+ * Given an Apiary, returns a list of November Survey objects since 2018,
+ * like this:
+ *
+ * [{ month_year: '112018', survey_type: SURVEY_TYPE_NOVEMBER, completed: true },
+ *  { month_year: '112019', survey_type: SURVEY_TYPE_NOVEMBER, completed: false }]
+ *
+ * @param {Apiary} apiary
+ */
+export function getNovemberSurveys({ id: apiary, surveys }) {
+    const survey_type = SURVEY_TYPE_NOVEMBER;
+    const startYear = 2018;
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+    // End at this year if after November (0-indexed 10), else last year
+    const endYear = currentMonth >= 10 ? currentYear : currentYear - 1;
+    const matchSurvey = makeSurveyMatcher(
+        surveys.filter(s => s.survey_type === survey_type),
+    );
+    const novSurveys = [];
+
+    for (let i = startYear; i <= endYear; i += 1) {
+        const month_year = `11${i}`;
+        const survey = matchSurvey(month_year) || {
+            apiary,
+            month_year,
+            survey_type,
+            completed: false,
+        };
+
+        novSurveys.push(survey);
+    }
+
+    return novSurveys;
+}
+
+/**
+ * Given an Apiary, returns a list of April Survey objects since 2019,
+ * like this:
+ *
+ * [{ month_year: '042019', survey_type: SURVEY_TYPE_APRIL, completed: true },
+ *  { month_year: '042020', survey_type: SURVEY_TYPE_APRIL, completed: false }]
+ *
+ * @param {Apiary} apiary
+ */
+export function getAprilSurveys({ id: apiary, surveys }) {
+    const survey_type = SURVEY_TYPE_APRIL;
+    const startYear = 2019;
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+    // End at this year if after April (0-indexed 3), else last year
+    const endYear = currentMonth >= 3 ? currentYear : currentYear - 1;
+    const matchSurvey = makeSurveyMatcher(
+        surveys.filter(s => s.survey_type === survey_type),
+    );
+    const aprSurveys = [];
+
+    for (let i = startYear; i <= endYear; i += 1) {
+        const month_year = `04${i}`;
+        const survey = matchSurvey(month_year) || {
+            apiary,
+            month_year,
+            survey_type,
+            completed: false,
+        };
+
+        aprSurveys.push(survey);
+    }
+
+    return aprSurveys;
+}
+
+/**
+ * Given an Apiary, returns a list of Monthly Survey objects since the date
+ * of apiary creation, like this:
+ *
+ * [{ month_year: '012019', survey_type: SURVEY_TYPE_MONTHLY, completed: true },
+ *  { month_year: '022019', survey_type: SURVEY_TYPE_MONTHLY, completed: false },
+ *  { month_year: '032019', survey_type: SURVEY_TYPE_MONTHLY, completed: false }]
+ *
+ * @param {Apiary} apiary
+ */
+export function getMonthlySurveys({ id: apiary, created_at: createdAt, surveys }) {
+    const survey_type = SURVEY_TYPE_MONTHLY;
+    const currentDate = new Date();
+
+    const startYear = Number(createdAt.substring(0, 4));
+    const endYear = currentDate.getFullYear();
+
+    const createdMonth = Number(createdAt.substring(5, 7));
+    const currentMonth = currentDate.getMonth() + 1; // Add one to make 1-indexed
+
+    const matchSurvey = makeSurveyMatcher(
+        surveys.filter(s => s.survey_type === survey_type),
+    );
+    const mthSurveys = [];
+
+    for (let y = startYear; y <= endYear; y += 1) {
+        const startMonth = y === startYear ? createdMonth : 1;
+        const endMonth = y === endYear ? currentMonth : 12;
+
+        for (let m = startMonth; m <= endMonth; m += 1) {
+            const twoDigitMonth = `0${m}`.slice(-2);
+            const month_year = `${twoDigitMonth}${y}`;
+            const survey = matchSurvey(month_year) || {
+                apiary,
+                month_year,
+                survey_type,
+                completed: false,
+            };
+
+            mthSurveys.push(survey);
+        }
+    }
+
+    return mthSurveys;
+}
+
+export function sortSurveysByMonthYearDescending(a, b) {
+    const monthA = a.month_year.slice(0, 2);
+    const yearA = a.month_year.slice(-4);
+
+    const monthB = b.month_year.slice(0, 2);
+    const yearB = b.month_year.slice(-4);
+
+    if (yearA === yearB) {
+        return Number(monthB) - Number(monthA);
+    }
+
+    return Number(yearB) - Number(yearA);
 }

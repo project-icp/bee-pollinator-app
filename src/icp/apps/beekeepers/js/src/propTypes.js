@@ -52,3 +52,13 @@ export const UserSurvey = shape({
     rear_queens: bool.isRequired,
     equipment: string,
 });
+
+export const Survey = shape({
+    id: number,
+    month_year: string.isRequired,
+    num_colonies: number,
+    created_at: string,
+    survey_type: string.isRequired,
+    apiary: number.isRequired,
+    completed: bool.isRequired,
+});
