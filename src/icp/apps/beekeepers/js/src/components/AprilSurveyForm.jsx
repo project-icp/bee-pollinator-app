@@ -6,7 +6,6 @@ import { fetchUserApiaries } from '../actions';
 import { SURVEY_TYPE_APRIL } from '../constants';
 import { arrayToSemicolonDelimitedString, getOrCreateSurveyRequest } from '../utils';
 
-/* eslint-disable camelcase */
 class AprilSurveyForm extends Component {
     constructor(props) {
         super(props);
@@ -279,8 +278,6 @@ class AprilSurveyForm extends Component {
         );
     }
 }
-
-/* eslint-enable camelcase */
 
 function mapStateToProps(state) {
     return state.main;
