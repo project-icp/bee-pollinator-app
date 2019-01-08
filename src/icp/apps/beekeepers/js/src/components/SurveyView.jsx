@@ -1,15 +1,14 @@
 import React from 'react';
-
 import { arrayOf, bool } from 'prop-types';
-import { Apiary } from '../propTypes';
 
-import SurveyCard from './SurveyCard';
+import { Apiary } from '../propTypes';
 import {
     getNovemberSurveys,
     getAprilSurveys,
     getMonthlySurveys,
     sortSurveysByMonthYearDescending,
 } from '../utils';
+import SurveyCard from './SurveyCard';
 
 const SurveyView = ({ apiaries, isProUser }) => {
     const surveyedApiaries = [];
