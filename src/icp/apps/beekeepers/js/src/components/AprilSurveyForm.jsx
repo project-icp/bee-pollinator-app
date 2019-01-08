@@ -20,6 +20,7 @@ class AprilSurveyForm extends Component {
             completedSurvey: '',
             error: '',
         };
+        this.multipleChoiceKeys = ['colony_loss_reason'];
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -34,15 +35,24 @@ class AprilSurveyForm extends Component {
                 apiaryId,
                 surveyId,
             }).then(({ data }) => {
-                const keys = data.colony_loss_reason.split(';')
-                    .map(s => `colony_loss_reason_${s}`);
-                const newState = keys.reduce((acc, key) => {
-                    acc[key] = true;
-
-                    return acc;
-                }, {
+                let newState = {
                     completedSurvey: data,
                     num_colonies: data.survey.num_colonies,
+                };
+                this.multipleChoiceKeys.forEach((key) => {
+                    const keys = data[key].split(';')
+                        .map(s => `${key}_${s}`);
+                    newState = keys.reduce((acc, k) => {
+                        acc[k] = true;
+                        // Other text input requires special handling
+                        // to parse key name and capture value
+                        if (k.includes('_OTHER-')) {
+                            const otherKey = k.split('-')[0];
+                            const otherValue = k.split('_OTHER-')[1];
+                            acc[otherKey] = otherValue;
+                        }
+                        return acc;
+                    }, newState);
                 });
                 this.setState(newState);
             }).catch(error => this.setState({ error }));
@@ -78,9 +88,8 @@ class AprilSurveyForm extends Component {
             num_colonies,
         } = this.state;
 
-        const multipleChoiceKeys = ['colony_loss_reason'];
         const multipleChoiceState = {};
-        multipleChoiceKeys.forEach((key) => {
+        this.multipleChoiceKeys.forEach((key) => {
             const keys = Object
                 .entries(this.state)
                 .filter(option => option[1] && option[0].startsWith(key))
@@ -95,6 +104,7 @@ class AprilSurveyForm extends Component {
         });
         /* eslint-enable react/destructuring-assignment */
 
+        // TODO: Replace month_year with prop from parent
         const survey = {
             num_colonies,
             apiary: apiaryId,
@@ -108,7 +118,7 @@ class AprilSurveyForm extends Component {
             .then(({ data }) => {
                 this.setState({
                     completedSurvey: data,
-                    error: 'Success!',
+                    error: '',
                 });
             })
             .catch(error => this.setState({ error: error.response.statusText }));
