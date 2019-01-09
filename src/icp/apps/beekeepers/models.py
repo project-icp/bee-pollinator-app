@@ -67,6 +67,12 @@ class Survey(models.Model):
         (MONTHLY, 'Monthly'),
     )
 
+    SUBSURVEY_FIELDS = dict((
+        (APRIL, 'april'),
+        (NOVEMBER, 'november'),
+        (MONTHLY, 'monthlies'),
+    ))
+
     month_year = models.CharField(
         max_length=255,
         null=False,

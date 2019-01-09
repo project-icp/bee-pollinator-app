@@ -8,6 +8,7 @@ from rest_framework.serializers import (
     CurrentUserDefault,
     ModelSerializer,
     PrimaryKeyRelatedField,
+    ValidationError,
 )
 
 from models import (
@@ -16,6 +17,7 @@ from models import (
     AprilSurvey,
     NovemberSurvey,
     MonthlySurvey,
+    SUBSURVEY_MODELS,
     UserSurvey
 )
 
@@ -33,37 +35,68 @@ class SurveySerializer(ModelSerializer):
         model = Survey
 
 
-class SubSurveySerializer(ModelSerializer):
-    survey = SurveySerializer(many=False)
+class AprilSurveySerializer(ModelSerializer):
+    class Meta:
+        model = AprilSurvey
+        exclude = ('survey',)
+
+
+class NovemberSurveySerializer(ModelSerializer):
+    class Meta:
+        model = NovemberSurvey
+        exclude = ('survey',)
+
+
+class MonthlySurveySerializer(ModelSerializer):
+    class Meta:
+        model = MonthlySurvey
+        exclude = ('survey',)
+
+
+class SurveyDetailSerializer(ModelSerializer):
+    class Meta:
+        model = Survey
+        fields = ('id', 'month_year', 'num_colonies', 'apiary', 'created_at',
+                  'survey_type', 'april', 'november', 'monthlies',)
+
+    april = AprilSurveySerializer(many=False, required=False)
+    november = NovemberSurveySerializer(many=False, required=False)
+    monthlies = MonthlySurveySerializer(many=True, required=False)
 
     @transaction.atomic
     def create(self, validated_data):
-        survey = Survey.objects.create(**validated_data['survey'])
-        validated_data['survey'] = survey
-        subsurvey = self.Meta.model.objects.create(**validated_data)
-        return subsurvey
+        survey_type = validated_data['survey_type']
+        field = Survey.SUBSURVEY_FIELDS[survey_type]
+        SubModel = SUBSURVEY_MODELS[survey_type]
 
+        survey = Survey.objects.create(
+            apiary=validated_data['apiary'],
+            month_year=validated_data['month_year'],
+            num_colonies=validated_data['num_colonies'],
+            survey_type=validated_data['survey_type'])
 
-class AprilSurveySerializer(SubSurveySerializer):
-    class Meta:
-        model = AprilSurvey
+        subdata = validated_data[field]
+        if survey_type == 'MONTHLY':
+            for monthly in subdata:
+                monthly['survey'] = survey
+                SubModel.objects.create(**monthly)
+        else:
+            subdata['survey'] = survey
+            SubModel.objects.create(**subdata)
 
+        return survey
 
-class NovemberSurveySerializer(SubSurveySerializer):
-    class Meta:
-        model = NovemberSurvey
+    def validate(self, data):
+        """Ensure subsurvey field is specified for the survey type"""
+        survey_type = data['survey_type']
+        field = Survey.SUBSURVEY_FIELDS[survey_type]
+        if field not in data:
+            raise ValidationError(
+                '`{field}` field is required when '
+                'survey type is `{survey_type}`'.format(
+                    field=field, survey_type=survey_type))
 
-
-class MonthlySurveySerializer(SubSurveySerializer):
-    class Meta:
-        model = MonthlySurvey
-
-
-SUBSURVEY_SERIALIZERS = {
-    'APRIL': AprilSurveySerializer,
-    'NOVEMBER': NovemberSurveySerializer,
-    'MONTHLY': MonthlySurveySerializer,
-}
+        return data
 
 
 class UserSurveySerializer(ModelSerializer):
