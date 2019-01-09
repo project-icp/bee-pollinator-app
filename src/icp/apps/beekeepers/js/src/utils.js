@@ -97,6 +97,19 @@ export const monthNames = {
     12: 'December',
 };
 
+/**
+ * Given a month_year string in "MMYYYY" format, returns a string with the
+ * full month name and the year. E.g. "042018" => "April 2018"
+ *
+ * @param {MMYYY} month_year
+ */
+export function toMonthNameYear(month_year) {
+    const month = monthNames[month_year.slice(0, 2)];
+    const year = month_year.slice(-4);
+
+    return `${month} ${year}`;
+}
+
 export function sortByValue(a, b) {
     const valA = a[1].toUpperCase();
     const valB = b[1].toUpperCase();

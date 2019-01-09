@@ -2,7 +2,7 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 
 import { Survey } from '../propTypes';
-import { monthNames } from '../utils';
+import { toMonthNameYear } from '../utils';
 import {
     SURVEY_TYPE_NOVEMBER,
     SURVEY_TYPE_APRIL,
@@ -46,9 +46,7 @@ const SurveyCardListing = ({
             <Popup
                 trigger={(
                     <button type="button" className="listing__monthYear">
-                        {monthNames[month_year.slice(0, 2)]}
-                        {' '}
-                        {month_year.slice(-4)}
+                        {toMonthNameYear(month_year)}
                         {' '}
                         (
                         {survey_type}
