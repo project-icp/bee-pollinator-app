@@ -275,10 +275,21 @@ export function sortSurveysByMonthYearDescending(a, b) {
     return Number(yearB) - Number(yearA);
 }
 
-export function getOrCreateSurveyRequest({ apiaryId, surveyId, form }) {
-    const request = surveyId
-        ? csrfRequest.get(`/beekeepers/apiary/${apiaryId}/survey/${surveyId}/`)
-        : csrfRequest.post(`/beekeepers/apiary/${apiaryId}/survey/`, form);
+/**
+ * Given an Apiary ID and, optionally, a Survey ID or form, returns a post or get request
+ *
+ * @param {number} apiary
+ * @param {number} id
+ * @param {object} form
+ *      {
+ *          survey: {Survey},
+ *          ...form fields,
+ *      }
+ */
+export function getOrCreateSurveyRequest({ apiary, id, form }) {
+    const request = id
+        ? csrfRequest.get(`/beekeepers/apiary/${apiary}/survey/${id}/`)
+        : csrfRequest.post(`/beekeepers/apiary/${apiary}/survey/`, form);
 
     return request;
 }

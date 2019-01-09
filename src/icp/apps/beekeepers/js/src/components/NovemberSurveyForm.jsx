@@ -1,24 +1,17 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { number, string, func } from 'prop-types';
+import { func } from 'prop-types';
 
 import { fetchUserApiaries } from '../actions';
-import { SURVEY_TYPE_NOVEMBER } from '../constants';
+import {
+    SURVEY_TYPE_NOVEMBER,
+    MITE_MANAGEMENT_OPTIONS,
+    SEASONS,
+    VARROA_CHECK_METHODS,
+} from '../constants';
 import { arrayToSemicolonDelimitedString, getOrCreateSurveyRequest } from '../utils';
+import { Survey } from '../propTypes';
 
-const miteManagementCheckboxOptions = [
-    'CHEMICAL_FORMIC_ACID_MAQS',
-    'CHEMICAL_FORMIC_ACID_FORMIC_PRO',
-    'CHEMICAL_OXALIC_ACID_VAPORIZATION',
-    'CHEMICAL_OXALIC_ACID_DRIBBLE',
-    'CHEMICAL_THYMOL_MENTHOL_APILIFE',
-    'CHEMICAL_THYMOL_MENTHOL_APIGUARD',
-    'CHEMICAL_SYNTHETIC_APIVAR',
-    'CHEMICAL_SYNTHETIC_APISTAN',
-    'CHEMICAL_SYNTHETIC_CHECKMITE_PLUS',
-    'MECHANICAL_DRONE_BROOD_REMOVAL',
-    'MECHANICAL_QUEEN_MANIPULATION',
-];
 
 class NovemberSurveyForm extends Component {
     constructor(props) {
@@ -37,7 +30,7 @@ class NovemberSurveyForm extends Component {
             supplemental_protein_WINTER: false,
             small_hive_beetles: false,
             varroa_check_frequency: 'NEVER',
-            varroa_check_method_OTHER: false,
+            varroa_check_method_OTHER: '',
             varroa_check_method_ALCOHOL_WASH: false,
             varroa_check_method_SUGAR_SHAKE: false,
             varroa_check_method_STICKY_BOARDS: false,
@@ -45,6 +38,17 @@ class NovemberSurveyForm extends Component {
             mite_management_OTHER: '',
             mite_management_CHEMICAL_ORGANIC_OTHER: '',
             mite_management_MECHANICAL_OTHER: '',
+            mite_management_CHEMICAL_FORMIC_ACID_MAQS: false,
+            mite_management_CHEMICAL_FORMIC_ACID_FORMIC_PRO: false,
+            mite_management_CHEMICAL_OXALIC_ACID_VAPORIZATION: false,
+            mite_management_CHEMICAL_OXALIC_ACID_DRIBBLE: false,
+            mite_management_CHEMICAL_THYMOL_MENTHOL_APILIFE: false,
+            mite_management_CHEMICAL_THYMOL_MENTHOL_APIGUARD: false,
+            mite_management_CHEMICAL_SYNTHETIC_APIVAR: false,
+            mite_management_CHEMICAL_SYNTHETIC_APISTAN: false,
+            mite_management_CHEMICAL_SYNTHETIC_CHECKMITE_PLUS: false,
+            mite_management_MECHANICAL_DRONE_BROOD_REMOVAL: false,
+            mite_management_MECHANICAL_QUEEN_MANIPULATION: false,
             completedSurvey: '',
             error: '',
         };
@@ -55,36 +59,43 @@ class NovemberSurveyForm extends Component {
         ];
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.makeSeasonalInputs = this.makeSeasonalInputs.bind(this);
+        this.makeMultipleChoiceInputs = this.makeMultipleChoiceInputs.bind(this);
     }
 
     componentDidMount() {
         const {
-            apiaryId,
-            surveyId,
+            survey: {
+                apiary,
+                id,
+                completed,
+            },
         } = this.props;
-        if (surveyId) {
+        if (completed) {
             getOrCreateSurveyRequest({
-                apiaryId,
-                surveyId,
+                apiary,
+                id,
             }).then(({ data }) => {
                 let newState = {
                     completedSurvey: data,
                     num_colonies: data.survey.num_colonies,
                 };
                 this.multipleChoiceKeys.forEach((key) => {
-                    const keys = data[key].split(';')
-                        .map(s => `${key}_${s}`);
-                    newState = keys.reduce((acc, k) => {
-                        acc[k] = true;
-                        // Other text input requires special handling
-                        // to parse key name and capture value
-                        if (k.includes('_OTHER-')) {
-                            const otherKey = k.split('-')[0];
-                            const otherValue = k.split('_OTHER-')[1];
-                            acc[otherKey] = otherValue;
-                        }
-                        return acc;
-                    }, newState);
+                    if (data[key]) {
+                        const keys = data[key].split(';')
+                            .map(s => `${key}_${s}`);
+                        newState = keys.reduce((acc, k) => {
+                            acc[k] = true;
+                            // Other text input requires special handling
+                            // to parse key name and capture value
+                            if (k.includes('_OTHER-')) {
+                                const otherKey = k.split('-')[0];
+                                const otherValue = k.split('_OTHER-')[1];
+                                acc[otherKey] = otherValue;
+                            }
+                            return acc;
+                        }, newState);
+                    }
                 });
                 this.setState(newState);
             }).catch(error => this.setState({ error }));
@@ -113,8 +124,10 @@ class NovemberSurveyForm extends Component {
         // Send form data to backend for validation/save and prevent form from closing modal
         event.preventDefault();
         const {
-            apiaryId,
-            month_year,
+            survey: {
+                apiary,
+                month_year,
+            },
             dispatch,
         } = this.props;
 
@@ -125,32 +138,32 @@ class NovemberSurveyForm extends Component {
         const multipleChoiceState = {};
         this.multipleChoiceKeys.forEach((key) => {
             // Assemble semi-colon delimited mega-string for each multiple choice field
-            const keys = Object
+            const keyOptions = Object
                 .entries(this.state)
                 .filter(option => option[1] && option[0].startsWith(key))
-                .map(o => o[0].split(`${key}_`)[1]);
-            if (keys.length) {
-                const keysNotOther = keys.filter(k => !k.includes('OTHER'));
-                const keysOther = keys.filter(k => k.includes('OTHER'));
-                const prependedKeysOther = keysOther.map(k => `${k}-${this.state[`${key}_${k}`]}`);
-                const allKeys = keysNotOther.concat(prependedKeysOther);
+                .map(option => option[0].split(`${key}_`)[1]);
+            if (keyOptions.length) {
+                const values = keyOptions.filter(k => !k.includes('OTHER'));
+                // text inputs require custom parsing to look like "OTHER-user input here"
+                const textInputPrefixes = keyOptions.filter(k => k.includes('OTHER'));
+                const textInputValues = textInputPrefixes.map(k => `${k}-${this.state[`${key}_${k}`]}`);
+                const allValues = values.concat(textInputValues);
 
-                multipleChoiceState[key] = arrayToSemicolonDelimitedString(allKeys);
+                multipleChoiceState[key] = arrayToSemicolonDelimitedString(allValues);
             }
         });
         /* eslint-enable react/destructuring-assignment */
 
-        // TODO: Replace month_year with prop from parent
         const survey = {
             num_colonies,
-            apiary: apiaryId,
+            apiary,
             month_year,
             survey_type: SURVEY_TYPE_NOVEMBER,
         };
 
         const form = Object.assign({}, this.state, multipleChoiceState, { survey });
 
-        getOrCreateSurveyRequest({ apiaryId, form })
+        getOrCreateSurveyRequest({ apiary, form })
             .then(({ data }) => {
                 this.setState({
                     completedSurvey: data,
@@ -161,25 +174,62 @@ class NovemberSurveyForm extends Component {
             .catch(error => this.setState({ error: error.response.statusText }));
     }
 
+    /* eslint-disable react/destructuring-assignment */
+    makeMultipleChoiceInputs(groupName, options) {
+        const { completedSurvey } = this.state;
+
+        return options.map((option) => {
+            const key = `${groupName}_${option}`;
+            const label = option.split('_').join(' ').toLowerCase();
+            return (
+                <Fragment key={key}>
+                    <label htmlFor={key}>{label}</label>
+                    <input
+                        type="checkbox"
+                        className="form__control"
+                        id={key}
+                        name={key}
+                        checked={this.state[key]}
+                        onChange={this.handleChange}
+                        disabled={!!completedSurvey}
+                    />
+                </Fragment>
+            );
+        });
+    }
+
+    makeSeasonalInputs(groupName) {
+        const { completedSurvey } = this.state;
+
+        return SEASONS.map((option) => {
+            const key = `${groupName}_${option}`;
+            const label = option.split('_').join(' ').toLowerCase();
+            return (
+                <Fragment key={key}>
+                    <label htmlFor={key}>{label}</label>
+                    <input
+                        type="checkbox"
+                        className="form__control"
+                        id={key}
+                        name={key}
+                        checked={this.state[key]}
+                        onChange={this.handleChange}
+                        disabled={!!completedSurvey}
+                    />
+                </Fragment>
+            );
+        });
+    }
+    /* eslint-enable react/destructuring-assignment */
+
     render() {
         const {
             num_colonies,
-            // harvested_honey,
-            // supplemental_sugar_SPRING,
-            // supplemental_sugar_SUMMER,
-            // supplemental_sugar_FALL,
-            // supplemental_sugar_WINTER,
-            // supplemental_protein_SPRING,
-            // supplemental_protein_SUMMER,
-            // supplemental_protein_FALL,
-            // supplemental_protein_WINTER,
-            // small_hive_beetles,
-            // varroa_check_frequency,
-            // varroa_check_method_OTHER,
-            // varroa_check_method_ALCOHOL_WASH,
-            // varroa_check_method_SUGAR_SHAKE,
-            // varroa_check_method_STICKY_BOARDS,
-            // varroa_manage_frequency,
+            harvested_honey,
+            small_hive_beetles,
+            varroa_check_frequency,
+            varroa_check_method_OTHER,
+            varroa_manage_frequency,
             mite_management_OTHER,
             mite_management_CHEMICAL_ORGANIC_OTHER,
             mite_management_MECHANICAL_OTHER,
@@ -208,26 +258,13 @@ class NovemberSurveyForm extends Component {
             ? 'Survey results'
             : 'Fill out this survey about your apiary';
 
-        /* eslint-disable react/destructuring-assignment */
-        const miteManagementCheckboxInputs = miteManagementCheckboxOptions.map((option) => {
-            const key = `mite_management_${option}`;
-            const label = option.split('_').join(' ').toLowerCase();
-            return (
-                <Fragment key={key}>
-                    <label htmlFor={key}>{label}</label>
-                    <input
-                        type="checkbox"
-                        className="form__control"
-                        id={key}
-                        name={key}
-                        checked={this.state[key]}
-                        onChange={this.handleChange}
-                        disabled={!!completedSurvey}
-                    />
-                </Fragment>
-            );
-        });
-        /* eslint-enable react/destructuring-assignment */
+        const miteManagementCheckboxInputs = this.makeMultipleChoiceInputs('mite_management', MITE_MANAGEMENT_OPTIONS);
+
+        const supplementalSugarInputs = this.makeSeasonalInputs('supplemental_sugar');
+
+        const supplementalProteinInputs = this.makeSeasonalInputs('supplemental_protein');
+
+        const varroaCheckMethodCheckboxInputs = this.makeMultipleChoiceInputs('varroa_check_method', VARROA_CHECK_METHODS);
 
         const surveyForm = (
             <>
@@ -247,11 +284,106 @@ class NovemberSurveyForm extends Component {
                             disabled={!!completedSurvey}
                             required
                         />
+                        <div className="form__group">
+                            <label htmlFor="harvested_honey">
+                                How much honey did you collect on average for each colony?
+                            </label>
+                            <select
+                                type="text"
+                                id="harvested_honey"
+                                name="harvested_honey"
+                                value={harvested_honey}
+                                onChange={this.handleChange}
+                                className="form__control"
+                            >
+                                <option value="DID_NOT_HARVEST">Did not harvest</option>
+                                <option value="LESS_THAN_10">Less than 10 lbs</option>
+                                <option value="BETWEEN_10_AND_25">Between 10 and 25 lbs</option>
+                                <option value="BETWEEN_25_AND_50">Between 25 and 50 lbs</option>
+                                <option value="MORE_THAN_50">More than 50</option>
+                            </select>
+                        </div>
+                        <label htmlFor="supplemental_sugar">
+                            Did you feed supplemental sugar?
+                            If so, what times of year did you feed sugar?
+                            Check all that apply.
+                        </label>
+                        {supplementalSugarInputs}
+                        <label htmlFor="supplemental_protein">
+                            Did you feed supplemental pollen or protein?
+                            If so, what times of year did you feed pollen or protein?
+                            Check all that apply.
+                        </label>
+                        {supplementalProteinInputs}
+                        <label htmlFor="small_hive_beetles">
+                            Have you observed small hive beetles in your hives?
+                        </label>
+                        <input
+                            type="checkbox"
+                            className="form__control"
+                            id="small_hive_beetles"
+                            name="small_hive_beetles"
+                            checked={small_hive_beetles}
+                            onChange={this.handleChange}
+                            disabled={!!completedSurvey}
+                        />
+                        <div className="form__group">
+                            <label htmlFor="varroa_check_frequency">
+                                How often do you check for Varroa?
+                            </label>
+                            <select
+                                type="text"
+                                id="varroa_check_frequency"
+                                name="varroa_check_frequency"
+                                value={varroa_check_frequency}
+                                onChange={this.handleChange}
+                                className="form__control"
+                            >
+                                <option value="NEVER">I did not</option>
+                                <option value="ONCE">Once a year</option>
+                                <option value="TWICE">Twice a year</option>
+                                <option value="THRICE">Three times a year</option>
+                                <option value="MORE_THAN_THREE">More than three times a year</option>
+                            </select>
+                        </div>
+                        <label htmlFor="varroa_check_method">
+                            What method(s) do you use to check for Varroa?
+                            Check all that apply.
+                        </label>
+                        {varroaCheckMethodCheckboxInputs}
+                        <label htmlFor="varroa_check_method_OTHER">Other varroa check method</label>
+                        <input
+                            type="text"
+                            className="form__control"
+                            id="varroa_check_method_OTHER"
+                            name="varroa_check_method_OTHER"
+                            value={varroa_check_method_OTHER}
+                            onChange={this.handleChange}
+                            disabled={!!completedSurvey}
+                        />
+                        <div className="form__group">
+                            <label htmlFor="varroa_manage_frequency">
+                                How you manage for Varroa? If so, how often?
+                            </label>
+                            <select
+                                type="text"
+                                id="varroa_manage_frequency"
+                                name="varroa_manage_frequency"
+                                value={varroa_manage_frequency}
+                                onChange={this.handleChange}
+                                className="form__control"
+                            >
+                                <option value="NEVER">I did not</option>
+                                <option value="ONCE">Once a year</option>
+                                <option value="TWICE">Twice a year</option>
+                                <option value="THRICE">Three times a year</option>
+                                <option value="MORE_THAN_THREE">More than three times a year</option>
+                            </select>
+                        </div>
                         <label htmlFor="mite_management">
                             What methods of mite management do you use?
                             Check all that apply.
                         </label>
-
                         {miteManagementCheckboxInputs}
                         <label htmlFor="mite_management_CHEMICAL_ORGANIC_OTHER">
                             Other organic chemical
@@ -311,14 +443,8 @@ function mapStateToProps(state) {
 }
 
 NovemberSurveyForm.propTypes = {
-    apiaryId: number.isRequired,
-    surveyId: number,
-    month_year: string.isRequired,
+    survey: Survey.isRequired,
     dispatch: func.isRequired,
-};
-
-NovemberSurveyForm.defaultProps = {
-    surveyId: null,
 };
 
 export default connect(mapStateToProps)(NovemberSurveyForm);
