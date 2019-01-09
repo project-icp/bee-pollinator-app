@@ -55,6 +55,7 @@ class NovemberSurveyForm extends Component {
         this.multipleChoiceKeys = [
             'supplemental_sugar',
             'supplemental_protein',
+            'varroa_check_method',
             'mite_management',
         ];
         this.handleChange = this.handleChange.bind(this);
@@ -289,7 +290,6 @@ class NovemberSurveyForm extends Component {
                                 How much honey did you collect on average for each colony?
                             </label>
                             <select
-                                type="text"
                                 id="harvested_honey"
                                 name="harvested_honey"
                                 value={harvested_honey}
@@ -332,7 +332,6 @@ class NovemberSurveyForm extends Component {
                                 How often do you check for Varroa?
                             </label>
                             <select
-                                type="text"
                                 id="varroa_check_frequency"
                                 name="varroa_check_frequency"
                                 value={varroa_check_frequency}
@@ -366,7 +365,6 @@ class NovemberSurveyForm extends Component {
                                 How you manage for Varroa? If so, how often?
                             </label>
                             <select
-                                type="text"
                                 id="varroa_manage_frequency"
                                 name="varroa_manage_frequency"
                                 value={varroa_manage_frequency}

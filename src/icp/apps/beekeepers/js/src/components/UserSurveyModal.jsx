@@ -150,7 +150,6 @@ class UserSurveyModal extends Component {
                                     What level will you contribute at?
                                 </label>
                                 <select
-                                    type="text"
                                     id="contribution_level"
                                     name="contribution_level"
                                     value={contribution_level}
@@ -175,7 +174,6 @@ class UserSurveyModal extends Component {
                             <div className="form__group">
                                 <label htmlFor="preferred_contact">Do you prefer email or phone?</label>
                                 <select
-                                    type="text"
                                     id="preferred_contact"
                                     name="preferred_contact"
                                     value={preferred_contact}
@@ -219,7 +217,6 @@ class UserSurveyModal extends Component {
                                     How many total colonies do you manage?
                                 </label>
                                 <select
-                                    type="text"
                                     id="total_colonies"
                                     name="total_colonies"
                                     value={total_colonies}
@@ -311,7 +308,6 @@ class UserSurveyModal extends Component {
                                     What best describes your beekeeping practice?
                                 </label>
                                 <select
-                                    type="text"
                                     id="practice"
                                     name="practice"
                                     value={practice}
