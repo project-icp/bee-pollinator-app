@@ -78,7 +78,7 @@ module.exports = ({ production }) => {
                     loader: 'eslint-loader',
                 },
                 {
-                    test: /\.scss$/,
+                    test: /\.s?css$/,
                     use: [
                         {
                             loader: 'style-loader',
