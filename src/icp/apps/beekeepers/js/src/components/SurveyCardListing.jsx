@@ -10,11 +10,11 @@ import {
 } from '../constants';
 
 import AprilSurveyForm from './AprilSurveyForm';
+import NovemberSurveyForm from './NovemberSurveyForm';
 
 const SurveyCardListing = ({
+    survey,
     survey: {
-        id,
-        apiary,
         month_year,
         survey_type,
         completed,
@@ -24,11 +24,13 @@ const SurveyCardListing = ({
     switch (survey_type) {
         case SURVEY_TYPE_APRIL:
             formComponent = (
-                <AprilSurveyForm month_year={month_year} apiaryId={apiary} surveyId={id} />
+                <AprilSurveyForm survey={survey} />
             );
             break;
         case SURVEY_TYPE_NOVEMBER:
-            formComponent = <div />; // replace with nov form component
+            formComponent = (
+                <NovemberSurveyForm survey={survey} />
+            );
             break;
         case SURVEY_TYPE_MONTHLY:
             formComponent = <div />; // replace with monthly form component
