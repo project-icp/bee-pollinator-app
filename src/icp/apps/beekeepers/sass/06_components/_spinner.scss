@@ -1,5 +1,9 @@
+.spinner {
+    margin: auto;
+}
+
 .spinner::after {
-    position: absolute;
+    display: flex;
     box-sizing: border-box;
     width: 20px;
     height: 20px;
