@@ -79,11 +79,11 @@ class NovemberSurveyForm extends Component {
             }).then(({ data }) => {
                 let newState = {
                     completedSurvey: data,
-                    num_colonies: data.survey.num_colonies,
+                    num_colonies: data.num_colonies,
                 };
                 this.multipleChoiceKeys.forEach((key) => {
-                    if (data[key]) {
-                        const keys = data[key].split(';')
+                    if (data.november[key]) {
+                        const keys = data.november[key].split(';')
                             .map(s => `${key}_${s}`);
                         newState = keys.reduce((acc, k) => {
                             acc[k] = true;
@@ -138,32 +138,34 @@ class NovemberSurveyForm extends Component {
         } = this.state;
 
         const multipleChoiceState = {};
-        this.multipleChoiceKeys.forEach((key) => {
+        this.multipleChoiceKeys.forEach((mcKey) => {
             // Assemble semi-colon delimited mega-string for each multiple choice field
-            const keyOptions = Object
-                .entries(this.state)
-                .filter(option => option[1] && option[0].startsWith(key))
-                .map(option => option[0].split(`${key}_`)[1]);
+            const keyOptions = Object.entries(this.state)
+                .filter(([k, v]) => v && k.startsWith(mcKey))
+                // eslint-disable-next-line no-unused-vars
+                .map(([k, _]) => k.split(`${mcKey}_`)[1]);
+
             if (keyOptions.length) {
                 const values = keyOptions.filter(k => !k.includes('OTHER'));
                 // text inputs require custom parsing to look like "OTHER-user input here"
                 const textInputPrefixes = keyOptions.filter(k => k.includes('OTHER'));
-                const textInputValues = textInputPrefixes.map(k => `${k}-${this.state[`${key}_${k}`]}`);
+                const textInputValues = textInputPrefixes.map(k => `${k}-${this.state[`${mcKey}_${k}`]}`);
                 const allValues = values.concat(textInputValues);
 
-                multipleChoiceState[key] = arrayToSemicolonDelimitedString(allValues);
+                multipleChoiceState[mcKey] = arrayToSemicolonDelimitedString(allValues);
             }
         });
         /* eslint-enable react/destructuring-assignment */
 
-        const survey = {
+        const november = Object.assign({}, this.state, multipleChoiceState);
+
+        const form = {
             num_colonies,
             apiary,
             month_year,
             survey_type: SURVEY_TYPE_NOVEMBER,
+            november,
         };
-
-        const form = Object.assign({}, this.state, multipleChoiceState, { survey });
 
         getOrCreateSurveyRequest({ apiary, form })
             .then(() => {
