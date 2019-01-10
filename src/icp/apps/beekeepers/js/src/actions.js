@@ -36,6 +36,8 @@ export const hideCropLayer = createAction('Hide crop layer');
 export const setCropLayerOpacity = createAction('Set crop layer opacity');
 export const openUserSurveyModal = createAction('Open user survey modal');
 export const closeUserSurveyModal = createAction('Close user survey modal');
+export const openEmailFormModal = createAction('Open email form modal');
+export const closeEmailFormModal = createAction('Close email form modal');
 
 
 export function fetchApiaryScores(apiaryList, forageRange) {
@@ -207,6 +209,27 @@ export function logout() {
     });
 }
 
+export function resendActivationLink(form) {
+    return dispatch => csrfRequest
+        .post('/user/resend', form)
+        .then(() => {
+            dispatch(setAuthState({
+                username: '',
+                userId: null,
+                message: 'Check your email for the activation link',
+                authError: '',
+                userSurvey: null,
+            }));
+        }).catch((error) => {
+            dispatch(setAuthState({
+                message: '',
+                authError: error.response.data.errors[0],
+                username: '',
+                userSurvey: null,
+                userId: null,
+            }));
+        });
+}
 
 export function createUserSurvey(form) {
     return (dispatch, getState) => {
