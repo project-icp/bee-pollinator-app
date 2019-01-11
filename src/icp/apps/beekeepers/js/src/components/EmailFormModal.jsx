@@ -7,6 +7,7 @@ import {
     closeEmailFormModal,
     openLoginModal,
     sendAuthLink,
+    clearAuthMessages,
 } from '../actions';
 
 
@@ -41,7 +42,7 @@ class EmailFormModal extends Component {
         ) : null;
 
         const userMessage = message ? (
-            <div className="form__group--error">
+            <div className="form__group--message">
                 {message}
             </div>
         ) : null;
@@ -49,7 +50,10 @@ class EmailFormModal extends Component {
         return (
             <Popup
                 open={isEmailFormModalOpen}
-                onClose={() => dispatch(closeEmailFormModal())}
+                onClose={() => {
+                    dispatch(clearAuthMessages());
+                    dispatch(closeEmailFormModal());
+                }}
                 modal
             >
                 {close => (

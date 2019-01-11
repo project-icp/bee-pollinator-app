@@ -3,7 +3,12 @@ import { bool, func, string } from 'prop-types';
 import Popup from 'reactjs-popup';
 import { connect } from 'react-redux';
 
-import { closeSignUpModal, openLoginModal, signUp } from '../actions';
+import {
+    closeSignUpModal,
+    openLoginModal,
+    signUp,
+    clearAuthMessages,
+} from '../actions';
 import { toFormData } from '../utils';
 
 
@@ -46,7 +51,14 @@ class SignUpModal extends Component {
         ) : null;
 
         return (
-            <Popup open={isSignUpModalOpen} onClose={() => dispatch(closeSignUpModal())} modal>
+            <Popup
+                open={isSignUpModalOpen}
+                onClose={() => {
+                    dispatch(closeSignUpModal());
+                    dispatch(clearAuthMessages());
+                }}
+                modal
+            >
                 {close => (
                     <div className="authModal">
                         <div className="authModal__header">

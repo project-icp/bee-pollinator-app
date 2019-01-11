@@ -7,7 +7,7 @@ import {
     closeLoginModal,
     openSignUpModal,
     login,
-    clearAuthError,
+    clearAuthMessages,
     openEmailFormModal,
 } from '../actions';
 
@@ -59,7 +59,7 @@ class LoginModal extends Component {
             <Popup
                 open={isLoginModalOpen}
                 onClose={() => {
-                    dispatch(clearAuthError());
+                    dispatch(clearAuthMessages());
                     dispatch(closeLoginModal());
                 }}
                 modal

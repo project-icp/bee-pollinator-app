@@ -16,7 +16,7 @@ import {
     openParticipateModal,
     closeParticipateModal,
     setAuthState,
-    clearAuthError,
+    clearAuthMessages,
     showCropLayer,
     hideCropLayer,
     setCropLayerOpacity,
@@ -24,7 +24,6 @@ import {
     closeUserSurveyModal,
     openEmailFormModal,
     closeEmailFormModal,
-
 } from './actions';
 
 const initialState = {
@@ -89,8 +88,11 @@ const initialAuthState = {
 const authReducer = createReducer({
     [setAuthState]:
         (state, payload) => update(state, { $set: payload }),
-    [clearAuthError]:
-        state => update(state, { authError: { $set: '' } }),
+    [clearAuthMessages]:
+        state => update(state, {
+            authError: { $set: '' },
+            message: { $set: '' },
+        }),
 }, initialAuthState);
 
 export default {
