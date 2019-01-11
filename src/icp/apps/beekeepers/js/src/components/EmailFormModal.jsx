@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import {
     closeEmailFormModal,
     openLoginModal,
-    resendActivationLink,
+    sendAuthLink,
 } from '../actions';
 
 
@@ -79,13 +79,14 @@ class EmailFormModal extends Component {
                                 <button
                                     type="button"
                                     className="button--long"
-                                    onClick={() => dispatch(resendActivationLink(this.state))}
+                                    onClick={() => dispatch(sendAuthLink(this.state, 'resend'))}
                                 >
                                     Resend activation link
                                 </button>
                                 <button
                                     type="button"
                                     className="button--long"
+                                    onClick={() => dispatch(sendAuthLink(this.state, 'forgot'))}
                                 >
                                     Forgot password
                                 </button>

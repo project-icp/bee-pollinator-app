@@ -209,14 +209,15 @@ export function logout() {
     });
 }
 
-export function resendActivationLink(form) {
+export function sendAuthLink(form, endpoint) {
+    // valid endpoints at /user/forgot and /user/resend
     return dispatch => csrfRequest
-        .post('/user/resend', form)
+        .post(`/user/${endpoint}`, form)
         .then(() => {
             dispatch(setAuthState({
                 username: '',
                 userId: null,
-                message: 'Check your email for the activation link',
+                message: 'Check your email to reset your password or activate your account',
                 authError: '',
                 userSurvey: null,
             }));
