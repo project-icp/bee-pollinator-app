@@ -135,6 +135,7 @@ class UserSurveyModal extends Component {
                 open={isUserSurveyModalOpen}
                 closeOnEscape={false}
                 closeOnDocumentClick={false}
+                className="modal"
                 modal
             >
                 <div className="authModal">

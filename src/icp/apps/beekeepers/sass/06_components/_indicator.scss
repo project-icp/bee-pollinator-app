@@ -17,10 +17,14 @@
     &__popup {
         display: flex;
         flex-direction: column;
-        justify-content: left;
 
         .name {
             font-weight: $font-weight-bold;
+            text-align: left;
+        }
+
+        .description {
+            text-align: left;
         }
 
         .scores {

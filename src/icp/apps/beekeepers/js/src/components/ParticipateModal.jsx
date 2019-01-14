@@ -7,7 +7,12 @@ import { closeParticipateModal, openSignUpModal, openLoginModal } from '../actio
 
 
 const ParticipateModal = ({ isParticipateModalOpen, dispatch }) => (
-    <Popup open={isParticipateModalOpen} onClose={() => dispatch(closeParticipateModal())} modal>
+    <Popup
+        open={isParticipateModalOpen}
+        onClose={() => dispatch(closeParticipateModal())}
+        className="modal"
+        modal
+    >
         {close => (
             <div className="authModal">
                 <div className="authModal__header">
