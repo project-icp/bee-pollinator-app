@@ -38,6 +38,8 @@ export const openUserSurveyModal = createAction('Open user survey modal');
 export const closeUserSurveyModal = createAction('Close user survey modal');
 export const openEmailFormModal = createAction('Open email form modal');
 export const closeEmailFormModal = createAction('Close email form modal');
+export const openSuccessModal = createAction('Open success message modal');
+export const closeSuccessModal = createAction('Close success message modal');
 
 
 export function fetchApiaryScores(apiaryList, forageRange) {
@@ -149,6 +151,15 @@ export function fetchApiaryScores(apiaryList, forageRange) {
     };
 }
 
+
+export function flashSuccessModal() {
+    return (dispatch) => {
+        dispatch(openSuccessModal());
+        setTimeout(() => dispatch(closeSuccessModal()), 2000);
+    };
+}
+
+
 export function signUp(form) {
     return dispatch => csrfRequest.post('/user/sign_up?beekeepers', form)
         .then(({ data: { result } }) => {
@@ -174,6 +185,7 @@ export function signUp(form) {
             }));
         });
 }
+
 
 export function login(form) {
     return (dispatch) => {
@@ -259,6 +271,7 @@ export function createUserSurvey(form) {
                     userSurvey: data.beekeeper_survey,
                 }));
                 dispatch(closeUserSurveyModal());
+                dispatch(flashSuccessModal());
             })
             .catch(() => {
                 const errorMsg = 'Error submitting user survey. Check the fields and try again, or try again later.';

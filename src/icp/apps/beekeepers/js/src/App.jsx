@@ -16,6 +16,7 @@ import LoginModal from './components/LoginModal';
 import ParticipateModal from './components/ParticipateModal';
 import UserSurveyModal from './components/UserSurveyModal';
 import EmailFormModal from './components/EmailFormModal';
+import SuccessModal from './components/SuccessModal';
 
 import { UserSurvey } from './propTypes';
 import { login, saveAndFetchApiaries, openUserSurveyModal } from './actions';
@@ -55,6 +56,7 @@ class App extends React.Component {
                     <SignUpModal />
                     <LoginModal />
                     <EmailFormModal />
+                    <SuccessModal />
                     <Switch>
                         <Route path="/survey" component={Survey} />
                         <Route render={locationFinder} />
