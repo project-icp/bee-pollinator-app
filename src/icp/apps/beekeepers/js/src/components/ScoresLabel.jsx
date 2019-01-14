@@ -1,8 +1,10 @@
 import React from 'react';
 import { arrayOf, string } from 'prop-types';
+import Popup from 'reactjs-popup';
 
 import { Score } from '../propTypes';
 import { toDashedString, toSpacedString } from '../utils';
+import { INDICATOR_DETAILS } from '../constants';
 
 
 function generateScore(data, error) {
@@ -17,13 +19,33 @@ function generateScore(data, error) {
 const ScoresLabel = ({ indicator, scores }) => {
     const formattedScores = scores.map(({ data, err }) => generateScore(data, err)).join('/');
     const score = formattedScores[0] ? formattedScores : '!';
-    return (
-        <div className={`indicator indicator--${toDashedString(indicator)}`}>
-            <div className="indicator__number">
-                {score}
-            </div>
-            <div className="indicator__name">{toSpacedString(indicator)}</div>
+    const indicatorDetails = INDICATOR_DETAILS[indicator];
+    const hoverScores = indicatorDetails.scoreLabels.map((label, idx) => (
+        <div className="score">
+            <div className="value">{generateScore(scores[idx].data)}</div>
+            <div className="label">{label}</div>
         </div>
+    ));
+    return (
+        <Popup
+            trigger={(
+                <div className={`indicator indicator--${toDashedString(indicator)}`}>
+                    <div className="indicator__number">
+                        {score}
+                    </div>
+                    <div className="indicator__name">{toSpacedString(indicator)}</div>
+                </div>
+            )}
+            position="top center"
+            on="hover"
+        >
+            <div className="indicator__popup">
+                <div className="name">{indicatorDetails.name}</div>
+                <div className="description">{indicatorDetails.description}</div>
+                <div className="scores">{hoverScores}</div>
+            </div>
+        </Popup>
+
     );
 };
 
