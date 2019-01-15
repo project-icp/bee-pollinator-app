@@ -23,14 +23,14 @@ const SurveyCardListing = ({
     let formComponent;
     switch (survey_type) {
         case SURVEY_TYPE_APRIL:
-            formComponent = (
-                <AprilSurveyForm survey={survey} />
-            );
+            formComponent = (close => (
+                <AprilSurveyForm survey={survey} close={close} />
+            ));
             break;
         case SURVEY_TYPE_NOVEMBER:
-            formComponent = (
-                <NovemberSurveyForm survey={survey} />
-            );
+            formComponent = (close => (
+                <NovemberSurveyForm survey={survey} close={close} />
+            ));
             break;
         case SURVEY_TYPE_MONTHLY:
             formComponent = <div />; // replace with monthly form component

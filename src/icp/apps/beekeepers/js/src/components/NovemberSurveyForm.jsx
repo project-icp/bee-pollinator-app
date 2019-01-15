@@ -130,6 +130,7 @@ class NovemberSurveyForm extends Component {
                 month_year,
             },
             dispatch,
+            close,
         } = this.props;
 
         const {
@@ -165,12 +166,9 @@ class NovemberSurveyForm extends Component {
         const form = Object.assign({}, this.state, multipleChoiceState, { survey });
 
         getOrCreateSurveyRequest({ apiary, form })
-            .then(({ data }) => {
-                this.setState({
-                    completedSurvey: data,
-                    error: '',
-                });
+            .then(() => {
                 dispatch(fetchUserApiaries());
+                close();
             })
             .catch(error => this.setState({ error: error.response.statusText }));
     }
@@ -443,6 +441,7 @@ function mapStateToProps(state) {
 NovemberSurveyForm.propTypes = {
     survey: Survey.isRequired,
     dispatch: func.isRequired,
+    close: func.isRequired,
 };
 
 export default connect(mapStateToProps)(NovemberSurveyForm);
