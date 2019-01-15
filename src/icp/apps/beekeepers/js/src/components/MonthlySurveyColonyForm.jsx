@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { func } from 'prop-types';
+import { func, number } from 'prop-types';
 import 'react-tabs/style/react-tabs.css';
 
 import {
@@ -16,7 +16,7 @@ class MonthlySurveyColonyForm extends Component {
         const { data, onChange } = this.props;
         const disabled = data.id !== null;
 
-        return (key, label) => (
+        return (key, label, required) => (
             <div className="form__group">
                 <label htmlFor={key}>
                     {label}
@@ -29,6 +29,7 @@ class MonthlySurveyColonyForm extends Component {
                     value={data[key]}
                     onChange={onChange}
                     disabled={disabled}
+                    required={required}
                 />
             </div>
         );
@@ -88,14 +89,21 @@ class MonthlySurveyColonyForm extends Component {
     render() {
         const {
             data: {
+                colony_name,
                 colony_alive,
                 varroa_count_performed,
             },
+            idx,
         } = this.props;
 
         const inputText = this.inputFactory('text');
         const inputDate = this.inputFactory('date');
         const inputNumber = this.inputFactory('number');
+
+        // The first colony is always requried. Henceforth, the colony name
+        // indicates if the colony is being filled out. If it is filled out,
+        // then the other fields are required as well.
+        const required = idx === 0 || colony_name !== '';
 
         const colonyLossReasons = colony_alive ? null : (
             <>
@@ -125,8 +133,8 @@ class MonthlySurveyColonyForm extends Component {
 
         return (
             <>
-                {inputText('colony_name', 'Colony Name (required)')}
-                {inputDate('inspection_date', 'Date of Inspection')}
+                {inputText('colony_name', 'Colony Name (required)', required)}
+                {inputDate('inspection_date', 'Date of Inspection', required)}
                 {this.inputSelect('colony_alive', 'Is the colony alive?', [
                     ['true', 'Yes'],
                     ['false', 'No'],
@@ -187,6 +195,7 @@ class MonthlySurveyColonyForm extends Component {
 MonthlySurveyColonyForm.propTypes = {
     data: MonthlySurveyColony.isRequired,
     onChange: func.isRequired,
+    idx: number.isRequired,
 };
 
 export default MonthlySurveyColonyForm;

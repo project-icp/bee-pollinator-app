@@ -245,6 +245,11 @@ class MonthlySurveyForm extends Component {
             return Object.assign({}, monthly, multipleChoiceData);
         }).filter(m => m !== null);
 
+        if (monthlies.length === 0) {
+            this.setState({ error: 'Please fill out at least one colony' });
+            return;
+        }
+
         const form = {
             num_colonies,
             apiary,
@@ -304,6 +309,7 @@ class MonthlySurveyForm extends Component {
                 <MonthlySurveyColonyForm
                     onChange={this.handleSubsurveyChange(idx)}
                     data={data}
+                    idx={idx}
                 />
             </TabPanel>
         ));
