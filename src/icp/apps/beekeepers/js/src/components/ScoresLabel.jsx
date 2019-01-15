@@ -21,7 +21,7 @@ const ScoresLabel = ({ indicator, scores }) => {
     const score = formattedScores[0] ? formattedScores : '!';
     const indicatorDetails = INDICATOR_DETAILS[indicator];
     const hoverScores = indicatorDetails.scoreLabels.map((label, idx) => (
-        <div className="score">
+        <div className="score" key={label}>
             <div className="value">{generateScore(scores[idx].data)}</div>
             <div className="label">{label}</div>
         </div>
