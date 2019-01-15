@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { func } from 'prop-types';
 
-import { fetchUserApiaries } from '../actions';
+import { fetchUserApiaries, flashSuccessModal } from '../actions';
 import {
     SURVEY_TYPE_NOVEMBER,
     MITE_MANAGEMENT_OPTIONS,
@@ -130,6 +130,7 @@ class NovemberSurveyForm extends Component {
                 month_year,
             },
             dispatch,
+            close,
         } = this.props;
 
         const {
@@ -165,12 +166,10 @@ class NovemberSurveyForm extends Component {
         const form = Object.assign({}, this.state, multipleChoiceState, { survey });
 
         getOrCreateSurveyRequest({ apiary, form })
-            .then(({ data }) => {
-                this.setState({
-                    completedSurvey: data,
-                    error: '',
-                });
+            .then(() => {
                 dispatch(fetchUserApiaries());
+                close();
+                dispatch(flashSuccessModal());
             })
             .catch(error => this.setState({ error: error.response.statusText }));
     }
@@ -443,6 +442,7 @@ function mapStateToProps(state) {
 NovemberSurveyForm.propTypes = {
     survey: Survey.isRequired,
     dispatch: func.isRequired,
+    close: func.isRequired,
 };
 
 export default connect(mapStateToProps)(NovemberSurveyForm);

@@ -24,6 +24,8 @@ import {
     closeUserSurveyModal,
     openEmailFormModal,
     closeEmailFormModal,
+    openSuccessModal,
+    closeSuccessModal,
 } from './actions';
 
 const initialState = {
@@ -37,6 +39,7 @@ const initialState = {
     cropLayerOpacity: 0.5,
     isUserSurveyModalOpen: false,
     isEmailFormModalOpen: false,
+    isSuccessModalOpen: false,
 };
 
 const mainReducer = createReducer({
@@ -72,6 +75,10 @@ const mainReducer = createReducer({
         state => update(state, { isEmailFormModalOpen: { $set: true } }),
     [closeEmailFormModal]:
         state => update(state, { isEmailFormModalOpen: { $set: false } }),
+    [openSuccessModal]:
+        state => update(state, { isSuccessModalOpen: { $set: true } }),
+    [closeSuccessModal]:
+        state => update(state, { isSuccessModalOpen: { $set: false } }),
 }, initialState);
 
 // Placeholder reducer for parts of state that will be persisted to localStorage
