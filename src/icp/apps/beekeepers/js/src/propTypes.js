@@ -62,3 +62,23 @@ export const Survey = shape({
     apiary: number.isRequired,
     completed: bool.isRequired,
 });
+
+export const MonthlySurveyColony = shape({
+    id: number,
+    inspection_date: string,
+    colony_name: string,
+    colony_alive: bool,
+    colony_loss_reason: string,
+    num_bodies_supers_deep: number,
+    num_bodies_supers_medium: number,
+    num_bodies_supers_shallow: number,
+    activity_since_last: string,
+    queenright: bool,
+    same_queen: string,
+    queen_stock: string,
+    queen_source: string,
+    varroa_count_performed: bool,
+    varroa_count_technique: string,
+    varroa_count_result: number,
+    varroa_treatment: string,
+});
