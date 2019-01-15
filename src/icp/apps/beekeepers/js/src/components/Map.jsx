@@ -201,6 +201,11 @@ class Map extends Component {
                         attribution="Tiles &copy; Esri"
                         url="https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
                     />
+                    <TileLayer
+                        attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                        url="https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png"
+                        subdomains="abcd"
+                    />
                     <CropLayerControl
                         position="bottomleft"
                         enableMapZoom={this.enableMapZoom}
