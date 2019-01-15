@@ -62,6 +62,7 @@ class LoginModal extends Component {
                     dispatch(clearAuthMessages());
                     dispatch(closeLoginModal());
                 }}
+                className="modal"
                 modal
             >
                 {close => (

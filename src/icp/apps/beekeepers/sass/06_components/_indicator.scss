@@ -13,6 +13,29 @@
         color: $color-grey-3;
         text-transform: capitalize;
     }
+
+    &__popup {
+        display: flex;
+        flex-direction: column;
+
+        .name {
+            font-weight: $font-weight-bold;
+            text-align: left;
+        }
+
+        .description {
+            text-align: left;
+        }
+
+        .scores {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .value {
+            font-weight: $font-weight-bold;
+        }
+    }
 }
 
 @include media("<=tablet") {

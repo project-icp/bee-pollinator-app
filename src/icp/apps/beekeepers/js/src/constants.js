@@ -12,6 +12,24 @@ export const INDICATORS = {
     FLORAL_FALL: 'floral_fall',
 };
 
+export const INDICATOR_DETAILS = {
+    nesting: {
+        name: 'Nesting quality',
+        description: 'Lorem ipsum of nesting quality.',
+        scoreLabels: ['Nesting'],
+    },
+    pesticide: {
+        name: 'Pesticide quality',
+        description: 'Lorem ipsum of pesticide quality.',
+        scoreLabels: ['Pesticide'],
+    },
+    forage: {
+        name: 'Forage quality',
+        description: 'Lorem ipsum of forage quality.',
+        scoreLabels: ['Spring', 'Summer', 'Fall'],
+    },
+};
+
 export const SORT_OPTIONS = [DEFAULT_SORT].concat(Object.values(INDICATORS));
 
 export const MAP_CENTER = [40.0, -76.079];
