@@ -10,12 +10,13 @@ const SuccessModal = ({ dispatch, isSuccessModalOpen }) => (
         {close => (
             <div className="authModal">
                 <div className="authModal__header">
+                    Thank You
                     <button type="button" className="button" onClick={close}>
                         &times;
                     </button>
                 </div>
                 <div className="authModal__content">
-                    Successfully submitted!
+                    Your response has been saved.
                 </div>
             </div>
         )}
