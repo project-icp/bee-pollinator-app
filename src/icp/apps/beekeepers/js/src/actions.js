@@ -18,7 +18,7 @@ export const closeLoginModal = createAction('Close log in modal');
 export const openParticipateModal = createAction('Open participate modal');
 export const closeParticipateModal = createAction('Close participate modal');
 export const setAuthState = createAction('Set auth information to the state');
-export const clearAuthError = createAction('Clear saved auth error');
+export const clearAuthMessages = createAction('Clear saved auth message and error');
 export const startSavingApiaryList = createAction('Start saving apiary list');
 export const completeSavingApiaryList = createAction('Complete saving apiary list');
 export const failSavingApiaryList = createAction('Fail saving apiary list');
@@ -36,6 +36,8 @@ export const hideCropLayer = createAction('Hide crop layer');
 export const setCropLayerOpacity = createAction('Set crop layer opacity');
 export const openUserSurveyModal = createAction('Open user survey modal');
 export const closeUserSurveyModal = createAction('Close user survey modal');
+export const openEmailFormModal = createAction('Open email form modal');
+export const closeEmailFormModal = createAction('Close email form modal');
 
 
 export function fetchApiaryScores(apiaryList, forageRange) {
@@ -154,8 +156,10 @@ export function signUp(form) {
                 dispatch(closeSignUpModal());
                 dispatch(setAuthState({
                     username: '',
-                    authError: 'Please click the validation link in your email and then log in.',
+                    authError: '',
                     userId: null,
+                    userSurvey: null,
+                    message: 'Please click the validation link in your email and then log in.',
                 }));
                 dispatch(openLoginModal());
             }
@@ -165,6 +169,8 @@ export function signUp(form) {
                 username: '',
                 authError: error.response.data.errors[0],
                 userId: null,
+                userSurvey: null,
+                message: '',
             }));
         });
 }
@@ -180,6 +186,7 @@ export function login(form) {
                 dispatch(setAuthState({
                     username: data.username || '',
                     authError: '',
+                    message: '',
                     userId: data.id || null,
                     userSurvey: data.beekeeper_survey,
                 }));
@@ -188,6 +195,7 @@ export function login(form) {
             .catch((error) => {
                 dispatch(setAuthState({
                     username: '',
+                    message: '',
                     authError: error.response.data.errors[0],
                     userId: null,
                     userSurvey: null,
@@ -201,12 +209,36 @@ export function logout() {
         dispatch(setAuthState({
             username: '',
             authError: '',
+            message: '',
             userId: null,
+            userSurvey: null,
         }));
         dispatch(setApiaryList([]));
     });
 }
 
+export function sendAuthLink(form, endpoint) {
+    // valid endpoints at /user/forgot and /user/resend
+    return dispatch => csrfRequest
+        .post(`/user/${endpoint}`, form)
+        .then(() => {
+            dispatch(setAuthState({
+                username: '',
+                userId: null,
+                message: 'Check your email to reset your password or activate your account',
+                authError: '',
+                userSurvey: null,
+            }));
+        }).catch((error) => {
+            dispatch(setAuthState({
+                message: '',
+                authError: error.response.data.errors[0],
+                username: '',
+                userSurvey: null,
+                userId: null,
+            }));
+        });
+}
 
 export function createUserSurvey(form) {
     return (dispatch, getState) => {
@@ -221,6 +253,7 @@ export function createUserSurvey(form) {
             .then(({ data }) => {
                 dispatch(setAuthState({
                     username,
+                    message: '',
                     authError: '',
                     userId,
                     userSurvey: data.beekeeper_survey,
@@ -231,6 +264,7 @@ export function createUserSurvey(form) {
                 const errorMsg = 'Error submitting user survey. Check the fields and try again, or try again later.';
                 dispatch(setAuthState({
                     username,
+                    message: '',
                     authError: errorMsg,
                     userId,
                     userSurvey: null,

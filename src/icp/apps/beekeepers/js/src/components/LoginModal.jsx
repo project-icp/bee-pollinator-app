@@ -7,7 +7,8 @@ import {
     closeLoginModal,
     openSignUpModal,
     login,
-    clearAuthError,
+    clearAuthMessages,
+    openEmailFormModal,
 } from '../actions';
 
 
@@ -58,7 +59,7 @@ class LoginModal extends Component {
             <Popup
                 open={isLoginModalOpen}
                 onClose={() => {
-                    dispatch(clearAuthError());
+                    dispatch(clearAuthMessages());
                     dispatch(closeLoginModal());
                 }}
                 modal
@@ -109,9 +110,23 @@ class LoginModal extends Component {
                                 <button
                                     type="button"
                                     className="button"
-                                    onClick={close}
+                                    onClick={() => {
+                                        close();
+                                        dispatch(openEmailFormModal());
+                                    }}
                                 >
-                                    I forgot my password
+                                    Forgot password
+                                </button>
+                                &#9900;
+                                <button
+                                    type="button"
+                                    className="button"
+                                    onClick={() => {
+                                        close();
+                                        dispatch(openEmailFormModal());
+                                    }}
+                                >
+                                    Resend activation link
                                 </button>
                                 &#9900;
                                 <button

@@ -16,12 +16,14 @@ import {
     openParticipateModal,
     closeParticipateModal,
     setAuthState,
-    clearAuthError,
+    clearAuthMessages,
     showCropLayer,
     hideCropLayer,
     setCropLayerOpacity,
     openUserSurveyModal,
     closeUserSurveyModal,
+    openEmailFormModal,
+    closeEmailFormModal,
 } from './actions';
 
 const initialState = {
@@ -34,6 +36,7 @@ const initialState = {
     isCropLayerActive: false,
     cropLayerOpacity: 0.5,
     isUserSurveyModalOpen: false,
+    isEmailFormModalOpen: false,
 };
 
 const mainReducer = createReducer({
@@ -65,6 +68,10 @@ const mainReducer = createReducer({
         state => update(state, { isUserSurveyModalOpen: { $set: true } }),
     [closeUserSurveyModal]:
         state => update(state, { isUserSurveyModalOpen: { $set: false } }),
+    [openEmailFormModal]:
+        state => update(state, { isEmailFormModalOpen: { $set: true } }),
+    [closeEmailFormModal]:
+        state => update(state, { isEmailFormModalOpen: { $set: false } }),
 }, initialState);
 
 // Placeholder reducer for parts of state that will be persisted to localStorage
@@ -74,14 +81,18 @@ const initialAuthState = {
     username: '',
     userId: null,
     authError: '',
+    message: '',
     userSurvey: null,
 };
 
 const authReducer = createReducer({
     [setAuthState]:
         (state, payload) => update(state, { $set: payload }),
-    [clearAuthError]:
-        state => update(state, { authError: { $set: '' } }),
+    [clearAuthMessages]:
+        state => update(state, {
+            authError: { $set: '' },
+            message: { $set: '' },
+        }),
 }, initialAuthState);
 
 export default {

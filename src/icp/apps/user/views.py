@@ -176,7 +176,8 @@ def sign_up(request):
 @decorators.permission_classes((AllowAny, ))
 def resend(request):
     # Resend activation email if the key hasn't expired.
-    form = PasswordResetForm(request.POST)
+    data = request.POST or request.DATA
+    form = PasswordResetForm(data)
     if form.is_valid():
         email = form.cleaned_data['email']
         try:
@@ -203,7 +204,8 @@ def resend(request):
 @decorators.api_view(['POST'])
 @decorators.permission_classes((AllowAny, ))
 def forgot(request):
-    form = PasswordResetForm(request.POST)
+    data = request.POST or request.DATA
+    form = PasswordResetForm(data)
 
     if form.is_valid():
         email = form.cleaned_data['email']

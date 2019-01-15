@@ -4,44 +4,35 @@ import Popup from 'reactjs-popup';
 import { connect } from 'react-redux';
 
 import {
-    closeSignUpModal,
+    closeEmailFormModal,
     openLoginModal,
-    signUp,
+    sendAuthLink,
     clearAuthMessages,
 } from '../actions';
-import { toFormData } from '../utils';
 
 
-class SignUpModal extends Component {
+class EmailFormModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
             email: '',
-            username: '',
-            password1: '',
-            password2: '',
         };
         this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange({ currentTarget: { name, value } }) {
         this.setState({ [name]: value });
     }
 
-    handleSubmit(event) {
-        const { dispatch } = this.props;
-        dispatch(signUp(toFormData(this.state)));
-        event.preventDefault();
-    }
-
     render() {
-        const { isSignUpModalOpen, dispatch, authError } = this.props;
+        const {
+            isEmailFormModalOpen,
+            dispatch,
+            authError,
+            message,
+        } = this.props;
         const {
             email,
-            username,
-            password1,
-            password2,
         } = this.state;
 
         const errorWarning = authError ? (
@@ -50,12 +41,18 @@ class SignUpModal extends Component {
             </div>
         ) : null;
 
+        const userMessage = message ? (
+            <div className="form__group--message">
+                {message}
+            </div>
+        ) : null;
+
         return (
             <Popup
-                open={isSignUpModalOpen}
+                open={isEmailFormModalOpen}
                 onClose={() => {
-                    dispatch(closeSignUpModal());
                     dispatch(clearAuthMessages());
+                    dispatch(closeEmailFormModal());
                 }}
                 modal
             >
@@ -68,8 +65,9 @@ class SignUpModal extends Component {
                             </button>
                         </div>
                         <div className="authModal__content">
-                            <div className="title">Sign up for the study</div>
-                            <form className="form" onSubmit={this.handleSubmit}>
+                            <div className="title">Enter your email</div>
+                            <form className="form">
+                                {userMessage}
                                 {errorWarning}
                                 <div className="form__group">
                                     <label htmlFor="email">Email</label>
@@ -82,45 +80,19 @@ class SignUpModal extends Component {
                                         required
                                     />
                                 </div>
-                                <div className="form__group">
-                                    <label htmlFor="username">Username</label>
-                                    <input
-                                        type="text"
-                                        name="username"
-                                        value={username}
-                                        onChange={this.handleChange}
-                                        className="form__control"
-                                        required
-                                    />
-                                </div>
-                                <div className="form__group">
-                                    <label htmlFor="password1">Password</label>
-                                    <input
-                                        type="password"
-                                        className="form__control"
-                                        name="password1"
-                                        value={password1}
-                                        onChange={this.handleChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="form__group">
-                                    <label htmlFor="password2">Repeat Password</label>
-                                    <input
-                                        type="password"
-                                        className="form__control"
-                                        name="password2"
-                                        value={password2}
-                                        onChange={this.handleChange}
-                                        required
-                                    />
-                                </div>
                                 <button
-                                    type="submit"
-                                    value="Submit"
+                                    type="button"
                                     className="button--long"
+                                    onClick={() => dispatch(sendAuthLink(this.state, 'resend'))}
                                 >
-                                    Sign Up
+                                    Resend activation link
+                                </button>
+                                <button
+                                    type="button"
+                                    className="button--long"
+                                    onClick={() => dispatch(sendAuthLink(this.state, 'forgot'))}
+                                >
+                                    Forgot password
                                 </button>
                             </form>
                         </div>
@@ -148,16 +120,18 @@ class SignUpModal extends Component {
 
 function mapStateToProps(state) {
     return {
-        isSignUpModalOpen: state.main.isSignUpModalOpen,
+        isEmailFormModalOpen: state.main.isEmailFormModalOpen,
         dispatch: state.main.dispatch,
+        message: state.auth.message,
         authError: state.auth.authError,
     };
 }
 
-SignUpModal.propTypes = {
-    isSignUpModalOpen: bool.isRequired,
+EmailFormModal.propTypes = {
+    isEmailFormModalOpen: bool.isRequired,
     dispatch: func.isRequired,
+    message: string.isRequired,
     authError: string.isRequired,
 };
 
-export default connect(mapStateToProps)(SignUpModal);
+export default connect(mapStateToProps)(EmailFormModal);
