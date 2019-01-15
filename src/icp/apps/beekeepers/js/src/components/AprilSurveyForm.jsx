@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { func } from 'prop-types';
 
-import { fetchUserApiaries } from '../actions';
+import { fetchUserApiaries, flashSuccessModal } from '../actions';
 import { SURVEY_TYPE_APRIL, COLONY_LOSS_REASONS } from '../constants';
 import { arrayToSemicolonDelimitedString, getOrCreateSurveyRequest } from '../utils';
 import { Survey } from '../propTypes';
@@ -134,6 +134,7 @@ class AprilSurveyForm extends Component {
             .then(() => {
                 dispatch(fetchUserApiaries());
                 close();
+                dispatch(flashSuccessModal());
             })
             .catch(error => this.setState({ error: error.response.statusText }));
     }
