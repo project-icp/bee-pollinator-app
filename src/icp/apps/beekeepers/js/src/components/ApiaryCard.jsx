@@ -4,7 +4,12 @@ import { connect } from 'react-redux';
 
 import { Apiary } from '../propTypes';
 import { INDICATORS } from '../constants';
-import { setApiaryStar, setApiarySurvey, deleteApiary } from '../actions';
+import {
+    setApiaryStar,
+    setApiarySurvey,
+    deleteApiary,
+    fetchApiaryScores,
+} from '../actions';
 import { getMarkerClass } from '../utils';
 
 import CardButton from './CardButton';
@@ -27,9 +32,23 @@ const ApiaryCard = ({ apiary, forageRange, dispatch }) => {
     const onSurvey = () => dispatch(setApiarySurvey(apiary));
     const onDelete = () => dispatch(deleteApiary(apiary));
 
-    const scoreCard = !Object.keys(apiary.scores[forageRange]).length
-        ? <div className="spinner" />
-        : (
+    let scoreCard;
+    if (!Object.keys(apiary.scores[forageRange]).length && !apiary.fetching) {
+        scoreCard = (
+            <>
+                Error fetching apiary data
+                <button
+                    type="button"
+                    onClick={() => dispatch(fetchApiaryScores([apiary], forageRange))}
+                >
+                    Try again?
+                </button>
+            </>
+        );
+    } else if (!Object.keys(apiary.scores[forageRange]).length) {
+        scoreCard = <div className="spinner" />;
+    } else {
+        scoreCard = (
             <>
                 <div className="card__top">
                     <div className="card__identification">
@@ -64,6 +83,7 @@ const ApiaryCard = ({ apiary, forageRange, dispatch }) => {
                 </div>
             </>
         );
+    }
 
     return (
         <li className="card">
