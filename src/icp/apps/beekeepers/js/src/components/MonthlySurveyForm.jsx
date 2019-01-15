@@ -24,7 +24,7 @@ import MonthlySurveyColonyForm from './MonthlySurveyColonyForm';
 class MonthlySurveyForm extends Component {
     constructor(props) {
         super(props);
-        const initialMonthly = {
+        this.initialMonthly = {
             id: null,
             inspection_date: '',
             colony_name: '',
@@ -75,7 +75,11 @@ class MonthlySurveyForm extends Component {
 
         this.state = {
             num_colonies: props.survey.num_colonies || '',
-            monthlies: [initialMonthly, initialMonthly, initialMonthly],
+            monthlies: [
+                this.initialMonthly,
+                this.initialMonthly,
+                this.initialMonthly,
+            ],
             error: '',
             selectedTabIndex: 0,
         };
@@ -88,6 +92,36 @@ class MonthlySurveyForm extends Component {
             'activity_since_last',
             'varroa_count_technique',
             'varroa_treatment',
+        ];
+        // If a `field` has the `value`, then all the fields in `reset` are set
+        // to their value from initialMonthly
+        this.resetKeys = [
+            {
+                field: 'colony_alive',
+                value: true,
+                reset: [
+                    'colony_loss_reason',
+                    'colony_loss_reason_VARROA_MITES',
+                    'colony_loss_reason_INADEQUETE_FOOD_STORES',
+                    'colony_loss_reason_POOR_QUEENS',
+                    'colony_loss_reason_POOR_WEATHER_CONDITIONS',
+                    'colony_loss_reason_COLONY_TOO_SMALL_IN_NOVEMBER',
+                    'colony_loss_reason_PESTICIDE_EXPOSURE',
+                    'colony_loss_reason_OTHER',
+                ],
+            },
+            {
+                field: 'varroa_count_performed',
+                value: false,
+                reset: [
+                    'varroa_count_technique',
+                    'varroa_count_technique_ALCOHOL_WASH',
+                    'varroa_count_technique_SUGAR_SHAKE',
+                    'varroa_count_technique_STICKY_BOARDS',
+                    'varroa_count_technique_OTHER',
+                    'varroa_count_result',
+                ],
+            },
         ];
     }
 
@@ -189,13 +223,28 @@ class MonthlySurveyForm extends Component {
 
             const { monthlies } = this.state;
 
+            let changeset = {
+                [name]: {
+                    $set: finalValue,
+                },
+            };
+
+            // Reset dependent keys if needed
+            const resetKey = this.resetKeys.find(({ field }) => field === name);
+            if (resetKey && resetKey.value === finalValue) {
+                changeset = resetKey.reset.reduce(
+                    (acc, f) => Object.assign(acc, {
+                        [f]: {
+                            $set: this.initialMonthly[f],
+                        },
+                    }),
+                    changeset,
+                );
+            }
+
             this.setState({
                 monthlies: update(monthlies, {
-                    [idx]: {
-                        [name]: {
-                            $set: finalValue,
-                        },
-                    },
+                    [idx]: changeset,
                 }),
             });
         };
