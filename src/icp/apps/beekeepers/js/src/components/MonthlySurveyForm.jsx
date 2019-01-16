@@ -10,7 +10,7 @@ import {
 } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
-import { fetchUserApiaries } from '../actions';
+import { fetchUserApiaries, flashSuccessModal } from '../actions';
 import { SURVEY_TYPE_MONTHLY } from '../constants';
 import { Survey } from '../propTypes';
 import {
@@ -259,6 +259,7 @@ class MonthlySurveyForm extends Component {
                 month_year,
             },
             dispatch,
+            close,
         } = this.props;
 
         const {
@@ -309,11 +310,9 @@ class MonthlySurveyForm extends Component {
 
         getOrCreateSurveyRequest({ apiary, form })
             .then(() => {
-                // TODO Replace with success message
-                this.setState({
-                    error: '',
-                });
                 dispatch(fetchUserApiaries());
+                close();
+                dispatch(flashSuccessModal());
             })
             .catch(error => this.setState({ error: error.response.statusText }));
     }
@@ -425,6 +424,7 @@ function mapStateToProps(state) {
 MonthlySurveyForm.propTypes = {
     survey: Survey.isRequired,
     dispatch: func.isRequired,
+    close: func.isRequired,
 };
 
 export default connect(mapStateToProps)(MonthlySurveyForm);

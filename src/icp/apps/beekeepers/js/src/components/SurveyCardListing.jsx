@@ -34,9 +34,9 @@ const SurveyCardListing = ({
             ));
             break;
         case SURVEY_TYPE_MONTHLY:
-            formComponent = (
-                <MonthlySurveyForm survey={survey} />
-            );
+            formComponent = (close => (
+                <MonthlySurveyForm survey={survey} close={close} />
+            ));
             break;
         default:
             throw new Error(`Unknown survey type: ${survey_type}`);
