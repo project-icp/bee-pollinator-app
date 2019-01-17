@@ -258,16 +258,23 @@ export function getMonthlySurveys({ id: apiary, created_at: createdAt, surveys }
         const endMonth = y === endYear ? currentMonth : 12;
 
         for (let m = startMonth; m <= endMonth; m += 1) {
-            const twoDigitMonth = `0${m}`.slice(-2);
-            const month_year = `${twoDigitMonth}${y}`;
-            const survey = matchSurvey(month_year) || {
-                apiary,
-                month_year,
-                survey_type,
-                completed: false,
-            };
+            // Don't list current month until the 15th
+            if (!(
+                y === endYear
+                && m === endMonth
+                && currentDate.getDate() < 15
+            )) {
+                const twoDigitMonth = `0${m}`.slice(-2);
+                const month_year = `${twoDigitMonth}${y}`;
+                const survey = matchSurvey(month_year) || {
+                    apiary,
+                    month_year,
+                    survey_type,
+                    completed: false,
+                };
 
-            mthSurveys.push(survey);
+                mthSurveys.push(survey);
+            }
         }
     }
 
