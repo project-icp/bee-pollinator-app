@@ -23,9 +23,9 @@ export const INDICATOR_DETAILS = {
         description: 'Lorem ipsum of pesticide quality.',
         scoreLabels: ['Pesticide'],
     },
-    forage: {
-        name: 'Forage quality',
-        description: 'Lorem ipsum of forage quality.',
+    floral: {
+        name: 'Floral quality',
+        description: 'Lorem ipsum of floral quality.',
         scoreLabels: ['Spring', 'Summer', 'Fall'],
     },
 };
