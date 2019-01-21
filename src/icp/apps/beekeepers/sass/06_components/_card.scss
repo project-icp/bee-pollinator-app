@@ -1,7 +1,10 @@
 .card {
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
     min-height: 80px;
+    font-size: $font-size-med;
     background-color: #fff;
     border-radius: 4px;
     box-shadow: 0 0 4px -1px rgba(0, 0, 0, 0.5);
