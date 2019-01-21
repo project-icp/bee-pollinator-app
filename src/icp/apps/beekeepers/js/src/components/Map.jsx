@@ -23,12 +23,13 @@ import {
     fetchApiaryScores,
     setApiaryList,
     updateApiary,
+    setMapCenter,
 } from '../actions';
 import {
-    MAP_CENTER,
-    MAP_ZOOM,
     FORAGE_RANGE_3KM,
     FORAGE_RANGE_5KM,
+    MAP_ZOOM,
+    MAP_CENTER,
 } from '../constants';
 import { getNextInSequence, isSameLocation } from '../utils';
 
@@ -41,6 +42,7 @@ class Map extends Component {
         this.onClickAddMarker = this.onClickAddMarker.bind(this);
         this.enableMapZoom = this.enableMapZoom.bind(this);
         this.disableMapZoom = this.disableMapZoom.bind(this);
+        this.onMapMove = this.onMapMove.bind(this);
         this.mapRef = createRef();
         this.addressLookup = (new esri.GeocodeService()).reverse();
 
@@ -50,6 +52,7 @@ class Map extends Component {
     }
 
     componentDidMount() {
+        const { mapCenter } = this.props;
         const geocoderUrl = 'https://utility.arcgis.com/usrsvcs/appservices/OvpAtyJwoLLdQcLC/rest/services/World/GeocodeServer/';
         const map = this.mapRef.current.leafletElement;
         const geocoder = new esri.Geosearch({
@@ -72,7 +75,7 @@ class Map extends Component {
             useMapBounds: false,
             zoomToResult: false,
         }).addTo(map);
-
+        map.setView(mapCenter);
         geocoder.on('results', ({ results }) => {
             const selectedResult = results && results[0];
             if (selectedResult) {
@@ -155,6 +158,12 @@ class Map extends Component {
         }, 300);
     }
 
+    onMapMove(event) {
+        const { dispatch } = this.props;
+        const center = event.target.getCenter();
+        dispatch(setMapCenter([center.lat, center.lng]));
+    }
+
     enableMapZoom() {
         this.mapRef.current.leafletElement.scrollWheelZoom.enable();
     }
@@ -164,7 +173,11 @@ class Map extends Component {
     }
 
     render() {
-        const { apiaries, cropLayerOpacity, isCropLayerActive } = this.props;
+        const {
+            apiaries,
+            cropLayerOpacity,
+            isCropLayerActive,
+        } = this.props;
         const markers = apiaries.map((apiary) => {
             const icon = L.divIcon({
                 className: 'custom icon',
@@ -193,6 +206,7 @@ class Map extends Component {
                     zoom={MAP_ZOOM}
                     zoomControl={false}
                     onClick={this.onClickAddMarker}
+                    onMoveEnd={this.onMapMove}
                     ref={this.mapRef}
                     maxZoom={18}
                 >
@@ -215,7 +229,14 @@ class Map extends Component {
 }
 
 function mapStateToProps(state) {
-    return state.main;
+    return {
+        apiaries: state.main.apiaries,
+        forageRange: state.main.forageRange,
+        isCropLayerActive: state.main.isCropLayerActive,
+        cropLayerOpacity: state.main.cropLayerOpacity,
+        dispatch: state.main.dispatch,
+        mapCenter: state.saved.mapCenter,
+    };
 }
 
 Map.propTypes = {
@@ -224,6 +245,7 @@ Map.propTypes = {
     isCropLayerActive: bool.isRequired,
     cropLayerOpacity: number.isRequired,
     dispatch: func.isRequired,
+    mapCenter: arrayOf(number).isRequired,
 };
 
 export default connect(mapStateToProps)(Map);

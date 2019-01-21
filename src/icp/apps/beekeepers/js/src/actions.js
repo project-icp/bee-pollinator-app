@@ -40,6 +40,7 @@ export const openEmailFormModal = createAction('Open email form modal');
 export const closeEmailFormModal = createAction('Close email form modal');
 export const openSuccessModal = createAction('Open success message modal');
 export const closeSuccessModal = createAction('Close success message modal');
+export const setMapCenter = createAction('Set map center');
 
 
 export function fetchApiaryScores(apiaryList, forageRange) {
