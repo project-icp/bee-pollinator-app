@@ -180,8 +180,9 @@ class Map extends Component {
         });
         const cropLayer = !isCropLayerActive ? null : (
             <TileLayer
-                url="https://{s}.tiles.azavea.com/cdl-reclass/{z}/{x}/{y}.png"
+                url="https://{s}.tiles.azavea.com/cdl-reclass-2017-gdal/{z}/{x}/{y}.png"
                 subdomains="abcd"
+                maxNativeZoom={13}
                 opacity={cropLayerOpacity}
             />
         );

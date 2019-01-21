@@ -373,8 +373,8 @@ BASEMAPS = [
 ]
 
 OVERLAY = {
-    'url': 'https://{s}.tiles.azavea.com/cdl-reclass/{z}/{x}/{y}.png',
-    'maxNativeZoom': 15
+    'url': 'https://{s}.tiles.azavea.com/cdl-reclass-2017-gdal/{z}/{x}/{y}.png',
+    'maxNativeZoom': 13
 }
 
 DRAW_TOOLS = [
