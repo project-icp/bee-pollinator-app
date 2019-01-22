@@ -1,7 +1,6 @@
 # Script produced interim data
 src/icp/pollinator/src/pollinator/reclass/*.json
 src/icp/pollinator/src/pollinator/reclass/*.csv
-src/icp/apps/beekeepers/exports/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
