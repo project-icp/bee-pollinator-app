@@ -5,14 +5,6 @@ import os
 import boto3
 import rasterio
 from pyproj import Proj
-import psycopg2
-
-
-PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-HOST = os.environ.get('ICP_DB_HOST')
-DB_USER = os.environ.get('ICP_DB_USER')
-DB_PW = os.environ.get('ICP_DB_PASSWORD')
-DB_NAME = os.environ.get('ICP_DB_NAME')
 
 
 def sample_at_point(geom, raster_path):
@@ -93,47 +85,3 @@ class gdal_configured_credentials():
     def __exit__(self, *args):
         """Context manager close"""
         self.remove_env_vars()
-
-
-def export_survey_tables():
-    """Export all types of beekeepers surveys to CSVs."""
-
-    db_options = "dbname={} user={} host={} password={}".format(
-        DB_NAME, DB_USER, HOST, DB_PW
-    )
-    connection = psycopg2.connect(db_options)
-    cur = connection.cursor()
-
-    tables = dict(
-        novembersurvey=None,
-        aprilsurvey=None,
-        monthlysurvey=None,
-        usersurvey="""
-            SELECT auth_user.username AS username, auth_user.email AS email,
-            beekeepers_usersurvey.*
-            FROM beekeepers_usersurvey
-            INNER JOIN auth_user ON beekeepers_usersurvey.user_id=auth_user.id
-        """,
-        survey="""
-            SELECT beekeepers_survey.*, beekeepers_apiary.lat AS lat,
-            beekeepers_apiary.lng AS lng
-            FROM beekeepers_survey
-            INNER JOIN beekeepers_apiary
-            ON beekeepers_survey.apiary_id=beekeepers_apiary.id
-        """,
-    )
-    # collect output CSVs to dedicated folder
-    dir = os.path.join(PROJECT_ROOT, 'exports')
-    if not os.path.exists(dir):
-        os.mkdir(dir)
-
-    for table, query in tables.iteritems():
-        if query is None:
-            query = "SELECT * FROM beekeepers_{}".format(table)
-        output_query = "COPY ({0}) TO STDOUT WITH CSV HEADER".format(query)
-
-        filename = "{}/{}.csv".format(dir, table)
-        with open(filename, 'w') as f:
-            cur.copy_expert(output_query, f)
-
-    connection.close()
