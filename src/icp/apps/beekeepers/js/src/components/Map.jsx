@@ -24,6 +24,7 @@ import {
     setApiaryList,
     updateApiary,
     setMapCenter,
+    setMapZoom,
 } from '../actions';
 import {
     FORAGE_RANGE_3KM,
@@ -43,6 +44,7 @@ class Map extends Component {
         this.enableMapZoom = this.enableMapZoom.bind(this);
         this.disableMapZoom = this.disableMapZoom.bind(this);
         this.onMapMove = this.onMapMove.bind(this);
+        this.onMapZoom = this.onMapZoom.bind(this);
         this.mapRef = createRef();
         this.addressLookup = (new esri.GeocodeService()).reverse();
 
@@ -52,7 +54,7 @@ class Map extends Component {
     }
 
     componentDidMount() {
-        const { mapCenter } = this.props;
+        const { mapCenter, mapZoom } = this.props;
         const geocoderUrl = 'https://utility.arcgis.com/usrsvcs/appservices/OvpAtyJwoLLdQcLC/rest/services/World/GeocodeServer/';
         const map = this.mapRef.current.leafletElement;
         const geocoder = new esri.Geosearch({
@@ -75,13 +77,16 @@ class Map extends Component {
             useMapBounds: false,
             zoomToResult: false,
         }).addTo(map);
-        map.setView(mapCenter);
+
         geocoder.on('results', ({ results }) => {
             const selectedResult = results && results[0];
             if (selectedResult) {
                 map.panTo(selectedResult.latlng);
             }
         });
+
+        // initialize map with user's latest settings
+        map.setView(mapCenter, mapZoom);
     }
 
     onClickAddMarker(event) {
@@ -164,6 +169,12 @@ class Map extends Component {
         dispatch(setMapCenter([center.lat, center.lng]));
     }
 
+    onMapZoom(event) {
+        const { dispatch } = this.props;
+        const zoom = event.target.getZoom();
+        dispatch(setMapZoom(zoom));
+    }
+
     enableMapZoom() {
         this.mapRef.current.leafletElement.scrollWheelZoom.enable();
     }
@@ -207,6 +218,7 @@ class Map extends Component {
                     zoomControl={false}
                     onClick={this.onClickAddMarker}
                     onMoveEnd={this.onMapMove}
+                    onZoomEnd={this.onMapZoom}
                     ref={this.mapRef}
                     maxZoom={18}
                 >
@@ -236,6 +248,7 @@ function mapStateToProps(state) {
         cropLayerOpacity: state.main.cropLayerOpacity,
         dispatch: state.main.dispatch,
         mapCenter: state.saved.mapCenter,
+        mapZoom: state.saved.mapZoom,
     };
 }
 
@@ -246,6 +259,7 @@ Map.propTypes = {
     cropLayerOpacity: number.isRequired,
     dispatch: func.isRequired,
     mapCenter: arrayOf(number).isRequired,
+    mapZoom: number.isRequired,
 };
 
 export default connect(mapStateToProps)(Map);

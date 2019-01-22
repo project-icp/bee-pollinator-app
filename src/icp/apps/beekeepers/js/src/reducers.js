@@ -5,6 +5,7 @@ import {
     DEFAULT_SORT,
     FORAGE_RANGE_3KM,
     MAP_CENTER,
+    MAP_ZOOM,
 } from './constants';
 import {
     setSort,
@@ -28,6 +29,7 @@ import {
     openSuccessModal,
     closeSuccessModal,
     setMapCenter,
+    setMapZoom,
 } from './actions';
 
 const initialState = {
@@ -85,12 +87,15 @@ const mainReducer = createReducer({
 
 const savedState = {
     mapCenter: MAP_CENTER,
+    mapZoom: MAP_ZOOM,
 };
 
 // Placeholder reducer for parts of state that will be persisted to localStorage
 const savedReducer = createReducer({
     [setMapCenter]:
         (state, payload) => update(state, { mapCenter: { $set: payload } }),
+    [setMapZoom]:
+        (state, payload) => update(state, { mapZoom: { $set: payload } }),
 }, savedState);
 
 const initialAuthState = {
