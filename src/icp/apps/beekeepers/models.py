@@ -67,6 +67,12 @@ class Survey(models.Model):
         (MONTHLY, 'Monthly'),
     )
 
+    SUBSURVEY_FIELDS = dict((
+        (APRIL, 'april'),
+        (NOVEMBER, 'november'),
+        (MONTHLY, 'monthlies'),
+    ))
+
     month_year = models.CharField(
         max_length=255,
         null=False,
@@ -261,21 +267,26 @@ class MonthlySurvey(models.Model):
         null=False,
         help_text='Is the colony alive?')
     colony_loss_reason = models.TextField(
-        null=False,
+        null=True,
+        blank=True,
         help_text='The most likely causes for colony loss')
     num_bodies_supers_deep = models.IntegerField(
         null=True,
+        blank=True,
         help_text='Total number of hive bodies and supers (deep)')
     num_bodies_supers_medium = models.IntegerField(
         null=True,
+        blank=True,
         help_text='Total number of hive bodies and supers (medium)')
     num_bodies_supers_shallow = models.IntegerField(
         null=True,
+        blank=True,
         help_text='Total number of hive bodies and supers (shallow)')
     activity_since_last = models.CharField(
         # REMOVED_HONEY;REMOVED_BROOD;FED_POLLEN_PROTEIN;FED_SUGAR
         max_length=255,
         null=True,
+        blank=True,
         help_text='Since the last assessment have you: '
                   'removed honey, removed brood, '
                   'fed pollen or protein, fed sugar? '
@@ -291,11 +302,13 @@ class MonthlySurvey(models.Model):
     queen_stock = models.CharField(
         max_length=255,
         null=True,
+        blank=True,
         help_text='To the best of your knowledge, '
                   'what is the stock of the queen?')
     queen_source = models.CharField(
         max_length=255,
-        null=False,
+        null=True,
+        blank=True,
         choices=QUEEN_SOURCES,
         help_text='Where did the queen come from?')
     varroa_count_performed = models.BooleanField(
@@ -305,9 +318,11 @@ class MonthlySurvey(models.Model):
         # ALCOHOL_WASH;SUGAR_SHAKE;STICKY_BOARDS;OTHER-
         max_length=255,
         null=True,
+        blank=True,
         help_text='How did you do a Varroa count?')
     varroa_count_result = models.IntegerField(
         null=True,
+        blank=True,
         help_text='Number of mites per 300 bees (1/2 cup)')
     varroa_treatment = models.TextField(
         # CHEMICAL_FORMIC_ACID_MAQS;CHEMICAL_FORMIC_ACID_FORMIC_PRO;
@@ -319,6 +334,7 @@ class MonthlySurvey(models.Model):
         # MECHANICAL_OTHER-
         # OTHER-
         null=True,
+        blank=True,
         help_text='What methods of mite management do you use? '
                   'Select all that apply.')
 

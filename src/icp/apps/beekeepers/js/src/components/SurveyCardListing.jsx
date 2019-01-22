@@ -2,7 +2,7 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 
 import { Survey } from '../propTypes';
-import { monthNames } from '../utils';
+import { toMonthNameYear } from '../utils';
 import {
     SURVEY_TYPE_NOVEMBER,
     SURVEY_TYPE_APRIL,
@@ -11,6 +11,7 @@ import {
 
 import AprilSurveyForm from './AprilSurveyForm';
 import NovemberSurveyForm from './NovemberSurveyForm';
+import MonthlySurveyForm from './MonthlySurveyForm';
 
 const SurveyCardListing = ({
     survey,
@@ -33,7 +34,9 @@ const SurveyCardListing = ({
             ));
             break;
         case SURVEY_TYPE_MONTHLY:
-            formComponent = <div />; // replace with monthly form component
+            formComponent = (close => (
+                <MonthlySurveyForm survey={survey} close={close} />
+            ));
             break;
         default:
             throw new Error(`Unknown survey type: ${survey_type}`);
@@ -46,9 +49,7 @@ const SurveyCardListing = ({
             <Popup
                 trigger={(
                     <button type="button" className="listing__monthYear">
-                        {monthNames[month_year.slice(0, 2)]}
-                        {' '}
-                        {month_year.slice(-4)}
+                        {toMonthNameYear(month_year)}
                         {' '}
                         (
                         {survey_type}

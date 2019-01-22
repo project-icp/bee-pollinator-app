@@ -97,6 +97,19 @@ export const monthNames = {
     12: 'December',
 };
 
+/**
+ * Given a month_year string in "MMYYYY" format, returns a string with the
+ * full month name and the year. E.g. "042018" => "April 2018"
+ *
+ * @param {MMYYY} month_year
+ */
+export function toMonthNameYear(month_year) {
+    const month = monthNames[month_year.slice(0, 2)];
+    const year = month_year.slice(-4);
+
+    return `${month} ${year}`;
+}
+
 export function sortByValue(a, b) {
     const valA = a[1].toUpperCase();
     const valB = b[1].toUpperCase();
@@ -245,16 +258,23 @@ export function getMonthlySurveys({ id: apiary, created_at: createdAt, surveys }
         const endMonth = y === endYear ? currentMonth : 12;
 
         for (let m = startMonth; m <= endMonth; m += 1) {
-            const twoDigitMonth = `0${m}`.slice(-2);
-            const month_year = `${twoDigitMonth}${y}`;
-            const survey = matchSurvey(month_year) || {
-                apiary,
-                month_year,
-                survey_type,
-                completed: false,
-            };
+            // Don't list current month until the 15th
+            if (!(
+                y === endYear
+                && m === endMonth
+                && currentDate.getDate() < 15
+            )) {
+                const twoDigitMonth = `0${m}`.slice(-2);
+                const month_year = `${twoDigitMonth}${y}`;
+                const survey = matchSurvey(month_year) || {
+                    apiary,
+                    month_year,
+                    survey_type,
+                    completed: false,
+                };
 
-            mthSurveys.push(survey);
+                mthSurveys.push(survey);
+            }
         }
     }
 
