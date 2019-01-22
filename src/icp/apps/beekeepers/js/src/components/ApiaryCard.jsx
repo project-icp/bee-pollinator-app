@@ -72,7 +72,7 @@ const ApiaryCard = ({ apiary, forageRange, dispatch }) => {
                             scores={[values[INDICATORS.PESTICIDE]]}
                         />
                         <ScoresLabel
-                            indicator="forage"
+                            indicator="floral"
                             scores={[
                                 values[INDICATORS.FLORAL_SPRING],
                                 values[INDICATORS.FLORAL_SUMMER],
