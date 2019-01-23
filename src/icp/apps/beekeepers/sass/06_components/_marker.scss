@@ -1,12 +1,14 @@
 .marker {
-    width: 22px;
-    height: 22px;
+    flex-shrink: 0;
+    width: $marker-size;
+    height: $marker-size;
     color: #fff;
-    font-weight: 600;
-    line-height: 22px;
+    font-weight: $font-weight-normal;
+    line-height: $marker-size;
     text-align: center;
     background-color: $color-primary;
     border-radius: 100px;
+    cursor: default;
 
     &--selected {
         background-color: $color-selected;

@@ -65,3 +65,5 @@
 .icon-clipboard-outline:before { content: '\e807'; } /* '' */
 .icon-times:before { content: '\e808'; } /* '' */
 .icon-pencil:before { content: '\e809'; } /* '' */
+.icon-search:before { content: '\e80a'; } /* '' */
+.icon-angle-down:before { content: '\e80b'; } /* '' */

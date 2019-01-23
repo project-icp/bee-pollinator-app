@@ -14,3 +14,25 @@
         cursor: inherit;
     }
 }
+
+.map-marker {
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+.geocoder-control.geocoder-control-expanded::after {
+    position: absolute;
+    top: 7px;
+    right: 8px;
+    font-size: 14px;
+    font-family: beekeeper, sans-serif;
+    content: "\E80A";
+}
+
+.geocoder-control-input {
+    font-family: $font-family;
+    background: #fff;
+}
+
+.geocoder-control-suggestions {
+    font-family: $font-family;
+}

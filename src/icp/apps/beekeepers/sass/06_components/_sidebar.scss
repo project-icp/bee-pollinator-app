@@ -3,16 +3,16 @@
     min-width: 520px;
     max-width: 600px;
     height: 100%;
-    padding: 2rem;
+    padding: 2rem 1.5rem;
     overflow-y: auto;
-    background-color: #f8f9fb;
+    background-color: $sidebar-background;
 
     &__header {
         display: flex;
         justify-content: space-between;
-        margin-top: 1rem;
-        margin-bottom: 1.6rem;
-        font-weight: 900;
+        margin-top: 1.4rem;
+        margin-bottom: 3.2rem;
+        font-weight: $font-weight-bold;
         font-size: $font-size-xl;
     }
 

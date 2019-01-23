@@ -15,4 +15,4 @@
     - { role: "azavea.redis", when: "['development', 'test'] | some_are_in(group_names)" }
     - { role: "bee-pollinator.graphite", when: "['test'] | is_not_in(group_names)" }
     - { role: "bee-pollinator.logstash", when: "['test'] | is_not_in(group_names)" }
-    - { role: "azavea.kibana", when: "['test'] | is_not_in(group_names)" }
+    # - { role: "azavea.kibana", when: "['test'] | is_not_in(group_names)" }

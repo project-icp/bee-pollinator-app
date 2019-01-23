@@ -20,12 +20,6 @@ const ScoresLabel = ({ indicator, scores }) => {
     const formattedScores = scores.map(({ data, error }) => generateScore(data, error)).join('/');
     const score = formattedScores[0] ? formattedScores : '!';
     const indicatorDetails = INDICATOR_DETAILS[indicator];
-    const hoverScores = indicatorDetails.scoreLabels.map((label, idx) => (
-        <div className="score" key={label}>
-            <div className="value">{generateScore(scores[idx].data, scores[idx].error)}</div>
-            <div className="label">{label}</div>
-        </div>
-    ));
     return (
         <Popup
             trigger={(
@@ -42,7 +36,6 @@ const ScoresLabel = ({ indicator, scores }) => {
             <div className="indicator__popup">
                 <div className="name">{indicatorDetails.name}</div>
                 <div className="description">{indicatorDetails.description}</div>
-                <div className="scores">{hoverScores}</div>
             </div>
         </Popup>
 

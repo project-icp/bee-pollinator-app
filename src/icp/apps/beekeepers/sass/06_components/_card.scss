@@ -8,6 +8,7 @@
     background-color: #fff;
     border-radius: 4px;
     box-shadow: 0 0 4px -1px rgba(0, 0, 0, 0.5);
+    cursor: default;
 
     &:not(:last-child) {
         margin-bottom: 1.4rem;
@@ -24,22 +25,27 @@
     &__bottom {
         width: 100%;
         height: 3.6rem;
-        padding: 0.9rem 0.4rem;
+        padding: 0.9rem 0.6rem;
         text-align: center;
     }
 
     &__identification {
         display: flex;
         flex: 1;
+        min-height: $marker-size;
+        overflow: hidden;
+        white-space: nowrap;
     }
 
     &__name {
-        font-weight: 600;
+        overflow: hidden;
+        font-weight: $font-weight-normal;
         font-size: $font-size-med;
+        text-overflow: ellipsis;
     }
 
     &__benchmarklocation {
-        font-weight: 400;
+        font-weight: $font-weight-light;
     }
 
     &__button {
