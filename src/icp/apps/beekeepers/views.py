@@ -7,6 +7,7 @@ from cStringIO import StringIO
 from zipfile import ZipFile
 from tempfile import SpooledTemporaryFile
 
+from django.conf import settings
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import now
@@ -27,10 +28,7 @@ from tasks import sample_at_point
 
 DATA_BUCKET = os.environ['AWS_BEEKEEPERS_DATA_BUCKET']
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-HOST = os.environ.get('ICP_DB_HOST')
-DB_USER = os.environ.get('ICP_DB_USER')
-DB_PW = os.environ.get('ICP_DB_PASSWORD')
-DB_NAME = os.environ.get('ICP_DB_NAME')
+DB = settings.DATABASES['default']
 
 
 @decorators.api_view(['GET'])
@@ -39,8 +37,8 @@ def export_survey_tables(request):
     """Export a zip file of CSVs of all types of beekeepers surveys."""
 
     # prepare queries to the database
-    db_options = "dbname={} user={} host={} password={}".format(
-        DB_NAME, DB_USER, HOST, DB_PW
+    db_options = 'dbname={} user={} host={} password={}'.format(
+        DB['NAME'], DB['USER'], DB['HOST'], DB['PASSWORD']
     )
     connection = psycopg2.connect(db_options)
     cur = connection.cursor()
@@ -49,14 +47,14 @@ def export_survey_tables(request):
         aprilsurvey=None,
         monthlysurvey=None,
         usersurvey="""
-            SELECT auth_user.username AS username, auth_user.email AS email,
+            SELECT auth_user.username, auth_user.email,
             beekeepers_usersurvey.*
             FROM beekeepers_usersurvey
             INNER JOIN auth_user ON beekeepers_usersurvey.user_id=auth_user.id
         """,
         survey="""
-            SELECT beekeepers_survey.*, beekeepers_apiary.lat AS lat,
-            beekeepers_apiary.lng AS lng
+            SELECT beekeepers_survey.*, beekeepers_apiary.lat,
+            beekeepers_apiary.lng
             FROM beekeepers_survey
             INNER JOIN beekeepers_apiary
             ON beekeepers_survey.apiary_id=beekeepers_apiary.id
@@ -64,17 +62,17 @@ def export_survey_tables(request):
     )
 
     # the zipped CSVs are written in memory
-    date_stamp = now().strftime("%Y-%m-%d_%H-%M-%S")
-    zip_dir = 'beekeepers_exports_%s' % date_stamp
+    date_stamp = now().strftime('%Y-%m-%d_%H-%M-%S')
+    zip_dir = 'beekeepers_exports_{}'.format(date_stamp)
     stream = StringIO()
 
     with ZipFile(stream, 'w') as zf:
         for table, query in tables.iteritems():
             if query is None:
-                query = "SELECT * FROM beekeepers_{}".format(table)
+                query = 'SELECT * FROM beekeepers_{}'.format(table)
 
-            filename = "{}/{}_{}.csv".format(zip_dir, table, date_stamp)
-            full_query = "COPY ({0}) TO STDOUT WITH CSV HEADER".format(query)
+            filename = '{}/{}_{}.csv'.format(zip_dir, table, date_stamp)
+            full_query = 'COPY ({0}) TO STDOUT WITH CSV HEADER'.format(query)
             tempfile = SpooledTemporaryFile()
             cur.copy_expert(full_query, tempfile)
             tempfile.seek(0)
@@ -83,9 +81,9 @@ def export_survey_tables(request):
 
     resp = HttpResponse(
         stream.getvalue(),
-        content_type="application/x-zip-compressed"
+        content_type='application/x-zip-compressed'
     )
-    resp['Content-Disposition'] = 'attachment; filename=%s.zip' % zip_dir
+    resp['Content-Disposition'] = 'attachment; filename={}.zip'.format(zip_dir)
     connection.close()
     return resp
 
