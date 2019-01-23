@@ -48,6 +48,9 @@ const ApiaryCard = ({ apiary, forageRange, dispatch }) => {
     } else if (!Object.keys(apiary.scores[forageRange]).length) {
         scoreCard = <div className="spinner" />;
     } else {
+        const scoreLabels = Object.values(INDICATORS).map(i => (
+            <ScoresLabel key={i} indicator={i} scores={[values[i]]} />
+        ));
         scoreCard = (
             <>
                 <div className="card__top">
@@ -63,22 +66,7 @@ const ApiaryCard = ({ apiary, forageRange, dispatch }) => {
                 </div>
                 <div className="card__bottom">
                     <div className="indicator-container">
-                        <ScoresLabel
-                            indicator={INDICATORS.NESTING_QUALITY}
-                            scores={[values[INDICATORS.NESTING_QUALITY]]}
-                        />
-                        <ScoresLabel
-                            indicator={INDICATORS.PESTICIDE}
-                            scores={[values[INDICATORS.PESTICIDE]]}
-                        />
-                        <ScoresLabel
-                            indicator="floral"
-                            scores={[
-                                values[INDICATORS.FLORAL_SPRING],
-                                values[INDICATORS.FLORAL_SUMMER],
-                                values[INDICATORS.FLORAL_FALL],
-                            ]}
-                        />
+                        {scoreLabels}
                     </div>
                 </div>
             </>
