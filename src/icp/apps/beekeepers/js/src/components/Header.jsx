@@ -3,7 +3,11 @@ import { connect } from 'react-redux';
 import { NavLink, withRouter } from 'react-router-dom';
 import { func, string, bool } from 'prop-types';
 
-import { openParticipateModal, openLoginModal, logout } from '../actions';
+import {
+    openParticipateModal,
+    openLoginModal,
+    logout,
+} from '../actions';
 
 const Header = ({ dispatch, username, isStaff }) => {
     const exportDataButton = isStaff

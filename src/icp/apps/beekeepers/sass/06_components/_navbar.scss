@@ -47,6 +47,11 @@
         }
     }
 
+    &__link {
+        color: $color-grey-2;
+        text-decoration: none;
+    }
+
     &__button {
         padding: 0;
         color: $color-grey-2;

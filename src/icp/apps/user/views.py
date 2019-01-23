@@ -48,6 +48,7 @@ def login(request):
                     'username': user.username,
                     'guest': False,
                     'id': user.id,
+                    'is_staff': user.is_staff,
                     'beekeeper_survey': user_survey
                 }
             else:
@@ -79,6 +80,7 @@ def login(request):
                 'result': 'success',
                 'username': user.username,
                 'guest': False,
+                'is_staff': user.is_staff,
                 'id': user.id,
                 'beekeeper_survey': user_survey
             }
