@@ -22,6 +22,18 @@ const Header = ({ dispatch, username, isStaff }) => {
                 </a>
             </li>
         ) : null;
+    const exportDataButtonForScreenReader = isStaff
+        ? (
+            <li>
+                <a
+                    rel="noopener noreferrer"
+                    className="sr-only navbar__link"
+                    href="/beekeepers/export/"
+                >
+                    Export Survey Data
+                </a>
+            </li>
+        ) : null;
     const authButtons = username
         ? (
             <li className="navbar__item navbar__item--user">
@@ -33,13 +45,7 @@ const Header = ({ dispatch, username, isStaff }) => {
                     ▾
                 </button>
                 {/* Hidden buttons for screen readers */}
-                <a
-                    rel="noopener noreferrer"
-                    className="sr-only navbar__link"
-                    href="/beekeepers/export/"
-                >
-                    Export Survey Data
-                </a>
+                {exportDataButtonForScreenReader}
                 <button
                     type="button"
                     className="sr-only"
