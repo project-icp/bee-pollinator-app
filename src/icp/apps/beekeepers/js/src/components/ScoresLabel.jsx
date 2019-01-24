@@ -3,7 +3,7 @@ import { arrayOf, string } from 'prop-types';
 import Popup from 'reactjs-popup';
 
 import { Score } from '../propTypes';
-import { toDashedString, toSpacedString } from '../utils';
+import { toDashedString } from '../utils';
 import { INDICATOR_DETAILS } from '../constants';
 
 
@@ -33,7 +33,7 @@ const ScoresLabel = ({ indicator, scores }) => {
                     <div className="indicator__number">
                         {score}
                     </div>
-                    <div className="indicator__name">{toSpacedString(indicator)}</div>
+                    <div className="indicator__name">{indicatorDetails.shortLabel}</div>
                 </div>
             )}
             position="top center"
