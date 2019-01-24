@@ -81,7 +81,7 @@ def export_survey_tables(request):
 
     resp = HttpResponse(
         stream.getvalue(),
-        content_type='application/x-zip-compressed'
+        content_type='application/zip'
     )
     resp['Content-Disposition'] = 'attachment; filename={}.zip'.format(zip_dir)
     connection.close()
