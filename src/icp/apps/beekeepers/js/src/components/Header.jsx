@@ -1,11 +1,45 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink, withRouter } from 'react-router-dom';
-import { func, string } from 'prop-types';
+import { func, string, bool } from 'prop-types';
 
-import { openParticipateModal, openLoginModal, logout } from '../actions';
+import {
+    openParticipateModal,
+    openLoginModal,
+    logout,
+} from '../actions';
 
-const Header = ({ dispatch, username }) => {
+const Header = ({ dispatch, username, isStaff }) => {
+    const makeExportDataButton = srOnly => (
+        <a
+            rel="noopener noreferrer"
+            className={`navbar__link ${srOnly ? 'sr-only' : ''}`}
+            href="/beekeepers/export/"
+        >
+            Export Survey Data
+        </a>
+    );
+
+    const exportDataButton = isStaff
+        ? (
+            <li>
+                {makeExportDataButton()}
+            </li>
+        ) : null;
+
+    const exportDataButtonForScreenReader = isStaff
+        ? makeExportDataButton(true) : null;
+
+    const makeLogOutButton = srOnly => (
+        <button
+            type="button"
+            className={`navbar__button ${srOnly ? 'sr-only' : ''}`}
+            onClick={() => dispatch(logout())}
+        >
+            Log Out
+        </button>
+    );
+
     const authButtons = username
         ? (
             <li className="navbar__item navbar__item--user">
@@ -16,23 +50,13 @@ const Header = ({ dispatch, username }) => {
                     {username}
                     ▾
                 </button>
-                {/* Hidden Log Out button for screen readers */}
-                <button
-                    type="button"
-                    className="sr-only"
-                    onClick={() => dispatch(logout())}
-                >
-                    Log Out
-                </button>
+                {/* Hidden buttons for screen readers */}
+                {exportDataButtonForScreenReader}
+                {makeLogOutButton(true)}
                 <ul className="navbar__options">
+                    {exportDataButton}
                     <li>
-                        <button
-                            type="button"
-                            className="navbar__button"
-                            onClick={() => dispatch(logout())}
-                        >
-                            Log Out
-                        </button>
+                        {makeLogOutButton()}
                     </li>
                 </ul>
             </li>
@@ -59,6 +83,7 @@ const Header = ({ dispatch, username }) => {
                 </li>
             </>
         );
+
     return (
         <header className="header">
             <div className="navbar">
@@ -92,6 +117,7 @@ function mapStateToProps(state) {
 Header.propTypes = {
     dispatch: func.isRequired,
     username: string.isRequired,
+    isStaff: bool.isRequired,
 };
 
 export default withRouter(connect(mapStateToProps)(Header));

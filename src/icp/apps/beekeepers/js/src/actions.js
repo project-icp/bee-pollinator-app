@@ -170,6 +170,7 @@ export function signUp(form) {
                 dispatch(setAuthState({
                     username: '',
                     authError: '',
+                    isStaff: false,
                     userId: null,
                     userSurvey: null,
                     message: 'Please click the validation link in your email and then log in.',
@@ -181,6 +182,7 @@ export function signUp(form) {
             dispatch(setAuthState({
                 username: '',
                 authError: error.response.data.errors[0],
+                isStaff: false,
                 userId: null,
                 userSurvey: null,
                 message: '',
@@ -201,6 +203,7 @@ export function login(form) {
                     username: data.username || '',
                     authError: '',
                     message: '',
+                    isStaff: data.is_staff,
                     userId: data.id || null,
                     userSurvey: data.beekeeper_survey,
                 }));
@@ -210,6 +213,7 @@ export function login(form) {
                 dispatch(setAuthState({
                     username: '',
                     message: '',
+                    isStaff: false,
                     authError: error.response.data.errors[0],
                     userId: null,
                     userSurvey: null,
@@ -224,6 +228,7 @@ export function logout() {
             username: '',
             authError: '',
             message: '',
+            isStaff: false,
             userId: null,
             userSurvey: null,
         }));
@@ -240,6 +245,7 @@ export function sendAuthLink(form, endpoint) {
                 username: '',
                 userId: null,
                 message: 'Check your email to reset your password or activate your account',
+                isStaff: false,
                 authError: '',
                 userSurvey: null,
             }));
@@ -247,6 +253,7 @@ export function sendAuthLink(form, endpoint) {
             dispatch(setAuthState({
                 message: '',
                 authError: error.response.data.errors[0],
+                isStaff: false,
                 username: '',
                 userSurvey: null,
                 userId: null,
@@ -260,6 +267,7 @@ export function createUserSurvey(form) {
             auth: {
                 username,
                 userId,
+                isStaff,
             },
         } = getState();
 
@@ -270,6 +278,7 @@ export function createUserSurvey(form) {
                     message: '',
                     authError: '',
                     userId,
+                    isStaff,
                     userSurvey: data.beekeeper_survey,
                 }));
                 dispatch(closeUserSurveyModal());
@@ -281,6 +290,7 @@ export function createUserSurvey(form) {
                     username,
                     message: '',
                     authError: errorMsg,
+                    isStaff,
                     userId,
                     userSurvey: null,
                 }));

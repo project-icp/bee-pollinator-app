@@ -16,6 +16,7 @@ router.register(r'user_survey', views.UserSurveyViewSet)
 
 urlpatterns = patterns(
     '',
+    url(r'export/$', views.export_survey_tables, name='export'),
     url(r'fetch/$', views.fetch_data, name='fetch_data'),
     url(r'^apiary/(?P<apiary_id>[0-9]+)/survey/$',
         views.create_survey, name='survey-create'),

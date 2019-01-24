@@ -103,6 +103,7 @@ const initialAuthState = {
     userId: null,
     authError: '',
     message: '',
+    isStaff: false,
     userSurvey: null,
 };
 
