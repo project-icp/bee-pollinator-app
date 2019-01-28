@@ -26,6 +26,8 @@ if not instance_metadata:
 ALLOWED_HOSTS = [
     'app.pollinationmapper.org',
     'staging.app.pollinationmapper.org',
+    'app.beescape.org',
+    'staging.app.beescape.org',
     '.elb.amazonaws.com',
     'localhost'
 ]
