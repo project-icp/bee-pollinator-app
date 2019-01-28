@@ -59,9 +59,24 @@ const ApiaryCard = ({ apiary, forageRange, dispatch }) => {
                         <div className="card__name">{name}</div>
                     </div>
                     <div className="card__buttons">
-                        <CardButton icon="star" filled={starred} onClick={onStar} />
-                        <CardButton icon="clipboard" filled={surveyed} onClick={onSurvey} />
-                        <CardButton icon="trash" filled onClick={onDelete} />
+                        <CardButton
+                            icon="star"
+                            filled={starred}
+                            tooltip="Mark apiary as important"
+                            onClick={onStar}
+                        />
+                        <CardButton
+                            icon="clipboard"
+                            filled={surveyed}
+                            tooltip="Include apiary in surveys"
+                            onClick={onSurvey}
+                        />
+                        <CardButton
+                            icon="trash"
+                            filled
+                            tooltip="Delete apiary"
+                            onClick={onDelete}
+                        />
                     </div>
                 </div>
                 <div className="card__bottom">
