@@ -41,17 +41,7 @@ class Sidebar extends Component {
             return <Splash />;
         }
 
-        if (sortBy === DEFAULT_SORT) {
-            apiaries.sort((a, b) => {
-                if (a.marker.length === b.marker.length) {
-                    if (a.marker < b.marker) { return -1; }
-                    if (a.marker > b.marker) { return 1; }
-                    return 0;
-                }
-
-                return a.marker.length - b.marker.length;
-            });
-        } else {
+        if (sortBy !== DEFAULT_SORT) {
             apiaries.sort((a, b) => {
                 if (!b.scores[forageRange][sortBy] || !a.scores[forageRange][sortBy]) {
                     return 0;
