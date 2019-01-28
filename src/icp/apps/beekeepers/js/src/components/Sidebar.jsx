@@ -34,21 +34,21 @@ class Sidebar extends Component {
             dispatch,
         } = this.props;
 
-        // Make a deep copy of the apiaries to sort
-        const apiaries = JSON.parse(JSON.stringify(unsortedApiaries));
-
-        if (apiaries.length === 0) {
+        if (unsortedApiaries.length === 0) {
             return <Splash />;
         }
 
-        if (sortBy !== DEFAULT_SORT) {
-            apiaries.sort((a, b) => {
+        // unsortedApiaries is in DEFAULT_SORT already, so can be used directly.
+        // In other cases, we make a deep copy and sort that, so as not to alter
+        // the redux state out of band.
+        const apiaries = sortBy === DEFAULT_SORT
+            ? unsortedApiaries
+            : JSON.parse(JSON.stringify(unsortedApiaries)).sort((a, b) => {
                 if (!b.scores[forageRange][sortBy] || !a.scores[forageRange][sortBy]) {
                     return 0;
                 }
                 return b.scores[forageRange][sortBy].data - a.scores[forageRange][sortBy].data;
             });
-        }
 
         const apiaryCards = apiaries.map(apiary => (
             <ApiaryCard
