@@ -28,11 +28,14 @@ class Sidebar extends Component {
 
     render() {
         const {
-            apiaries,
+            apiaries: unsortedApiaries,
             forageRange,
             sortBy,
             dispatch,
         } = this.props;
+
+        // Make a deep copy of the apiaries to sort
+        const apiaries = JSON.parse(JSON.stringify(unsortedApiaries));
 
         if (apiaries.length === 0) {
             return <Splash />;
