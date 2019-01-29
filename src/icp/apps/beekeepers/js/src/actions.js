@@ -203,7 +203,7 @@ export function login(form) {
                     username: data.username || '',
                     authError: '',
                     message: '',
-                    isStaff: data.is_staff,
+                    isStaff: data.is_staff || false,
                     userId: data.id || null,
                     userSurvey: data.beekeeper_survey,
                 }));
