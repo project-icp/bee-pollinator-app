@@ -9,7 +9,7 @@ import { arrayToSemicolonDelimitedString } from '../utils';
 class UserSurveyModal extends Component {
     constructor(props) {
         super(props);
-        this.state = {
+        this.initialState = {
             // each form input corresponds to a state var
             contribution_level: 'PRO',
             phone: '',
@@ -38,6 +38,7 @@ class UserSurveyModal extends Component {
             equipment_top_bar: '',
             equipment_other: '',
         };
+        this.state = this.initialState;
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -89,6 +90,8 @@ class UserSurveyModal extends Component {
             equipment,
         });
         dispatch(createUserSurvey(form));
+
+        this.setState(this.initialState);
     }
 
     render() {
