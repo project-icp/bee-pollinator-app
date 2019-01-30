@@ -33,6 +33,7 @@ body {
 main {
     display: flex;
     flex: 1;
+    overflow-y: auto;
 }
 
 strong {
