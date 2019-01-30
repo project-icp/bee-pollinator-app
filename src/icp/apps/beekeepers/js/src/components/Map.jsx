@@ -65,7 +65,7 @@ class Map extends Component {
                     categories: ['Address', 'Postal'],
                 }),
             ],
-            placeholder: 'Find location',
+            placeholder: 'Search location',
             expanded: true,
             collapseAfterResult: false,
             position: 'topleft',

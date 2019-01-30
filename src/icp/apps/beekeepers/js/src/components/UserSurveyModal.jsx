@@ -6,6 +6,13 @@ import { connect } from 'react-redux';
 import { createUserSurvey } from '../actions';
 import { arrayToSemicolonDelimitedString } from '../utils';
 
+import Tooltip from './Tooltip';
+import {
+    CONTRIBUTION_LEVEL_LIGHT_DESCRIPTION,
+    RELOCATE_COLONIES_DESCRIPTION,
+    CONTRIBUTION_LEVEL_PRO_DESCRIPTION,
+} from '../constants';
+
 class UserSurveyModal extends Component {
     constructor(props) {
         super(props);
@@ -153,6 +160,12 @@ class UserSurveyModal extends Component {
                             <div className="form__group">
                                 <label htmlFor="contribution_level">
                                     What level will you contribute at?
+                                    <Tooltip
+                                        description={[
+                                            CONTRIBUTION_LEVEL_LIGHT_DESCRIPTION,
+                                            CONTRIBUTION_LEVEL_PRO_DESCRIPTION,
+                                        ]}
+                                    />
                                 </label>
                                 <select
                                     id="contribution_level"
@@ -242,6 +255,7 @@ class UserSurveyModal extends Component {
                                 <div className="form__checkbox">
                                     <label htmlFor="relocate">
                                         Do you relocate your colonies throughout the year?
+                                        <Tooltip description={[RELOCATE_COLONIES_DESCRIPTION]} />
                                     </label>
                                     <input
                                         type="checkbox"
