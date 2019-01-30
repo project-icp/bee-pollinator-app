@@ -44,16 +44,16 @@ const SurveyCardListing = ({
     return (
         <div className="listing">
             <div className={`listing__icon${completed ? '--completed' : ''}`}>
-                {completed ? '✓' : '◯'}
+                {completed ? <i className="icon-check" /> : <i className="icon-circle" />}
             </div>
             <Popup
                 trigger={(
                     <button type="button" className="listing__monthYear">
                         {toMonthNameYear(month_year)}
                         {' '}
-                        (
-                        {survey_type}
-                        )
+                        <span className="survey__type">
+                            {survey_type}
+                        </span>
                     </button>
                 )}
                 modal

@@ -39,7 +39,7 @@
         &.active {
             position: relative;
             top: 7px;
-            height: 30px;
+            height: 31px;
             padding: 10px 8px;
             color: $text-dark;
             font-weight: $font-weight-normal;
@@ -70,10 +70,13 @@
         border: none;
 
         &--auth {
-            padding: 9px;
+            height: 31px;
+            padding: 8px 8px 7px;
             color: $color-white;
             background: $color-primary;
             border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
     }
 }

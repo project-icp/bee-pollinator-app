@@ -2,7 +2,7 @@
 *,
 *::before,
 *::after {
-    box-sizing: inherit;
+    box-sizing: border-box;
 }
 
 html {
@@ -38,5 +38,16 @@ main {
 
 strong {
     font-weight: $font-weight-bold;
+}
+
+button {
+    padding: 8px;
+    color: #fff;
+    font-size: 14px;
+    font-family: inherit;
+    background: #008bf4;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 /* stylelint-enable selector-max-type */

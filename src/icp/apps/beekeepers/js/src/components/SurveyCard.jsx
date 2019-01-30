@@ -27,8 +27,8 @@ const SurveyCard = ({ apiary, dispatch, surveys }) => {
                 </div>
                 <button
                     type="button"
-                    className="button--long"
                     onClick={onSurvey}
+                    className="surveyCard__add-button"
                 >
                     Add to study
                 </button>

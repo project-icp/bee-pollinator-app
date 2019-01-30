@@ -35,7 +35,6 @@
         padding: 8px 15px;
         font: $font-med;
         font-weight: $font-weight-bold;
-        border-bottom: 1px solid $color-grey-4;
 
         > .button {
             padding: 0;
@@ -51,6 +50,7 @@
         .title {
             font: $font-xxl;
             font-weight: $font-weight-bold;
+            line-height: 1.2;
         }
     }
 
@@ -59,6 +59,7 @@
         flex-direction: column;
         align-items: center;
         padding: 15px;
+        text-align: center;
     }
 }
 
@@ -83,6 +84,12 @@
     &__control {
         padding: 8px;
         font: $font-med;
-        border: $color-grey-3 solid 0.1px;
+        border: $color-grey-3 solid 1px;
+
+        &[type="text"],
+        &[type="number"],
+        &[type="date"] {
+            width: 100%;
+        }
     }
 }
