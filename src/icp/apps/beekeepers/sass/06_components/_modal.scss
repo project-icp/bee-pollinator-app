@@ -88,7 +88,9 @@
 
         &[type="text"],
         &[type="number"],
-        &[type="date"] {
+        &[type="date"],
+        &[type="email"],
+        &[type="password"] {
             width: 100%;
         }
     }
