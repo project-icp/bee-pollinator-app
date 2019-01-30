@@ -2,9 +2,15 @@
 
 ## URLs
 
-Staging: https://staging.app.beescape.org
+Staging:
 
-Production: https://app.beescape.org
+- https://staging.app.beescape.org
+- https://staging.app.pollinationmapper.org
+
+Production:
+
+- https://app.beescape.org
+- https://app.pollinationmapper.org
 
 ## Local Development
 
