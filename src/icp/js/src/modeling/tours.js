@@ -42,7 +42,7 @@ var newScenarioTour = createTour(
         steps: [
             {
                 target: "add-pollinator-planting-btn",
-                content: 'Select a pollinator planting type from this menu, then draw it on the scenario map. Plantings can be drawn outside of the selected farm or field area, but cannot be stacked on top of each other. The minimum planting size is 100 ft &times; 100 ft. See <a target="_blank" rel="noopener noreferrer" href="http://pollinationmapper.org")>help guide</a> for more information.',
+                content: 'Select a pollinator planting type from this menu, then draw it on the scenario map. Plantings can be drawn outside of the selected farm or field area, but cannot be stacked on top of each other. The minimum planting size is 100 ft &times; 100 ft. See <a target="_blank" rel="noopener noreferrer" href="http://beescape.org")>help guide</a> for more information.',
                 placement: "bottom"
             },
             {
