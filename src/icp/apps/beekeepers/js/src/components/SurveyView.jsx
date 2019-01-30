@@ -60,8 +60,11 @@ const SurveyView = ({ apiaries, isProUser }) => {
             </div>
             <div className="survey__body">
                 <div>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    Here, you will find links to the available surveys for your selected apiaries.
+                    If the link is in red, it is a reminder to add information. If the link is in
+                    green, it means the information has already been added. You can add more
+                    apiaries at any time. Please note that you need to complete the survey after
+                    you initiate it - it is not possible to partially save your work.
                 </div>
                 <div className="survey__body--section">
                     <h2 className="survey__title">Response needed</h2>

@@ -88,14 +88,14 @@ const Header = ({ dispatch, username, isStaff }) => {
         <header className="header">
             <div className="navbar">
                 <div className="navbar__logo">
-                    Landscape4Bees
+                    Beescape
                     <NavLink exact to="/" className="navbar__item">Location finder</NavLink>
                     <NavLink to="/survey" className="navbar__item">Survey</NavLink>
                 </div>
                 <ul className="navbar__items">
                     <li className="navbar__item">
                         <button type="button" className="navbar__button">
-                            About
+                            Home
                         </button>
                     </li>
                     <li className="navbar__item">

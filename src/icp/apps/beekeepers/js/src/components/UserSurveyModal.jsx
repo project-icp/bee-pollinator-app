@@ -146,7 +146,8 @@ class UserSurveyModal extends Component {
                         <div>User survey</div>
                     </div>
                     <div className="authModal__content">
-                        <div className="title">Fill out your user survey</div>
+                        <div className="title">Beescape Team Registration</div>
+                        Please provide us with some basic information about your honey bees.
                         <form className="form" onSubmit={this.handleSubmit}>
                             {errorWarning}
                             <div className="form__group">
@@ -463,7 +464,7 @@ class UserSurveyModal extends Component {
                                         onChange={this.handleChange}
                                         value="8_FRAME_LANGSTROTH"
                                     />
-                                    <label htmlFor="equipment_8_frame">8 frame langstroth</label>
+                                    <label htmlFor="equipment_8_frame">8 frame Langstroth</label>
                                 </div>
                                 <div className="form__checkbox">
                                     <input
@@ -475,7 +476,7 @@ class UserSurveyModal extends Component {
                                         onChange={this.handleChange}
                                         value="10_FRAME_LANGSTROTH"
                                     />
-                                    <label htmlFor="equipment_10_frame">10 frame langstroth</label>
+                                    <label htmlFor="equipment_10_frame">10 frame Langstroth</label>
                                 </div>
                                 <div className="form__checkbox">
                                     <input

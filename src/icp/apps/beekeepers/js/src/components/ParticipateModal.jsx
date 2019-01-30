@@ -23,9 +23,14 @@ const ParticipateModal = ({ isParticipateModalOpen, dispatch }) => (
                 </div>
                 <div className="authModal__content">
                     <div className="title">
-                        Help give the beekeeping community better data!
+                        Help us see the world as a bee!
                     </div>
-                    Lorem ipsum
+                    Our goal is to give beekeepers, gardeners, and growers detailed information
+                    about the quality of their landscapes for bees, and site-specific
+                    recommendations for land and bee management practices. But, to do this, we
+                    need your help, so we can have data from many diverse landscapes! If you
+                    have a wild bee hotel and would like to participate in our study, please
+                    click here. If you are a beekeeper, please follow the link below.
                 </div>
                 <div className="authModal__footer">
                     <button
