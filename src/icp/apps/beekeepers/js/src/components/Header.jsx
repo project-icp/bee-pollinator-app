@@ -48,7 +48,7 @@ const Header = ({ dispatch, username, isStaff }) => {
                     className="navbar__button"
                 >
                     {username}
-                    ▾
+                    <span className="icon-angle-down" />
                 </button>
                 {/* Hidden buttons for screen readers */}
                 {exportDataButtonForScreenReader}

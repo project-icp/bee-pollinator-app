@@ -129,7 +129,6 @@ class LoginModal extends Component {
                                 >
                                     Resend activation link
                                 </button>
-                                &#9900;
                                 <button
                                     type="button"
                                     className="button"

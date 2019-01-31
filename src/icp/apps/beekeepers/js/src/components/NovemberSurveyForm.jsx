@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { func } from 'prop-types';
 
@@ -184,8 +184,10 @@ class NovemberSurveyForm extends Component {
             const key = `${groupName}_${option}`;
             const label = option.split('_').join(' ').toLowerCase();
             return (
-                <Fragment key={key}>
-                    <label htmlFor={key}>{label}</label>
+                <div
+                    key={key}
+                    className="form__checkbox"
+                >
                     <input
                         type="checkbox"
                         className="form__control"
@@ -195,7 +197,8 @@ class NovemberSurveyForm extends Component {
                         onChange={this.handleChange}
                         disabled={!!completedSurvey}
                     />
-                </Fragment>
+                    <label htmlFor={key}>{label}</label>
+                </div>
             );
         });
     }
@@ -207,8 +210,10 @@ class NovemberSurveyForm extends Component {
             const key = `${groupName}_${option}`;
             const label = option.split('_').join(' ').toLowerCase();
             return (
-                <Fragment key={key}>
-                    <label htmlFor={key}>{label}</label>
+                <div
+                    key={key}
+                    className="form__checkbox"
+                >
                     <input
                         type="checkbox"
                         className="form__control"
@@ -218,7 +223,8 @@ class NovemberSurveyForm extends Component {
                         onChange={this.handleChange}
                         disabled={!!completedSurvey}
                     />
-                </Fragment>
+                    <label htmlFor={key}>{label}</label>
+                </div>
             );
         });
     }
@@ -304,30 +310,39 @@ class NovemberSurveyForm extends Component {
                                 <option value="MORE_THAN_50">More than 50</option>
                             </select>
                         </div>
-                        <label htmlFor="supplemental_sugar">
-                            Did you feed supplemental sugar?
-                            If so, what times of year did you feed sugar?
-                            Check all that apply.
-                        </label>
-                        {supplementalSugarInputs}
-                        <label htmlFor="supplemental_protein">
-                            Did you feed supplemental pollen or protein?
-                            If so, what times of year did you feed pollen or protein?
-                            Check all that apply.
-                        </label>
-                        {supplementalProteinInputs}
-                        <label htmlFor="small_hive_beetles">
-                            Have you observed small hive beetles in your hives?
-                        </label>
-                        <input
-                            type="checkbox"
-                            className="form__control"
-                            id="small_hive_beetles"
-                            name="small_hive_beetles"
-                            checked={small_hive_beetles}
-                            onChange={this.handleChange}
-                            disabled={!!completedSurvey}
-                        />
+                        <div className="form__group">
+                            <label htmlFor="supplemental_sugar">
+                                Did you feed supplemental sugar?
+                                If so, what times of year did you feed sugar?
+                                Check all that apply.
+                            </label>
+                            {supplementalSugarInputs}
+                        </div>
+                        <div className="form__group">
+                            <label htmlFor="supplemental_protein">
+                                Did you feed supplemental pollen or protein?
+                                If so, what times of year did you feed pollen or protein?
+                                Check all that apply.
+                            </label>
+                            {supplementalProteinInputs}
+                        </div>
+                        <div className="form__group">
+                            <label htmlFor="small_hive_beetles">
+                                Have you observed small hive beetles in your hives?
+                            </label>
+                            <input
+                                type="checkbox"
+                                className="form__control"
+                                id="small_hive_beetles"
+                                name="small_hive_beetles"
+                                checked={small_hive_beetles}
+                                onChange={this.handleChange}
+                                disabled={!!completedSurvey}
+                            />
+                            <label htmlFor="small_hive_beetles">
+                                yes
+                            </label>
+                        </div>
                         <div className="form__group">
                             <label htmlFor="varroa_check_frequency">
                                 How often do you check for Varroa?
@@ -346,21 +361,25 @@ class NovemberSurveyForm extends Component {
                                 <option value="MORE_THAN_THREE">More than three times a year</option>
                             </select>
                         </div>
-                        <label htmlFor="varroa_check_method">
-                            What method(s) do you use to check for Varroa?
-                            Check all that apply.
-                        </label>
-                        {varroaCheckMethodCheckboxInputs}
-                        <label htmlFor="varroa_check_method_OTHER">Other varroa check method</label>
-                        <input
-                            type="text"
-                            className="form__control"
-                            id="varroa_check_method_OTHER"
-                            name="varroa_check_method_OTHER"
-                            value={varroa_check_method_OTHER}
-                            onChange={this.handleChange}
-                            disabled={!!completedSurvey}
-                        />
+                        <div className="form__group">
+                            <label htmlFor="varroa_check_method">
+                                What method(s) do you use to check for Varroa?
+                                Check all that apply.
+                            </label>
+                            {varroaCheckMethodCheckboxInputs}
+                            <div className="form__secondary">
+                                <label htmlFor="varroa_check_method_OTHER">Other varroa check method</label>
+                                <input
+                                    type="text"
+                                    className="form__control"
+                                    id="varroa_check_method_OTHER"
+                                    name="varroa_check_method_OTHER"
+                                    value={varroa_check_method_OTHER}
+                                    onChange={this.handleChange}
+                                    disabled={!!completedSurvey}
+                                />
+                            </div>
+                        </div>
                         <div className="form__group">
                             <label htmlFor="varroa_manage_frequency">
                                 How you manage for Varroa? If so, how often?
@@ -379,43 +398,47 @@ class NovemberSurveyForm extends Component {
                                 <option value="MORE_THAN_THREE">More than three times a year</option>
                             </select>
                         </div>
-                        <label htmlFor="mite_management">
-                            What methods of mite management do you use?
-                            Check all that apply.
-                        </label>
-                        {miteManagementCheckboxInputs}
-                        <label htmlFor="mite_management_CHEMICAL_ORGANIC_OTHER">
-                            Other organic chemical
-                        </label>
-                        <input
-                            type="text"
-                            className="form__control"
-                            id="mite_management_CHEMICAL_ORGANIC_OTHER"
-                            name="mite_management_CHEMICAL_ORGANIC_OTHER"
-                            value={mite_management_CHEMICAL_ORGANIC_OTHER}
-                            onChange={this.handleChange}
-                            disabled={!!completedSurvey}
-                        />
-                        <label htmlFor="mite_management_MECHANICAL_OTHER">Other mechanical</label>
-                        <input
-                            type="text"
-                            className="form__control"
-                            id="mite_management_MECHANICAL_OTHER"
-                            name="mite_management_MECHANICAL_OTHER"
-                            value={mite_management_MECHANICAL_OTHER}
-                            onChange={this.handleChange}
-                            disabled={!!completedSurvey}
-                        />
-                        <label htmlFor="mite_management_OTHER">Other</label>
-                        <input
-                            type="text"
-                            className="form__control"
-                            id="mite_management_OTHER"
-                            name="mite_management_OTHER"
-                            value={mite_management_OTHER}
-                            onChange={this.handleChange}
-                            disabled={!!completedSurvey}
-                        />
+                        <div className="form__group">
+                            <label htmlFor="mite_management">
+                                What methods of mite management do you use?
+                                Check all that apply.
+                            </label>
+                            {miteManagementCheckboxInputs}
+                            <div className="form__secondary">
+                                <label htmlFor="mite_management_CHEMICAL_ORGANIC_OTHER">
+                                    Other organic chemical
+                                </label>
+                                <input
+                                    type="text"
+                                    className="form__control"
+                                    id="mite_management_CHEMICAL_ORGANIC_OTHER"
+                                    name="mite_management_CHEMICAL_ORGANIC_OTHER"
+                                    value={mite_management_CHEMICAL_ORGANIC_OTHER}
+                                    onChange={this.handleChange}
+                                    disabled={!!completedSurvey}
+                                />
+                                <label htmlFor="mite_management_MECHANICAL_OTHER">Other mechanical</label>
+                                <input
+                                    type="text"
+                                    className="form__control"
+                                    id="mite_management_MECHANICAL_OTHER"
+                                    name="mite_management_MECHANICAL_OTHER"
+                                    value={mite_management_MECHANICAL_OTHER}
+                                    onChange={this.handleChange}
+                                    disabled={!!completedSurvey}
+                                />
+                                <label htmlFor="mite_management_OTHER">Other</label>
+                                <input
+                                    type="text"
+                                    className="form__control"
+                                    id="mite_management_OTHER"
+                                    name="mite_management_OTHER"
+                                    value={mite_management_OTHER}
+                                    onChange={this.handleChange}
+                                    disabled={!!completedSurvey}
+                                />
+                            </div>
+                        </div>
                     </div>
                     {submitButton}
                 </form>

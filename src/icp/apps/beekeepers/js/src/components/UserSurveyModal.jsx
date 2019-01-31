@@ -138,7 +138,7 @@ class UserSurveyModal extends Component {
                 open={isUserSurveyModalOpen}
                 closeOnEscape={false}
                 closeOnDocumentClick={false}
-                className="modal"
+                className="modal userModal"
                 modal
             >
                 <div className="authModal">
@@ -238,17 +238,22 @@ class UserSurveyModal extends Component {
                                 </select>
                             </div>
                             <div className="form__group">
-                                <label htmlFor="relocate">
-                                    Do you relocate your colonies throughout the year?
-                                </label>
-                                <input
-                                    type="checkbox"
-                                    className="form__control"
-                                    id="relocate"
-                                    name="relocate"
-                                    checked={relocate}
-                                    onChange={this.handleChange}
-                                />
+                                <div className="form__checkbox">
+                                    <label htmlFor="relocate">
+                                        Do you relocate your colonies throughout the year?
+                                    </label>
+                                    <input
+                                        type="checkbox"
+                                        className="form__control"
+                                        id="relocate"
+                                        name="relocate"
+                                        checked={relocate}
+                                        onChange={this.handleChange}
+                                    />
+                                    <label htmlFor="relocate">
+                                        Yes
+                                    </label>
+                                </div>
                             </div>
                             <div className="form__group">
                                 <label htmlFor="income">
@@ -256,56 +261,66 @@ class UserSurveyModal extends Component {
                                     What do you receive income from?
                                     Check all that apply.
                                 </label>
-                                <label htmlFor="income_rent">Rent colonies for pollination</label>
-                                <input
-                                    type="checkbox"
-                                    className="form__control"
-                                    id="income"
-                                    name="income_rent"
-                                    checked={income_rent}
-                                    onChange={this.handleChange}
-                                    value="RENT_COLONIES_FOR_POLLINATION"
-                                />
-                                <label htmlFor="income_sell_honey">Sell honey</label>
-                                <input
-                                    type="checkbox"
-                                    className="form__control"
-                                    id="income_sell_honey"
-                                    name="income_sell_honey"
-                                    checked={income_sell_honey}
-                                    onChange={this.handleChange}
-                                    value="SELL_HONEY"
-                                />
-                                <label htmlFor="income_sell_nucs">Sell nucs package</label>
-                                <input
-                                    type="checkbox"
-                                    className="form__control"
-                                    id="income"
-                                    name="income_sell_nucs"
-                                    checked={income_sell_nucs}
-                                    onChange={this.handleChange}
-                                    value="SELL_NUCS_PACKAGES"
-                                />
-                                <label htmlFor="income_sell_queens">Sell queens</label>
-                                <input
-                                    type="checkbox"
-                                    className="form__control"
-                                    id="income"
-                                    name="income_sell_queens"
-                                    checked={income_sell_queens}
-                                    onChange={this.handleChange}
-                                    value="SELL_QUEENS"
-                                />
-                                <label htmlFor="income_none">No income</label>
-                                <input
-                                    type="checkbox"
-                                    className="form__control"
-                                    id="income"
-                                    name="income_none"
-                                    checked={income_none}
-                                    onChange={this.handleChange}
-                                    value="NO_INCOME"
-                                />
+                                <div className="form__checkbox">
+                                    <input
+                                        type="checkbox"
+                                        className="form__control"
+                                        id="income_rent"
+                                        name="income_rent"
+                                        checked={income_rent}
+                                        onChange={this.handleChange}
+                                        value="RENT_COLONIES_FOR_POLLINATION"
+                                    />
+                                    <label htmlFor="income_rent">Rent colonies for pollination</label>
+                                </div>
+                                <div className="form__checkbox">
+                                    <input
+                                        type="checkbox"
+                                        className="form__control"
+                                        id="income_sell_honey"
+                                        name="income_sell_honey"
+                                        checked={income_sell_honey}
+                                        onChange={this.handleChange}
+                                        value="SELL_HONEY"
+                                    />
+                                    <label htmlFor="income_sell_honey">Sell honey</label>
+                                </div>
+                                <div className="form__checkbox">
+                                    <input
+                                        type="checkbox"
+                                        className="form__control"
+                                        id="income_sell_nucs"
+                                        name="income_sell_nucs"
+                                        checked={income_sell_nucs}
+                                        onChange={this.handleChange}
+                                        value="SELL_NUCS_PACKAGES"
+                                    />
+                                    <label htmlFor="income_sell_nucs">Sell nucs package</label>
+                                </div>
+                                <div className="form__checkbox">
+                                    <input
+                                        type="checkbox"
+                                        className="form__control"
+                                        id="income_sell_queens"
+                                        name="income_sell_queens"
+                                        checked={income_sell_queens}
+                                        onChange={this.handleChange}
+                                        value="SELL_QUEENS"
+                                    />
+                                    <label htmlFor="income_sell_queens">Sell queens</label>
+                                </div>
+                                <div className="form__checkbox">
+                                    <input
+                                        type="checkbox"
+                                        className="form__control"
+                                        id="income_none"
+                                        name="income_none"
+                                        checked={income_none}
+                                        onChange={this.handleChange}
+                                        value="NO_INCOME"
+                                    />
+                                    <label htmlFor="income_none">No income</label>
+                                </div>
                             </div>
                             <div className="form__group">
                                 <label htmlFor="practice">
@@ -324,17 +339,22 @@ class UserSurveyModal extends Component {
                                 </select>
                             </div>
                             <div className="form__group">
-                                <label htmlFor="varroa_management">
-                                    Do you manage for Varroa?
-                                </label>
-                                <input
-                                    type="checkbox"
-                                    className="form__control"
-                                    id="varroa_management"
-                                    name="varroa_management"
-                                    checked={varroa_management}
-                                    onChange={this.handleChange}
-                                />
+                                <div className="form__checkbox">
+                                    <label htmlFor="varroa_management">
+                                        Do you manage for Varroa?
+                                    </label>
+                                    <input
+                                        type="checkbox"
+                                        className="form__control"
+                                        id="varroa_management"
+                                        name="varroa_management"
+                                        checked={varroa_management}
+                                        onChange={this.handleChange}
+                                    />
+                                    <label htmlFor="varroa_management">
+                                        Yes
+                                    </label>
+                                </div>
                             </div>
                             <div className="form__group">
                                 <label htmlFor="varroa_management_trigger">
@@ -350,17 +370,22 @@ class UserSurveyModal extends Component {
                                 />
                             </div>
                             <div className="form__group">
-                                <label htmlFor="purchased_queens">
-                                    Do you buy queens, nucs or packages?
-                                </label>
-                                <input
-                                    type="checkbox"
-                                    className="form__control"
-                                    id="purchased_queens"
-                                    name="purchased_queens"
-                                    checked={purchased_queens}
-                                    onChange={this.handleChange}
-                                />
+                                <div className="form__checkbox">
+                                    <label htmlFor="purchased_queens">
+                                        Do you buy queens, nucs or packages?
+                                    </label>
+                                    <input
+                                        type="checkbox"
+                                        className="form__control"
+                                        id="purchased_queens"
+                                        name="purchased_queens"
+                                        checked={purchased_queens}
+                                        onChange={this.handleChange}
+                                    />
+                                    <label htmlFor="purchased_queens">
+                                        Yes
+                                    </label>
+                                </div>
                             </div>
                             <div className="form__group">
                                 <label htmlFor="purchased_queens_sources">
@@ -376,17 +401,22 @@ class UserSurveyModal extends Component {
                                 />
                             </div>
                             <div className="form__group">
-                                <label htmlFor="resistant_queens">
-                                    Do you use Varroa-resistant queens?
-                                </label>
-                                <input
-                                    type="checkbox"
-                                    className="form__control"
-                                    id="resistant_queens"
-                                    name="resistant_queens"
-                                    checked={resistant_queens}
-                                    onChange={this.handleChange}
-                                />
+                                <div className="form__checkbox">
+                                    <label htmlFor="resistant_queens">
+                                        Do you use Varroa-resistant queens?
+                                    </label>
+                                    <input
+                                        type="checkbox"
+                                        className="form__control"
+                                        id="resistant_queens"
+                                        name="resistant_queens"
+                                        checked={resistant_queens}
+                                        onChange={this.handleChange}
+                                    />
+                                    <label htmlFor="resistant_queens">
+                                        Yes
+                                    </label>
+                                </div>
                             </div>
                             <div className="form__group">
                                 <label htmlFor="resistant_queens_genetics">
@@ -402,52 +432,63 @@ class UserSurveyModal extends Component {
                                 />
                             </div>
                             <div className="form__group">
-                                <label htmlFor="rear_queens">
-                                    Do you rear queens?
-                                </label>
-                                <input
-                                    type="checkbox"
-                                    className="form__control"
-                                    id="rear_queens"
-                                    name="rear_queens"
-                                    checked={rear_queens}
-                                    onChange={this.handleChange}
-                                />
+                                <div className="form__checkbox">
+                                    <label htmlFor="rear_queens">
+                                        Do you rear queens?
+                                    </label>
+                                    <input
+                                        type="checkbox"
+                                        className="form__control"
+                                        id="rear_queens"
+                                        name="rear_queens"
+                                        checked={rear_queens}
+                                        onChange={this.handleChange}
+                                    />
+                                    <label htmlFor="rear_queens">
+                                        Yes
+                                    </label>
+                                </div>
                             </div>
                             <div className="form__group">
                                 <label htmlFor="equipment">
                                     What kind of equipment do you use? Check all that apply.
                                 </label>
-                                <label htmlFor="equipment_8_frame">8 frame langstroth</label>
-                                <input
-                                    type="checkbox"
-                                    className="form__control"
-                                    id="equipment_8_frame"
-                                    name="equipment_8_frame"
-                                    checked={equipment_8_frame}
-                                    onChange={this.handleChange}
-                                    value="8_FRAME_LANGSTROTH"
-                                />
-                                <label htmlFor="equipment_10_frame">10 frame langstroth</label>
-                                <input
-                                    type="checkbox"
-                                    className="form__control"
-                                    id="equipment"
-                                    name="equipment_10_frame"
-                                    checked={equipment_10_frame}
-                                    onChange={this.handleChange}
-                                    value="10_FRAME_LANGSTROTH"
-                                />
-                                <label htmlFor="equipment_top_bar">Top bar</label>
-                                <input
-                                    type="checkbox"
-                                    className="form__control"
-                                    id="equipment_top_bar"
-                                    name="equipment_top_bar"
-                                    checked={equipment_top_bar}
-                                    onChange={this.handleChange}
-                                    value="TOP_BAR"
-                                />
+                                <div className="form__checkbox">
+                                    <input
+                                        type="checkbox"
+                                        className="form__control"
+                                        id="equipment_8_frame"
+                                        name="equipment_8_frame"
+                                        checked={equipment_8_frame}
+                                        onChange={this.handleChange}
+                                        value="8_FRAME_LANGSTROTH"
+                                    />
+                                    <label htmlFor="equipment_8_frame">8 frame langstroth</label>
+                                </div>
+                                <div className="form__checkbox">
+                                    <input
+                                        type="checkbox"
+                                        className="form__control"
+                                        id="equipment"
+                                        name="equipment_10_frame"
+                                        checked={equipment_10_frame}
+                                        onChange={this.handleChange}
+                                        value="10_FRAME_LANGSTROTH"
+                                    />
+                                    <label htmlFor="equipment_10_frame">10 frame langstroth</label>
+                                </div>
+                                <div className="form__checkbox">
+                                    <input
+                                        type="checkbox"
+                                        className="form__control"
+                                        id="equipment_top_bar"
+                                        name="equipment_top_bar"
+                                        checked={equipment_top_bar}
+                                        onChange={this.handleChange}
+                                        value="TOP_BAR"
+                                    />
+                                    <label htmlFor="equipment_top_bar">Top bar</label>
+                                </div>
                                 <label htmlFor="equipment_other">Other</label>
                                 <input
                                     type="text"

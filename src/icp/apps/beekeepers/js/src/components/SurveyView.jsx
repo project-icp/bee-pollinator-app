@@ -64,15 +64,15 @@ const SurveyView = ({ apiaries, isProUser }) => {
                     eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 </div>
                 <div className="survey__body--section">
-                    Response needed
+                    <h2 className="survey__title">Response needed</h2>
                     {incompleteSurveyCards}
                 </div>
                 <div className="survey__body--section">
-                    Up to date
+                    <h2 className="survey__title">Up to date</h2>
                     {completedSurveyCards}
                 </div>
                 <div className="survey__body--section">
-                    This is not in the study
+                    <h2 className="survey__title">This is not in the study</h2>
                     {unsurveyedCards}
                 </div>
             </div>

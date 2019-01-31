@@ -385,8 +385,10 @@ class MonthlySurveyForm extends Component {
                             required
                         />
                     </div>
-                    Please enter details for up to three colonies. Every named
-                    colony will be saved.
+                    <div className="tab-description">
+                        Please enter details for up to three colonies. Every named
+                        colony will be saved.
+                    </div>
                     <Tabs
                         forceRenderTabPanel
                         selectedIndex={selectedTabIndex}

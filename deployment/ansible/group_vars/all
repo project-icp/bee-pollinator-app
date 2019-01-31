@@ -44,5 +44,3 @@ model_data_path: "/opt/icp-crop-data"
 numpy_version: "1.11.1"
 
 ubuntu_ssl_cert_path: "/etc/ssl/certs/ca-certificates.crt"
-
-redis_version: "2:2.8.4-2ubuntu0.2"

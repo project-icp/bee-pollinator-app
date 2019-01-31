@@ -1,35 +1,43 @@
 .indicator {
     display: flex;
+    cursor: default;
 
     &__number {
-        margin-right: 0.6rem;
+        margin-right: 0.5rem;
         font-weight: 600;
-        font-size: larger;
+        font-size: $font-size-med;
         text-align: right;
         font-feature-settings: "tnum";
     }
 
     &__name {
+        position: relative;
+        top: 1px;
         color: $color-grey-3;
+        font-weight: $font-weight-light;
+        font-size: $font-size-base;
         text-transform: capitalize;
     }
 
     &__popup {
         display: flex;
         flex-direction: column;
+        padding: 4px;
 
         .name {
+            margin-bottom: 0.5rem;
             font-weight: $font-weight-bold;
             text-align: left;
         }
 
         .description {
+            font-size: $font-size-base;
             text-align: left;
         }
 
         .scores {
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
         }
 
         .value {
@@ -46,5 +54,5 @@
 
 .indicator-container {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
 }

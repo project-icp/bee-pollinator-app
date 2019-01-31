@@ -2,7 +2,7 @@
 *,
 *::before,
 *::after {
-    box-sizing: inherit;
+    box-sizing: border-box;
 }
 
 html {
@@ -18,6 +18,7 @@ body {
     width: 100%;
     height: 100%;
     margin: 0;
+    color: $text-dark;
     font: $font-base;
     font-weight: $font-weight-normal;
     background-color: #ccc;
@@ -32,9 +33,21 @@ body {
 main {
     display: flex;
     flex: 1;
+    overflow-y: auto;
 }
 
 strong {
     font-weight: $font-weight-bold;
+}
+
+button {
+    padding: 8px;
+    color: #fff;
+    font-size: 14px;
+    font-family: inherit;
+    background: #008bf4;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 /* stylelint-enable selector-max-type */

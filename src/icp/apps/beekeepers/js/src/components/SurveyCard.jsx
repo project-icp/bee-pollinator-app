@@ -27,8 +27,8 @@ const SurveyCard = ({ apiary, dispatch, surveys }) => {
                 </div>
                 <button
                     type="button"
-                    className="button--long"
                     onClick={onSurvey}
+                    className="surveyCard__add-button"
                 >
                     Add to study
                 </button>
@@ -55,6 +55,7 @@ const SurveyCard = ({ apiary, dispatch, surveys }) => {
         const cardDetails = surveys.length <= 4 ? null : (
             <Popup
                 modal
+                className="modal nice"
                 trigger={cardDetailTrigger}
             >
                 <ApiarySurveyListing apiary={apiary} surveys={surveys} />

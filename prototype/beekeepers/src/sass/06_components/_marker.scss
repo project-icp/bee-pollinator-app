@@ -7,6 +7,7 @@
     text-align: center;
     background-color: $color-primary;
     border-radius: 100px;
+    flex-shrink: 0;
 
     &--selected {
         background-color: $color-selected;

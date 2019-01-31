@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { func, number } from 'prop-types';
 import 'react-tabs/style/react-tabs.css';
 
@@ -70,8 +70,10 @@ class MonthlySurveyColonyForm extends Component {
             const label = option.split('_').join(' ').toLowerCase();
 
             return (
-                <Fragment key={key}>
-                    <label htmlFor={key}>{label}</label>
+                <div
+                    className="form__checkbox"
+                    key={key}
+                >
                     <input
                         type="checkbox"
                         className="form__control"
@@ -81,7 +83,8 @@ class MonthlySurveyColonyForm extends Component {
                         onChange={onChange}
                         disabled={disabled}
                     />
-                </Fragment>
+                    <label htmlFor={key}>{label}</label>
+                </div>
             );
         });
     }
@@ -113,8 +116,10 @@ class MonthlySurveyColonyForm extends Component {
                         Check all that apply.
                     </label>
                     {this.makeMultipleChoiceInputs('colony_loss_reason', COLONY_LOSS_REASONS)}
+                    <div className="form__secondary">
+                        {inputText('colony_loss_reason_OTHER', 'other')}
+                    </div>
                 </div>
-                {inputText('colony_loss_reason_OTHER', 'other')}
             </>
         );
 
@@ -125,9 +130,11 @@ class MonthlySurveyColonyForm extends Component {
                         How did you do a Varroa count?
                     </label>
                     {this.makeMultipleChoiceInputs('varroa_count_technique', VARROA_CHECK_METHODS)}
+                    <div className="form__secondary">
+                        {inputText('varroa_count_technique_OTHER', 'other')}
+                        {inputNumber('varroa_count_result', 'Number of mites per 300 bees (1/2 cup)')}
+                    </div>
                 </div>
-                {inputText('varroa_count_technique_OTHER', 'other')}
-                {inputNumber('varroa_count_result', 'Number of mites per 300 bees (1/2 cup)')}
             </>
         );
 
@@ -142,10 +149,12 @@ class MonthlySurveyColonyForm extends Component {
                 {colonyLossReasons}
                 <div className="form__group">
                     Total number of hive bodies and supers:
+                    <div className="form__secondary">
+                        {inputNumber('num_bodies_supers_deep', 'Deep')}
+                        {inputNumber('num_bodies_supers_medium', 'Medium')}
+                        {inputNumber('num_bodies_supers_shallow', 'Shallow')}
+                    </div>
                 </div>
-                {inputNumber('num_bodies_supers_deep', 'Deep')}
-                {inputNumber('num_bodies_supers_medium', 'Medium')}
-                {inputNumber('num_bodies_supers_shallow', 'Shallow')}
                 <div className="form__group">
                     <label htmlFor="activity_since_last">
                         Since the last assessment, have you done any of the following?
@@ -183,10 +192,12 @@ class MonthlySurveyColonyForm extends Component {
                         Check all that apply.
                     </label>
                     {this.makeMultipleChoiceInputs('varroa_treatment', MITE_MANAGEMENT_OPTIONS)}
+                    <div className="form__secondary">
+                        {inputText('varroa_treatment_CHEMICAL_ORGANIC_OTHER', 'Other organic chemical')}
+                        {inputText('varroa_treatment_MECHANICAL_OTHER', 'Other mechanical')}
+                        {inputText('varroa_treatment_OTHER', 'Other')}
+                    </div>
                 </div>
-                {inputText('varroa_treatment_CHEMICAL_ORGANIC_OTHER', 'Other organic chemical')}
-                {inputText('varroa_treatment_MECHANICAL_OTHER', 'Other mechanical')}
-                {inputText('varroa_treatment_OTHER', 'Other')}
             </>
         );
     }

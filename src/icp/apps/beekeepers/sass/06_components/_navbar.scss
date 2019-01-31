@@ -31,14 +31,22 @@
     &__item {
         margin-left: 1.4rem;
         color: $color-grey-2;
-        font-weight: normal;
+        font-weight: $font-weight-light;
         font-size: 14px;
         text-decoration: none;
         list-style: none;
 
         &.active {
-            color: $color-black;
-            text-decoration: underline;
+            position: relative;
+            top: 7px;
+            height: 31px;
+            padding: 10px 8px;
+            color: $text-dark;
+            font-weight: $font-weight-normal;
+            font-weight: 600;
+            line-height: 11px;
+            background-color: #d7e3e6;
+            border-radius: 5px;
         }
 
         &--user:hover {
@@ -57,14 +65,18 @@
         padding: 0;
         color: $color-grey-2;
         font-size: 14px;
+        font-family: inherit;
         background: none;
         border: none;
 
         &--auth {
-            padding: 9px;
+            height: 31px;
+            padding: 8px 8px 7px;
             color: $color-white;
             background: $color-primary;
             border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
     }
 }

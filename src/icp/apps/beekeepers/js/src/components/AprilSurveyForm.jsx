@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { func } from 'prop-types';
 
@@ -147,8 +147,10 @@ class AprilSurveyForm extends Component {
             const key = `${groupName}_${option}`;
             const label = option.split('_').join(' ').toLowerCase();
             return (
-                <Fragment key={key}>
-                    <label htmlFor={key}>{label}</label>
+                <div
+                    key={key}
+                    className="form__checkbox"
+                >
                     <input
                         type="checkbox"
                         className="form__control"
@@ -158,7 +160,8 @@ class AprilSurveyForm extends Component {
                         onChange={this.handleChange}
                         disabled={!!completedSurvey}
                     />
-                </Fragment>
+                    <label htmlFor={key}>{label}</label>
+                </div>
             );
         });
     }
