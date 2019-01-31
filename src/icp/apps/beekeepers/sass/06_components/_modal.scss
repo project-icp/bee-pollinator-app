@@ -5,11 +5,17 @@
 
 .popup-content {
     z-index: 1000 !important;
+    width: 600px !important;
 }
 
 .modal {
-    width: 380px !important;
+    width: 400px !important;
     padding: 0 !important;
+}
+
+.userModal {
+    width: 600px !important;
+    font-size: 16px;
 }
 
 .authModal {
@@ -48,6 +54,7 @@
         padding: 15px;
 
         .title {
+            margin-bottom: 10px;
             font: $font-xxl;
             font-weight: $font-weight-bold;
             line-height: 1.2;

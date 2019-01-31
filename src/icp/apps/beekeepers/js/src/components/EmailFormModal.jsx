@@ -54,18 +54,19 @@ class EmailFormModal extends Component {
                     dispatch(clearAuthMessages());
                     dispatch(closeEmailFormModal());
                 }}
+                className="modal"
                 modal
             >
                 {close => (
                     <div className="authModal">
                         <div className="authModal__header">
-                            <div>Participate in study</div>
+                            <div>Reset/Resend</div>
                             <button type="button" className="button" onClick={close}>
                                 &times;
                             </button>
                         </div>
                         <div className="authModal__content">
-                            <div className="title">Enter your email</div>
+                            <div className="title">Reset password or resend activation link</div>
                             <form className="form">
                                 {userMessage}
                                 {errorWarning}
@@ -83,16 +84,16 @@ class EmailFormModal extends Component {
                                 <button
                                     type="button"
                                     className="button--long"
-                                    onClick={() => dispatch(sendAuthLink(this.state, 'resend'))}
+                                    onClick={() => dispatch(sendAuthLink(this.state, 'forgot'))}
                                 >
-                                    Resend activation link
+                                    Password reset
                                 </button>
                                 <button
                                     type="button"
                                     className="button--long"
-                                    onClick={() => dispatch(sendAuthLink(this.state, 'forgot'))}
+                                    onClick={() => dispatch(sendAuthLink(this.state, 'resend'))}
                                 >
-                                    Forgot password
+                                    Resend activation link
                                 </button>
                             </form>
                         </div>

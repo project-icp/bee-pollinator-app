@@ -55,6 +55,7 @@ const SurveyCard = ({ apiary, dispatch, surveys }) => {
         const cardDetails = surveys.length <= 4 ? null : (
             <Popup
                 modal
+                className="modal"
                 trigger={cardDetailTrigger}
             >
                 <ApiarySurveyListing apiary={apiary} surveys={surveys} />

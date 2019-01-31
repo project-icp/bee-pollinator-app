@@ -157,9 +157,13 @@
 
 /* stylelint-disable */
 
+.modal .form__group {
+    margin: 10px auto;
+}
+
 .form__group {
     display: block;
-    margin: 20px auto 10px;
+    margin: 20px auto;
 
     [type="checkbox"] + label {
         display: inline-block;
@@ -193,6 +197,7 @@
 
 .form__group--error {
     width: 100%;
+    margin: 14px 0 10px;
     margin-bottom: 8px;
     padding: 8px;
     background: none;
