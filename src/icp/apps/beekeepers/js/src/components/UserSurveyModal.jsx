@@ -239,6 +239,9 @@ class UserSurveyModal extends Component {
                             </div>
                             <div className="form__group">
                                 <div className="form__checkbox">
+                                    <label htmlFor="relocate">
+                                        Do you relocate your colonies throughout the year?
+                                    </label>
                                     <input
                                         type="checkbox"
                                         className="form__control"
@@ -248,7 +251,7 @@ class UserSurveyModal extends Component {
                                         onChange={this.handleChange}
                                     />
                                     <label htmlFor="relocate">
-                                        Do you relocate your colonies throughout the year?
+                                        Yes
                                     </label>
                                 </div>
                             </div>
@@ -337,6 +340,9 @@ class UserSurveyModal extends Component {
                             </div>
                             <div className="form__group">
                                 <div className="form__checkbox">
+                                    <label htmlFor="varroa_management">
+                                        Do you manage for Varroa?
+                                    </label>
                                     <input
                                         type="checkbox"
                                         className="form__control"
@@ -346,7 +352,7 @@ class UserSurveyModal extends Component {
                                         onChange={this.handleChange}
                                     />
                                     <label htmlFor="varroa_management">
-                                        Do you manage for Varroa
+                                        Yes
                                     </label>
                                 </div>
                             </div>
@@ -365,6 +371,9 @@ class UserSurveyModal extends Component {
                             </div>
                             <div className="form__group">
                                 <div className="form__checkbox">
+                                    <label htmlFor="purchased_queens">
+                                        Do you buy queens, nucs or packages?
+                                    </label>
                                     <input
                                         type="checkbox"
                                         className="form__control"
@@ -374,7 +383,7 @@ class UserSurveyModal extends Component {
                                         onChange={this.handleChange}
                                     />
                                     <label htmlFor="purchased_queens">
-                                        I buy queens, nucs or packages
+                                        Yes
                                     </label>
                                 </div>
                             </div>
@@ -393,6 +402,9 @@ class UserSurveyModal extends Component {
                             </div>
                             <div className="form__group">
                                 <div className="form__checkbox">
+                                    <label htmlFor="resistant_queens">
+                                        Do you use Varroa-resistant queens?
+                                    </label>
                                     <input
                                         type="checkbox"
                                         className="form__control"
@@ -402,7 +414,7 @@ class UserSurveyModal extends Component {
                                         onChange={this.handleChange}
                                     />
                                     <label htmlFor="resistant_queens">
-                                        I use Varroa-resistant queens
+                                        Yes
                                     </label>
                                 </div>
                             </div>
@@ -421,6 +433,9 @@ class UserSurveyModal extends Component {
                             </div>
                             <div className="form__group">
                                 <div className="form__checkbox">
+                                    <label htmlFor="rear_queens">
+                                        Do you rear queens?
+                                    </label>
                                     <input
                                         type="checkbox"
                                         className="form__control"
@@ -430,7 +445,7 @@ class UserSurveyModal extends Component {
                                         onChange={this.handleChange}
                                     />
                                     <label htmlFor="rear_queens">
-                                        I rear queens
+                                        Yes
                                     </label>
                                 </div>
                             </div>
