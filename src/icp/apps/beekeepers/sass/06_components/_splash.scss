@@ -1,5 +1,4 @@
 .splash {
-    padding: 6rem;
     font: $font-med;
     background-color: #fff;
 
@@ -9,5 +8,9 @@
         font-weight: 900;
         font-size: $font-size-xxl;
         line-height: $font-size-3xl;
+    }
+
+    &__content {
+        padding: 4rem;
     }
 }

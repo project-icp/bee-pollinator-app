@@ -56,6 +56,7 @@ const SurveyCardListing = ({
                         </span>
                     </button>
                 )}
+                className="surveyModal"
                 modal
             >
                 {formComponent}
