@@ -7,7 +7,7 @@ const Tooltip = ({ description }) => {
     const sections = description.map(d => <div className="tooltip__text" key={d}>{d}</div>);
     return (
         <Popup
-            trigger={<span className="info">ℹ</span>}
+            trigger={<i className="icon-info-circle" />}
             position="top center"
             className="tooltip"
             on="hover"

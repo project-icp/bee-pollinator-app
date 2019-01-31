@@ -102,17 +102,3 @@
     width: 400px !important;
     padding: 0 !important;
 }
-
-.info {
-    padding: 5px;
-}
-
-.tooltip {
-    min-width: fit-content;
-    max-width: 500px;
-
-    &__text {
-        font: $font-size-xs;
-        font-weight: $font-weight-light;
-    }
-}
