@@ -36,7 +36,20 @@ const ApiaryCard = ({ apiary, forageRange, dispatch }) => {
     if (!Object.keys(apiary.scores[forageRange]).length && !apiary.fetching) {
         scoreCard = (
             <>
-                Error fetching apiary data
+                <div className="card__top">
+                    <div className="card__identification">
+                        <div className={`marker ${markerClass}`}>{marker}</div>
+                        <div className="card__name">Error fetching apiary data</div>
+                    </div>
+                    <div className="card__buttons">
+                        <CardButton
+                            icon="trash"
+                            filled
+                            tooltip="Delete apiary"
+                            onClick={onDelete}
+                        />
+                    </div>
+                </div>
                 <button
                     type="button"
                     onClick={() => dispatch(fetchApiaryScores([apiary], forageRange))}
