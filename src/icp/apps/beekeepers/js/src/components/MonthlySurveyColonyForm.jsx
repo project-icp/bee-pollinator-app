@@ -155,6 +155,23 @@ class MonthlySurveyColonyForm extends Component {
                         {inputNumber('num_bodies_supers_shallow', 'Shallow')}
                     </div>
                 </div>
+                {this.inputSelect('varroa_count_performed', 'Did you do a Varroa count?', [
+                    ['true', 'Yes'],
+                    ['false', 'No'],
+                ])}
+                {varroaCountDetails}
+                <div className="form__group">
+                    <label htmlFor="varroa_treatment">
+                        Do you treat for Varroa? If so, how?
+                        Check all that apply.
+                    </label>
+                    {this.makeMultipleChoiceInputs('varroa_treatment', MITE_MANAGEMENT_OPTIONS)}
+                    <div className="form__secondary">
+                        {inputText('varroa_treatment_CHEMICAL_ORGANIC_OTHER', 'Other organic chemical')}
+                        {inputText('varroa_treatment_MECHANICAL_OTHER', 'Other mechanical')}
+                        {inputText('varroa_treatment_OTHER', 'Other')}
+                    </div>
+                </div>
                 <div className="form__group">
                     <label htmlFor="activity_since_last">
                         Since the last assessment, have you done any of the following?
@@ -181,23 +198,6 @@ class MonthlySurveyColonyForm extends Component {
                     ['PACKAGE', 'Package'],
                     ['FERAL', 'Feral colony or swarm'],
                 ])}
-                {this.inputSelect('varroa_count_performed', 'Did you do a Varroa count?', [
-                    ['true', 'Yes'],
-                    ['false', 'No'],
-                ])}
-                {varroaCountDetails}
-                <div className="form__group">
-                    <label htmlFor="varroa_treatment">
-                        Do you treat for Varroa? If so, how?
-                        Check all that apply.
-                    </label>
-                    {this.makeMultipleChoiceInputs('varroa_treatment', MITE_MANAGEMENT_OPTIONS)}
-                    <div className="form__secondary">
-                        {inputText('varroa_treatment_CHEMICAL_ORGANIC_OTHER', 'Other organic chemical')}
-                        {inputText('varroa_treatment_MECHANICAL_OTHER', 'Other mechanical')}
-                        {inputText('varroa_treatment_OTHER', 'Other')}
-                    </div>
-                </div>
             </>
         );
     }
