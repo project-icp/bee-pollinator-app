@@ -17,9 +17,9 @@ const SurveyCard = ({ apiary, dispatch, surveys }) => {
 
     let cardBody;
     let cardFooter = null;
+    const onSurvey = () => dispatch(setApiarySurvey(apiary));
 
     if (!surveyed) {
-        const onSurvey = () => dispatch(setApiarySurvey(apiary));
         cardBody = (
             <>
                 <div className="listing" key={name}>
@@ -65,7 +65,25 @@ const SurveyCard = ({ apiary, dispatch, surveys }) => {
         cardFooter = (
             <div className="surveyCard__footer">
                 {cardDetails}
-                <div>...</div>
+                <Popup
+                    trigger={(<button type="button" className="dropdown__button">...</button>)}
+                    position="right top"
+                    closeOnDocumentClick={false}
+                    on="hover"
+                    arrow={false}
+                >
+                    <div className="menu">
+                        <div className="menu-item">
+                            <button
+                                type="button"
+                                className="dropdown__button"
+                                onClick={onSurvey}
+                            >
+                                Remove from study
+                            </button>
+                        </div>
+                    </div>
+                </Popup>
             </div>
         );
     }

@@ -57,6 +57,16 @@
         background: $color-primary;
         border: none;
     }
+
+    .dropdown__button {
+        margin-left: auto;
+        padding: auto;
+        color: $color-grey-2;
+        font-size: $font-size-med;
+        font-family: inherit;
+        background: none;
+        border: none;
+    }
 }
 
 .button {
