@@ -101,8 +101,17 @@ export const ACTIVITY_SINCE_LAST = [
     'FED_SUGAR',
 ];
 
-export const CONTRIBUTION_LEVEL_LIGHT_DESCRIPTION = 'Light: You will be asked to fill out a survey about your bees in November and April.';
+export const CONTRIBUTION_LEVEL_LIGHT_DESCRIPTION = {
+    title: 'Light: ',
+    body: 'You will be asked to fill out a survey about your bees in November and April.',
+};
 
-export const CONTRIBUTION_LEVEL_PRO_DESCRIPTION = 'Pro: You will be asked to fill out a monthly survey, providing information for one to three colonies per apiary. This information includes colony size, Varroa counts, and colony management. You can access the surveys later, so you can also see how your colonies perform over time.';
+export const CONTRIBUTION_LEVEL_PRO_DESCRIPTION = {
+    title: 'Pro: ',
+    body: 'You will be asked to fill out a monthly survey, providing information for one to three colonies per apiary. This information includes colony size, Varroa counts, and colony management. You can access the surveys later, so you can also see how your colonies perform over time.',
+};
 
-export const RELOCATE_COLONIES_DESCRIPTION = 'At this point, we are only gathering data on colonies that remain in one location throughout the year.';
+export const RELOCATE_COLONIES_DESCRIPTION = {
+    title: '',
+    body: 'At this point, we are only gathering data on colonies that remain in one location throughout the year.',
+};
