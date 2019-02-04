@@ -6,14 +6,12 @@ export default function () {
     return (
         <div className="survey empty">
             <div className="survey__header empty">
-                Add locations of interest
+                Add your apiaries
             </div>
             <div className="survey__body">
                 <div>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex ea commodo consequat.
+                    Please drop a pin to locate your apiaries on the map. Then come back to this
+                    page and select the apiaries that you want to include in the survey.
                 </div>
                 <Link to="/" className="survey__button">Go to location finder</Link>
             </div>

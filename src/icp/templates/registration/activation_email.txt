@@ -12,11 +12,19 @@ To activate this account, please click the following link within the next
 
 http://{{site.domain}}{% url 'registration_activate' activation_key %}
 
-{% blocktrans with site_name=site.name %}
-Sincerely,
-{{ site_name }} Management
-{% endblocktrans %}
 
+{% if "Beekeepers" == user.userprofile.origin_app or "beescape.org" in site.domain %}
+    We are looking forward to working with you to make the world a better
+    place for bees!
+
+    Sincerely,
+    Beescape Team
+{% else %}
+    {% blocktrans with site_name=site.name %}
+    Sincerely,
+    {{ site_name }} Management
+    {% endblocktrans %}
+{% endif %}
 
 {% comment %}
 **registration/activation_email.txt**
