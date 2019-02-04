@@ -65,15 +65,24 @@ const SurveyView = ({ apiaries, isProUser }) => {
                 </div>
                 <div className="survey__body--section">
                     <h2 className="survey__title">Response needed</h2>
-                    {incompleteSurveyCards}
+                    {incompleteSurveyCards.length
+                        ? incompleteSurveyCards
+                        : <div className="empty-message">None. There are no remaining surveys to complete.</div>
+                    }
                 </div>
                 <div className="survey__body--section">
                     <h2 className="survey__title">Up to date</h2>
-                    {completedSurveyCards}
+                    {completedSurveyCards.length
+                        ? completedSurveyCards
+                        : <div className="empty-message">None. Please help the bees and complete any outstanding surveys.</div>
+                    }
                 </div>
                 <div className="survey__body--section">
-                    <h2 className="survey__title">This is not in the study</h2>
-                    {unsurveyedCards}
+                    <h2 className="survey__title">Not in the study</h2>
+                    {unsurveyedCards.length
+                        ? unsurveyedCards
+                        : <div className="empty-message">None. Nice work!</div>
+                    }
                 </div>
             </div>
         </div>

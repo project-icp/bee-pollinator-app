@@ -57,6 +57,16 @@
         background: $color-primary;
         border: none;
     }
+
+    .dropdown__button {
+        margin-left: auto;
+        padding: auto;
+        color: $color-grey-2;
+        font-size: $font-size-med;
+        font-family: inherit;
+        background: none;
+        border: none;
+    }
 }
 
 .button {
@@ -209,4 +219,9 @@
     padding-top: 25px;
     font-style: italic;
     border-top: 1px solid #ccc;
+}
+
+.empty-message {
+    font-weight: normal;
+    font-size: $font-size-med;
 }
