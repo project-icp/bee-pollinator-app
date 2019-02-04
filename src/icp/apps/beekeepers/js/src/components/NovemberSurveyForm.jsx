@@ -266,6 +266,28 @@ class NovemberSurveyForm extends Component {
             ? 'Survey results'
             : 'Fill out this survey about your apiary';
 
+        const confirmationButton = completedSurvey
+            ? null
+            : (
+                <div className="form__group">
+                    <label htmlFor="confirmation">
+                        Have you provided all the information available for these
+                        colonies and are ready to submit the survey? Surveys cannot
+                        be edited after submission.
+                    </label>
+                    <input
+                        type="checkbox"
+                        className="form__control"
+                        id="confirmed"
+                        name="confirmed"
+                        required
+                    />
+                    <label htmlFor="confirmation">
+                        Yes
+                    </label>
+                </div>
+            );
+
         const miteManagementCheckboxInputs = this.makeMultipleChoiceInputs('mite_management', MITE_MANAGEMENT_OPTIONS);
 
         const supplementalSugarInputs = this.makeSeasonalInputs('supplemental_sugar');
@@ -439,6 +461,7 @@ class NovemberSurveyForm extends Component {
                                 />
                             </div>
                         </div>
+                        {confirmationButton}
                     </div>
                     {submitButton}
                 </form>

@@ -196,6 +196,28 @@ class AprilSurveyForm extends Component {
             ? 'Survey results'
             : 'Fill out this survey about your apiary';
 
+        const confirmationButton = completedSurvey
+            ? null
+            : (
+                <div className="form__group">
+                    <label htmlFor="confirmation">
+                        Have you provided all the information available for these
+                        colonies and are ready to submit the survey? Surveys cannot
+                        be edited after submission.
+                    </label>
+                    <input
+                        type="checkbox"
+                        className="form__control"
+                        id="confirmed"
+                        name="confirmed"
+                        required
+                    />
+                    <label htmlFor="confirmation">
+                        Yes
+                    </label>
+                </div>
+            );
+
         const colonyLossReasonCheckboxInputs = this.makeMultipleChoiceInputs('colony_loss_reason', COLONY_LOSS_REASONS);
 
         const surveyForm = (
@@ -218,7 +240,7 @@ class AprilSurveyForm extends Component {
                         />
                         <label htmlFor="colony_loss_reason">
                             What do you think the most likely cause of colony loss was?
-                            Check all that apply.
+                            Check all that apply. Required.
                         </label>
                         {colonyLossReasonCheckboxInputs}
                         <label htmlFor="colony_loss_reason_OTHER">OTHER</label>
@@ -231,6 +253,7 @@ class AprilSurveyForm extends Component {
                             onChange={this.handleChange}
                             disabled={!!completedSurvey}
                         />
+                        {confirmationButton}
                     </div>
                     {submitButton}
                 </form>
