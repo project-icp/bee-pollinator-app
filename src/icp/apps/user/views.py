@@ -139,9 +139,11 @@ def sign_up(request):
     form = RegistrationFormUniqueEmail(request.POST)
 
     if form.is_valid():
+        from_beekeepers = ('app.beescape.org' in request.get_host() or
+                           'beekeepers' in request.GET)
         user = view.register(request, form)
         origin_app = \
-            UserProfile.BEEKEEPERS if 'beekeepers' in request.GET else \
+            UserProfile.BEEKEEPERS if from_beekeepers else \
             UserProfile.POLLINATION
 
         UserProfile.objects.create(
