@@ -333,14 +333,31 @@ class MonthlySurveyForm extends Component {
             </div>
         ) : null;
 
-        const submitButton = completed ? null : (
-            <button
-                type="submit"
-                value="Submit"
-                className="button--long"
-            >
-                Submit
-            </button>
+        const submitButtons = completed ? null : (
+            <div className="confirmation form__group">
+                <label htmlFor="confirmation">
+                    Have you provided all the information available for these
+                    colonies and are ready to submit the survey? Surveys cannot
+                    be edited after submission.
+                </label>
+                <input
+                    type="checkbox"
+                    className="form__control"
+                    id="confirmed"
+                    name="confirmed"
+                    required
+                />
+                <label htmlFor="confirmation">
+                    Yes
+                </label>
+                <button
+                    type="submit"
+                    value="Submit"
+                    className="button--long"
+                >
+                    Submit
+                </button>
+            </div>
         );
 
         const tabs = monthlies.map((_, idx) => (
@@ -399,7 +416,7 @@ class MonthlySurveyForm extends Component {
                         </TabList>
                         {tabPanels}
                     </Tabs>
-                    {submitButton}
+                    {submitButtons}
                 </form>
             </>
         );
