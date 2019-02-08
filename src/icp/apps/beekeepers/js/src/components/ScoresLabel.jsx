@@ -35,6 +35,26 @@ const ScoresLabel = ({ indicator, scores }) => {
         >
             <div className="indicator__popup">
                 <div className="name">{indicatorDetails.name}</div>
+                <table className="scoreTable">
+                    <thead>
+                        <tr>
+                            <th className="scoreTable__th">Min</th>
+                            <th className="scoreTable__th">Low</th>
+                            <th className="scoreTable__th">Med</th>
+                            <th className="scoreTable__th">High</th>
+                            <th className="scoreTable__th">Max</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td className="scoreTable__td">{indicatorDetails.scoreStops[0]}</td>
+                            <td className="scoreTable__td">{indicatorDetails.scoreStops[1]}</td>
+                            <td className="scoreTable__td">{indicatorDetails.scoreStops[2]}</td>
+                            <td className="scoreTable__td">{indicatorDetails.scoreStops[3]}</td>
+                            <td className="scoreTable__td">{indicatorDetails.scoreStops[4]}</td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div className="description">{indicatorDetails.description}</div>
             </div>
         </Popup>

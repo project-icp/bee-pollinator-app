@@ -30,6 +30,23 @@
             text-align: left;
         }
 
+        .scoreTable {
+            width: 100%;
+
+            &__th {
+                padding: 0 2px;
+                color: $color-grey-3;
+                font-weight: $font-weight-light;
+                font-size: $font-size-base;
+                text-transform: capitalize;
+            }
+
+            &__td {
+                color: $color-grey-2;
+                font-size: $font-size-base;
+            }
+        }
+
         .description {
             font-size: $font-size-base;
             text-align: left;
