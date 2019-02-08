@@ -313,3 +313,23 @@ export function getOrCreateSurveyRequest({ apiary, id, form }) {
 
     return request;
 }
+
+/**
+ * Given a score an a 5-value array of stops, classifies the score as
+ * "Low", "Medium", or "High". Scores below stops[1] are "Low". Scores
+ * above stops[2] are "High". Other scores are "Medium".
+ *
+ * @param {number} score
+ * @param {array} stops
+ */
+export function classifyScore(score, stops) {
+    if (score < stops[1]) {
+        return 'Low';
+    }
+
+    if (score < stops[3]) {
+        return 'Medium';
+    }
+
+    return 'High';
+}

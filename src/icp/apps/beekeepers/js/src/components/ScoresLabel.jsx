@@ -3,7 +3,7 @@ import { arrayOf, string } from 'prop-types';
 import Popup from 'reactjs-popup';
 
 import { Score } from '../propTypes';
-import { toDashedString } from '../utils';
+import { classifyScore, toDashedString } from '../utils';
 import { INDICATOR_DETAILS } from '../constants';
 
 
@@ -55,6 +55,11 @@ const ScoresLabel = ({ indicator, scores }) => {
                         </tr>
                     </tbody>
                 </table>
+                <div className="scoreVerdict">
+                    {score}
+                    {' = '}
+                    {classifyScore(score, indicatorDetails.scoreStops)}
+                </div>
                 <div className="description">{indicatorDetails.description}</div>
             </div>
         </Popup>
