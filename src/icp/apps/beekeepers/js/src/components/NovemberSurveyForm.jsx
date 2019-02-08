@@ -120,6 +120,15 @@ class NovemberSurveyForm extends Component {
                 finalValue = checked ? value : '';
             }
         }
+
+        // Convert boolean strings to bools
+        if (finalValue === 'true') {
+            finalValue = true;
+        }
+        if (finalValue === 'false') {
+            finalValue = false;
+        }
+
         this.setState({ [name]: finalValue });
     }
 
@@ -370,18 +379,17 @@ class NovemberSurveyForm extends Component {
                             <label htmlFor="small_hive_beetles">
                                 Have you observed small hive beetles in your hives?
                             </label>
-                            <input
-                                type="checkbox"
+                            <select
                                 className="form__control"
                                 id="small_hive_beetles"
                                 name="small_hive_beetles"
-                                checked={small_hive_beetles}
+                                value={small_hive_beetles}
                                 onChange={this.handleChange}
                                 disabled={!!completedSurvey}
-                            />
-                            <label htmlFor="small_hive_beetles">
-                                yes
-                            </label>
+                            >
+                                <option key="true" value="true">Yes</option>
+                                <option key="false" value="false">No</option>
+                            </select>
                         </div>
                         <div className="form__group">
                             <label htmlFor="varroa_check_frequency">

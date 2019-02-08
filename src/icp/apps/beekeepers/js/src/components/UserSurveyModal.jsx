@@ -64,6 +64,15 @@ class UserSurveyModal extends Component {
                 finalValue = checked ? value : '';
             }
         }
+
+        // Convert boolean strings to bools
+        if (finalValue === 'true') {
+            finalValue = true;
+        }
+        if (finalValue === 'false') {
+            finalValue = false;
+        }
+
         this.setState({ [name]: finalValue });
     }
 
@@ -253,23 +262,20 @@ class UserSurveyModal extends Component {
                                 </select>
                             </div>
                             <div className="form__group">
-                                <div className="form__checkbox">
-                                    <label htmlFor="relocate">
-                                        Do you relocate your colonies throughout the year?
-                                        <Tooltip description={[RELOCATE_COLONIES_DESCRIPTION]} />
-                                    </label>
-                                    <input
-                                        type="checkbox"
-                                        className="form__control"
-                                        id="relocate"
-                                        name="relocate"
-                                        checked={relocate}
-                                        onChange={this.handleChange}
-                                    />
-                                    <label htmlFor="relocate">
-                                        Yes
-                                    </label>
-                                </div>
+                                <label htmlFor="relocate">
+                                    Do you relocate your colonies throughout the year?
+                                    <Tooltip description={[RELOCATE_COLONIES_DESCRIPTION]} />
+                                </label>
+                                <select
+                                    className="form__control"
+                                    id="relocate"
+                                    name="relocate"
+                                    value={relocate}
+                                    onChange={this.handleChange}
+                                >
+                                    <option key="true" value="true">Yes</option>
+                                    <option key="false" value="false">No</option>
+                                </select>
                             </div>
                             <div className="form__group">
                                 <label htmlFor="income">
@@ -355,23 +361,20 @@ class UserSurveyModal extends Component {
                                 </select>
                             </div>
                             <div className="form__group">
-                                <div className="form__checkbox">
-                                    <label htmlFor="varroa_management">
-                                        Do you manage for Varroa?
-                                        <Tooltip description={[VARROA_MANAGEMENT_DESCRIPTION]} />
-                                    </label>
-                                    <input
-                                        type="checkbox"
-                                        className="form__control"
-                                        id="varroa_management"
-                                        name="varroa_management"
-                                        checked={varroa_management}
-                                        onChange={this.handleChange}
-                                    />
-                                    <label htmlFor="varroa_management">
-                                        Yes
-                                    </label>
-                                </div>
+                                <label htmlFor="varroa_management">
+                                    Do you manage for Varroa?
+                                    <Tooltip description={[VARROA_MANAGEMENT_DESCRIPTION]} />
+                                </label>
+                                <select
+                                    className="form__control"
+                                    id="varroa_management"
+                                    name="varroa_management"
+                                    value={varroa_management}
+                                    onChange={this.handleChange}
+                                >
+                                    <option key="true" value="true">Yes</option>
+                                    <option key="false" value="false">No</option>
+                                </select>
                             </div>
                             <div className="form__group">
                                 <label htmlFor="varroa_management_trigger">
@@ -387,22 +390,19 @@ class UserSurveyModal extends Component {
                                 />
                             </div>
                             <div className="form__group">
-                                <div className="form__checkbox">
-                                    <label htmlFor="purchased_queens">
-                                        Do you buy queens, nucs or packages?
-                                    </label>
-                                    <input
-                                        type="checkbox"
-                                        className="form__control"
-                                        id="purchased_queens"
-                                        name="purchased_queens"
-                                        checked={purchased_queens}
-                                        onChange={this.handleChange}
-                                    />
-                                    <label htmlFor="purchased_queens">
-                                        Yes
-                                    </label>
-                                </div>
+                                <label htmlFor="purchased_queens">
+                                    Do you buy queens, nucs or packages?
+                                </label>
+                                <select
+                                    className="form__control"
+                                    id="purchased_queens"
+                                    name="purchased_queens"
+                                    value={purchased_queens}
+                                    onChange={this.handleChange}
+                                >
+                                    <option key="true" value="true">Yes</option>
+                                    <option key="false" value="false">No</option>
+                                </select>
                             </div>
                             <div className="form__group">
                                 <label htmlFor="purchased_queens_sources">
@@ -418,22 +418,19 @@ class UserSurveyModal extends Component {
                                 />
                             </div>
                             <div className="form__group">
-                                <div className="form__checkbox">
-                                    <label htmlFor="resistant_queens">
-                                        Do you use Varroa-resistant queens?
-                                    </label>
-                                    <input
-                                        type="checkbox"
-                                        className="form__control"
-                                        id="resistant_queens"
-                                        name="resistant_queens"
-                                        checked={resistant_queens}
-                                        onChange={this.handleChange}
-                                    />
-                                    <label htmlFor="resistant_queens">
-                                        Yes
-                                    </label>
-                                </div>
+                                <label htmlFor="resistant_queens">
+                                    Do you use Varroa-resistant queens?
+                                </label>
+                                <select
+                                    className="form__control"
+                                    id="resistant_queens"
+                                    name="resistant_queens"
+                                    value={resistant_queens}
+                                    onChange={this.handleChange}
+                                >
+                                    <option key="true" value="true">Yes</option>
+                                    <option key="false" value="false">No</option>
+                                </select>
                             </div>
                             <div className="form__group">
                                 <label htmlFor="resistant_queens_genetics">
@@ -449,22 +446,19 @@ class UserSurveyModal extends Component {
                                 />
                             </div>
                             <div className="form__group">
-                                <div className="form__checkbox">
-                                    <label htmlFor="rear_queens">
-                                        Do you rear queens?
-                                    </label>
-                                    <input
-                                        type="checkbox"
-                                        className="form__control"
-                                        id="rear_queens"
-                                        name="rear_queens"
-                                        checked={rear_queens}
-                                        onChange={this.handleChange}
-                                    />
-                                    <label htmlFor="rear_queens">
-                                        Yes
-                                    </label>
-                                </div>
+                                <label htmlFor="rear_queens">
+                                    Do you rear queens?
+                                </label>
+                                <select
+                                    className="form__control"
+                                    id="rear_queens"
+                                    name="rear_queens"
+                                    value={rear_queens}
+                                    onChange={this.handleChange}
+                                >
+                                    <option key="true" value="true">Yes</option>
+                                    <option key="false" value="false">No</option>
+                                </select>
                             </div>
                             <div className="form__group">
                                 <label htmlFor="equipment">
