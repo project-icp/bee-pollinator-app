@@ -134,8 +134,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     }.merge(VAGRANT_NETWORK_OPTIONS)
     # Testem server
     app.vm.network "forwarded_port", {
-      guest: 7357,
-      host: 7357
+      guest: 7358,
+      host: 7358
     }.merge(VAGRANT_NETWORK_OPTIONS)
 
     app.ssh.forward_x11 = true
