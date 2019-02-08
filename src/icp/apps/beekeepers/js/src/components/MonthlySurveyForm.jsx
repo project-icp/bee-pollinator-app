@@ -51,7 +51,7 @@ class MonthlySurveyForm extends Component {
             colony_loss_reason_OTHER: '',
             activity_since_last_REMOVED_HONEY: false,
             activity_since_last_REMOVED_BROOD: false,
-            activity_since_last_FED_POLLEN_PROTEIN: false,
+            activity_since_last_FED_POLLEN_OR_PROTEIN: false,
             activity_since_last_FED_SUGAR: false,
             varroa_count_technique_ALCOHOL_WASH: false,
             varroa_count_technique_SUGAR_SHAKE: false,

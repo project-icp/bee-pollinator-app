@@ -11,6 +11,7 @@ import {
     CONTRIBUTION_LEVEL_LIGHT_DESCRIPTION,
     RELOCATE_COLONIES_DESCRIPTION,
     CONTRIBUTION_LEVEL_PRO_DESCRIPTION,
+    VARROA_MANAGEMENT_DESCRIPTION,
 } from '../constants';
 
 class UserSurveyModal extends Component {
@@ -357,6 +358,7 @@ class UserSurveyModal extends Component {
                                 <div className="form__checkbox">
                                     <label htmlFor="varroa_management">
                                         Do you manage for Varroa?
+                                        <Tooltip description={[VARROA_MANAGEMENT_DESCRIPTION]} />
                                     </label>
                                     <input
                                         type="checkbox"

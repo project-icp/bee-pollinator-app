@@ -283,7 +283,7 @@ class MonthlySurvey(models.Model):
         blank=True,
         help_text='Total number of hive bodies and supers (shallow)')
     activity_since_last = models.CharField(
-        # REMOVED_HONEY;REMOVED_BROOD;FED_POLLEN_PROTEIN;FED_SUGAR
+        # REMOVED_HONEY;REMOVED_BROOD;FED_POLLEN_OR_PROTEIN;FED_SUGAR
         max_length=255,
         null=True,
         blank=True,
