@@ -8,9 +8,13 @@ import {
     MITE_MANAGEMENT_OPTIONS,
     SEASONS,
     VARROA_CHECK_METHODS,
+    VARROA_ALCOHOL_WASH_DESCRIPTION,
+    VARROA_STICKYBOARD_DESCRIPTION,
+    VARROA_SUGAR_SHAKE_DESCRIPTION,
 } from '../constants';
 import { arrayToSemicolonDelimitedString, getOrCreateSurveyRequest } from '../utils';
 import { Survey } from '../propTypes';
+import Tooltip from './Tooltip';
 
 
 class NovemberSurveyForm extends Component {
@@ -177,12 +181,15 @@ class NovemberSurveyForm extends Component {
     }
 
     /* eslint-disable react/destructuring-assignment */
-    makeMultipleChoiceInputs(groupName, options) {
+    makeMultipleChoiceInputs(groupName, options, tooltipDescriptions) {
         const { completedSurvey } = this.state;
 
-        return options.map((option) => {
+        return options.map((option, index) => {
             const key = `${groupName}_${option}`;
             const label = option.split('_').join(' ').toLowerCase();
+            const tooltip = tooltipDescriptions
+                ? <Tooltip description={[tooltipDescriptions[index]]} />
+                : null;
             return (
                 <div
                     key={key}
@@ -197,7 +204,10 @@ class NovemberSurveyForm extends Component {
                         onChange={this.handleChange}
                         disabled={!!completedSurvey}
                     />
-                    <label htmlFor={key}>{label}</label>
+                    <label htmlFor={key}>
+                        {label}
+                        {tooltip}
+                    </label>
                 </div>
             );
         });
@@ -294,7 +304,15 @@ class NovemberSurveyForm extends Component {
 
         const supplementalProteinInputs = this.makeSeasonalInputs('supplemental_protein');
 
-        const varroaCheckMethodCheckboxInputs = this.makeMultipleChoiceInputs('varroa_check_method', VARROA_CHECK_METHODS);
+        const varroaCheckMethodCheckboxInputs = this.makeMultipleChoiceInputs(
+            'varroa_check_method',
+            VARROA_CHECK_METHODS,
+            [
+                VARROA_ALCOHOL_WASH_DESCRIPTION,
+                VARROA_SUGAR_SHAKE_DESCRIPTION,
+                VARROA_STICKYBOARD_DESCRIPTION,
+            ],
+        );
 
         const surveyForm = (
             <>

@@ -7,43 +7,63 @@ import {
     ACTIVITY_SINCE_LAST,
     VARROA_CHECK_METHODS,
     MITE_MANAGEMENT_OPTIONS,
+    VARROA_ALCOHOL_WASH_DESCRIPTION,
+    VARROA_STICKYBOARD_DESCRIPTION,
+    VARROA_SUGAR_SHAKE_DESCRIPTION,
+    DEEP_HIVE_BODIES_DESCRIPTION,
+    MEDIUM_HIVE_BODIES_DESCRIPTION,
+    SHALLOW_HIVE_BODIES_DESCRIPTION,
+    QUEEN_STOCK_DESCRIPTION,
+    QUEENRIGHT_DESCRIPTION,
 } from '../constants';
-
 import { MonthlySurveyColony } from '../propTypes';
+
+import Tooltip from './Tooltip';
+
 
 class MonthlySurveyColonyForm extends Component {
     inputFactory(inputType) {
         const { data, onChange } = this.props;
         const disabled = data.id !== null;
 
-        return (key, label, required) => (
-            <div className="form__group">
-                <label htmlFor={key}>
-                    {label}
-                </label>
-                <input
-                    type={inputType}
-                    className="form__control"
-                    id={key}
-                    name={key}
-                    value={data[key]}
-                    onChange={onChange}
-                    disabled={disabled}
-                    required={required}
-                />
-            </div>
-        );
+        return (key, label, required, tooltipDescription) => {
+            const tooltip = tooltipDescription
+                ? <Tooltip description={[tooltipDescription]} />
+                : null;
+            return (
+                <div className="form__group">
+                    <label htmlFor={key}>
+                        {label}
+                        {tooltip}
+                    </label>
+                    <input
+                        type={inputType}
+                        className="form__control"
+                        id={key}
+                        name={key}
+                        value={data[key]}
+                        onChange={onChange}
+                        disabled={disabled}
+                        required={required}
+                    />
+                </div>
+            );
+        };
     }
 
-    inputSelect(key, label, options) {
+    inputSelect(key, label, options, tooltipDescription) {
         const { data, onChange } = this.props;
         const value = data[key] && data[key].toString();
         const disabled = data.id !== null;
+        const tooltip = tooltipDescription
+            ? <Tooltip description={tooltipDescription} />
+            : null;
 
         return (
             <div className="form__group">
                 <label htmlFor={key}>
                     {label}
+                    {tooltip}
                 </label>
                 <select
                     className="form__control"
@@ -128,6 +148,13 @@ class MonthlySurveyColonyForm extends Component {
                 <div className="form__group">
                     <label htmlFor="varroa_count_technique">
                         How did you do a Varroa count?
+                        <Tooltip
+                            description={[
+                                VARROA_ALCOHOL_WASH_DESCRIPTION,
+                                VARROA_SUGAR_SHAKE_DESCRIPTION,
+                                VARROA_STICKYBOARD_DESCRIPTION,
+                            ]}
+                        />
                     </label>
                     {this.makeMultipleChoiceInputs('varroa_count_technique', VARROA_CHECK_METHODS)}
                     <div className="form__secondary">
@@ -149,6 +176,13 @@ class MonthlySurveyColonyForm extends Component {
                 {colonyLossReasons}
                 <div className="form__group">
                     Total number of hive bodies and supers:
+                    <Tooltip
+                        description={[
+                            DEEP_HIVE_BODIES_DESCRIPTION,
+                            MEDIUM_HIVE_BODIES_DESCRIPTION,
+                            SHALLOW_HIVE_BODIES_DESCRIPTION,
+                        ]}
+                    />
                     <div className="form__secondary">
                         {inputNumber('num_bodies_supers_deep', 'Deep')}
                         {inputNumber('num_bodies_supers_medium', 'Medium')}
@@ -182,7 +216,7 @@ class MonthlySurveyColonyForm extends Component {
                 {this.inputSelect('queenright', 'Is the colony queenright?', [
                     ['true', 'Yes'],
                     ['false', 'No'],
-                ])}
+                ], [QUEENRIGHT_DESCRIPTION])}
                 {this.inputSelect('same_queen', 'Is this the same queen from the last assessment?', [
                     ['YES', 'Yes: Same Queen'],
                     ['NO_BEEKEEPER_REPLACED', 'No: Beekeeper Replaced'],
@@ -190,7 +224,12 @@ class MonthlySurveyColonyForm extends Component {
                     ['NO_SUPERSEDURE', 'No: Supersedure'],
                     ['NO_QUEEN_DEATH', 'No: Queen Death'],
                 ])}
-                {inputText('queen_stock', 'To the best of your knowledge, what is the stock of the queen?')}
+                {inputText(
+                    'queen_stock',
+                    'To the best of your knowledge, what is the stock of the queen?',
+                    false,
+                    QUEEN_STOCK_DESCRIPTION,
+                )}
                 {this.inputSelect('queen_source', 'Where did the queen come from?', [
                     ['NON_LOCAL_COMMERCIAL', 'Non-local commercial breeder'],
                     ['LOCAL_COMMERCIAL', 'Local commercial breeder'],
