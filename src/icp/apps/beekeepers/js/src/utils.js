@@ -323,13 +323,13 @@ export function getOrCreateSurveyRequest({ apiary, id, form }) {
  * @param {array} stops
  */
 export function classifyScore(score, stops) {
-    if (score < stops[1]) {
+    if (score <= stops[1]) {
         return 'Low';
     }
 
-    if (score < stops[3]) {
-        return 'Medium';
+    if (score >= stops[3]) {
+        return 'High';
     }
 
-    return 'High';
+    return 'Medium';
 }
