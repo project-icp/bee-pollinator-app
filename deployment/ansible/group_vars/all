@@ -38,7 +38,9 @@ graphite_carbon_version: "0.9.13-pre1"
 graphite_whisper_version: "0.9.13-pre1"
 graphite_web_version: "0.9.13-pre1"
 
-docker_version: "18.*"
+# 18.06.2 is incompatible with Linux kernel v3.13.*. See:
+# https://github.com/docker/for-linux/issues/591
+docker_version: "18.06.1~ce~3-0~ubuntu"
 
 model_data_path: "/opt/icp-crop-data"
 numpy_version: "1.11.1"
