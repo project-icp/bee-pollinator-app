@@ -43,3 +43,7 @@
         group="icp"
         owner="icp"
   when: "['development', 'test'] | some_are_in(group_names)"
+
+- name: Uninstall Docker
+  apt: pkg="{{ docker_package_name }}={{ docker_version }}" state=absent
+  when: "['packer'] | some_are_in(group_names)"
