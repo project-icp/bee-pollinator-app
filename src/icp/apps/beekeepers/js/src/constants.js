@@ -18,30 +18,35 @@ export const INDICATOR_DETAILS = {
         description: 'Lorem ipsum of nesting quality.',
         scoreLabels: ['Nesting'],
         shortLabel: 'Nesting',
+        scoreStops: [7, 33, 39, 46, 66],
     },
     pesticide: {
         name: 'Pesticide quality',
         description: 'Lorem ipsum of pesticide quality.',
         scoreLabels: ['Pesticide'],
         shortLabel: 'Pesticide',
+        scoreStops: [0, 13, 26, 37, 208],
     },
     floral_spring: {
         name: 'Spring Floral quality',
         description: 'Lorem ipsum of spring floral quality.',
         scoreLabels: ['Spring Floral'],
         shortLabel: 'Spr. Floral',
+        scoreStops: [18, 40, 46, 53, 69],
     },
     floral_summer: {
         name: 'Summer Floral quality',
         description: 'Lorem ipsum of summer floral quality.',
         scoreLabels: ['Summer Floral'],
         shortLabel: 'Sum. Floral',
+        scoreStops: [21, 44, 46, 49, 56],
     },
     floral_fall: {
         name: 'Fall Floral quality',
         description: 'Lorem ipsum of fall floral quality.',
         scoreLabels: ['Fall Floral'],
         shortLabel: 'Fall Floral',
+        scoreStops: [15, 30, 33, 36, 44],
     },
 };
 
