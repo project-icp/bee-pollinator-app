@@ -376,19 +376,21 @@ class UserSurveyModal extends Component {
                                     <option key="false" value="false">No</option>
                                 </select>
                             </div>
-                            <div className="form__group">
-                                <label htmlFor="varroa_management_trigger">
-                                    How do you decide when to manage for Varroa?
-                                </label>
-                                <input
-                                    type="text"
-                                    className="form__control"
-                                    id="varroa_management_trigger"
-                                    name="varroa_management_trigger"
-                                    value={varroa_management_trigger}
-                                    onChange={this.handleChange}
-                                />
-                            </div>
+                            {varroa_management && (
+                                <div className="form__group">
+                                    <label htmlFor="varroa_management_trigger">
+                                        How do you decide when to manage for Varroa?
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className="form__control"
+                                        id="varroa_management_trigger"
+                                        name="varroa_management_trigger"
+                                        value={varroa_management_trigger}
+                                        onChange={this.handleChange}
+                                    />
+                                </div>
+                            )}
                             <div className="form__group">
                                 <label htmlFor="purchased_queens">
                                     Do you buy queens, nucs or packages?
@@ -404,19 +406,21 @@ class UserSurveyModal extends Component {
                                     <option key="false" value="false">No</option>
                                 </select>
                             </div>
-                            <div className="form__group">
-                                <label htmlFor="purchased_queens_sources">
-                                    From what state(s) did your purchased bees originate?
-                                </label>
-                                <input
-                                    type="text"
-                                    className="form__control"
-                                    id="purchased_queens_sources"
-                                    name="purchased_queens_sources"
-                                    value={purchased_queens_sources}
-                                    onChange={this.handleChange}
-                                />
-                            </div>
+                            {purchased_queens && (
+                                <div className="form__group">
+                                    <label htmlFor="purchased_queens_sources">
+                                        From what state(s) did your purchased bees originate?
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className="form__control"
+                                        id="purchased_queens_sources"
+                                        name="purchased_queens_sources"
+                                        value={purchased_queens_sources}
+                                        onChange={this.handleChange}
+                                    />
+                                </div>
+                            )}
                             <div className="form__group">
                                 <label htmlFor="resistant_queens">
                                     Do you use Varroa-resistant queens?
@@ -432,19 +436,21 @@ class UserSurveyModal extends Component {
                                     <option key="false" value="false">No</option>
                                 </select>
                             </div>
-                            <div className="form__group">
-                                <label htmlFor="resistant_queens_genetics">
-                                    Describe their genetics.
-                                </label>
-                                <input
-                                    type="text"
-                                    className="form__control"
-                                    id="resistant_queens_genetics"
-                                    name="resistant_queens_genetics"
-                                    value={resistant_queens_genetics}
-                                    onChange={this.handleChange}
-                                />
-                            </div>
+                            {resistant_queens && (
+                                <div className="form__group">
+                                    <label htmlFor="resistant_queens_genetics">
+                                        Describe their genetics.
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className="form__control"
+                                        id="resistant_queens_genetics"
+                                        name="resistant_queens_genetics"
+                                        value={resistant_queens_genetics}
+                                        onChange={this.handleChange}
+                                    />
+                                </div>
+                            )}
                             <div className="form__group">
                                 <label htmlFor="rear_queens">
                                     Do you rear queens?
