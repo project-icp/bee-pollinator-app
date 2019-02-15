@@ -20,7 +20,7 @@ import Tooltip from './Tooltip';
 class NovemberSurveyForm extends Component {
     constructor(props) {
         super(props);
-        this.state = {
+        this.initialState = {
             // each form input corresponds to a state var
             num_colonies: '',
             harvested_honey: 'DID_NOT_HARVEST',
@@ -56,11 +56,27 @@ class NovemberSurveyForm extends Component {
             completedSurvey: '',
             error: '',
         };
+        this.state = this.initialState;
         this.multipleChoiceKeys = [
             'supplemental_sugar',
             'supplemental_protein',
             'varroa_check_method',
             'mite_management',
+        ];
+        // If a `field` has the `value`, then all the fields in `reset` are set
+        // to their value from initialMonthly
+        this.resetKeys = [
+            {
+                field: 'varroa_check_frequency',
+                value: 'NEVER',
+                reset: [
+                    'varroa_check_method_ALCOHOL_WASH',
+                    'varroa_check_method_STICKY_BOARDS',
+                    'varroa_check_method_SUGAR_SHAKE',
+                    'varroa_check_method_OTHER',
+                    'varroa_manage_frequency',
+                ],
+            },
         ];
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -129,7 +145,18 @@ class NovemberSurveyForm extends Component {
             finalValue = false;
         }
 
-        this.setState({ [name]: finalValue });
+        let changeset = { [name]: finalValue };
+        // Reset dependent keys if needed
+        const resetKey = this.resetKeys.find(({ field }) => field === name);
+        if (resetKey && resetKey.value === finalValue) {
+            changeset = resetKey.reset.reduce(
+                (acc, f) => Object.assign(acc, {
+                    [f]: this.initialState[f],
+                }),
+                changeset,
+            );
+        }
+        this.setState(changeset);
     }
 
 

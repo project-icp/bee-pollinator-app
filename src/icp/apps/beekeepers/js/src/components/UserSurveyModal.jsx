@@ -46,6 +46,29 @@ class UserSurveyModal extends Component {
             equipment_top_bar: '',
             equipment_other: '',
         };
+        this.resetKeys = [
+            {
+                field: 'varroa_management',
+                value: false,
+                reset: [
+                    'varroa_management_trigger',
+                ],
+            },
+            {
+                field: 'purchased_queens',
+                value: false,
+                reset: [
+                    'purchased_queens_sources',
+                ],
+            },
+            {
+                field: 'resistant_queens',
+                value: false,
+                reset: [
+                    'resistant_queens_genetics',
+                ],
+            },
+        ];
         this.state = this.initialState;
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -73,7 +96,18 @@ class UserSurveyModal extends Component {
             finalValue = false;
         }
 
-        this.setState({ [name]: finalValue });
+        let changeset = { [name]: finalValue };
+        // Reset dependent keys if needed
+        const resetKey = this.resetKeys.find(({ field }) => field === name);
+        if (resetKey && resetKey.value === finalValue) {
+            changeset = resetKey.reset.reduce(
+                (acc, f) => Object.assign(acc, {
+                    [f]: this.initialState[f],
+                }),
+                changeset,
+            );
+        }
+        this.setState(changeset);
     }
 
     handleSubmit(event) {
