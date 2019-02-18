@@ -20,7 +20,7 @@ import Tooltip from './Tooltip';
 class NovemberSurveyForm extends Component {
     constructor(props) {
         super(props);
-        this.state = {
+        this.initialState = {
             // each form input corresponds to a state var
             num_colonies: '',
             harvested_honey: 'DID_NOT_HARVEST',
@@ -56,11 +56,27 @@ class NovemberSurveyForm extends Component {
             completedSurvey: '',
             error: '',
         };
+        this.state = this.initialState;
         this.multipleChoiceKeys = [
             'supplemental_sugar',
             'supplemental_protein',
             'varroa_check_method',
             'mite_management',
+        ];
+        // If a `field` has the `value`, then all the fields in `reset` are set
+        // to their value from initialState
+        this.resetKeys = [
+            {
+                field: 'varroa_check_frequency',
+                value: 'NEVER',
+                reset: [
+                    'varroa_check_method_ALCOHOL_WASH',
+                    'varroa_check_method_STICKY_BOARDS',
+                    'varroa_check_method_SUGAR_SHAKE',
+                    'varroa_check_method_OTHER',
+                    'varroa_manage_frequency',
+                ],
+            },
         ];
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -129,7 +145,18 @@ class NovemberSurveyForm extends Component {
             finalValue = false;
         }
 
-        this.setState({ [name]: finalValue });
+        let changeset = { [name]: finalValue };
+        // Reset dependent keys if needed
+        const resetKey = this.resetKeys.find(({ field }) => field === name);
+        if (resetKey && resetKey.value === finalValue) {
+            changeset = resetKey.reset.reduce(
+                (acc, f) => Object.assign(acc, {
+                    [f]: this.initialState[f],
+                }),
+                changeset,
+            );
+        }
+        this.setState(changeset);
     }
 
 
@@ -323,6 +350,49 @@ class NovemberSurveyForm extends Component {
             ],
         );
 
+        const varroaConditionalInputs = varroa_check_frequency !== 'NEVER'
+            ? (
+            <>
+                <div className="form__group">
+                    <label htmlFor="varroa_check_method">
+                        What method(s) do you use to check for Varroa?
+                        Check all that apply.
+                    </label>
+                    {varroaCheckMethodCheckboxInputs}
+                    <div className="form__secondary">
+                        <label htmlFor="varroa_check_method_OTHER">Other varroa check method</label>
+                        <input
+                            type="text"
+                            className="form__control"
+                            id="varroa_check_method_OTHER"
+                            name="varroa_check_method_OTHER"
+                            value={varroa_check_method_OTHER}
+                            onChange={this.handleChange}
+                            disabled={!!completedSurvey}
+                        />
+                    </div>
+                </div>
+                <div className="form__group">
+                    <label htmlFor="varroa_manage_frequency">
+                        How you manage for Varroa? If so, how often?
+                    </label>
+                    <select
+                        id="varroa_manage_frequency"
+                        name="varroa_manage_frequency"
+                        value={varroa_manage_frequency}
+                        onChange={this.handleChange}
+                        className="form__control"
+                    >
+                        <option value="NEVER">I did not</option>
+                        <option value="ONCE">Once a year</option>
+                        <option value="TWICE">Twice a year</option>
+                        <option value="THRICE">Three times a year</option>
+                        <option value="MORE_THAN_THREE">More than three times a year</option>
+                    </select>
+                </div>
+            </>
+            ) : null;
+
         const surveyForm = (
             <>
                 <div className="title">{title}</div>
@@ -409,43 +479,7 @@ class NovemberSurveyForm extends Component {
                                 <option value="MORE_THAN_THREE">More than three times a year</option>
                             </select>
                         </div>
-                        <div className="form__group">
-                            <label htmlFor="varroa_check_method">
-                                What method(s) do you use to check for Varroa?
-                                Check all that apply.
-                            </label>
-                            {varroaCheckMethodCheckboxInputs}
-                            <div className="form__secondary">
-                                <label htmlFor="varroa_check_method_OTHER">Other varroa check method</label>
-                                <input
-                                    type="text"
-                                    className="form__control"
-                                    id="varroa_check_method_OTHER"
-                                    name="varroa_check_method_OTHER"
-                                    value={varroa_check_method_OTHER}
-                                    onChange={this.handleChange}
-                                    disabled={!!completedSurvey}
-                                />
-                            </div>
-                        </div>
-                        <div className="form__group">
-                            <label htmlFor="varroa_manage_frequency">
-                                How you manage for Varroa? If so, how often?
-                            </label>
-                            <select
-                                id="varroa_manage_frequency"
-                                name="varroa_manage_frequency"
-                                value={varroa_manage_frequency}
-                                onChange={this.handleChange}
-                                className="form__control"
-                            >
-                                <option value="NEVER">I did not</option>
-                                <option value="ONCE">Once a year</option>
-                                <option value="TWICE">Twice a year</option>
-                                <option value="THRICE">Three times a year</option>
-                                <option value="MORE_THAN_THREE">More than three times a year</option>
-                            </select>
-                        </div>
+                        {varroaConditionalInputs}
                         <div className="form__group">
                             <label htmlFor="mite_management">
                                 What methods of mite management do you use?
