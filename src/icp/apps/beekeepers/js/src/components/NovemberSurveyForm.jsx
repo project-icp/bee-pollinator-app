@@ -64,7 +64,7 @@ class NovemberSurveyForm extends Component {
             'mite_management',
         ];
         // If a `field` has the `value`, then all the fields in `reset` are set
-        // to their value from initialMonthly
+        // to their value from initialState
         this.resetKeys = [
             {
                 field: 'varroa_check_frequency',

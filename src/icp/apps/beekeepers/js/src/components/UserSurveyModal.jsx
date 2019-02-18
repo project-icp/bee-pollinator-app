@@ -46,6 +46,8 @@ class UserSurveyModal extends Component {
             equipment_top_bar: '',
             equipment_other: '',
         };
+        // If a `field` has the `value`, then all the fields in `reset` are set
+        // to their value from initialState
         this.resetKeys = [
             {
                 field: 'varroa_management',
