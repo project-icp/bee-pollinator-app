@@ -8,14 +8,16 @@ import { openSignUpModal } from '../actions';
 const GuestSurveyView = ({ dispatch }) => (
     <div className="survey empty">
         <div className="survey__header empty">
-            Sign up to participate in our study to get better info about hive locations
+            Help us see the world as a bee!
         </div>
         <div className="survey__body">
             <div>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                aliquip ex ea commodo consequat.
+                Our goal is to give beekeepers, gardeners, and growers detailed information about
+                the quality of their landscapes for bees, and site-specific recommendations for
+                land and bee management practices. But, to do this, we need your help, so we can
+                have data from many diverse landscapes! If you have a wild bee hotel and would like
+                to participate in our study, please click here. If you are a beekeeper, please
+                follow the link below.
             </div>
             <button
                 type="button"

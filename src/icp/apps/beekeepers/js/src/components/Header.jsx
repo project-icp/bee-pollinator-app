@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink, withRouter } from 'react-router-dom';
 import { func, string, bool } from 'prop-types';
+import logo from '../../../img/beescape-logo.png';
 
 import {
     openParticipateModal,
@@ -87,12 +88,12 @@ const Header = ({ dispatch, username, isStaff }) => {
     return (
         <header className="header">
             <div className="navbar">
-                <div className="navbar__logo">
-                    Beescape
+                <div className="navbar__left">
+                    <img src={logo} alt="Beescape Logo" className="navbar__logo" />
                     <NavLink exact to="/" className="navbar__item">Location finder</NavLink>
                     <NavLink to="/survey" className="navbar__item">Survey</NavLink>
                 </div>
-                <ul className="navbar__items">
+                <ul className="navbar__right">
                     <li className="navbar__item">
                         <button type="button" className="navbar__button">
                             Home
