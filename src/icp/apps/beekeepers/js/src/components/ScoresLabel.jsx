@@ -62,7 +62,6 @@ const ScoresLabel = ({ indicator, scores }) => {
                     {' = '}
                     {classifyScore(score, indicatorDetails.scoreStops)}
                 </div>
-                <div className="description">{indicatorDetails.description}</div>
             </div>
         </Popup>
 

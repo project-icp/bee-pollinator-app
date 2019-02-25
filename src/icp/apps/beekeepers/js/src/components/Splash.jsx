@@ -5,7 +5,7 @@ export default function () {
         <div className="sidebar splash">
             <div className="splash__content">
                 <h2 className="splash__header">
-                    Get a bees’ eye view of your landscape!
+                    Get a bee’s eye view of your landscape!
                 </h2>
                 <p>
                     Managed honey bees and wild bees travel far from their nests to find food.
