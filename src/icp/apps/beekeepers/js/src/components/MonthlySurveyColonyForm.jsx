@@ -15,6 +15,8 @@ import {
     SHALLOW_HIVE_BODIES_DESCRIPTION,
     QUEEN_STOCK_DESCRIPTION,
     QUEENRIGHT_DESCRIPTION,
+    THYMOL_DESCRIPTION,
+    AMITRAZ_DESCRIPTION,
 } from '../constants';
 import { MonthlySurveyColony } from '../propTypes';
 
@@ -81,13 +83,16 @@ class MonthlySurveyColonyForm extends Component {
         );
     }
 
-    makeMultipleChoiceInputs(groupName, options) {
+    makeMultipleChoiceInputs(groupName, options, tooltipDescriptions) {
         const { data, onChange } = this.props;
         const disabled = data.id !== null;
 
-        return options.map((option) => {
+        return options.map((option, index) => {
             const key = `${groupName}_${option}`;
             const label = option.split('_').join(' ').toLowerCase();
+            const tooltip = tooltipDescriptions && tooltipDescriptions[index]
+                ? <Tooltip description={[tooltipDescriptions[index]]} />
+                : null;
 
             return (
                 <div
@@ -103,7 +108,10 @@ class MonthlySurveyColonyForm extends Component {
                         onChange={onChange}
                         disabled={disabled}
                     />
-                    <label htmlFor={key}>{label}</label>
+                    <label htmlFor={key}>
+                        {label}
+                        {tooltip}
+                    </label>
                 </div>
             );
         });
@@ -132,8 +140,8 @@ class MonthlySurveyColonyForm extends Component {
             <>
                 <div className="form__group">
                     <label htmlFor="colony_loss_reason">
-                        What do you think the most likely cause of colony loss was?
-                        Check all that apply.
+                        What do you think was the most likely cause of colony loss?
+                        Check all that apply. Required.
                     </label>
                     {this.makeMultipleChoiceInputs('colony_loss_reason', COLONY_LOSS_REASONS)}
                     <div className="form__secondary">
@@ -199,10 +207,8 @@ class MonthlySurveyColonyForm extends Component {
                         Do you treat for Varroa? If so, how?
                         Check all that apply.
                     </label>
-                    {this.makeMultipleChoiceInputs('varroa_treatment', MITE_MANAGEMENT_OPTIONS)}
+                    {this.makeMultipleChoiceInputs('varroa_treatment', MITE_MANAGEMENT_OPTIONS, [THYMOL_DESCRIPTION, AMITRAZ_DESCRIPTION])}
                     <div className="form__secondary">
-                        {inputText('varroa_treatment_CHEMICAL_ORGANIC_OTHER', 'Other organic chemical')}
-                        {inputText('varroa_treatment_MECHANICAL_OTHER', 'Other mechanical')}
                         {inputText('varroa_treatment_OTHER', 'Other')}
                     </div>
                 </div>

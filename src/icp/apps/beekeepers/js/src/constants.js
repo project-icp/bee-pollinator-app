@@ -59,17 +59,15 @@ export const SURVEY_TYPE_MONTHLY = 'MONTHLY';
 
 
 export const MITE_MANAGEMENT_OPTIONS = [
-    'CHEMICAL_FORMIC_ACID_MAQS',
-    'CHEMICAL_FORMIC_ACID_FORMIC_PRO',
-    'CHEMICAL_OXALIC_ACID_VAPORIZATION',
-    'CHEMICAL_OXALIC_ACID_DRIBBLE',
-    'CHEMICAL_THYMOL_MENTHOL_APILIFE',
-    'CHEMICAL_THYMOL_MENTHOL_APIGUARD',
-    'CHEMICAL_SYNTHETIC_APIVAR',
-    'CHEMICAL_SYNTHETIC_APISTAN',
-    'CHEMICAL_SYNTHETIC_CHECKMITE_PLUS',
-    'MECHANICAL_DRONE_BROOD_REMOVAL',
-    'MECHANICAL_QUEEN_MANIPULATION',
+    'THYMOL',
+    'AMITRAZ',
+    'FORMIC_ACID',
+    'OXALIC_ACID',
+    'APISTAN',
+    'CHECKMITE',
+    'QUEEN_MANIPULATION',
+    'DRONE_REMOVE',
+    'NONE',
 ];
 
 export const SEASONS = [
@@ -92,6 +90,7 @@ export const COLONY_LOSS_REASONS = [
     'POOR_WEATHER_CONDITIONS',
     'COLONY_TOO_SMALL_IN_NOVEMBER',
     'PESTICIDE_EXPOSURE',
+    'BEAR_OR_NATURAL_DISASTER',
 ];
 
 export const ACTIVITY_SINCE_LAST = [
@@ -159,4 +158,14 @@ export const QUEEN_STOCK_DESCRIPTION = {
 export const QUEENRIGHT_DESCRIPTION = {
     title: '',
     body: 'You can determine if a queen is present by locating her physically or checking for eggs. However, by late fall the queen stops laying eggs. We ask that beekeepers use their best judgement when making the assessments during these times.',
+};
+
+export const THYMOL_DESCRIPTION = {
+    title: '',
+    body: 'The active ingredient in Apilife Var is thymol.',
+};
+
+export const AMITRAZ_DESCRIPTION = {
+    title: '',
+    body: 'The active ingredient in Apivar is amitraz.',
 };

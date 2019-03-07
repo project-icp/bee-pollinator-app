@@ -44,6 +44,7 @@ class UserSurveyModal extends Component {
             equipment_8_frame: '',
             equipment_10_frame: '',
             equipment_top_bar: '',
+            equipment_warre_hive: '',
             equipment_other: '',
         };
         // If a `field` has the `value`, then all the fields in `reset` are set
@@ -128,6 +129,7 @@ class UserSurveyModal extends Component {
             equipment_8_frame,
             equipment_10_frame,
             equipment_top_bar,
+            equipment_warre_hive,
             equipment_other,
         } = this.state;
 
@@ -136,7 +138,13 @@ class UserSurveyModal extends Component {
         );
         const prepended_equipment_other = equipment_other.length ? `OTHER-${equipment_other}` : '';
         const equipment = arrayToSemicolonDelimitedString(
-            [equipment_8_frame, equipment_10_frame, equipment_top_bar, prepended_equipment_other],
+            [
+                equipment_8_frame,
+                equipment_10_frame,
+                equipment_top_bar,
+                equipment_warre_hive,
+                prepended_equipment_other,
+            ],
         );
         const form = Object.assign({}, this.state, {
             income,
@@ -177,6 +185,7 @@ class UserSurveyModal extends Component {
             equipment_8_frame,
             equipment_10_frame,
             equipment_top_bar,
+            equipment_warre_hive,
             equipment_other,
         } = this.state;
 
@@ -315,8 +324,7 @@ class UserSurveyModal extends Component {
                             </div>
                             <div className="form__group">
                                 <label htmlFor="income">
-                                    Do you obtain income from your bees?
-                                    What do you receive income from?
+                                    Do you receive income from any of the following?
                                     Check all that apply.
                                 </label>
                                 <div className="form__checkbox">
@@ -429,7 +437,7 @@ class UserSurveyModal extends Component {
                             )}
                             <div className="form__group">
                                 <label htmlFor="purchased_queens">
-                                    Do you buy queens, nucs or packages?
+                                    Do you regularly buy queens, nucs or packages?
                                 </label>
                                 <select
                                     className="form__control"
@@ -522,7 +530,7 @@ class UserSurveyModal extends Component {
                                     <input
                                         type="checkbox"
                                         className="form__control"
-                                        id="equipment"
+                                        id="equipment_10_frame"
                                         name="equipment_10_frame"
                                         checked={equipment_10_frame}
                                         onChange={this.handleChange}
@@ -541,6 +549,18 @@ class UserSurveyModal extends Component {
                                         value="TOP_BAR"
                                     />
                                     <label htmlFor="equipment_top_bar">Top bar</label>
+                                </div>
+                                <div className="form__checkbox">
+                                    <input
+                                        type="checkbox"
+                                        className="form__control"
+                                        id="equipment_warre_hive"
+                                        name="equipment_warre_hive"
+                                        checked={equipment_warre_hive}
+                                        onChange={this.handleChange}
+                                        value="WARRE_HIVE"
+                                    />
+                                    <label htmlFor="equipment_warre_hive">Warre hive</label>
                                 </div>
                                 <label htmlFor="equipment_other">Other</label>
                                 <input
