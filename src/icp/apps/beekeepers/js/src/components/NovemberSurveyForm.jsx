@@ -51,6 +51,7 @@ class NovemberSurveyForm extends Component {
             mite_management_CHECKMITE: false,
             mite_management_DRONE_REMOVE: false,
             mite_management_QUEEN_MANIPULATION: false,
+            all_colonies_treated: true,
             completedSurvey: '',
             error: '',
         };
@@ -283,6 +284,7 @@ class NovemberSurveyForm extends Component {
             varroa_check_method_OTHER,
             varroa_manage_frequency,
             mite_management_OTHER,
+            all_colonies_treated,
             completedSurvey,
             error,
         } = this.state;
@@ -499,6 +501,22 @@ class NovemberSurveyForm extends Component {
                                     disabled={!!completedSurvey}
                                 />
                             </div>
+                        </div>
+                        <div className="form__group">
+                            <label htmlFor="all_colonies_treated">
+                                Did you treat all of the colonies in the apiary?
+                            </label>
+                            <select
+                                className="form__control"
+                                id="all_colonies_treated"
+                                name="all_colonies_treated"
+                                value={all_colonies_treated}
+                                onChange={this.handleChange}
+                                disabled={!!completedSurvey}
+                            >
+                                <option key="true" value="true">Yes</option>
+                                <option key="false" value="false">No</option>
+                            </select>
                         </div>
                         {confirmationButton}
                     </div>
