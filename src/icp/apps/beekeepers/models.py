@@ -222,6 +222,10 @@ class NovemberSurvey(models.Model):
         null=True,
         help_text='What methods of mite management do you use? '
                   'Select all that apply.')
+    all_colonies_treated = models.BooleanField(
+        null=False,
+        default=True,
+        help_text='Did you treat all of the colonies in the apiary?')
 
     def __unicode__(self):
         return unicode('{}:{}:{}'.format(
@@ -339,6 +343,12 @@ class MonthlySurvey(models.Model):
         blank=True,
         help_text='What methods of mite management do you use? '
                   'Select all that apply.')
+    hive_scale_id = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text='If you have an automated scale associated with this '
+                  'colony, please enter the hive scale ID number here.')
 
     class Meta:
         unique_together = ('survey', 'colony_name')
