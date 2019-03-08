@@ -31,7 +31,6 @@ class UserSurveyModal extends Component {
             income_sell_honey: '',
             income_sell_nucs: '',
             income_sell_queens: '',
-            income_none: '',
             practice: 'CONVENTIONAL',
             varroa_management: false,
             varroa_management_trigger: '',
@@ -125,7 +124,6 @@ class UserSurveyModal extends Component {
             income_sell_honey,
             income_sell_nucs,
             income_sell_queens,
-            income_none,
             equipment_8_frame,
             equipment_10_frame,
             equipment_top_bar,
@@ -134,7 +132,7 @@ class UserSurveyModal extends Component {
         } = this.state;
 
         const income = arrayToSemicolonDelimitedString(
-            [income_none, income_rent, income_sell_honey, income_sell_nucs, income_sell_queens],
+            [income_rent, income_sell_honey, income_sell_nucs, income_sell_queens],
         );
         const prepended_equipment_other = equipment_other.length ? `OTHER-${equipment_other}` : '';
         const equipment = arrayToSemicolonDelimitedString(
@@ -173,7 +171,6 @@ class UserSurveyModal extends Component {
             income_sell_honey,
             income_sell_nucs,
             income_sell_queens,
-            income_none,
             practice,
             varroa_management,
             varroa_management_trigger,
@@ -374,18 +371,6 @@ class UserSurveyModal extends Component {
                                         value="SELL_QUEENS"
                                     />
                                     <label htmlFor="income_sell_queens">Sell queens</label>
-                                </div>
-                                <div className="form__checkbox">
-                                    <input
-                                        type="checkbox"
-                                        className="form__control"
-                                        id="income_none"
-                                        name="income_none"
-                                        checked={income_none}
-                                        onChange={this.handleChange}
-                                        value="NO_INCOME"
-                                    />
-                                    <label htmlFor="income_none">No income</label>
                                 </div>
                             </div>
                             <div className="form__group">
