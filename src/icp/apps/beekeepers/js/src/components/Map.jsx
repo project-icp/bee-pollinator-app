@@ -238,7 +238,7 @@ class Map extends Component {
                         enableMapZoom={this.enableMapZoom}
                         disableMapZoom={this.disableMapZoom}
                     />
-                    <ZoomControl position="bottomleft" />
+                    <ZoomControl position="topright" />
                     {markers}
                 </LeafletMap>
             </div>
