@@ -93,7 +93,9 @@ class CropLayerControl extends Component {
                     className="layercontrol__button"
                     onClick={this.toggleCropLayer}
                 >
-                    <i className="icon-layers" />
+                    <div className="layercontrol__button-text">
+                        Crop layer
+                    </div>
                 </button>
                 {slider}
                 {legend}
