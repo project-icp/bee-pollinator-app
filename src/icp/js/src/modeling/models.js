@@ -500,9 +500,10 @@ var ScenarioModel = Backbone.Model.extend({
             resultModel = this.get('results').first(),
             needsResults = resultModel.isEmpty() || resultModel.isStale(inputmodHash),
             isCurrentConditions = this.get('is_current_conditions'),
+            isProjectLoaded = App.currentProject.get('area_of_interest') !== null,
             fetchResultsPromise;
 
-        if (!needsResults) {
+        if (!needsResults || !isProjectLoaded) {
             // Return current promise or immediately resolve
             return self.fetchResultsPromise || $.when();
         }
