@@ -31,10 +31,13 @@ class UserSurveyModal extends Component {
             income_sell_honey: '',
             income_sell_nucs: '',
             income_sell_queens: '',
-            income_none: '',
             practice: 'CONVENTIONAL',
             varroa_management: false,
             varroa_management_trigger: '',
+            varroa_management_trigger_mite_counts: '',
+            varroa_management_trigger_mite_symptoms: '',
+            varroa_management_trigger_time_of_year: '',
+            varroa_management_trigger_other: '',
             purchased_queens: false,
             purchased_queens_sources: '',
             resistant_queens: false,
@@ -44,6 +47,7 @@ class UserSurveyModal extends Component {
             equipment_8_frame: '',
             equipment_10_frame: '',
             equipment_top_bar: '',
+            equipment_warre_hive: '',
             equipment_other: '',
         };
         // If a `field` has the `value`, then all the fields in `reset` are set
@@ -54,6 +58,10 @@ class UserSurveyModal extends Component {
                 value: false,
                 reset: [
                     'varroa_management_trigger',
+                    'varroa_management_trigger_mite_counts',
+                    'varroa_management_trigger_mite_symptoms',
+                    'varroa_management_trigger_time_of_year',
+                    'varroa_management_trigger_other',
                 ],
             },
             {
@@ -124,22 +132,44 @@ class UserSurveyModal extends Component {
             income_sell_honey,
             income_sell_nucs,
             income_sell_queens,
-            income_none,
+            varroa_management_trigger_mite_counts,
+            varroa_management_trigger_mite_symptoms,
+            varroa_management_trigger_time_of_year,
+            varroa_management_trigger_other,
             equipment_8_frame,
             equipment_10_frame,
             equipment_top_bar,
+            equipment_warre_hive,
             equipment_other,
         } = this.state;
 
         const income = arrayToSemicolonDelimitedString(
-            [income_none, income_rent, income_sell_honey, income_sell_nucs, income_sell_queens],
+            [income_rent, income_sell_honey, income_sell_nucs, income_sell_queens],
         );
+
+        const prepend_varroa_management_trigger_other = varroa_management_trigger_other.length ? `OTHER-${varroa_management_trigger_other}` : '';
+        const varroa_management_trigger = arrayToSemicolonDelimitedString(
+            [
+                varroa_management_trigger_mite_counts,
+                varroa_management_trigger_mite_symptoms,
+                varroa_management_trigger_time_of_year,
+                prepend_varroa_management_trigger_other,
+            ],
+        );
+
         const prepended_equipment_other = equipment_other.length ? `OTHER-${equipment_other}` : '';
         const equipment = arrayToSemicolonDelimitedString(
-            [equipment_8_frame, equipment_10_frame, equipment_top_bar, prepended_equipment_other],
+            [
+                equipment_8_frame,
+                equipment_10_frame,
+                equipment_top_bar,
+                equipment_warre_hive,
+                prepended_equipment_other,
+            ],
         );
         const form = Object.assign({}, this.state, {
             income,
+            varroa_management_trigger,
             equipment,
         });
         dispatch(createUserSurvey(form));
@@ -165,10 +195,12 @@ class UserSurveyModal extends Component {
             income_sell_honey,
             income_sell_nucs,
             income_sell_queens,
-            income_none,
             practice,
             varroa_management,
-            varroa_management_trigger,
+            varroa_management_trigger_mite_counts,
+            varroa_management_trigger_mite_symptoms,
+            varroa_management_trigger_time_of_year,
+            varroa_management_trigger_other,
             purchased_queens,
             purchased_queens_sources,
             resistant_queens,
@@ -177,6 +209,7 @@ class UserSurveyModal extends Component {
             equipment_8_frame,
             equipment_10_frame,
             equipment_top_bar,
+            equipment_warre_hive,
             equipment_other,
         } = this.state;
 
@@ -227,12 +260,14 @@ class UserSurveyModal extends Component {
                             <div className="form__group">
                                 <label htmlFor="phone">Phone number</label>
                                 <input
-                                    type="text"
+                                    type="tel"
                                     className="form__control"
                                     id="phone"
                                     name="phone"
                                     value={phone}
+                                    placeholder="123-456-7890"
                                     onChange={this.handleChange}
+                                    required
                                 />
                             </div>
                             <div className="form__group">
@@ -315,8 +350,7 @@ class UserSurveyModal extends Component {
                             </div>
                             <div className="form__group">
                                 <label htmlFor="income">
-                                    Do you obtain income from your bees?
-                                    What do you receive income from?
+                                    Do you receive income from any of the following?
                                     Check all that apply.
                                 </label>
                                 <div className="form__checkbox">
@@ -367,18 +401,6 @@ class UserSurveyModal extends Component {
                                     />
                                     <label htmlFor="income_sell_queens">Sell queens</label>
                                 </div>
-                                <div className="form__checkbox">
-                                    <input
-                                        type="checkbox"
-                                        className="form__control"
-                                        id="income_none"
-                                        name="income_none"
-                                        checked={income_none}
-                                        onChange={this.handleChange}
-                                        value="NO_INCOME"
-                                    />
-                                    <label htmlFor="income_none">No income</label>
-                                </div>
                             </div>
                             <div className="form__group">
                                 <label htmlFor="practice">
@@ -417,19 +439,56 @@ class UserSurveyModal extends Component {
                                     <label htmlFor="varroa_management_trigger">
                                         How do you decide when to manage for Varroa?
                                     </label>
+                                    <div className="form__checkbox">
+                                        <input
+                                            type="checkbox"
+                                            className="form__control"
+                                            id="varroa_management_trigger_mite_counts"
+                                            name="varroa_management_trigger_mite_counts"
+                                            checked={varroa_management_trigger_mite_counts}
+                                            onChange={this.handleChange}
+                                            value="MITE_COUNTS"
+                                        />
+                                        <label htmlFor="varroa_management_trigger_mite_counts">Mite Counts</label>
+                                    </div>
+                                    <div className="form__checkbox">
+                                        <input
+                                            type="checkbox"
+                                            className="form__control"
+                                            id="varroa_management_trigger_mite_symptoms"
+                                            name="varroa_management_trigger_mite_symptoms"
+                                            checked={varroa_management_trigger_mite_symptoms}
+                                            onChange={this.handleChange}
+                                            value="MITE_SYMPTOMS"
+                                        />
+                                        <label htmlFor="varroa_management_trigger_mite_symptoms">Mite Symptoms</label>
+                                    </div>
+                                    <div className="form__checkbox">
+                                        <input
+                                            type="checkbox"
+                                            className="form__control"
+                                            id="varroa_management_trigger_time_of_year"
+                                            name="varroa_management_trigger_time_of_year"
+                                            checked={varroa_management_trigger_time_of_year}
+                                            onChange={this.handleChange}
+                                            value="TIME_OF_YEAR"
+                                        />
+                                        <label htmlFor="varroa_management_trigger_time_of_year">Time of Year</label>
+                                    </div>
+                                    <label htmlFor="varroa_management_trigger_other">Other</label>
                                     <input
                                         type="text"
                                         className="form__control"
-                                        id="varroa_management_trigger"
-                                        name="varroa_management_trigger"
-                                        value={varroa_management_trigger}
+                                        id="varroa_management_trigger_other"
+                                        name="varroa_management_trigger_other"
+                                        value={varroa_management_trigger_other}
                                         onChange={this.handleChange}
                                     />
                                 </div>
                             )}
                             <div className="form__group">
                                 <label htmlFor="purchased_queens">
-                                    Do you buy queens, nucs or packages?
+                                    Do you regularly buy queens, nucs or packages?
                                 </label>
                                 <select
                                     className="form__control"
@@ -475,7 +534,7 @@ class UserSurveyModal extends Component {
                             {resistant_queens && (
                                 <div className="form__group">
                                     <label htmlFor="resistant_queens_genetics">
-                                        Describe their genetics.
+                                        What is the stock or genetic background of your queens?
                                     </label>
                                     <input
                                         type="text"
@@ -522,7 +581,7 @@ class UserSurveyModal extends Component {
                                     <input
                                         type="checkbox"
                                         className="form__control"
-                                        id="equipment"
+                                        id="equipment_10_frame"
                                         name="equipment_10_frame"
                                         checked={equipment_10_frame}
                                         onChange={this.handleChange}
@@ -541,6 +600,18 @@ class UserSurveyModal extends Component {
                                         value="TOP_BAR"
                                     />
                                     <label htmlFor="equipment_top_bar">Top bar</label>
+                                </div>
+                                <div className="form__checkbox">
+                                    <input
+                                        type="checkbox"
+                                        className="form__control"
+                                        id="equipment_warre_hive"
+                                        name="equipment_warre_hive"
+                                        checked={equipment_warre_hive}
+                                        onChange={this.handleChange}
+                                        value="WARRE_HIVE"
+                                    />
+                                    <label htmlFor="equipment_warre_hive">Warre hive</label>
                                 </div>
                                 <label htmlFor="equipment_other">Other</label>
                                 <input

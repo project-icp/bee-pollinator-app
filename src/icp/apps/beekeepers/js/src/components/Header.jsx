@@ -95,14 +95,24 @@ const Header = ({ dispatch, username, isStaff }) => {
                 </div>
                 <ul className="navbar__right">
                     <li className="navbar__item">
-                        <button type="button" className="navbar__button">
+                        <a
+                            className="navbar__button"
+                            href="http://beescape.org"
+                            target="_blank"
+                            rel="noreferrer noopener"
+                        >
                             Home
-                        </button>
+                        </a>
                     </li>
                     <li className="navbar__item">
-                        <button type="button" className="navbar__button">
+                        <a
+                            className="navbar__button"
+                            href="http://beescape.org/methodology"
+                            target="_blank"
+                            rel="noreferrer noopener"
+                        >
                             Methodology
-                        </button>
+                        </a>
                     </li>
                     {authButtons}
                 </ul>

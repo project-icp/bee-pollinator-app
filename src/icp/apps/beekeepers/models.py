@@ -118,6 +118,7 @@ class AprilSurvey(models.Model):
       - poor weather conditions
       - colony too small in November
       - pesticide exposure
+      - bear or natural disaster
       - other (fillable field)
 
     Multiple selections are possible, and will be separated by a semicolon.
@@ -148,8 +149,7 @@ class NovemberSurvey(models.Model):
     - varroa_check_method and varroa_manage_frequency need only be filled if
       varroa_check_frequency has been filled out
     - mite_management can take a large list of predefined inputs, but also
-      free-form text prefixed by CHEMICAL_OTHER_ORGANIC-, MECHANICAL_OTHER-,
-      or OTHER-
+      free-form text prefixed by OTHER-
     """
     HARVEST_CHOICES = (
         ('DID_NOT_HARVEST', 'Did not harvest'),
@@ -210,13 +210,14 @@ class NovemberSurvey(models.Model):
         default='NEVER',
         help_text='Do you manage for Varroa? If so, how often?')
     mite_management = models.TextField(
-        # CHEMICAL_FORMIC_ACID_MAQS;CHEMICAL_FORMIC_ACID_FORMIC_PRO;
-        # CHEMICAL_OXALIC_ACID_VAPORIZATION;CHEMICAL_OXALIC_ACID_DRIBBLE;
-        # CHEMICAL_THYMOL_MENTHOL_APILIFE;CHEMICAL_THYMOL_MENTHOL_APIGUARD;
-        # CHEMICAL_SYNTHETIC_APIVAR;CHEMICAL_SYNTHETIC_APISTAN;
-        # CHEMICAL_SYNTHETIC_CHECKMITE_PLUS;CHEMICAL_ORGANIC_OTHER-
-        # MECHANICAL_DRONE_BROOD_REMOVAL;MECHANICAL_QUEEN_MANIPULATION;
-        # MECHANICAL_OTHER-
+        # THYMOL
+        # AMITRAZ
+        # FORMIC_ACID
+        # OXALIC_ACID
+        # APISTAN
+        # CHECKMITE
+        # DRONE_REMOVAL
+        # QUEEN_MANIPULATION
         # OTHER-
         null=True,
         help_text='What methods of mite management do you use? '
@@ -325,13 +326,14 @@ class MonthlySurvey(models.Model):
         blank=True,
         help_text='Number of mites per 300 bees (1/2 cup)')
     varroa_treatment = models.TextField(
-        # CHEMICAL_FORMIC_ACID_MAQS;CHEMICAL_FORMIC_ACID_FORMIC_PRO;
-        # CHEMICAL_OXALIC_ACID_VAPORIZATION;CHEMICAL_OXALIC_ACID_DRIBBLE;
-        # CHEMICAL_THYMOL_MENTHOL_APILIFE;CHEMICAL_THYMOL_MENTHOL_APIGUARD;
-        # CHEMICAL_SYNTHETIC_APIVAR;CHEMICAL_SYNTHETIC_APISTAN;
-        # CHEMICAL_SYNTHETIC_CHECKMITE_PLUS;CHEMICAL_OTHER_ORGANIC-
-        # MECHANICAL_DRONE_BROOD_REMOVAL;MECHANICAL_QUEEN_MANIPULATION;
-        # MECHANICAL_OTHER-
+        # THYMOL
+        # AMITRAZ
+        # FORMIC_ACID
+        # OXALIC_ACID
+        # APISTAN
+        # CHECKMITE
+        # DRONE_REMOVAL
+        # QUEEN_MANIPULATION
         # OTHER-
         null=True,
         blank=True,
@@ -407,7 +409,7 @@ class UserSurvey(models.Model):
         help_text='Do you relocate your colonies throughout the year?')
     income = models.CharField(
         # RENT_COLONIES_FOR_POLLINATION; SELL_HONEY; SELL_NUCS_PACKAGES;
-        # SELL_QUEENS; NO_INCOME
+        # SELL_QUEENS
         max_length=255,
         null=False,
         blank=True,
@@ -427,6 +429,7 @@ class UserSurvey(models.Model):
         null=False,
         help_text='Do you manage for Varroa?')
     varroa_management_trigger = models.TextField(
+        # MITE_COUNTS; MITE_SYMPTOMS; TIME_OF_YEAR; OTHER-
         null=True,
         blank=True,
         help_text='How do you decide when to manage for Varroa?')
@@ -449,7 +452,7 @@ class UserSurvey(models.Model):
         null=False,
         help_text='Do you rear queens?')
     equipment = models.TextField(
-        # 8_FRAME_LANGSTROTH; 10_FRAME_LANGSTROTH; TOP_BAR; OTHER-
+        # 8_FRAME_LANGSTROTH; 10_FRAME_LANGSTROTH; TOP_BAR; WARRE_HIVE; OTHER-
         null=False,
         blank=True,
         help_text='What kind of equipment do you use?'

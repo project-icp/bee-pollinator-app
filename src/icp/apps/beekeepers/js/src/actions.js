@@ -173,7 +173,7 @@ export function signUp(form) {
                     isStaff: false,
                     userId: null,
                     userSurvey: null,
-                    message: 'Please click the validation link in your email and then log in.',
+                    message: 'Please check your email for an account activation link. The email may go to your spam folder, depending on your email settings.',
                 }));
                 dispatch(openLoginModal());
             }
@@ -244,7 +244,7 @@ export function sendAuthLink(form, endpoint) {
             dispatch(setAuthState({
                 username: '',
                 userId: null,
-                message: 'Check your email to reset your password or activate your account',
+                message: 'Please check your email for a password reset or account activation link. The email may go to your spam folder, depending on your email settings.',
                 isStaff: false,
                 authError: '',
                 userSurvey: null,

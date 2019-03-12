@@ -20,6 +20,7 @@ class AprilSurveyForm extends Component {
             colony_loss_reason_POOR_WEATHER_CONDITIONS: false,
             colony_loss_reason_COLONY_TOO_SMALL_IN_NOVEMBER: false,
             colony_loss_reason_PESTICIDE_EXPOSURE: false,
+            colony_loss_reason_BEAR_OR_NATURAL_DISASTER: false,
             completedSurvey: '',
             error: '',
         };
@@ -239,7 +240,7 @@ class AprilSurveyForm extends Component {
                             required
                         />
                         <label htmlFor="colony_loss_reason">
-                            What do you think the most likely cause of colony loss was?
+                            What do you think was the most likely cause of colony loss?
                             Check all that apply. Required.
                         </label>
                         {colonyLossReasonCheckboxInputs}

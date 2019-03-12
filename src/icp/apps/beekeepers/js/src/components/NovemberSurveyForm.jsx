@@ -11,6 +11,8 @@ import {
     VARROA_ALCOHOL_WASH_DESCRIPTION,
     VARROA_STICKYBOARD_DESCRIPTION,
     VARROA_SUGAR_SHAKE_DESCRIPTION,
+    THYMOL_DESCRIPTION,
+    AMITRAZ_DESCRIPTION,
 } from '../constants';
 import { arrayToSemicolonDelimitedString, getOrCreateSurveyRequest } from '../utils';
 import { Survey } from '../propTypes';
@@ -40,19 +42,15 @@ class NovemberSurveyForm extends Component {
             varroa_check_method_STICKY_BOARDS: false,
             varroa_manage_frequency: 'NEVER',
             mite_management_OTHER: '',
-            mite_management_CHEMICAL_ORGANIC_OTHER: '',
-            mite_management_MECHANICAL_OTHER: '',
-            mite_management_CHEMICAL_FORMIC_ACID_MAQS: false,
-            mite_management_CHEMICAL_FORMIC_ACID_FORMIC_PRO: false,
-            mite_management_CHEMICAL_OXALIC_ACID_VAPORIZATION: false,
-            mite_management_CHEMICAL_OXALIC_ACID_DRIBBLE: false,
-            mite_management_CHEMICAL_THYMOL_MENTHOL_APILIFE: false,
-            mite_management_CHEMICAL_THYMOL_MENTHOL_APIGUARD: false,
-            mite_management_CHEMICAL_SYNTHETIC_APIVAR: false,
-            mite_management_CHEMICAL_SYNTHETIC_APISTAN: false,
-            mite_management_CHEMICAL_SYNTHETIC_CHECKMITE_PLUS: false,
-            mite_management_MECHANICAL_DRONE_BROOD_REMOVAL: false,
-            mite_management_MECHANICAL_QUEEN_MANIPULATION: false,
+            mite_management_FORMIC_ACID: false,
+            mite_management_OXALIC_ACID: false,
+            mite_management_THYMOL: false,
+            mite_management_NONE: false,
+            mite_management_AMITRAZ: false,
+            mite_management_APISTAN: false,
+            mite_management_CHECKMITE: false,
+            mite_management_DRONE_REMOVE: false,
+            mite_management_QUEEN_MANIPULATION: false,
             completedSurvey: '',
             error: '',
         };
@@ -223,7 +221,7 @@ class NovemberSurveyForm extends Component {
         return options.map((option, index) => {
             const key = `${groupName}_${option}`;
             const label = option.split('_').join(' ').toLowerCase();
-            const tooltip = tooltipDescriptions
+            const tooltip = tooltipDescriptions && tooltipDescriptions[index]
                 ? <Tooltip description={[tooltipDescriptions[index]]} />
                 : null;
             return (
@@ -285,8 +283,6 @@ class NovemberSurveyForm extends Component {
             varroa_check_method_OTHER,
             varroa_manage_frequency,
             mite_management_OTHER,
-            mite_management_CHEMICAL_ORGANIC_OTHER,
-            mite_management_MECHANICAL_OTHER,
             completedSurvey,
             error,
         } = this.state;
@@ -334,7 +330,11 @@ class NovemberSurveyForm extends Component {
                 </div>
             );
 
-        const miteManagementCheckboxInputs = this.makeMultipleChoiceInputs('mite_management', MITE_MANAGEMENT_OPTIONS);
+        const miteManagementCheckboxInputs = this.makeMultipleChoiceInputs(
+            'mite_management',
+            MITE_MANAGEMENT_OPTIONS,
+            [THYMOL_DESCRIPTION, AMITRAZ_DESCRIPTION],
+        );
 
         const supplementalSugarInputs = this.makeSeasonalInputs('supplemental_sugar');
 
@@ -413,7 +413,8 @@ class NovemberSurveyForm extends Component {
                         />
                         <div className="form__group">
                             <label htmlFor="harvested_honey">
-                                How much honey did you collect on average for each colony?
+                                Approximately how much honey did you collect for each colony
+                                this year?
                             </label>
                             <select
                                 id="harvested_honey"
@@ -487,28 +488,6 @@ class NovemberSurveyForm extends Component {
                             </label>
                             {miteManagementCheckboxInputs}
                             <div className="form__secondary">
-                                <label htmlFor="mite_management_CHEMICAL_ORGANIC_OTHER">
-                                    Other organic chemical
-                                </label>
-                                <input
-                                    type="text"
-                                    className="form__control"
-                                    id="mite_management_CHEMICAL_ORGANIC_OTHER"
-                                    name="mite_management_CHEMICAL_ORGANIC_OTHER"
-                                    value={mite_management_CHEMICAL_ORGANIC_OTHER}
-                                    onChange={this.handleChange}
-                                    disabled={!!completedSurvey}
-                                />
-                                <label htmlFor="mite_management_MECHANICAL_OTHER">Other mechanical</label>
-                                <input
-                                    type="text"
-                                    className="form__control"
-                                    id="mite_management_MECHANICAL_OTHER"
-                                    name="mite_management_MECHANICAL_OTHER"
-                                    value={mite_management_MECHANICAL_OTHER}
-                                    onChange={this.handleChange}
-                                    disabled={!!completedSurvey}
-                                />
                                 <label htmlFor="mite_management_OTHER">Other</label>
                                 <input
                                     type="text"
