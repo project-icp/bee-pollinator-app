@@ -260,12 +260,14 @@ class UserSurveyModal extends Component {
                             <div className="form__group">
                                 <label htmlFor="phone">Phone number</label>
                                 <input
-                                    type="text"
+                                    type="tel"
                                     className="form__control"
                                     id="phone"
                                     name="phone"
                                     value={phone}
+                                    placeholder="123-456-7890"
                                     onChange={this.handleChange}
+                                    required
                                 />
                             </div>
                             <div className="form__group">
