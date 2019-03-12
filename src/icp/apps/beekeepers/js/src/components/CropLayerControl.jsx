@@ -51,7 +51,35 @@ class CropLayerControl extends Component {
             enableMapZoom,
             disableMapZoom,
         } = this.props;
-        const slider = !isCropLayerActive ? null : (
+
+        const button = !isCropLayerActive && (
+            <button
+                type="button"
+                className="layercontrol__button"
+                onClick={this.toggleCropLayer}
+            >
+                <div className="layercontrol__button-text">
+                    Crop layer
+                </div>
+            </button>
+        );
+
+        const header = isCropLayerActive && (
+            <div className="layercontrol__header">
+                <div className="layercontrol__header-title">
+                    Crops
+                </div>
+                <button
+                    type="button"
+                    className="layercontrol__header-close"
+                    onClick={this.toggleCropLayer}
+                >
+                    &times;
+                </button>
+            </div>
+        );
+
+        const slider = isCropLayerActive && (
             <input
                 title="Drag to change opacity of overlay"
                 type="range"
@@ -63,6 +91,7 @@ class CropLayerControl extends Component {
                 onChange={this.setOpacity}
             />
         );
+
         const legendItems = !isCropLayerActive
             ? []
             : this.cropTypes.map(([key, value]) => (
@@ -71,7 +100,7 @@ class CropLayerControl extends Component {
                     {value}
                 </div>
             ));
-        const legend = !isCropLayerActive ? null : (
+        const legend = isCropLayerActive && (
             <div
                 className="layercontrol__legend"
                 onMouseOver={disableMapZoom}
@@ -83,20 +112,20 @@ class CropLayerControl extends Component {
             </div>
         );
 
+        const contents = isCropLayerActive ? (
+            <>
+                {header}
+                {legend}
+                {slider}
+            </>
+        ) : button;
+
         return (
             <Control
                 className="layercontrol leaflet-bar"
                 position={position}
             >
-                <button
-                    type="button"
-                    className="layercontrol__button"
-                    onClick={this.toggleCropLayer}
-                >
-                    <i className="icon-layers" />
-                </button>
-                {slider}
-                {legend}
+                {contents}
             </Control>
         );
     }

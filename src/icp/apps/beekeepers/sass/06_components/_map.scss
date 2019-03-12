@@ -28,3 +28,17 @@
 .geocoder-control-suggestions {
     font-family: $font-family;
 }
+
+.leaflet-control-zoom {
+    display: flex;
+
+    &-in {
+        border-right: solid 1px #ccc;
+        border-bottom: none !important;
+        border-radius: 2px 0 0 2px !important;
+    }
+
+    &-out {
+        border-radius: 0 2px 2px 0 !important;
+    }
+}
