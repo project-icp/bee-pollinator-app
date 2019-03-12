@@ -162,7 +162,7 @@ export const QUEENRIGHT_DESCRIPTION = {
 
 export const THYMOL_DESCRIPTION = {
     title: '',
-    body: 'The active ingredient in Apilife Var is thymol.',
+    body: 'The active ingredient in Apilife and Apiguard is thymol.',
 };
 
 export const AMITRAZ_DESCRIPTION = {
