@@ -429,6 +429,7 @@ class UserSurvey(models.Model):
         null=False,
         help_text='Do you manage for Varroa?')
     varroa_management_trigger = models.TextField(
+        # MITE_COUNTS; MITE_SYMPTOMS; TIME_OF_YEAR; OTHER-
         null=True,
         blank=True,
         help_text='How do you decide when to manage for Varroa?')

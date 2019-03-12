@@ -34,6 +34,10 @@ class UserSurveyModal extends Component {
             practice: 'CONVENTIONAL',
             varroa_management: false,
             varroa_management_trigger: '',
+            varroa_management_trigger_mite_counts: '',
+            varroa_management_trigger_mite_symptoms: '',
+            varroa_management_trigger_time_of_year: '',
+            varroa_management_trigger_other: '',
             purchased_queens: false,
             purchased_queens_sources: '',
             resistant_queens: false,
@@ -54,6 +58,10 @@ class UserSurveyModal extends Component {
                 value: false,
                 reset: [
                     'varroa_management_trigger',
+                    'varroa_management_trigger_mite_counts',
+                    'varroa_management_trigger_mite_symptoms',
+                    'varroa_management_trigger_time_of_year',
+                    'varroa_management_trigger_other',
                 ],
             },
             {
@@ -124,6 +132,10 @@ class UserSurveyModal extends Component {
             income_sell_honey,
             income_sell_nucs,
             income_sell_queens,
+            varroa_management_trigger_mite_counts,
+            varroa_management_trigger_mite_symptoms,
+            varroa_management_trigger_time_of_year,
+            varroa_management_trigger_other,
             equipment_8_frame,
             equipment_10_frame,
             equipment_top_bar,
@@ -134,6 +146,17 @@ class UserSurveyModal extends Component {
         const income = arrayToSemicolonDelimitedString(
             [income_rent, income_sell_honey, income_sell_nucs, income_sell_queens],
         );
+
+        const prepend_varroa_management_trigger_other = varroa_management_trigger_other.length ? `OTHER-${varroa_management_trigger_other}` : '';
+        const varroa_management_trigger = arrayToSemicolonDelimitedString(
+            [
+                varroa_management_trigger_mite_counts,
+                varroa_management_trigger_mite_symptoms,
+                varroa_management_trigger_time_of_year,
+                prepend_varroa_management_trigger_other,
+            ],
+        );
+
         const prepended_equipment_other = equipment_other.length ? `OTHER-${equipment_other}` : '';
         const equipment = arrayToSemicolonDelimitedString(
             [
@@ -146,6 +169,7 @@ class UserSurveyModal extends Component {
         );
         const form = Object.assign({}, this.state, {
             income,
+            varroa_management_trigger,
             equipment,
         });
         dispatch(createUserSurvey(form));
@@ -173,7 +197,10 @@ class UserSurveyModal extends Component {
             income_sell_queens,
             practice,
             varroa_management,
-            varroa_management_trigger,
+            varroa_management_trigger_mite_counts,
+            varroa_management_trigger_mite_symptoms,
+            varroa_management_trigger_time_of_year,
+            varroa_management_trigger_other,
             purchased_queens,
             purchased_queens_sources,
             resistant_queens,
@@ -410,12 +437,49 @@ class UserSurveyModal extends Component {
                                     <label htmlFor="varroa_management_trigger">
                                         How do you decide when to manage for Varroa?
                                     </label>
+                                    <div className="form__checkbox">
+                                        <input
+                                            type="checkbox"
+                                            className="form__control"
+                                            id="varroa_management_trigger_mite_counts"
+                                            name="varroa_management_trigger_mite_counts"
+                                            checked={varroa_management_trigger_mite_counts}
+                                            onChange={this.handleChange}
+                                            value="MITE_COUNTS"
+                                        />
+                                        <label htmlFor="varroa_management_trigger_mite_counts">Mite Counts</label>
+                                    </div>
+                                    <div className="form__checkbox">
+                                        <input
+                                            type="checkbox"
+                                            className="form__control"
+                                            id="varroa_management_trigger_mite_symptoms"
+                                            name="varroa_management_trigger_mite_symptoms"
+                                            checked={varroa_management_trigger_mite_symptoms}
+                                            onChange={this.handleChange}
+                                            value="MITE_SYMPTOMS"
+                                        />
+                                        <label htmlFor="varroa_management_trigger_mite_symptoms">Mite Symptoms</label>
+                                    </div>
+                                    <div className="form__checkbox">
+                                        <input
+                                            type="checkbox"
+                                            className="form__control"
+                                            id="varroa_management_trigger_time_of_year"
+                                            name="varroa_management_trigger_time_of_year"
+                                            checked={varroa_management_trigger_time_of_year}
+                                            onChange={this.handleChange}
+                                            value="TIME_OF_YEAR"
+                                        />
+                                        <label htmlFor="varroa_management_trigger_time_of_year">Time of Year</label>
+                                    </div>
+                                    <label htmlFor="varroa_management_trigger_other">Other</label>
                                     <input
                                         type="text"
                                         className="form__control"
-                                        id="varroa_management_trigger"
-                                        name="varroa_management_trigger"
-                                        value={varroa_management_trigger}
+                                        id="varroa_management_trigger_other"
+                                        name="varroa_management_trigger_other"
+                                        value={varroa_management_trigger_other}
                                         onChange={this.handleChange}
                                     />
                                 </div>
