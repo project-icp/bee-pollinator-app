@@ -468,7 +468,7 @@ class UserSurveyModal extends Component {
                             {resistant_queens && (
                                 <div className="form__group">
                                     <label htmlFor="resistant_queens_genetics">
-                                        Describe their genetics.
+                                        What is the stock or genetic background of your queens?
                                     </label>
                                     <input
                                         type="text"
