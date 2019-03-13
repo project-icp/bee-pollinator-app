@@ -99,6 +99,11 @@ class NovemberSurveyForm extends Component {
                 let newState = {
                     completedSurvey: data,
                     num_colonies: data.num_colonies,
+                    harvested_honey: data.november.harvested_honey,
+                    small_hive_beetles: data.november.small_hive_beetles,
+                    varroa_check_frequency: data.november.varroa_check_frequency,
+                    varroa_manage_frequency: data.november.varroa_manage_frequency,
+                    all_colonies_treated: data.november.all_colonies_treated,
                 };
                 this.multipleChoiceKeys.forEach((key) => {
                     if (data.november[key]) {
