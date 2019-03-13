@@ -1,7 +1,10 @@
 export const FORAGE_RANGE_3KM = '3km';
 export const FORAGE_RANGE_5KM = '5km';
 
-export const FORAGE_RANGES = [FORAGE_RANGE_3KM, FORAGE_RANGE_5KM];
+export const FORAGE_RANGES = {
+    [FORAGE_RANGE_3KM]: FORAGE_RANGE_3KM,
+    [FORAGE_RANGE_5KM]: FORAGE_RANGE_5KM,
+};
 export const DEFAULT_SORT = 'default';
 
 export const INDICATORS = {
@@ -20,9 +23,9 @@ export const INDICATOR_DETAILS = {
         scoreStops: [7, 33, 39, 46, 66],
     },
     pesticide: {
-        name: 'Pesticide quality',
-        scoreLabels: ['Pesticide'],
-        shortLabel: 'Pesticide',
+        name: 'Insecticide load',
+        scoreLabels: ['Insecticide'],
+        shortLabel: 'Insecticide',
         scoreStops: [0, 13, 26, 37, 208],
     },
     floral_spring: {
@@ -45,7 +48,12 @@ export const INDICATOR_DETAILS = {
     },
 };
 
-export const SORT_OPTIONS = [DEFAULT_SORT].concat(Object.values(INDICATORS));
+export const SORT_OPTIONS = Object
+    .entries(INDICATOR_DETAILS)
+    .reduce((acc, [indicator, { name }]) => {
+        acc[indicator] = name;
+        return acc;
+    }, { default: 'Default' });
 
 export const MAP_CENTER = [40.0, -76.079];
 export const MAP_ZOOM = 10;
