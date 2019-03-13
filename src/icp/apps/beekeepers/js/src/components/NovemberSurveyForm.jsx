@@ -384,6 +384,7 @@ class NovemberSurveyForm extends Component {
                         value={varroa_manage_frequency}
                         onChange={this.handleChange}
                         className="form__control"
+                        disabled={!!completedSurvey}
                     >
                         <option value="NEVER">I did not</option>
                         <option value="ONCE">Once a year</option>
@@ -424,6 +425,7 @@ class NovemberSurveyForm extends Component {
                                 value={harvested_honey}
                                 onChange={this.handleChange}
                                 className="form__control"
+                                disabled={!!completedSurvey}
                             >
                                 <option value="DID_NOT_HARVEST">Did not harvest</option>
                                 <option value="LESS_THAN_10">Less than 10 lbs</option>
@@ -474,6 +476,7 @@ class NovemberSurveyForm extends Component {
                                 value={varroa_check_frequency}
                                 onChange={this.handleChange}
                                 className="form__control"
+                                disabled={!!completedSurvey}
                             >
                                 <option value="NEVER">I did not</option>
                                 <option value="ONCE">Once a year</option>
