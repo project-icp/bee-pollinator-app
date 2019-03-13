@@ -6,7 +6,12 @@ import { connect } from 'react-redux';
 import { closeSuccessModal } from '../actions';
 
 const SuccessModal = ({ dispatch, isSuccessModalOpen }) => (
-    <Popup open={isSuccessModalOpen} onClose={() => dispatch(closeSuccessModal())} modal>
+    <Popup
+        open={isSuccessModalOpen}
+        onClose={() => dispatch(closeSuccessModal())}
+        className="modal"
+        modal
+    >
         {close => (
             <div className="authModal">
                 <div className="authModal__header">
