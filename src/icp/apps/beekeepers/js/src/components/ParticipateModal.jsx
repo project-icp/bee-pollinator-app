@@ -29,8 +29,15 @@ const ParticipateModal = ({ isParticipateModalOpen, dispatch }) => (
                     about the quality of their landscapes for bees, and site-specific
                     recommendations for land and bee management practices. But, to do this, we
                     need your help, so we can have data from many diverse landscapes! If you
-                    have a wild bee hotel and would like to participate in our study, please
-                    click here. If you are a beekeeper, please follow the link below.
+                    have a wild bee hotel and would like to participate in our study,&nbsp;
+                    <a
+                        href="http://beescape.org/wild-bees/"
+                        target="_blank"
+                        rel="noreferrer noopener"
+                    >
+                        please click here
+                    </a>
+                    . If you are a beekeeper, please follow the link below.
                 </div>
                 <div className="authModal__footer">
                     <button
