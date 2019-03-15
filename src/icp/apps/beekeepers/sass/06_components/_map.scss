@@ -31,7 +31,12 @@
 
 .leaflet-control-zoom {
     display: flex;
-
+    /* stylelint-disable selector-max-type */
+    a {
+        font-size: 20px;
+        line-height: 26px;
+    }
+    /* stylelint-enable selector-max-type */
     &-in {
         border-right: solid 1px #ccc;
         border-bottom: none !important;

@@ -13,7 +13,10 @@
     }
 
     &__logo {
-        height: 30px;
+        position: relative;
+        top: 2px;
+        height: 25px;
+        margin-right: 16px;
     }
 
     &__options {
