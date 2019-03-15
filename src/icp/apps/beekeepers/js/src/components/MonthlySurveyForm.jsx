@@ -159,7 +159,7 @@ class MonthlySurveyForm extends Component {
                         });
 
                         return Object.assign({}, clientData, serverData);
-                    });
+                    }).sort((a, b) => a.id - b.id); // In ascending order of id
 
                     this.setState({
                         num_colonies: data.num_colonies,
