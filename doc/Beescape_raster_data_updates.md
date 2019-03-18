@@ -86,15 +86,15 @@ below.
 2. Navigate to the S3 Dashboard from the main page.
 ![](https://d2mxuefqeaa7sj.cloudfront.net/s_6BE299F545FCF2593B762836DDCB999658CD6A5F7E8F2D741503E07F83F0F3C8_1550084171548_file.png)
 
-3. Open the `beekeepers-staging-data-us-east-1` bucket.
-![](https://d2mxuefqeaa7sj.cloudfront.net/s_6BE299F545FCF2593B762836DDCB999658CD6A5F7E8F2D741503E07F83F0F3C8_1550084303960_file.png)
+3. Open the `beekeepers-production-data-us-east-1` bucket.
+<img width="648" alt="image" src="https://user-images.githubusercontent.com/1774125/54562683-de502c00-499d-11e9-894b-bfb158c9aa63.png">
 
 4. Open the folder corresponding to the aggregation radius
-![](https://d2mxuefqeaa7sj.cloudfront.net/s_6BE299F545FCF2593B762836DDCB999658CD6A5F7E8F2D741503E07F83F0F3C8_1550084724181_file.png)
+<img width="699" alt="image" src="https://user-images.githubusercontent.com/1774125/54562409-536f3180-499d-11e9-8794-6afa616dcc47.png">
 
 5. Click the `Upload` button and select the file on your system to upload. It
    should be replacing an existing tif and have the same exact file name.
-![](https://d2mxuefqeaa7sj.cloudfront.net/s_6BE299F545FCF2593B762836DDCB999658CD6A5F7E8F2D741503E07F83F0F3C8_1550085076812_file.png)
+<img width="1555" alt="image" src="https://user-images.githubusercontent.com/1774125/54562457-6a158880-499d-11e9-88d7-6dc708eee87b.png">
 
 6. Use the following settings when uploading the raster:
   - Object: ✅ Read; Object Permissions:  ✅Read,  ✅Write
@@ -102,13 +102,13 @@ below.
   - Standard storage class
   - No encryption
 
-![](https://d2mxuefqeaa7sj.cloudfront.net/s_6BE299F545FCF2593B762836DDCB999658CD6A5F7E8F2D741503E07F83F0F3C8_1550097261070_Screenshot+from+2019-02-13+173136.png)
+<img width="1108" alt="image" src="https://user-images.githubusercontent.com/1774125/54562510-89141a80-499d-11e9-827d-cd06dfea5747.png">
 
-![](https://d2mxuefqeaa7sj.cloudfront.net/s_6BE299F545FCF2593B762836DDCB999658CD6A5F7E8F2D741503E07F83F0F3C8_1550519610812_Screenshot+from+2019-02-18+145322.png)
+<img width="1106" alt="image" src="https://user-images.githubusercontent.com/1774125/54562532-93361900-499d-11e9-8b79-0354e40fad47.png">
 
-![](https://d2mxuefqeaa7sj.cloudfront.net/s_6BE299F545FCF2593B762836DDCB999658CD6A5F7E8F2D741503E07F83F0F3C8_1550097303390_Screenshot+from+2019-02-13+173249.png)
+<img width="1108" alt="image" src="https://user-images.githubusercontent.com/1774125/54562553-9cbf8100-499d-11e9-90ca-2f97e839a818.png">
 
-![](https://d2mxuefqeaa7sj.cloudfront.net/s_6BE299F545FCF2593B762836DDCB999658CD6A5F7E8F2D741503E07F83F0F3C8_1550097325916_Screenshot+from+2019-02-13+173305.png)
+<img width="1118" alt="image" src="https://user-images.githubusercontent.com/1774125/54562564-a3e68f00-499d-11e9-9413-c094278a7c84.png">
 
 7. After the upload is complete, test that the application still reads the
    raster correctly.
@@ -119,4 +119,3 @@ If the upload results in a broken application, first try and upload the
 previous version of the raster. If it is unavailable, contact Azavea for
 support. The S3 storage system automatically creates backups of each file and
 we can restore to a previous version.
-
