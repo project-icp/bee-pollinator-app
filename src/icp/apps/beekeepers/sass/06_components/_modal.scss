@@ -1,0 +1,106 @@
+.popup-overlay {
+    z-index: 1001 !important;
+    display: block !important;
+    overflow-y: auto;
+}
+
+.popup-content {
+    z-index: 1000 !important;
+}
+
+.modal {
+    width: 400px !important;
+    margin-top: 60px !important;
+    padding: 0 !important;
+}
+
+.userModal,
+.surveyModal {
+    width: 600px !important;
+    font-size: 16px;
+}
+
+.authModal {
+    .button {
+        color: $color-primary;
+        background-color: $color-white;
+        border: none;
+
+        &--long {
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px;
+            color: $color-white;
+            background: $color-primary;
+            border: none;
+        }
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 15px;
+        font: $font-med;
+        font-weight: $font-weight-bold;
+
+        > .button {
+            padding: 0;
+            color: $color-black;
+            font: $font-xl;
+            border: none;
+        }
+    }
+
+    &__content {
+        padding: 15px;
+
+        .title {
+            margin-bottom: 10px;
+            font: $font-xxl;
+            font-weight: $font-weight-bold;
+            line-height: 1.2;
+        }
+    }
+
+    &__footer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+        text-align: center;
+    }
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__group {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin: 10px auto;
+        font: $font-size-base;
+        font-weight: $font-weight-bold;
+
+        &--error {
+            color: $color-starred;
+        }
+    }
+
+    &__control {
+        padding: 8px;
+        font: $font-med;
+        border: $color-grey-3 solid 1px;
+
+        &[type="text"],
+        &[type="number"],
+        &[type="date"],
+        &[type="email"],
+        &[type="password"] {
+            width: 100%;
+        }
+    }
+}

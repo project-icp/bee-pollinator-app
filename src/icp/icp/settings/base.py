@@ -284,6 +284,7 @@ DJANGO_APPS = (
 THIRD_PARTY_APPS = (
     'rest_framework',
     'registration',
+    'webpack_loader',
 )
 
 # THIRD-PARTY CONFIGURATION
@@ -305,6 +306,13 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
 ]
 
+# webpack_loader
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'STATS_FILE': join(SITE_ROOT, 'apps/beekeepers/.webpack-stats.json'),
+    }
+}
+
 # END THIRD-PARTY CONFIGURATION
 
 # Apps specific for this project go here.
@@ -313,7 +321,8 @@ LOCAL_APPS = (
     'apps.modeling',
     'apps.home',
     'apps.geocode',
-    'apps.user'
+    'apps.user',
+    'apps.beekeepers',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -364,8 +373,8 @@ BASEMAPS = [
 ]
 
 OVERLAY = {
-    'url': 'https://{s}.tiles.azavea.com/cdl-reclass/{z}/{x}/{y}.png',
-    'maxNativeZoom': 15
+    'url': 'https://{s}.tiles.azavea.com/cdl-reclass-2017-gdal/{z}/{x}/{y}.png',
+    'maxNativeZoom': 13
 }
 
 DRAW_TOOLS = [

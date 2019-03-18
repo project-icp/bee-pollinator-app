@@ -16,6 +16,9 @@ from rest_framework import decorators, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
+from apps.user.models import UserProfile
+from apps.beekeepers.serializers import UserSurveySerializer
+
 
 @decorators.api_view(['POST', 'GET'])
 @decorators.permission_classes((AllowAny, ))
@@ -24,17 +27,29 @@ def login(request):
     status_code = status.HTTP_200_OK
 
     if request.method == 'POST':
-        user = authenticate(username=request.REQUEST.get('username'),
-                            password=request.REQUEST.get('password'))
+        username = (request.REQUEST.get('username') or
+                    request.DATA.get('username'))
+        password = (request.REQUEST.get('password') or
+                    request.DATA.get('password'))
+        user = authenticate(username=username,
+                            password=password)
 
         if user is not None:
             if user.is_active:
                 auth_login(request, user)
+                user_survey = None
+                if hasattr(user, 'beekeeper_user_survey'):
+                    user_survey = UserSurveySerializer(
+                        user.beekeeper_user_survey
+                    ).data
+
                 response_data = {
                     'result': 'success',
                     'username': user.username,
                     'guest': False,
-                    'id': user.id
+                    'id': user.id,
+                    'is_staff': user.is_staff,
+                    'beekeeper_survey': user_survey
                 }
             else:
                 response_data = {
@@ -55,11 +70,19 @@ def login(request):
         user = request.user
 
         if user.is_authenticated() and user.is_active:
+            user_survey = None
+            if hasattr(user, 'beekeeper_user_survey'):
+                user_survey = UserSurveySerializer(
+                    user.beekeeper_user_survey
+                ).data
+
             response_data = {
                 'result': 'success',
                 'username': user.username,
                 'guest': False,
-                'id': user.id
+                'is_staff': user.is_staff,
+                'id': user.id,
+                'beekeeper_survey': user_survey
             }
         else:
             response_data = {
@@ -116,7 +139,18 @@ def sign_up(request):
     form = RegistrationFormUniqueEmail(request.POST)
 
     if form.is_valid():
+        from_beekeepers = ('app.beescape.org' in request.get_host() or
+                           'beekeepers' in request.GET)
         user = view.register(request, form)
+        origin_app = \
+            UserProfile.BEEKEEPERS if from_beekeepers else \
+            UserProfile.POLLINATION
+
+        UserProfile.objects.create(
+            user=user,
+            origin_app=origin_app
+        )
+
         response_data = {'result': 'success',
                          'username': user.username,
                          'guest': False}
@@ -146,7 +180,8 @@ def sign_up(request):
 @decorators.permission_classes((AllowAny, ))
 def resend(request):
     # Resend activation email if the key hasn't expired.
-    form = PasswordResetForm(request.POST)
+    data = request.POST or request.DATA
+    form = PasswordResetForm(data)
     if form.is_valid():
         email = form.cleaned_data['email']
         try:
@@ -173,7 +208,8 @@ def resend(request):
 @decorators.api_view(['POST'])
 @decorators.permission_classes((AllowAny, ))
 def forgot(request):
-    form = PasswordResetForm(request.POST)
+    data = request.POST or request.DATA
+    form = PasswordResetForm(data)
 
     if form.is_valid():
         email = form.cleaned_data['email']

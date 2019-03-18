@@ -3,8 +3,10 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
 
+from django.conf import settings
 from django.contrib.gis.db import models
-from django.contrib.auth.models import User
+
+AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
 
 class Project(models.Model):
@@ -14,7 +16,7 @@ class Project(models.Model):
         (YIELD_MODEL, 'Crop Yield Model'),
     )
 
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(AUTH_USER_MODEL)
     name = models.CharField(
         max_length=255)
     area_of_interest = models.MultiPolygonField(

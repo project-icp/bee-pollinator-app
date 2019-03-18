@@ -1,0 +1,45 @@
+---
+- name: Add Docker dependencies for Ansible
+  pip: name="{{ item }}" state=present
+  with_items:
+    - "docker==3.5.*"
+    - "docker-compose==1.22.*"
+
+- name: Allow vagrant to run Docker
+  user: name=vagrant groups=docker append=yes
+
+- name: Fetch Node Docker Image
+  docker_image: name=node tag=8 state=present
+
+- name: Install NPM Dependencies
+  docker_container:
+    name: beekeepers-node
+    image: node:8
+    volumes:
+      - "{{ beekeepers_home }}:/usr/src/app"
+    working_dir: /usr/src/app
+    command: yarn
+    detach: no
+    cleanup: yes
+
+- name: Generate Beekeepers Bundle
+  docker_container:
+    name: beekeepers-node
+    image: node:8
+    volumes:
+      - "{{ beekeepers_home }}:/usr/src/app"
+    working_dir: /usr/src/app
+    command: yarn build
+    detach: no
+    cleanup: yes
+
+- name: Link Static Directory
+  file: path="{{ beekeepers_static_root }}"
+        src="{{ beekeepers_home }}/dist"
+        state=link
+
+- name: Change AWS credentials access to the icp user
+  file: path="/var/lib/icp/.aws"
+        group="icp"
+        owner="icp"
+  when: "['development', 'test'] | some_are_in(group_names)"

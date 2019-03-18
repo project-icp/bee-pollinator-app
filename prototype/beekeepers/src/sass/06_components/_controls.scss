@@ -1,0 +1,19 @@
+.controls {
+    display: flex;
+    margin-bottom: 2.6rem;
+
+    &__header {
+        margin-bottom: -0.4rem;
+        color: $color-grey-4;
+        font-size: $font-size-sm;
+    }
+
+    &__select {
+        flex: 1;
+        color: inherit;
+    }
+
+    &__display {
+        flex: 2;
+    }
+}

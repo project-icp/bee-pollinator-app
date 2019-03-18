@@ -1,0 +1,21 @@
+.icon-star-fill {
+    color: $color-star;
+}
+
+.icon-clipboard-fill {
+    color: $color-clipboard;
+}
+
+.icon-info-circle {
+    padding: 5px;
+}
+
+.tooltip {
+    min-width: fit-content;
+    max-width: 500px;
+
+    &__text {
+        font: $font-size-xs;
+        font-weight: $font-weight-light;
+    }
+}

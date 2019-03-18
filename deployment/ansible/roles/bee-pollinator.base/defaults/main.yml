@@ -12,3 +12,6 @@ envdir_config:
   ICP_STACK_COLOR: "{{ stack_color }}"
   ICP_STACK_TYPE: "{{ stack_type }}"
   ROLLBAR_SERVER_SIDE_ACCESS_TOKEN: "Unknown"
+  AWS_BEEKEEPERS_DATA_BUCKET: "{{ aws_beekeepers_data_bucket }}"
+  CURL_CA_BUNDLE: "{{ ubuntu_ssl_cert_path }}"
+  

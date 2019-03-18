@@ -41,7 +41,7 @@
             "ami_block_device_mappings": [
                 {
                     "device_name": "/dev/sdf",
-                    "snapshot_id": "snap-08429591cf7ae1fb7",
+                    "snapshot_id": "snap-0a40643aeb3029eb0",
                     "volume_type": "gp2",
                     "delete_on_termination": true
                 }
@@ -89,7 +89,8 @@
                 "sleep 5",
                 "sudo apt-get update -qq",
                 "sudo apt-get install python-pip python-dev libffi-dev libssl-dev -y",
-                "sudo pip install ansible==2.2.1.0",
+                "sudo pip install --upgrade pip==18.1",
+                "sudo pip install ansible==2.5.4.0",
                 "sudo /bin/sh -c 'echo {{user `version`}} > /srv/version.txt'"
             ]
         },

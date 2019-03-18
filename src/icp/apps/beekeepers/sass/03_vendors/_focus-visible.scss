@@ -1,0 +1,6 @@
+// Polyfill for `:focus-visible`
+// https://github.com/WICG/focus-visible
+
+.js-focus-visible :focus:not(.focus-visible) {
+     outline: 0;
+}

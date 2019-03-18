@@ -17,6 +17,7 @@
 
 - name: Synchronize Django application into app_home
   synchronize: archive=no
+               copy_links=yes
                checksum=yes
                compress=no
                recursive=yes

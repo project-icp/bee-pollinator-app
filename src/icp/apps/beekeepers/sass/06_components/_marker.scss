@@ -1,0 +1,28 @@
+.marker {
+    flex-shrink: 0;
+    width: $marker-size;
+    height: $marker-size;
+    color: #fff;
+    font-weight: $font-weight-normal;
+    line-height: $marker-size;
+    text-align: center;
+    background-color: $color-primary;
+    border-radius: 100px;
+    cursor: default;
+
+    &--selected {
+        background-color: $color-selected;
+    }
+
+    &--starred {
+        background-color: $color-starred;
+    }
+
+    &--starred-survey {
+        background-color: $color-starred-survey;
+    }
+}
+
+.map-marker {
+    transform: translate(-25%, -25%);
+}

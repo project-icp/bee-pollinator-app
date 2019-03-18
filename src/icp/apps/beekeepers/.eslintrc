@@ -1,0 +1,37 @@
+{
+    "extends": "airbnb",
+    "env": {
+        "es6": true,
+        "browser": true,
+        "node": true,
+        "mocha": true
+    },
+    "parser": "babel-eslint",
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+        "camelcase": 0,
+        "indent": [2, 4, { "SwitchCase": 1, "VariableDeclarator": 2 }],
+        "react/jsx-indent": [2, 4],
+        "react/jsx-indent-props": [2, 4],
+        "max-statements": [0, 10],
+        "jsx-a11y/label-has-associated-control": [ "error", {
+            "required": {
+                "some": [ "nesting", "id"  ]
+            }
+        }],
+        "jsx-a11y/label-has-for": [ "error", {
+            "required": {
+                "some": [ "nesting", "id"  ]
+            }
+        }]
+    },
+    "settings": {
+        "import/resolver": {
+            "webpack": {
+                "config": "webpack.config.js"
+            }
+        }
+    }
+}

@@ -10,7 +10,7 @@
   pip: name=numpy version={{ numpy_version }}
 
 - name: Install pollinator model dependencies
-  pip: chdir="{{ app_home }}/requirements" requirements=model.txt
+  pip: requirements="{{ app_home }}/requirements/model.txt"
 
 - name: Create model data path
   file: path="{{ model_data_path }}"

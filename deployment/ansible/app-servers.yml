@@ -12,8 +12,14 @@
                   line="127.0.0.1 localhost {{ statsite_host }}"
       when: "['packer'] | is_in(group_names)"
 
+    - name: Add Docker APT Key
+      shell: "curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
+      args:
+        warn: no
+
   roles:
     - { role: "bee-pollinator.app" }
+    - { role: "bee-pollinator.beekeepers" }
 
   post_tasks:
     - name: Revert change to /etc/hosts

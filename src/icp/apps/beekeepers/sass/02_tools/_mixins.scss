@@ -1,0 +1,119 @@
+/* stylelint-disable aditayvm/at-rule-no-children */
+
+@mixin flex($direction : column, $wrap : nowrap, $justify-content: flex-start, $align-items: center) {
+    display: flex;
+    flex-direction: $direction;
+    flex-wrap: $wrap;
+    justify-content: $justify-content;
+    align-items: $align-items;
+}
+
+@mixin link-reset($color : inherit) {
+    &:link,
+    &:visited,
+    &:focus,
+    &:hover,
+    &:active {
+        color: $color;
+        text-decoration: none;
+    }
+}
+
+@mixin button($background: $color-black, $color: $color-white) {
+    display: inline-block;
+    margin: 0;
+    padding: 0.8rem 1.6em;
+    color: $color;
+    font: inherit;
+    text-align: center;
+    text-transform: none;
+    text-decoration: none;
+    background: $background;
+    border: 0;
+    border-radius: 1px;
+    cursor: pointer;
+    transition: background 250ms ease-in-out, transform 150ms ease;
+    appearance: none;
+
+    &:hover {
+        transform: scale(1.04);
+    }
+
+    &:focus {
+        outline: 1px solid $color-white;
+        outline-offset: -3px;
+    }
+
+    &:active {
+        transform: scale(0.99);
+    }
+}
+
+@mixin button-reset($color: inherit) {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    color: $color;
+    font: inherit;
+    text-align: inherit;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    appearance: none;
+}
+
+@mixin invisible {
+    opacity: 0;
+    pointer-events: none;
+}
+
+@mixin visible($opacity: 1) {
+    opacity: $opacity;
+    pointer-events: auto;
+}
+
+@mixin light-on-dark {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+@mixin icon-font($content : ' ') {
+    position: absolute;
+    display: inline-block;
+    width: 1em;
+    margin-right: 0.2em;
+
+    /* Animation center compensation - margins should be symmetric */
+
+    /* remove if not needed */
+    margin-left: 0.2em;
+    font-weight: normal;
+    font-family: "fontello"; /* stylelint-disable-line font-family-no-missing-generic-family-keyword */
+    font-style: normal;
+
+    /* opacity: .8; */
+
+    /* For safety - reset parent styles, that can break glyph codes */
+    font-variant: normal;
+
+    /* fix buttons height, for twitter bootstrap */
+    line-height: 1em;
+    text-align: center;
+    text-transform: none;
+    text-decoration: inherit;
+    content: $content;
+    speak: none;
+
+    /* you can be more comfortable with increased icons size */
+
+    /* font-size: 120%; */
+
+    /* Font smoothing. That was taken from TWBS */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    /* Uncomment for 3D effect */
+
+    /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+/* stylelint-enable aditayvm/at-rule-no-children */

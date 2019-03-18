@@ -1,4 +1,4 @@
-"""Helper functions to handle AMI creation with packer"""
+"""Helper functions to handle AMI creation with packer."""
 
 import os
 from os.path import dirname
@@ -6,32 +6,24 @@ import shutil
 import subprocess
 
 import logging
-import urllib2
-import csv
 
+from boto import ec2
 
+CANONICAL_ACCOUNT_ID = '099720109477'
 LOGGER = logging.getLogger('icp')
 
-UBUNTU_RELEASE_URL = 'http://cloud-images.ubuntu.com/query/trusty/server/released.current.txt'  # NOQA
-UBUNTU_RELEASE_FIELD_NAMES = ['version', 'version_type', 'release_status',
-                              'date', 'storage', 'arch', 'region', 'id',
-                              'kernel', 'unknown_col', 'virtualization_type']
 
+def get_recent_ubuntu_ami(region, aws_profile):
+    """Get AMI ID for current release in region."""
+    conn = ec2.connect_to_region(region, profile_name=aws_profile)
+    amis = conn.get_all_images(owners=[CANONICAL_ACCOUNT_ID], filters={
+        'name': 'ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*',
+        'architecture': 'x86_64',
+        'root-device-type': 'ebs',
+        'virtualization-type': 'hvm',
+    })
 
-def get_recent_ubuntu_ami(region):
-    """Gets AMI ID for current release in region"""
-    response = urllib2.urlopen(UBUNTU_RELEASE_URL).readlines()
-    reader = csv.DictReader(response, fieldnames=UBUNTU_RELEASE_FIELD_NAMES,
-                            delimiter='\t')
-
-    def ami_filter(ami):
-        """Helper function to filter AMIs"""
-        return (ami['region'] == region and
-                ami['arch'] == 'amd64' and
-                ami['storage'] == 'ebs-ssd' and
-                ami['virtualization_type'] == 'hvm')
-
-    return [row for row in reader if ami_filter(row)][0]['id']
+    return sorted(amis, key=lambda ami: ami.creationDate, reverse=True)[0].id
 
 
 def get_project_root():
@@ -94,7 +86,7 @@ def run_packer(icp_config, machine_types, aws_profile):
     stack_type = icp_config['StackType']
 
     # Get most recent Ubuntu release AMI
-    aws_ubuntu_ami = get_recent_ubuntu_ami(region)
+    aws_ubuntu_ami = get_recent_ubuntu_ami(region, aws_profile)
 
     update_ansible_roles()
 

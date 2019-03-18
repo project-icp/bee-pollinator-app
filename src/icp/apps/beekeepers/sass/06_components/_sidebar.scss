@@ -1,0 +1,22 @@
+.sidebar {
+    flex: 1;
+    min-width: 520px;
+    max-width: 600px;
+    height: 100%;
+    padding: 2rem 1.5rem;
+    overflow-y: auto;
+    background-color: $sidebar-background;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1.4rem;
+        margin-bottom: 3.2rem;
+        font-weight: $font-weight-bold;
+        font-size: $font-size-xl;
+    }
+
+    &__controls {
+        display: flex;
+    }
+}

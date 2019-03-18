@@ -1,0 +1,23 @@
+.marker {
+    width: 22px;
+    height: 22px;
+    color: #fff;
+    font-weight: 600;
+    line-height: 22px;
+    text-align: center;
+    background-color: $color-primary;
+    border-radius: 100px;
+    flex-shrink: 0;
+
+    &--selected {
+        background-color: $color-selected;
+    }
+
+    &--starred {
+        background-color: $color-starred;
+    }
+
+    &--starred-survey {
+        background-color: $color-starred-survey;
+    }
+}

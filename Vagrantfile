@@ -45,6 +45,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "services" do |services|
     services.vm.hostname = "services"
     services.vm.network "private_network", ip: ENV.fetch("ICP_SERVICES_IP", "33.33.34.30")
+    services.vm.synced_folder "~/.aws", "/home/vagrant/.aws"
 
     # Graphite Web
     services.vm.network "forwarded_port", {
@@ -111,6 +112,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     app.vm.hostname = "app"
     app.vm.network "private_network", ip: ENV.fetch("ICP_APP_IP", "33.33.34.10")
 
+    app.vm.synced_folder "~/.aws", "/home/vagrant/.aws", type: "rsync"
+    app.vm.synced_folder "~/.aws", "/var/lib/icp/.aws", type: "rsync"
+
     if Vagrant::Util::Platform.windows? || Vagrant::Util::Platform.cygwin?
       app.vm.synced_folder "src/icp", "/opt/app/", type: "rsync", rsync__exclude: ["node_modules/", "apps/"]
       app.vm.synced_folder "src/icp/apps", "/opt/app/apps"
@@ -130,8 +134,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     }.merge(VAGRANT_NETWORK_OPTIONS)
     # Testem server
     app.vm.network "forwarded_port", {
-      guest: 7357,
-      host: 7357
+      guest: 7358,
+      host: 7358
     }.merge(VAGRANT_NETWORK_OPTIONS)
 
     app.ssh.forward_x11 = true

@@ -16,4 +16,5 @@ relp_host: "monitoring.service.icp.internal"
 graphite_host: "monitoring.service.icp.internal"
 statsite_host: "monitoring.service.icp.internal"
 
+aws_beekeepers_data_bucket: "beekeepers-staging-data-us-east-1"
 stack_type: "Packer"

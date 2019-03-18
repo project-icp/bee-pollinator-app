@@ -1,0 +1,217 @@
+.survey {
+    width: 100%;
+    height: auto;
+    min-height: max-content;
+    padding-left: 20px;
+    background-color: #f8f9fb;
+
+    &__title {
+        margin-top: 6px;
+        margin-bottom: 20px;
+    }
+
+    &__type {
+        margin-left: 4px;
+        font-size: $font-size-sm;
+        opacity: 0.5;
+    }
+
+    &.empty {
+        align-items: center;
+    }
+
+    &__header {
+        width: 600px;
+        margin-top: 1rem;
+        font: $font-xxl;
+        font-weight: $font-weight-bold;
+
+        &.empty {
+            margin-top: 8rem;
+        }
+    }
+
+    &__body {
+        width: 600px;
+        margin: 2rem 0;
+        font: $font-med;
+
+        &--section {
+            margin: 4rem 0;
+            font: $font-xl;
+            font-weight: $font-weight-bold;
+        }
+    }
+
+    &__button {
+        display: inline-block;
+        max-width: max-content;
+        margin: 2rem 0;
+        padding: 15px;
+        color: $color-white;
+        font-size: 14px;
+        text-decoration: none;
+        background: $color-primary;
+        border: none;
+        border-radius: 5px;
+    }
+
+    .dropdown__button {
+        margin-left: auto;
+        padding: auto;
+        color: $color-grey-2;
+        font-size: $font-size-med;
+        font-family: inherit;
+        background: none;
+        border: none;
+    }
+}
+
+.button {
+    &--long {
+        width: 150px;
+        margin-top: 20px;
+        padding: 15px;
+        color: $color-white;
+        font-weight: $font-weight-bold;
+        font-size: $font-size-med;
+        background: $color-primary;
+        border: none;
+    }
+}
+
+.surveyCard {
+    padding: 10px 15px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 4px -1px rgba(0, 0, 0, 0.5);
+
+    &:not(:last-child) {
+        margin-bottom: 1.4rem;
+    }
+
+    &__add-button {
+        margin: 10px 0;
+    }
+
+    &__title {
+        margin: 10px 0;
+        font: $font-lg;
+        font-weight: $font-weight-bold;
+    }
+
+    &__body {
+        font: $font-med;
+        text-decoration: none;
+    }
+
+    &__footer {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        .button {
+            font: $font-sm;
+            border: none;
+        }
+    }
+}
+
+.listing {
+    display: flex;
+    margin-bottom: 6px;
+
+    &__icon {
+        padding-right: 10px;
+        color: #de9b00;
+
+        &--completed {
+            padding-right: 10px;
+            color: #19cb35;
+        }
+    }
+
+    &__monthYear {
+        padding-right: 10px;
+        color: $color-black;
+        text-decoration: none;
+        border: none;
+    }
+
+    &__start {
+        color: $color-primary;
+        text-decoration: none;
+    }
+
+    /* stylelint-disable */
+    button {
+        padding: 0;
+        font-size: $font-size-med;
+        background: none;
+    }
+    /* stylelint-enable */
+}
+
+/* stylelint-disable */
+
+.modal .form__group {
+    margin: 10px auto;
+}
+
+.form__group {
+    display: block;
+    margin: 20px auto;
+
+    [type="checkbox"] + label {
+        display: inline-block;
+        margin-top: 2px;
+        margin-bottom: 2px;
+        margin-left: 5px;
+    }
+
+    label {
+        display: block;
+        margin: 10px 0;
+        font-weight: $font-weight-normal;
+
+        &:first-child {
+            font-weight: $font-weight-bold;
+        }
+    }
+}
+
+.form__secondary {
+    label {
+        font-weight: $font-weight-normal;
+
+        &:first-child {
+            font-weight: $font-weight-normal !important;
+        }
+    }
+}
+
+/* stylelint-enable */
+
+.form__group--error {
+    width: 100%;
+    margin: 14px 0 10px;
+    margin-bottom: 8px;
+    padding: 8px;
+    background: none;
+    border: 1px solid;
+}
+
+.tab-description {
+    margin: 15px 0;
+    padding-top: 25px;
+    font-style: italic;
+}
+
+.empty-message {
+    font-weight: normal;
+    font-size: $font-size-med;
+}
+
+.confirmation {
+    border-top: 1px solid #ccc;
+}

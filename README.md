@@ -2,13 +2,21 @@
 
 ## URLs
 
-Staging: https://staging.app.pollinationmapper.org
+Staging:
 
-Production: https://app.pollinationmapper.org
+- https://staging.app.beescape.org
+- https://staging.app.pollinationmapper.org
+
+Production:
+
+- https://app.beescape.org
+- https://app.pollinationmapper.org
 
 ## Local Development
 
-A combination of Vagrant 1.6+ and Ansible 1.8+ is used to setup the development environment for this project. The project consists of the following virtual machines:
+A combination of Vagrant 2.1+ and Ansible 2.6+ is used to setup the development environment for this project. Running `vagrant box update` is recommended so you're on the latest version of the `ubuntu/trusty64` box.
+
+The project consists of the following virtual machines:
 
 - `app`
 - `services`
@@ -264,3 +272,54 @@ If you make changes to the model, and would like to reinstall it on the app with
 3. Update the app's colors and SVGs
 
     `python /vagrant/scripts/colors/update.py`
+
+
+# Beekeepers App
+
+Beekeepers is a separate front-end app that takes advantage of the API infrastructure of the Pollination Mapper, but uses a new, modern tech stack. Discussion about its architecture can be found [here](./doc/phase-2/000_project_architecture_adr.md).
+
+The app can be viewed at [http://localhost:8000/?beekeepers](http://localhost:8000/?beekeepers).
+
+## AWS Credentials
+Raster data used by Beekeeper is stored and accessed from a private s3 bucket. To authenticate your requests, get your own IAM credentials and add them under an `icp-bees` profile to `~/.aws/credentials`. Ensure your `~/.aws/credentials` file has at least read permissions, else run `chmod -R 644 ~/.aws`. Provision your VM to mount the AWS credentials with Ansible.
+
+To build the Beekeepers App, run:
+
+```bash
+$ ./scripts/beekeepers.sh build
+```
+
+For development with hot module reloading enabled, run:
+
+```bash
+$ ./scripts/beekeepers.sh start
+```
+
+Now any changes made to the front-end within `src/icp/apps/beekeepers` will be reflected immediately.
+
+**Note**: After running `start`, `build` must be run again to enable the front-end. This is because the template reads the `apps/beekeepers/.webpack.stats.json` file to decide which JavaScript files to include, which are generated and stored in the static files directory with `build`. However, `start` serves those files from its own port, which is no longer active when it is shut down, so we must run `build` again to generate the static files.
+
+The [`beekeepers.sh`](./scripts/beekeepers.sh) script just SSH's in to the `app` VM and runs [`yarn.sh`](./src/icp/apps/beekeepers/yarn.sh), so it can take any `yarn` parameters.
+
+## Apiary Score raster layers
+The raster data layers read by the application are hosted in the icp-bees AWS account and
+are used by dev, staging and production (there is only read-only access). The data layers
+are provided in pairs, one each at 3km and 5km focal operations. Additionally, each layer
+is provided per state and the file naming scheme represents this as:
+
+`[STATE_ABBR]_[INDICATOR]_[FORAGE_RADIUS].tif`
+
+This results in files named like `PA_pesticide_3km.tif`.
+
+In order to support multiple states that come as discrete files, a VRT per layer/radius pair
+has been created using the following steps:
+
+```bash
+gdalbuildvrt pesticide_3km.vrt PA_pesticide_3km.tif IL_pesticide_3km.tif
+```
+
+A convenience script has been added to `scripts/make-vrts.sh` which contains the `gdalbuildvrt`
+commands used to generate the existing IN, IL & PA VRTs.  It can be modified to regenerate
+with additional states in the future.
+Once a VRT has been created for each layer/radius, both VRT and tifs are uploaded
+to the data bucket under a folder indicating 3km or 5km.

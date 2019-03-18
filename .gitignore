@@ -59,6 +59,7 @@ target/
 
 # Ansible
 deployment/ansible/roles/azavea.*
+*.retry
 
 # CloudFormation
 deployment/default.yml
@@ -96,3 +97,6 @@ _SUCCESS
 
 # MacOS
 .DS_Store
+
+# Webpack Stats used to help Django Hot Reload
+.webpack-stats.json

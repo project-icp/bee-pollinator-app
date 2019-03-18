@@ -29,3 +29,14 @@
   notify:
     - Restart icp-app
     - Restart Celery
+
+- name: Add AWS_PROFILE to settings in development
+  copy: content="{{ aws_profile }}"
+        dest="{{ envdir_home }}/AWS_PROFILE"
+        owner=root
+        group=icp
+        mode=0750
+  when: "['development', 'test'] | some_are_in(group_names)"
+  notify:
+    - Restart icp-app
+    - Restart Celery

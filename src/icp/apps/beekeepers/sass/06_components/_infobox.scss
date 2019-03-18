@@ -1,0 +1,15 @@
+.infobox {
+    margin-top: $font-size-xxl;
+    padding: 2rem;
+    border: 1px solid #000;
+
+    &__title {
+        margin-bottom: 1rem;
+        font: $font-base;
+        text-transform: uppercase;
+    }
+
+    &__body {
+        font-weight: $font-weight-bold;
+    }
+}
