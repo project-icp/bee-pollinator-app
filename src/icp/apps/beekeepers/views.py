@@ -185,7 +185,9 @@ class ApiaryViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Apiary.objects.filter(user=self.request.user, deleted_at=None)
+        return (Apiary.objects
+                      .filter(user=self.request.user, deleted_at=None)
+                      .order_by('id'))
 
     def destroy(self, request, pk=None):
         """Soft deletes Apiaries from user's account"""
