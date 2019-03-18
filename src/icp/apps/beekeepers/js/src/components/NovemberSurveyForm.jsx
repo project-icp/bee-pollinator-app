@@ -99,6 +99,11 @@ class NovemberSurveyForm extends Component {
                 let newState = {
                     completedSurvey: data,
                     num_colonies: data.num_colonies,
+                    harvested_honey: data.november.harvested_honey,
+                    small_hive_beetles: data.november.small_hive_beetles,
+                    varroa_check_frequency: data.november.varroa_check_frequency,
+                    varroa_manage_frequency: data.november.varroa_manage_frequency,
+                    all_colonies_treated: data.november.all_colonies_treated,
                 };
                 this.multipleChoiceKeys.forEach((key) => {
                     if (data.november[key]) {
@@ -384,6 +389,7 @@ class NovemberSurveyForm extends Component {
                         value={varroa_manage_frequency}
                         onChange={this.handleChange}
                         className="form__control"
+                        disabled={!!completedSurvey}
                     >
                         <option value="NEVER">I did not</option>
                         <option value="ONCE">Once a year</option>
@@ -424,6 +430,7 @@ class NovemberSurveyForm extends Component {
                                 value={harvested_honey}
                                 onChange={this.handleChange}
                                 className="form__control"
+                                disabled={!!completedSurvey}
                             >
                                 <option value="DID_NOT_HARVEST">Did not harvest</option>
                                 <option value="LESS_THAN_10">Less than 10 lbs</option>
@@ -474,6 +481,7 @@ class NovemberSurveyForm extends Component {
                                 value={varroa_check_frequency}
                                 onChange={this.handleChange}
                                 className="form__control"
+                                disabled={!!completedSurvey}
                             >
                                 <option value="NEVER">I did not</option>
                                 <option value="ONCE">Once a year</option>

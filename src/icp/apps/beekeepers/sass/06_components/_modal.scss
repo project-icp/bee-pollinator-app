@@ -1,10 +1,17 @@
 .popup-overlay {
     z-index: 1001 !important;
+    display: block !important;
     overflow-y: auto;
 }
 
 .popup-content {
     z-index: 1000 !important;
+}
+
+.modal {
+    width: 400px !important;
+    margin-top: 60px !important;
+    padding: 0 !important;
 }
 
 .userModal,
@@ -96,9 +103,4 @@
             width: 100%;
         }
     }
-}
-
-.modal {
-    width: 400px !important;
-    padding: 0 !important;
 }

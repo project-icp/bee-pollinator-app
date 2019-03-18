@@ -1,6 +1,4 @@
 .survey {
-    display: flex;
-    flex-direction: column;
     width: 100%;
     height: auto;
     min-height: max-content;
@@ -24,7 +22,7 @@
 
     &__header {
         width: 600px;
-        margin-top: 3rem;
+        margin-top: 1rem;
         font: $font-xxl;
         font-weight: $font-weight-bold;
 
@@ -34,14 +32,12 @@
     }
 
     &__body {
-        display: flex;
-        flex-direction: column;
         width: 600px;
         margin: 2rem 0;
         font: $font-med;
 
         &--section {
-            margin: 2rem 0;
+            margin: 4rem 0;
             font: $font-xl;
             font-weight: $font-weight-bold;
         }
@@ -83,9 +79,6 @@
 }
 
 .surveyCard {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
     padding: 10px 15px;
     background-color: #fff;
     border-radius: 4px;
@@ -99,12 +92,6 @@
         margin: 10px 0;
     }
 
-    &__content {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
     &__title {
         margin: 10px 0;
         font: $font-lg;
@@ -112,8 +99,6 @@
     }
 
     &__body {
-        // display: flex;
-        flex-direction: column;
         font: $font-med;
         text-decoration: none;
     }
