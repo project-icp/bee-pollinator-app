@@ -44,6 +44,7 @@
     }
 
     &__button {
+        display: inline-block;
         max-width: max-content;
         margin: 2rem 0;
         padding: 15px;
@@ -52,6 +53,7 @@
         text-decoration: none;
         background: $color-primary;
         border: none;
+        border-radius: 5px;
     }
 
     .dropdown__button {
