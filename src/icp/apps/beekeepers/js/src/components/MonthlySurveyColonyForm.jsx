@@ -205,7 +205,7 @@ class MonthlySurveyColonyForm extends Component {
                 {varroaCountDetails}
                 <div className="form__group">
                     <label htmlFor="varroa_treatment">
-                        Do you treat for Varroa? If so, how?
+                        Did you manage for Varroa since the last inspection?
                         Check all that apply.
                     </label>
                     {this.makeMultipleChoiceInputs('varroa_treatment', MITE_MANAGEMENT_OPTIONS, [THYMOL_DESCRIPTION, AMITRAZ_DESCRIPTION])}
