@@ -15,8 +15,8 @@ const ApiarySurveyListing = ({ apiary, surveys }) => {
     ));
 
     return (
-        <div>
-            <h2>{name}</h2>
+        <div className="historyModal">
+            <h2 className="title">{name}</h2>
             {listings}
         </div>
     );
