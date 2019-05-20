@@ -14,8 +14,12 @@ import {
     THYMOL_DESCRIPTION,
     AMITRAZ_DESCRIPTION,
 } from '../constants';
-import { arrayToSemicolonDelimitedString, getOrCreateSurveyRequest } from '../utils';
-import { Survey } from '../propTypes';
+import {
+    arrayToSemicolonDelimitedString,
+    getOrCreateSurveyRequest,
+    toMonthNameYear,
+} from '../utils';
+import { Apiary, Survey } from '../propTypes';
 import Tooltip from './Tooltip';
 
 
@@ -294,6 +298,11 @@ class NovemberSurveyForm extends Component {
             error,
         } = this.state;
 
+        const {
+            apiary: { name },
+            survey: { month_year },
+        } = this.props;
+
         const userMessage = error.length ? (
             <div className="form__group--error">
                 {error}
@@ -312,8 +321,8 @@ class NovemberSurveyForm extends Component {
             );
 
         const title = completedSurvey
-            ? 'Survey results'
-            : 'Fill out this survey about your apiary';
+            ? `Survey results for ${toMonthNameYear(month_year)}`
+            : `Survey for ${toMonthNameYear(month_year)}`;
 
         const confirmationButton = completedSurvey
             ? null
@@ -536,7 +545,7 @@ class NovemberSurveyForm extends Component {
         return (
             <div className="authModal">
                 <div className="authModal__header">
-                    <div>November survey</div>
+                    <div>{name}</div>
                 </div>
                 <div className="authModal__content">
                     {userMessage}
@@ -553,6 +562,7 @@ function mapStateToProps(state) {
 }
 
 NovemberSurveyForm.propTypes = {
+    apiary: Apiary.isRequired,
     survey: Survey.isRequired,
     dispatch: func.isRequired,
     close: func.isRequired,

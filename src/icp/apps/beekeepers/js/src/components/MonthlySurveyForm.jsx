@@ -12,7 +12,7 @@ import 'react-tabs/style/react-tabs.css';
 
 import { fetchUserApiaries, flashSuccessModal } from '../actions';
 import { SURVEY_TYPE_MONTHLY } from '../constants';
-import { Survey } from '../propTypes';
+import { Survey, Apiary } from '../propTypes';
 import {
     arrayToSemicolonDelimitedString,
     getOrCreateSurveyRequest,
@@ -326,7 +326,10 @@ class MonthlySurveyForm extends Component {
             selectedTabIndex,
         } = this.state;
 
-        const { survey: { month_year, completed } } = this.props;
+        const {
+            apiary: { name },
+            survey: { month_year, completed },
+        } = this.props;
 
         const userMessage = error.length ? (
             <div className="form__group--error">
@@ -425,7 +428,7 @@ class MonthlySurveyForm extends Component {
         return (
             <div className="authModal">
                 <div className="authModal__header">
-                    <div>Monthly Survey</div>
+                    <div>{name}</div>
                 </div>
                 <div className="authModal__content">
                     {userMessage}
@@ -442,6 +445,7 @@ function mapStateToProps(state) {
 }
 
 MonthlySurveyForm.propTypes = {
+    apiary: Apiary.isRequired,
     survey: Survey.isRequired,
     dispatch: func.isRequired,
     close: func.isRequired,
