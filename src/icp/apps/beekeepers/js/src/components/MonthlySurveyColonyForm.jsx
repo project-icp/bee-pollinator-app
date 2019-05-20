@@ -205,7 +205,7 @@ class MonthlySurveyColonyForm extends Component {
                 {varroaCountDetails}
                 <div className="form__group">
                     <label htmlFor="varroa_treatment">
-                        Do you treat for Varroa? If so, how?
+                        Did you manage for Varroa since the last inspection?
                         Check all that apply.
                     </label>
                     {this.makeMultipleChoiceInputs('varroa_treatment', MITE_MANAGEMENT_OPTIONS, [THYMOL_DESCRIPTION, AMITRAZ_DESCRIPTION])}
@@ -240,6 +240,7 @@ class MonthlySurveyColonyForm extends Component {
                 {this.inputSelect('queen_source', 'Where did the queen come from?', [
                     ['NON_LOCAL_COMMERCIAL', 'Non-local commercial breeder'],
                     ['LOCAL_COMMERCIAL', 'Local commercial breeder'],
+                    ['LOCAL_NON_COMMERCIAL', 'Local, non-commercial or reared on site'],
                     ['REQUEENED', 'Colony requeened itself'],
                     ['PACKAGE', 'Package'],
                     ['FERAL', 'Feral colony or swarm'],
