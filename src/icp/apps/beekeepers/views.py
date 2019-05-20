@@ -43,6 +43,7 @@ def export_survey_tables(request):
     connection = psycopg2.connect(db_options)
     cur = connection.cursor()
     tables = dict(
+        apiary=None,
         novembersurvey=None,
         aprilsurvey=None,
         monthlysurvey=None,
@@ -54,7 +55,7 @@ def export_survey_tables(request):
         """,
         survey="""
             SELECT beekeepers_survey.*, beekeepers_apiary.lat,
-            beekeepers_apiary.lng
+            beekeepers_apiary.lng, beekeepers_apiary.user_id
             FROM beekeepers_survey
             INNER JOIN beekeepers_apiary
             ON beekeepers_survey.apiary_id=beekeepers_apiary.id
