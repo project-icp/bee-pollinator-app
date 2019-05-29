@@ -19,8 +19,9 @@
 - src: azavea.postgresql-support
   version: 0.4.0
 
-- src: azavea.postgresql
-  version: 0.3.0
+- src: https://github.com/azavea/ansible-postgresql
+  version: feature/jrb/default-textsearch-config
+  name: azavea.postgresql
 
 - src: azavea.postgis
   version: 0.3.0
