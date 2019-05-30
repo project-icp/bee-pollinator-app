@@ -4,8 +4,12 @@ import { func } from 'prop-types';
 
 import { fetchUserApiaries, flashSuccessModal } from '../actions';
 import { SURVEY_TYPE_APRIL, COLONY_LOSS_REASONS } from '../constants';
-import { arrayToSemicolonDelimitedString, getOrCreateSurveyRequest } from '../utils';
-import { Survey } from '../propTypes';
+import {
+    arrayToSemicolonDelimitedString,
+    getOrCreateSurveyRequest,
+    toMonthNameYear,
+} from '../utils';
+import { Apiary, Survey } from '../propTypes';
 
 class AprilSurveyForm extends Component {
     constructor(props) {
@@ -176,6 +180,11 @@ class AprilSurveyForm extends Component {
             error,
         } = this.state;
 
+        const {
+            apiary: { name },
+            survey: { month_year },
+        } = this.props;
+
         const userMessage = error.length ? (
             <div className="form__group--error">
                 {error}
@@ -194,8 +203,8 @@ class AprilSurveyForm extends Component {
             );
 
         const title = completedSurvey
-            ? 'Survey results'
-            : 'Fill out this survey about your apiary';
+            ? `Survey results for ${toMonthNameYear(month_year)}`
+            : `Survey for ${toMonthNameYear(month_year)}`;
 
         const confirmationButton = completedSurvey
             ? null
@@ -264,7 +273,7 @@ class AprilSurveyForm extends Component {
         return (
             <div className="authModal">
                 <div className="authModal__header">
-                    <div>April survey</div>
+                    <div>{name}</div>
                 </div>
                 <div className="authModal__content">
                     {userMessage}
@@ -281,6 +290,7 @@ function mapStateToProps(state) {
 }
 
 AprilSurveyForm.propTypes = {
+    apiary: Apiary.isRequired,
     survey: Survey.isRequired,
     dispatch: func.isRequired,
     close: func.isRequired,

@@ -73,6 +73,9 @@
 - src: azavea.python
   version: 0.1.0
 
+- src: azavea.python-security
+  version: 1.0.0
+
 - src: azavea.unzip
   version: 0.1.2
 

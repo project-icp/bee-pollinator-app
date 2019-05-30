@@ -9,13 +9,14 @@ const ApiarySurveyListing = ({ apiary, surveys }) => {
     const listings = surveys.map(survey => (
         <SurveyCardListing
             key={name + survey.month_year + survey.survey_type}
+            apiary={apiary}
             survey={survey}
         />
     ));
 
     return (
-        <div>
-            <h2>{name}</h2>
+        <div className="historyModal">
+            <h2 className="title">{name}</h2>
             {listings}
         </div>
     );

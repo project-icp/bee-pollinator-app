@@ -40,6 +40,7 @@ const SurveyCard = ({ apiary, dispatch, surveys }) => {
         cardBody = shownSurveys.map(survey => (
             <SurveyCardListing
                 key={name + survey.month_year + survey.survey_type}
+                apiary={apiary}
                 survey={survey}
             />
         ));

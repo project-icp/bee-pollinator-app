@@ -253,6 +253,7 @@ class MonthlySurvey(models.Model):
     QUEEN_SOURCES = (
         ('NON_LOCAL_COMMERCIAL', 'Non-local commercial breeder'),
         ('LOCAL_COMMERCIAL', 'Local commercial breeder'),
+        ('LOCAL_NON_COMMERCIAL', 'Local, non-commercial or reared on site'),
         ('REQUEENED', 'Colony requeened itself'),
         ('PACKAGE', 'Package'),
         ('FERAL', 'Feral colony or swarm'),
