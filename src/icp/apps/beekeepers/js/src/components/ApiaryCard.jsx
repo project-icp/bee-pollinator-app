@@ -40,6 +40,21 @@ class ApiaryCard extends Component {
         this.saveApiaryNameOnEnter = this.saveApiaryNameOnEnter.bind(this);
     }
 
+    componentDidUpdate(prevProps) {
+        const { apiary: { name } } = this.props;
+        const { apiary: { name: prevName } } = prevProps;
+
+        if (prevName !== name) {
+            // Update internal state if the prop has changed.
+            // This is generally discouraged, see https://github.com/yannickcr/eslint-plugin-react/blob/7dce90a4f570847b33eaefddb8d9bb7d6eca9dc5/docs/rules/no-did-update-set-state.md
+            // but without this the default name isn't updated with the
+            // reverse geocoded address which kicks in a little later.
+
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({ apiaryName: name });
+        }
+    }
+
     onApiaryNameChange(e) {
         this.setState({ apiaryName: e.target.value });
     }
