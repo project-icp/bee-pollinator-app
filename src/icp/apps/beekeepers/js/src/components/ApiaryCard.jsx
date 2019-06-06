@@ -60,54 +60,54 @@ class ApiaryCard extends Component {
     }
 
     getCardNameBlock() {
-        const { isEditing, isHovering, apiaryName } = this.state;
+        const { isEditing, isHovering } = this.state;
+
+        let className = 'card__name';
+        let onKeyPress = () => {};
+        let onChange = () => {};
+        let onClick = () => {};
+        let onFocus = () => {};
+        let cardButton = null;
+        let readOnly = true;
 
         if (isEditing) {
-            return (
-                <>
-                    <input
-                        className="card__name card__name-editing"
-                        onChange={this.onApiaryNameChange}
-                        onKeyPress={this.saveApiaryNameOnEnter}
-                        value={apiaryName}
-                    />
-                    <CardButton
-                        icon="check"
-                        tooltip="Save apiary name"
-                        onClick={this.onApiaryNameSave}
-                    />
-                </>
+            className = 'card__name card__name-editing';
+            onChange = this.onApiaryNameChange;
+            onKeyPress = this.saveApiaryNameOnEnter;
+            onFocus = () => {};
+            readOnly = false;
+            cardButton = (
+                <CardButton
+                    icon="check"
+                    tooltip="Save apiary name"
+                    onClick={this.onApiaryNameSave}
+                />
             );
+        } else if (isHovering) {
+            className = 'card__name card__name-hovering';
+            onClick = this.enableEditing;
+            onKeyPress = this.enableEditingOnEnter;
+            cardButton = (
+                <CardButton
+                    icon="pencil"
+                    tooltip="Edit apiary name"
+                    onClick={this.enableEditing}
+                />
+            );
+        } else {
+            onKeyPress = this.enableEditingOnEnter;
+            onFocus = this.enableHovering;
         }
 
-        if (isHovering) {
-            return (
-                <>
-                    <input
-                        className="card__name card__name-hovering"
-                        readOnly
-                        onClick={this.enableEditing}
-                        onKeyPress={this.enableEditingOnEnter}
-                        value={apiaryName}
-                    />
-                    <CardButton
-                        icon="pencil"
-                        tooltip="Edit apiary name"
-                        onClick={this.enableEditing}
-                    />
-                </>
-            );
-        }
-
-        return (
-            <input
-                className="card__name"
-                readOnly
-                onKeyPress={this.enableEditingOnEnter}
-                onFocus={this.enableHovering}
-                value={apiaryName}
-            />
-        );
+        return {
+            className,
+            onKeyPress,
+            onChange,
+            onClick,
+            onFocus,
+            cardButton,
+            readOnly,
+        };
     }
 
     dispatchAction(action) {
@@ -148,6 +148,7 @@ class ApiaryCard extends Component {
 
     render() {
         const { apiary, forageRange, dispatch } = this.props;
+        const { apiaryName } = this.state;
 
         const {
             marker,
@@ -203,6 +204,8 @@ class ApiaryCard extends Component {
             <ScoresLabel key={i} indicator={i} scores={[values[i]]} />
         ));
 
+        const cardName = this.getCardNameBlock();
+
         return (
             <li className="card">
                 <div className="card__top">
@@ -212,7 +215,16 @@ class ApiaryCard extends Component {
                         onMouseLeave={this.disableHovering}
                     >
                         <div className={`marker ${markerClass}`}>{marker}</div>
-                        {this.getCardNameBlock()}
+                        <input
+                            className={cardName.className}
+                            onKeyPress={cardName.onKeyPress}
+                            onChange={cardName.onChange}
+                            onClick={cardName.onClick}
+                            onFocus={cardName.onFocus}
+                            readOnly={cardName.readOnly}
+                            value={apiaryName}
+                        />
+                        {cardName.cardButton}
                     </div>
                     <div className="card__buttons">
                         <CardButton
