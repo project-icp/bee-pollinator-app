@@ -73,12 +73,12 @@ class Sidebar extends Component {
                     <div className="sidebar__controls">
                         <DropdownSelector
                             title="Sort by:"
-                            options={SORT_OPTIONS}
+                            options={Object.entries(SORT_OPTIONS)}
                             onOptionClick={onSelectSort}
                         />
                         <DropdownSelector
                             title="Forage range:"
-                            options={FORAGE_RANGES}
+                            options={Object.entries(FORAGE_RANGES)}
                             onOptionClick={onSelectForageRange}
                         />
                     </div>
