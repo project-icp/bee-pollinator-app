@@ -177,7 +177,7 @@ class MonthlySurveyColonyForm extends Component {
             <>
                 {inputText('colony_name', 'Colony Name (required)', required)}
                 {inputDate('inspection_date', 'Date of Inspection', required)}
-                {inputText('hive_scale_id', 'If you have an automated scale associated with this colony, please enter the hive scale ID number here.')}
+                {inputText('hive_scale_id', 'If you have an automated scale associated with this colony, please enter the hive scale brand and ID number here.')}
                 {this.inputSelect('colony_alive', 'Is the colony alive?', [
                     ['true', 'Yes'],
                     ['false', 'No'],
