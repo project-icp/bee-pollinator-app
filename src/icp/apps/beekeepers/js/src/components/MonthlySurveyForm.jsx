@@ -128,7 +128,7 @@ class MonthlySurveyForm extends Component {
 
     componentDidMount() {
         const { monthlies: prevMonthlies } = this.state;
-        const { survey: { id, apiary } } = this.props;
+        const { survey: { id, apiary }, lastMonthlySurvey } = this.props;
 
         if (id) {
             getOrCreateSurveyRequest({ apiary, id })
@@ -167,6 +167,28 @@ class MonthlySurveyForm extends Component {
                     });
                 })
                 .catch(error => this.setState({ error }));
+        }
+
+        if (lastMonthlySurvey.id && !id) {
+            getOrCreateSurveyRequest({
+                apiary: lastMonthlySurvey.apiary,
+                id: lastMonthlySurvey.id,
+            }).then(({ data }) => {
+                const { monthlies } = this.state;
+                const updatedMonthlies = monthlies.map((monthly, idx) => {
+                    const lastMonthlySurveyColony = data
+                        ? data.monthlies[idx] : {};
+
+                    if (lastMonthlySurveyColony && lastMonthlySurveyColony.id) {
+                        return update(monthly, {
+                            colony_name: { $set: lastMonthlySurveyColony.colony_name },
+                            hive_scale_id: { $set: lastMonthlySurveyColony.hive_scale_id },
+                        });
+                    }
+                    return monthly;
+                });
+                this.setState({ monthlies: updatedMonthlies });
+            }).catch(error => this.setState({ error }));
         }
     }
 
@@ -444,11 +466,16 @@ function mapStateToProps(state) {
     return state.main;
 }
 
+MonthlySurveyForm.defaultProps = {
+    lastMonthlySurvey: {},
+};
+
 MonthlySurveyForm.propTypes = {
     apiary: Apiary.isRequired,
     survey: Survey.isRequired,
     dispatch: func.isRequired,
     close: func.isRequired,
+    lastMonthlySurvey: Survey,
 };
 
 export default connect(mapStateToProps)(MonthlySurveyForm);

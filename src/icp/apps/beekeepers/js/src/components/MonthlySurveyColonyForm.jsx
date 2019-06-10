@@ -25,7 +25,7 @@ import Tooltip from './Tooltip';
 
 class MonthlySurveyColonyForm extends Component {
     inputFactory(inputType) {
-        const { data, onChange } = this.props;
+        const { onChange, data } = this.props;
         const disabled = data.id !== null;
 
         return (key, label, required, tooltipDescription) => {
@@ -54,7 +54,7 @@ class MonthlySurveyColonyForm extends Component {
     }
 
     inputSelect(key, label, options, tooltipDescription) {
-        const { data, onChange } = this.props;
+        const { onChange, data } = this.props;
         const value = data[key] && data[key].toString();
         const disabled = data.id !== null;
         const tooltip = tooltipDescription
@@ -84,7 +84,7 @@ class MonthlySurveyColonyForm extends Component {
     }
 
     makeMultipleChoiceInputs(groupName, options, tooltipDescriptions) {
-        const { data, onChange } = this.props;
+        const { onChange, data } = this.props;
         const disabled = data.id !== null;
 
         return options.map((option, index) => {

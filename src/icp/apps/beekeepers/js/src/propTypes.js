@@ -81,4 +81,5 @@ export const MonthlySurveyColony = shape({
     varroa_count_technique: string,
     varroa_count_result: number,
     varroa_treatment: string,
+    hive_scale_id: string,
 });
