@@ -173,8 +173,10 @@ class MonthlySurveyColonyForm extends Component {
                 </div>
             </>
         );
+
         /* eslint-disable-next-line no-useless-escape */
         const dateRegex = '\\d{4}-\\d{2}-\\d{2}';
+
         return (
             <>
                 {inputText('colony_name', 'Colony Name (required)', required)}

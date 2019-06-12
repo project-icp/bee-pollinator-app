@@ -130,6 +130,7 @@ class MonthlySurveyForm extends Component {
         const { monthlies: prevMonthlies } = this.state;
         const { survey: { id, apiary }, lastMonthlySurvey } = this.props;
 
+        // Fetch and show data from the database for a completed survey
         if (id) {
             getOrCreateSurveyRequest({ apiary, id })
                 .then(({ data }) => {
@@ -169,17 +170,24 @@ class MonthlySurveyForm extends Component {
                 .catch(error => this.setState({ error }));
         }
 
-        if (lastMonthlySurvey.id && !id) {
+        // For a new survey, autofill select fields with most recent and complete survey data
+        // Else, show a blank survey
+        if (lastMonthlySurvey && !id) {
             getOrCreateSurveyRequest({
                 apiary: lastMonthlySurvey.apiary,
                 id: lastMonthlySurvey.id,
             }).then(({ data }) => {
-                const { monthlies } = this.state;
-                const updatedMonthlies = monthlies.map((monthly, idx) => {
-                    const lastMonthlySurveyColony = data
-                        ? data.monthlies[idx] : {};
+                // monthlies come in reverse order than how they're filled-out
+                const { monthlies: formMonthlies } = this.state;
+                const sortedMonthlies = Object.assign([], data.monthlies)
+                    .sort((a, b) => a.id - b.id); // In ascending order of id
 
-                    if (lastMonthlySurveyColony && lastMonthlySurveyColony.id) {
+                // autofill the blank forms with the latest data
+                const updatedFormMonthlies = formMonthlies.map((monthly, idx) => {
+                    const lastMonthlySurveyColony = sortedMonthlies
+                        ? sortedMonthlies[idx] : null;
+
+                    if (lastMonthlySurveyColony) {
                         return update(monthly, {
                             colony_name: { $set: lastMonthlySurveyColony.colony_name },
                             hive_scale_id: { $set: lastMonthlySurveyColony.hive_scale_id },
@@ -187,7 +195,7 @@ class MonthlySurveyForm extends Component {
                     }
                     return monthly;
                 });
-                this.setState({ monthlies: updatedMonthlies });
+                this.setState({ monthlies: updatedFormMonthlies });
             }).catch(error => this.setState({ error }));
         }
     }
@@ -467,7 +475,7 @@ function mapStateToProps(state) {
 }
 
 MonthlySurveyForm.defaultProps = {
-    lastMonthlySurvey: {},
+    lastMonthlySurvey: null,
 };
 
 MonthlySurveyForm.propTypes = {
