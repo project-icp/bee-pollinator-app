@@ -27,8 +27,7 @@ class MonthlySurveyColonyForm extends Component {
     inputFactory(inputType) {
         const { onChange, data } = this.props;
         const disabled = data.id !== null;
-
-        return (key, label, required, tooltipDescription) => {
+        return (key, label, required, tooltipDescription, placeholder, pattern) => {
             const tooltip = tooltipDescription
                 ? <Tooltip description={[tooltipDescription]} />
                 : null;
@@ -47,6 +46,8 @@ class MonthlySurveyColonyForm extends Component {
                         onChange={onChange}
                         disabled={disabled}
                         required={required}
+                        placeholder={placeholder}
+                        pattern={pattern}
                     />
                 </div>
             );
@@ -172,11 +173,12 @@ class MonthlySurveyColonyForm extends Component {
                 </div>
             </>
         );
-
+        /* eslint-disable-next-line no-useless-escape */
+        const dateRegex = '\\d{4}-\\d{2}-\\d{2}';
         return (
             <>
                 {inputText('colony_name', 'Colony Name (required)', required)}
-                {inputDate('inspection_date', 'Date of Inspection', required)}
+                {inputDate('inspection_date', 'Date of Inspection', required, false, 'YYYY-MM-DD', dateRegex)}
                 {inputText('hive_scale_id', 'If you have an automated scale associated with this colony, please enter the hive scale brand and ID number here.')}
                 {this.inputSelect('colony_alive', 'Is the colony alive?', [
                     ['true', 'Yes'],
