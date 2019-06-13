@@ -21,6 +21,7 @@ const SurveyCardListing = ({
         survey_type,
         completed,
     },
+    lastMonthlySurvey,
 }) => {
     let formComponent;
     switch (survey_type) {
@@ -36,7 +37,12 @@ const SurveyCardListing = ({
             break;
         case SURVEY_TYPE_MONTHLY:
             formComponent = (close => (
-                <MonthlySurveyForm apiary={apiary} survey={survey} close={close} />
+                <MonthlySurveyForm
+                    apiary={apiary}
+                    survey={survey}
+                    close={close}
+                    lastMonthlySurvey={lastMonthlySurvey}
+                />
             ));
             break;
         default:
@@ -66,9 +72,14 @@ const SurveyCardListing = ({
     );
 };
 
+SurveyCardListing.defaultProps = {
+    lastMonthlySurvey: null,
+};
+
 SurveyCardListing.propTypes = {
     apiary: Apiary.isRequired,
     survey: Survey.isRequired,
+    lastMonthlySurvey: Survey,
 };
 
 export default SurveyCardListing;

@@ -8,6 +8,7 @@ import { setApiarySurvey } from '../actions';
 
 import ApiarySurveyListing from './ApiarySurveyListing';
 import SurveyCardListing from './SurveyCardListing';
+import { SURVEY_TYPE_MONTHLY } from '../constants';
 
 const SurveyCard = ({ apiary, dispatch, surveys }) => {
     const {
@@ -37,11 +38,17 @@ const SurveyCard = ({ apiary, dispatch, surveys }) => {
     } else {
         const shownSurveys = surveys.slice(0, 4);
 
+        const sortedMonthlySurveys = surveys
+            .filter(survey => survey.survey_type === SURVEY_TYPE_MONTHLY && !!survey.completed);
+
+        const lastMonthlySurvey = sortedMonthlySurveys.length ? sortedMonthlySurveys[0] : null;
+
         cardBody = shownSurveys.map(survey => (
             <SurveyCardListing
                 key={name + survey.month_year + survey.survey_type}
                 apiary={apiary}
                 survey={survey}
+                lastMonthlySurvey={lastMonthlySurvey}
             />
         ));
 
@@ -59,7 +66,11 @@ const SurveyCard = ({ apiary, dispatch, surveys }) => {
                 className="modal nice"
                 trigger={cardDetailTrigger}
             >
-                <ApiarySurveyListing apiary={apiary} surveys={surveys} />
+                <ApiarySurveyListing
+                    apiary={apiary}
+                    surveys={surveys}
+                    lastMonthlySurvey={lastMonthlySurvey}
+                />
             </Popup>
         );
 
