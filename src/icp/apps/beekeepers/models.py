@@ -349,7 +349,8 @@ class MonthlySurvey(models.Model):
         null=True,
         blank=True,
         help_text='If you have an automated scale associated with this '
-                  'colony, please enter the hive scale ID number here.')
+                  'colony, please enter the hive scale brand and ID number '
+                  'here.')
 
     class Meta:
         unique_together = ('survey', 'colony_name')

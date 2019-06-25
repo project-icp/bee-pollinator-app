@@ -2,7 +2,7 @@ import React from 'react';
 import { func, string, arrayOf } from 'prop-types';
 
 const DropdownSelector = ({ title, options, onOptionClick }) => {
-    const selectOptions = Object.entries(options).map(([option, label]) => (
+    const selectOptions = options.map(([option, label]) => (
         <option value={option} key={option}>
             {label}
         </option>
@@ -26,7 +26,7 @@ const DropdownSelector = ({ title, options, onOptionClick }) => {
 
 DropdownSelector.propTypes = {
     title: string.isRequired,
-    options: arrayOf(string).isRequired,
+    options: arrayOf(arrayOf(string)).isRequired,
     onOptionClick: func.isRequired,
 };
 
