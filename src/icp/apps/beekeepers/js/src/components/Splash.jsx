@@ -11,7 +11,7 @@ export default function () {
                     Managed honey bees and wild bees travel far from their nests to find food.
                     What are your bees experiencing during their journey? This tool will help
                     you understand how the landscape surrounding your apiary, garden, or farm
-                    stacks up in terms of the floral resources bees can find, the pesticides
+                    stacks up in terms of the floral resources bees can find, the insecticides
                     they encounter, and, for wild bees, the nesting sites that are available.
                 </p>
                 <div className="infobox">

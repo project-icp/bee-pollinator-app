@@ -9,7 +9,7 @@ export const DEFAULT_SORT = 'default';
 
 export const INDICATORS = {
     NESTING_QUALITY: 'nesting',
-    PESTICIDE: 'pesticide',
+    INSECTICIDE: 'insecticide',
     FLORAL_SPRING: 'floral_spring',
     FLORAL_SUMMER: 'floral_summer',
     FLORAL_FALL: 'floral_fall',
@@ -22,7 +22,7 @@ export const INDICATOR_DETAILS = {
         shortLabel: 'Nesting',
         scoreStops: [7, 33, 39, 46, 66],
     },
-    pesticide: {
+    insecticide: {
         name: 'Insecticide load',
         scoreLabels: ['Insecticide'],
         shortLabel: 'Insecticide',
