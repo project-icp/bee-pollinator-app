@@ -1,16 +1,16 @@
-# Build vrts for PA, IL & IN raster files contained in this directory
+# Build vrts for PA, IL, IN, NY, MI, OH, WI, & WV raster files contained in this directory
 
-gdalbuildvrt floral_spring_3km.vrt PA_floral_spring_3km.tif IL_floral_spring_3km.tif IN_floral_spring_3km.tif
-gdalbuildvrt floral_spring_5km.vrt PA_floral_spring_5km.tif IL_floral_spring_5km.tif IN_floral_spring_5km.tif
+gdalbuildvrt floral_spring_3km.vrt PA_floral_spring_3km.tif IL_floral_spring_3km.tif IN_floral_spring_3km.tif NY_floral_spring_3km.tif MI_floral_spring_3km.tif OH_floral_spring_3km.tif WI_floral_spring_3km.tif WV_floral_spring_3km.tif
+gdalbuildvrt floral_spring_5km.vrt PA_floral_spring_5km.tif IL_floral_spring_5km.tif IN_floral_spring_5km.tif NY_floral_spring_5km.tif MI_floral_spring_5km.tif OH_floral_spring_5km.tif WI_floral_spring_5km.tif WV_floral_spring_5km.tif
 
-gdalbuildvrt floral_summer_3km.vrt PA_floral_summer_3km.tif IL_floral_summer_3km.tif IN_floral_summer_3km.tif
-gdalbuildvrt floral_summer_5km.vrt PA_floral_summer_5km.tif IL_floral_summer_5km.tif IN_floral_summer_5km.tif
+gdalbuildvrt floral_summer_3km.vrt PA_floral_summer_3km.tif IL_floral_summer_3km.tif IN_floral_summer_3km.tif NY_floral_summer_3km.tif MI_floral_summer_3km.tif OH_floral_summer_3km.tif WI_floral_summer_3km.tif WV_floral_summer_3km.tif
+gdalbuildvrt floral_summer_5km.vrt PA_floral_summer_5km.tif IL_floral_summer_5km.tif IN_floral_summer_5km.tif NY_floral_summer_5km.tif MI_floral_summer_5km.tif OH_floral_summer_5km.tif WI_floral_summer_5km.tif WV_floral_summer_5km.tif
 
-gdalbuildvrt floral_fall_3km.vrt PA_floral_fall_3km.tif IL_floral_fall_3km.tif IN_floral_fall_3km.tif
-gdalbuildvrt floral_fall_5km.vrt PA_floral_fall_5km.tif IL_floral_fall_5km.tif IN_floral_fall_5km.tif
+gdalbuildvrt floral_fall_3km.vrt PA_floral_fall_3km.tif IL_floral_fall_3km.tif IN_floral_fall_3km.tif NY_floral_fall_3km.tif MI_floral_fall_3km.tif OH_floral_fall_3km.tif WI_floral_fall_3km.tif WV_floral_fall_3km.tif
+gdalbuildvrt floral_fall_5km.vrt PA_floral_fall_5km.tif IL_floral_fall_5km.tif IN_floral_fall_5km.tif NY_floral_fall_5km.tif MI_floral_fall_5km.tif OH_floral_fall_5km.tif WI_floral_fall_5km.tif WV_floral_fall_5km.tif
 
-gdalbuildvrt nesting_3km.vrt PA_nesting_3km.tif IL_nesting_3km.tif IN_nesting_3km.tif
-gdalbuildvrt nesting_5km.vrt PA_nesting_5km.tif IL_nesting_5km.tif IN_nesting_5km.tif
+gdalbuildvrt nesting_3km.vrt PA_nesting_3km.tif IL_nesting_3km.tif IN_nesting_3km.tif NY_nesting_3km.tif MI_nesting_3km.tif OH_nesting_3km.tif WI_nesting_3km.tif WV_nesting_3km.tif
+gdalbuildvrt nesting_5km.vrt PA_nesting_5km.tif IL_nesting_5km.tif IN_nesting_5km.tif NY_nesting_5km.tif MI_nesting_5km.tif OH_nesting_5km.tif WI_nesting_5km.tif WV_nesting_5km.tif
 
-gdalbuildvrt pesticide_3km.vrt PA_pesticide_3km.tif IL_pesticide_3km.tif IN_pesticide_3km.tif
-gdalbuildvrt pesticide_5km.vrt PA_pesticide_5km.tif IL_pesticide_5km.tif IN_pesticide_5km.tif
+gdalbuildvrt insecticide_3km.vrt PA_insecticide_3km.tif IL_insecticide_3km.tif IN_insecticide_3km.tif NY_insecticide_3km.tif MI_insecticide_3km.tif OH_insecticide_3km.tif WI_insecticide_3km.tif WV_insecticide_3km.tif
+gdalbuildvrt insecticide_5km.vrt PA_insecticide_5km.tif IL_insecticide_5km.tif IN_insecticide_5km.tif NY_insecticide_5km.tif MI_insecticide_5km.tif OH_insecticide_5km.tif WI_insecticide_5km.tif WV_insecticide_5km.tif
