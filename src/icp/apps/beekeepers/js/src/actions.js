@@ -59,7 +59,9 @@ export function fetchApiaryScores(apiaryList, forageRange) {
         }
 
         // check if data for the apiaries already exist
-        if (apiaryList.every(apiary => apiary.scores[forageRange].data)) {
+        if (apiaryList.every(apiary => apiary.scores[forageRange]
+            && apiary.scores[forageRange].data)
+        ) {
             return true;
         }
 

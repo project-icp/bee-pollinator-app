@@ -173,11 +173,11 @@ class ApiaryCard extends Component {
             fetching,
         } = apiary;
 
-        const values = scores[forageRange];
+        const values = scores && scores[forageRange];
 
         const markerClass = getMarkerClass(apiary);
 
-        if (!Object.keys(values).length && !fetching) {
+        if ((!values || !Object.keys(values).length) && !fetching) {
             // Fetch is complete and no scores retrieved
             // Report error
 
