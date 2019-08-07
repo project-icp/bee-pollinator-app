@@ -309,17 +309,17 @@ is provided per state and the file naming scheme represents this as:
 
 `[STATE_ABBR]_[INDICATOR]_[FORAGE_RADIUS].tif`
 
-This results in files named like `PA_pesticide_3km.tif`.
+This results in files named like `PA_nesting_3km.tif`.
 
 In order to support multiple states that come as discrete files, a VRT per layer/radius pair
 has been created using the following steps:
 
 ```bash
-gdalbuildvrt pesticide_3km.vrt PA_pesticide_3km.tif IL_pesticide_3km.tif
+gdalbuildvrt nesting_3km.vrt PA_nesting_3km.tif IL_nesting_3km.tif
 ```
 
 A convenience script has been added to `scripts/make-vrts.sh` which contains the `gdalbuildvrt`
-commands used to generate the existing IN, IL & PA VRTs.  It can be modified to regenerate
+commands used to generate the existing VRTs.  It can be modified to regenerate
 with additional states in the future.
 Once a VRT has been created for each layer/radius, both VRT and tifs are uploaded
 to the data bucket under a folder indicating 3km or 5km.
