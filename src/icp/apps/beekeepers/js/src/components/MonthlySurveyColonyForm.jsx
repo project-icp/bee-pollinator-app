@@ -48,6 +48,7 @@ class MonthlySurveyColonyForm extends Component {
                         required={required}
                         placeholder={placeholder}
                         pattern={pattern}
+                        min={0}
                     />
                 </div>
             );

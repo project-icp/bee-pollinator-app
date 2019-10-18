@@ -295,6 +295,7 @@ class UserSurveyModal extends Component {
                                     value={year_began}
                                     onChange={this.handleChange}
                                     required
+                                    min={0}
                                 />
                             </div>
                             <div className="form__group">

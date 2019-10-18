@@ -427,6 +427,7 @@ class NovemberSurveyForm extends Component {
                             value={num_colonies}
                             disabled={!!completedSurvey}
                             required
+                            min={0}
                         />
                         <div className="form__group">
                             <label htmlFor="harvested_honey">

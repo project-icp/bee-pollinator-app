@@ -247,6 +247,7 @@ class AprilSurveyForm extends Component {
                             value={num_colonies}
                             disabled={!!completedSurvey}
                             required
+                            min={0}
                         />
                         <label htmlFor="colony_loss_reason">
                             What do you think was the most likely cause of colony loss?
