@@ -56,6 +56,7 @@ class NovemberSurveyForm extends Component {
             mite_management_DRONE_REMOVE: false,
             mite_management_QUEEN_MANIPULATION: false,
             all_colonies_treated: true,
+            notes: '',
             completedSurvey: '',
             error: '',
         };
@@ -108,6 +109,7 @@ class NovemberSurveyForm extends Component {
                     varroa_check_frequency: data.november.varroa_check_frequency,
                     varroa_manage_frequency: data.november.varroa_manage_frequency,
                     all_colonies_treated: data.november.all_colonies_treated,
+                    notes: data.november.notes,
                 };
                 this.multipleChoiceKeys.forEach((key) => {
                     if (data.november[key]) {
@@ -294,6 +296,7 @@ class NovemberSurveyForm extends Component {
             varroa_manage_frequency,
             mite_management_OTHER,
             all_colonies_treated,
+            notes,
             completedSurvey,
             error,
         } = this.state;
@@ -535,6 +538,19 @@ class NovemberSurveyForm extends Component {
                                 <option key="true" value="true">Yes</option>
                                 <option key="false" value="false">No</option>
                             </select>
+                        </div>
+                        <div className="form__group">
+                            <label htmlFor="notes">
+                                Notes
+                            </label>
+                            <textarea
+                                className="form__control textarea"
+                                name="notes"
+                                rows={2}
+                                value={notes || ''}
+                                onChange={this.handleChange}
+                                disabled={!!completedSurvey}
+                            />
                         </div>
                         {confirmationButton}
                     </div>

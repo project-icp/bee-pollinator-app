@@ -72,6 +72,7 @@ class MonthlySurveyForm extends Component {
             varroa_treatment_MECHANICAL_OTHER: '',
             varroa_treatment_OTHER: '',
             hive_scale_id: '',
+            notes: '',
         };
 
         this.state = {
