@@ -44,7 +44,7 @@ class Map extends Component {
         this.onClickAddMarker = this.onClickAddMarker.bind(this);
         this.enableMapZoom = this.enableMapZoom.bind(this);
         this.disableMapZoom = this.disableMapZoom.bind(this);
-        this.onMapMove = this.onMapMove.bind(this);
+        this.onMapDragEnd = this.onMapDragEnd.bind(this);
         this.onMapZoom = this.onMapZoom.bind(this);
         this.mapRef = createRef();
         this.addressLookup = (new esri.GeocodeService()).reverse();
@@ -174,7 +174,7 @@ class Map extends Component {
         }, 300);
     }
 
-    onMapMove(event) {
+    onMapDragEnd(event) {
         const { dispatch } = this.props;
         const center = event.target.getCenter();
         dispatch(setMapCenter([center.lat, center.lng]));
@@ -229,7 +229,7 @@ class Map extends Component {
                     zoom={MAP_ZOOM}
                     zoomControl={false}
                     onClick={this.onClickAddMarker}
-                    onMoveEnd={this.onMapMove}
+                    onDragEnd={this.onMapDragEnd}
                     onZoomEnd={this.onMapZoom}
                     ref={this.mapRef}
                     maxZoom={MAX_MAP_ZOOM}
