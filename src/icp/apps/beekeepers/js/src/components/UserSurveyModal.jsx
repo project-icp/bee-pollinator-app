@@ -388,7 +388,7 @@ class UserSurveyModal extends Component {
                                         onChange={this.handleChange}
                                         value="SELL_NUCS_PACKAGES"
                                     />
-                                    <label htmlFor="income_sell_nucs">Sell nucs package</label>
+                                    <label htmlFor="income_sell_nucs">Sell nucs/package</label>
                                 </div>
                                 <div className="form__checkbox">
                                     <input
