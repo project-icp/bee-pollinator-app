@@ -134,6 +134,10 @@ class AprilSurvey(models.Model):
     colony_loss_reason = models.TextField(
         null=False,
         help_text='The most likely causes for colony loss')
+    notes = models.TextField(
+        null=True,
+        blank=True,
+        help_text='Miscellaneous comments')
 
     def __unicode__(self):
         return unicode('{}:{}:{}'.format(
@@ -226,6 +230,10 @@ class NovemberSurvey(models.Model):
         null=False,
         default=True,
         help_text='Did you treat all of the colonies in the apiary?')
+    notes = models.TextField(
+        null=True,
+        blank=True,
+        help_text='Miscellaneous comments')
 
     def __unicode__(self):
         return unicode('{}:{}:{}'.format(
@@ -351,6 +359,10 @@ class MonthlySurvey(models.Model):
         help_text='If you have an automated scale associated with this '
                   'colony, please enter the hive scale brand and ID number '
                   'here.')
+    notes = models.TextField(
+        null=True,
+        blank=True,
+        help_text='Miscellaneous comments')
 
     class Meta:
         unique_together = ('survey', 'colony_name')
