@@ -14,6 +14,10 @@ export function isSameLocation(a, b) {
     return a.lat === b.lat && a.lng === b.lng;
 }
 
+export function isSameCoordinateArray(a, b) {
+    return a[0] === b[0] && a[1] === b[1];
+}
+
 function isLastInSequence(s) {
     let isLast = true;
 
