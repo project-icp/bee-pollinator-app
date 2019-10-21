@@ -91,10 +91,10 @@ class Map extends Component {
         map.setView(mapCenter, mapZoom);
     }
 
-    componentDidUpdate({ mapCenter: prevMapCenter }) {
+    componentDidUpdate({ mapCenter: prevMapCenter, mapZoom: prevMapZoom }) {
         const { mapCenter, mapZoom } = this.props;
 
-        if (!isSameCoordinateArray(prevMapCenter, mapCenter)) {
+        if (!isSameCoordinateArray(prevMapCenter, mapCenter) || prevMapZoom !== mapZoom) {
             const map = this.mapRef.current.leafletElement;
             map.setView(mapCenter, mapZoom);
         }
