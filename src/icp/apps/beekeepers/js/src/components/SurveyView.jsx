@@ -67,24 +67,24 @@ const SurveyView = ({ apiaries, isProUser }) => {
                     you initiate it - it is not possible to partially save your work.
                 </div>
                 <div className="survey__body--section">
-                    <h2 className="survey__title">Response needed</h2>
+                    <h2 className="survey__title">Apiaries with surveys that need to be completed:</h2>
                     {incompleteSurveyCards.length
                         ? incompleteSurveyCards
                         : <div className="empty-message">None. There are no remaining surveys to complete.</div>
                     }
                 </div>
                 <div className="survey__body--section">
-                    <h2 className="survey__title">Up to date</h2>
+                    <h2 className="survey__title">Apiaries with all surveys completed:</h2>
                     {completedSurveyCards.length
                         ? completedSurveyCards
-                        : <div className="empty-message">None. Please help the bees and complete any outstanding surveys.</div>
+                        : <div className="empty-message">None of your apiaries are up-to-date on their surveys. Please help the bees and complete any outstanding surveys.</div>
                     }
                 </div>
                 <div className="survey__body--section">
-                    <h2 className="survey__title">Not in the study</h2>
+                    <h2 className="survey__title">Apiaries not in the study:</h2>
                     {unsurveyedCards.length
                         ? unsurveyedCards
-                        : <div className="empty-message">None. Nice work!</div>
+                        : <div className="empty-message">None. All of your apiares are in the study!</div>
                     }
                 </div>
             </div>

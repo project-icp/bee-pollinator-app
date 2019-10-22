@@ -25,6 +25,7 @@ class AprilSurveyForm extends Component {
             colony_loss_reason_COLONY_TOO_SMALL_IN_NOVEMBER: false,
             colony_loss_reason_PESTICIDE_EXPOSURE: false,
             colony_loss_reason_BEAR_OR_NATURAL_DISASTER: false,
+            notes: '',
             completedSurvey: '',
             error: '',
         };
@@ -50,6 +51,7 @@ class AprilSurveyForm extends Component {
                 let newState = {
                     completedSurvey: data,
                     num_colonies: data.num_colonies,
+                    notes: data.april.notes,
                 };
                 this.multipleChoiceKeys.forEach((key) => {
                     if (data.april[key]) {
@@ -105,6 +107,7 @@ class AprilSurveyForm extends Component {
 
         const {
             num_colonies,
+            notes,
         } = this.state;
 
         const multipleChoiceState = {};
@@ -132,7 +135,7 @@ class AprilSurveyForm extends Component {
             apiary,
             month_year,
             survey_type: SURVEY_TYPE_APRIL,
-            april: multipleChoiceState,
+            april: { ...multipleChoiceState, notes },
         };
 
         getOrCreateSurveyRequest({ apiary, form })
@@ -176,6 +179,7 @@ class AprilSurveyForm extends Component {
         const {
             num_colonies,
             colony_loss_reason_OTHER,
+            notes,
             completedSurvey,
             error,
         } = this.state;
@@ -247,6 +251,7 @@ class AprilSurveyForm extends Component {
                             value={num_colonies}
                             disabled={!!completedSurvey}
                             required
+                            min={0}
                         />
                         <label htmlFor="colony_loss_reason">
                             What do you think was the most likely cause of colony loss?
@@ -263,6 +268,19 @@ class AprilSurveyForm extends Component {
                             onChange={this.handleChange}
                             disabled={!!completedSurvey}
                         />
+                        <div className="form__group">
+                            <label htmlFor="notes">
+                                Notes
+                            </label>
+                            <textarea
+                                className="form__control textarea"
+                                name="notes"
+                                rows={2}
+                                value={notes || ''}
+                                onChange={this.handleChange}
+                                disabled={!!completedSurvey}
+                            />
+                        </div>
                         {confirmationButton}
                     </div>
                     {submitButton}
