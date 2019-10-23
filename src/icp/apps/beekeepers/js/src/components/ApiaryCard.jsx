@@ -4,13 +4,15 @@ import { connect } from 'react-redux';
 import update from 'immutability-helper';
 
 import { Apiary } from '../propTypes';
-import { INDICATORS } from '../constants';
+import { INDICATORS, MAX_MAP_ZOOM } from '../constants';
 import {
     setApiaryStar,
     setApiarySurvey,
     deleteApiary,
     updateApiary,
     fetchApiaryScores,
+    setMapCenter,
+    setMapZoom,
 } from '../actions';
 import { getMarkerClass } from '../utils';
 
@@ -38,6 +40,7 @@ class ApiaryCard extends Component {
         this.enableEditing = this.enableEditing.bind(this);
         this.enableEditingOnEnter = this.enableEditingOnEnter.bind(this);
         this.saveApiaryNameOnEnter = this.saveApiaryNameOnEnter.bind(this);
+        this.zoomPanMapToLocation = this.zoomPanMapToLocation.bind(this);
     }
 
     componentDidUpdate(prevProps) {
@@ -161,11 +164,19 @@ class ApiaryCard extends Component {
         }
     }
 
+    zoomPanMapToLocation(lat, lng) {
+        const { dispatch } = this.props;
+        dispatch(setMapCenter([lat, lng]));
+        dispatch(setMapZoom(MAX_MAP_ZOOM));
+    }
+
     render() {
         const { apiary, forageRange, dispatch } = this.props;
         const { apiaryName } = this.state;
 
         const {
+            lat,
+            lng,
             marker,
             starred,
             surveyed,
@@ -182,10 +193,18 @@ class ApiaryCard extends Component {
             // Report error
 
             return (
-                <li className="card">
+                <li
+                    className="card"
+                >
                     <div className="card__top">
                         <div className="card__identification">
-                            <div className={`marker ${markerClass}`}>{marker}</div>
+                            <button
+                                type="button"
+                                className={`marker ${markerClass}`}
+                                onClick={() => this.zoomPanMapToLocation(lat, lng)}
+                            >
+                                {marker}
+                            </button>
                             <div className="card__name">Error fetching apiary data</div>
                         </div>
                         <div className="card__buttons">
@@ -222,14 +241,22 @@ class ApiaryCard extends Component {
         const cardName = this.getCardNameBlock();
 
         return (
-            <li className="card">
+            <div
+                className="card"
+            >
                 <div className="card__top">
                     <div
                         className="card__identification"
                         onMouseEnter={this.enableHovering}
                         onMouseLeave={this.disableHovering}
                     >
-                        <div className={`marker ${markerClass}`}>{marker}</div>
+                        <button
+                            type="button"
+                            className={`marker ${markerClass}`}
+                            onClick={() => this.zoomPanMapToLocation(lat, lng)}
+                        >
+                            {marker}
+                        </button>
                         <input
                             className={cardName.className}
                             onKeyPress={cardName.onKeyPress}
@@ -267,7 +294,7 @@ class ApiaryCard extends Component {
                         {scoreLabels}
                     </div>
                 </div>
-            </li>
+            </div>
         );
     }
 }

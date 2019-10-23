@@ -57,6 +57,7 @@ export const SORT_OPTIONS = Object
 
 export const MAP_CENTER = [40.0, -76.079];
 export const MAP_ZOOM = 10;
+export const MAX_MAP_ZOOM = 18;
 
 export const CONTRIBUTION_LEVEL_LIGHT = 'LIGHT';
 export const CONTRIBUTION_LEVEL_PRO = 'PRO';
