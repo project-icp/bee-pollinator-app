@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { func } from 'prop-types';
 
 import { fetchUserApiaries, flashSuccessModal } from '../actions';
-import { SURVEY_TYPE_APRIL, COLONY_LOSS_REASONS } from '../constants';
+import { SURVEY_TYPE_APRIL, SPRING_COLONY_LOSS_REASONS } from '../constants';
 import {
     arrayToSemicolonDelimitedString,
     getOrCreateSurveyRequest,
@@ -232,7 +232,7 @@ class AprilSurveyForm extends Component {
                 </div>
             );
 
-        const colonyLossReasonCheckboxInputs = this.makeMultipleChoiceInputs('colony_loss_reason', COLONY_LOSS_REASONS);
+        const colonyLossReasonCheckboxInputs = this.makeMultipleChoiceInputs('colony_loss_reason', SPRING_COLONY_LOSS_REASONS);
 
         const surveyForm = (
             <>
