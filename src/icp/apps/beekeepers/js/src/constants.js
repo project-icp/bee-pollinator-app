@@ -102,6 +102,11 @@ export const COLONY_LOSS_REASONS = [
     'BEAR_OR_NATURAL_DISASTER',
 ];
 
+export const SPRING_COLONY_LOSS_REASONS = [
+    'N/A_-_NO_COLONIES_LOST',
+    ...COLONY_LOSS_REASONS,
+];
+
 export const ACTIVITY_SINCE_LAST = [
     'REMOVED_HONEY',
     'REMOVED_BROOD',
