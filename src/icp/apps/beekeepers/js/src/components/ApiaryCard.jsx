@@ -166,7 +166,7 @@ class ApiaryCard extends Component {
 
     zoomPanMapToLocation(lat, lng) {
         const { dispatch } = this.props;
-        dispatch(setMapCenter([lat, lng]));
+        dispatch(setMapCenter({ lat, lng }));
         dispatch(setMapZoom(MAX_MAP_ZOOM));
     }
 
