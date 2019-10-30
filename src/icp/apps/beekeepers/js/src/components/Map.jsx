@@ -31,8 +31,9 @@ import {
     FORAGE_RANGE_5KM,
     MAP_ZOOM,
     MAP_CENTER,
+    MAX_MAP_ZOOM,
 } from '../constants';
-import { getNextInSequence, isSameLocation } from '../utils';
+import { getNextInSequence, isSameLocation, isSameCoordinateArray } from '../utils';
 
 import ApiaryMarker from './ApiaryMarker';
 import CropLayerControl from './CropLayerControl';
@@ -43,7 +44,7 @@ class Map extends Component {
         this.onClickAddMarker = this.onClickAddMarker.bind(this);
         this.enableMapZoom = this.enableMapZoom.bind(this);
         this.disableMapZoom = this.disableMapZoom.bind(this);
-        this.onMapMove = this.onMapMove.bind(this);
+        this.onMapDragEnd = this.onMapDragEnd.bind(this);
         this.onMapZoom = this.onMapZoom.bind(this);
         this.mapRef = createRef();
         this.addressLookup = (new esri.GeocodeService()).reverse();
@@ -54,7 +55,7 @@ class Map extends Component {
     }
 
     componentDidMount() {
-        const { mapCenter, mapZoom } = this.props;
+        const { mapCenter, mapZoom, dispatch } = this.props;
         const geocoderUrl = 'https://utility.arcgis.com/usrsvcs/appservices/OvpAtyJwoLLdQcLC/rest/services/World/GeocodeServer/';
         const map = this.mapRef.current.leafletElement;
         const geocoder = new esri.Geosearch({
@@ -81,12 +82,22 @@ class Map extends Component {
         geocoder.on('results', ({ results }) => {
             const selectedResult = results && results[0];
             if (selectedResult) {
-                map.panTo(selectedResult.latlng);
+                dispatch(setMapCenter(selectedResult.latlng));
+                dispatch(setMapZoom(MAX_MAP_ZOOM));
             }
         });
 
         // initialize map with user's latest settings
         map.setView(mapCenter, mapZoom);
+    }
+
+    componentDidUpdate({ mapCenter: prevMapCenter, mapZoom: prevMapZoom }) {
+        const { mapCenter, mapZoom } = this.props;
+
+        if (!isSameCoordinateArray(prevMapCenter, mapCenter) || prevMapZoom !== mapZoom) {
+            const map = this.mapRef.current.leafletElement;
+            map.setView(mapCenter, mapZoom);
+        }
     }
 
     onClickAddMarker(event) {
@@ -163,7 +174,7 @@ class Map extends Component {
         }, 300);
     }
 
-    onMapMove(event) {
+    onMapDragEnd(event) {
         const { dispatch } = this.props;
         const center = event.target.getCenter();
         dispatch(setMapCenter([center.lat, center.lng]));
@@ -218,10 +229,10 @@ class Map extends Component {
                     zoom={MAP_ZOOM}
                     zoomControl={false}
                     onClick={this.onClickAddMarker}
-                    onMoveEnd={this.onMapMove}
+                    onDragEnd={this.onMapDragEnd}
                     onZoomEnd={this.onMapZoom}
                     ref={this.mapRef}
-                    maxZoom={18}
+                    maxZoom={MAX_MAP_ZOOM}
                 >
                     {cropLayer}
                     <TileLayer

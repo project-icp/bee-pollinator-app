@@ -57,6 +57,7 @@ export const SORT_OPTIONS = Object
 
 export const MAP_CENTER = [40.0, -76.079];
 export const MAP_ZOOM = 10;
+export const MAX_MAP_ZOOM = 18;
 
 export const CONTRIBUTION_LEVEL_LIGHT = 'LIGHT';
 export const CONTRIBUTION_LEVEL_PRO = 'PRO';
@@ -99,6 +100,11 @@ export const COLONY_LOSS_REASONS = [
     'COLONY_TOO_SMALL_IN_NOVEMBER',
     'PESTICIDE_EXPOSURE',
     'BEAR_OR_NATURAL_DISASTER',
+];
+
+export const SPRING_COLONY_LOSS_REASONS = [
+    'N/A_-_NO_COLONIES_LOST',
+    ...COLONY_LOSS_REASONS,
 ];
 
 export const ACTIVITY_SINCE_LAST = [

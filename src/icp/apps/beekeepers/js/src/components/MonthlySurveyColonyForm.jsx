@@ -48,6 +48,7 @@ class MonthlySurveyColonyForm extends Component {
                         required={required}
                         placeholder={placeholder}
                         pattern={pattern}
+                        min={0}
                     />
                 </div>
             );
@@ -121,11 +122,14 @@ class MonthlySurveyColonyForm extends Component {
     render() {
         const {
             data: {
+                id,
                 colony_name,
                 colony_alive,
                 varroa_count_performed,
+                notes,
             },
             idx,
+            onChange,
         } = this.props;
 
         const inputText = this.inputFactory('text');
@@ -249,6 +253,19 @@ class MonthlySurveyColonyForm extends Component {
                     ['PACKAGE', 'Package'],
                     ['FERAL', 'Feral colony or swarm'],
                 ])}
+                <div className="form__group">
+                    <label htmlFor="notes">
+                        Notes
+                    </label>
+                    <textarea
+                        className="form__control textarea"
+                        disabled={id !== null}
+                        name="notes"
+                        onChange={onChange}
+                        rows={2}
+                        value={notes || ''}
+                    />
+                </div>
             </>
         );
     }
