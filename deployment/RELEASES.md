@@ -38,9 +38,7 @@ After the `staging-deployment` job completes, `staging.app.beescape.org` and `st
 
 ## AMI Promotion
 
-Select one AMI for each `Service` built using the `release/X.Y.Z` branch. Once selected, use the `Permissions` tab to `Edit` the AMI and allow account ID `146471631080` execute privileges. In addition, use the `Tags` tab to `Add/Edit Tags` for the `Environment` key. Ensure that its value is changed from `Staging` to `Production`.
-
-To confirm, you can login to the Bee Pollinator "production" account and see if the AMIs show up under the `Private images` filter.
+Select one AMI for each `Service` built using the `release/X.Y.Z` branch. Once selected, use the `Tags` tab to `Add/Edit Tags` for the `Environment` key. Ensure that its value is changed from `Staging` to `Production`.
 
 ## Dark Stack Launch
 
