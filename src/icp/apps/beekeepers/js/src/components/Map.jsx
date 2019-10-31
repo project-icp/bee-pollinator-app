@@ -16,6 +16,7 @@ import {
     func,
     number,
     string,
+    shape,
 } from 'prop-types';
 
 import { Apiary } from '../propTypes';
@@ -33,7 +34,7 @@ import {
     MAP_CENTER,
     MAX_MAP_ZOOM,
 } from '../constants';
-import { getNextInSequence, isSameLocation, isSameCoordinateArray } from '../utils';
+import { getNextInSequence, isSameLocation } from '../utils';
 
 import ApiaryMarker from './ApiaryMarker';
 import CropLayerControl from './CropLayerControl';
@@ -94,7 +95,7 @@ class Map extends Component {
     componentDidUpdate({ mapCenter: prevMapCenter, mapZoom: prevMapZoom }) {
         const { mapCenter, mapZoom } = this.props;
 
-        if (!isSameCoordinateArray(prevMapCenter, mapCenter) || prevMapZoom !== mapZoom) {
+        if (!isSameLocation(prevMapCenter, mapCenter) || prevMapZoom !== mapZoom) {
             const map = this.mapRef.current.leafletElement;
             map.setView(mapCenter, mapZoom);
         }
@@ -275,7 +276,10 @@ Map.propTypes = {
     isCropLayerActive: bool.isRequired,
     cropLayerOpacity: number.isRequired,
     dispatch: func.isRequired,
-    mapCenter: arrayOf(number).isRequired,
+    mapCenter: shape({
+        lat: number.isRequired,
+        lng: number.isRequired,
+    }).isRequired,
     mapZoom: number.isRequired,
 };
 
