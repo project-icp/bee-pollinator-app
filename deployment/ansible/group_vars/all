@@ -24,6 +24,8 @@ postgresql_support_psycopg2_version: "2.7"
 postgis_version: "2.3"
 postgis_package_version: "2.3.*.pgdg14.04+1"
 
+ntp_version: "1:4.2.6.p5+dfsg-3ubuntu2.14.04.13"
+
 elasticsearch_cluster_name: "logstash"
 
 nodejs_npm_version: 2.1.17
