@@ -6,6 +6,7 @@ const CardButton = ({
     filled,
     tooltip,
     onClick,
+    text,
 }) => {
     const fillOrOutline = (() => {
         if (filled === true) return '-fill';
@@ -20,21 +21,47 @@ const CardButton = ({
             title={tooltip}
             onClick={onClick}
         >
-            <i className={`icon-${icon}${fillOrOutline}`} />
+            {text || <i className={`icon-${icon}${fillOrOutline}`} />}
         </button>
     );
 };
 
 CardButton.propTypes = {
-    icon: string.isRequired,
+    icon: string,
     filled: bool,
     tooltip: string.isRequired,
     onClick: func,
+    text: string,
 };
 
 CardButton.defaultProps = {
     filled: null,
     onClick: () => {},
+    icon: null,
+    text: null,
 };
 
-export default CardButton;
+
+const CardButtonWithIcon = props => (
+    <CardButton
+        {...props}
+    />
+);
+
+CardButtonWithIcon.propTypes = {
+    ...CardButton.propTypes,
+    icon: string.isRequired,
+};
+
+const CardButtonWithText = props => (
+    <CardButton
+        {...props}
+    />
+);
+
+CardButtonWithText.propTypes = {
+    ...CardButton.propTypes,
+    text: string.isRequired,
+};
+
+export { CardButtonWithText, CardButtonWithIcon };
