@@ -1,16 +1,15 @@
 import React from 'react';
-import { arrayOf, bool } from 'prop-types';
+import { arrayOf } from 'prop-types';
 
 import { Apiary } from '../propTypes';
 import {
     getNovemberSurveys,
     getAprilSurveys,
-    getMonthlySurveys,
     sortSurveysByMonthYearDescending,
 } from '../utils';
 import SurveyCard from './SurveyCard';
 
-const SurveyView = ({ apiaries, isProUser }) => {
+const SurveyView = ({ apiaries }) => {
     const surveyedApiaries = [];
     const unsurveyedApiaries = [];
 
@@ -30,14 +29,8 @@ const SurveyView = ({ apiaries, isProUser }) => {
     const incompleteSurveyCards = [];
 
     surveyedApiaries.forEach((apiary) => {
-        const monthlySurveys = isProUser
-            ? getMonthlySurveys(apiary)
-            : [];
-        const surveys = monthlySurveys.concat(
-            getNovemberSurveys(apiary),
-            getAprilSurveys(apiary),
-        ).sort(sortSurveysByMonthYearDescending);
-
+        const surveys = [...getNovemberSurveys(apiary), ...getAprilSurveys(apiary)]
+            .sort(sortSurveysByMonthYearDescending);
         const surveyCard = (
             <SurveyCard
                 apiary={apiary}
@@ -94,7 +87,6 @@ const SurveyView = ({ apiaries, isProUser }) => {
 
 SurveyView.propTypes = {
     apiaries: arrayOf(Apiary).isRequired,
-    isProUser: bool.isRequired,
 };
 
 export default SurveyView;
