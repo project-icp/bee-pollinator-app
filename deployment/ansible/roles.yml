@@ -1,6 +1,6 @@
 - src: azavea.ntp
   version: 0.1.1
-  
+
 - src: azavea.pip
   version: 2.0.0
 
@@ -65,7 +65,7 @@
   version: 0.6.2
 
 - src: azavea.docker
-  version: 4.0.0
+  version: 5.0.0
 
 - src: azavea.python
   version: 0.1.0
