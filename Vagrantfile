@@ -106,6 +106,9 @@ Vagrant.configure("2") do |config|
       ansible.galaxy_command = "sudo pip install urllib3[secure]==1.22.* --ignore-installed" \
                                " && ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
       ansible.groups = ANSIBLE_GROUPS.merge(ANSIBLE_ENV_GROUPS)
+      ansible.extra_vars = {
+        services_ip: ENV.fetch("ICP_SERVICES_IP", "33.33.34.30")
+      }
     end
 
     worker.vm.provision "shell", inline: "service celeryd restart >> /dev/null 2>&1", run: "always"
@@ -158,6 +161,9 @@ Vagrant.configure("2") do |config|
       ansible.galaxy_command = "sudo pip install urllib3[secure]==1.22.* --ignore-installed" \
                                " && ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
       ansible.groups = ANSIBLE_GROUPS.merge(ANSIBLE_ENV_GROUPS)
+      ansible.extra_vars = {
+        services_ip: ENV.fetch("ICP_SERVICES_IP", "33.33.34.30")
+      }
     end
   end
 end
