@@ -28,6 +28,7 @@ class AprilSurveyForm extends Component {
             notes: '',
             completedSurvey: '',
             error: '',
+            missingNovemberSurvey: false,
         };
         this.multipleChoiceKeys = ['colony_loss_reason'];
         this.handleChange = this.handleChange.bind(this);
@@ -37,12 +38,21 @@ class AprilSurveyForm extends Component {
 
     componentDidMount() {
         const {
+            apiary: { surveys },
             survey: {
                 apiary,
                 id,
                 completed,
+                month_year,
             },
         } = this.props;
+        const previous_year = parseInt(month_year.slice(-4), 10) - 1;
+        if (!surveys.some(pastSurvey => pastSurvey.month_year === `11${previous_year}`)) {
+            this.setState({
+                error: `Please complete the November survey for ${previous_year} first.`,
+                missingNovemberSurvey: true,
+            });
+        }
         if (completed) {
             getOrCreateSurveyRequest({
                 apiary,
@@ -182,6 +192,7 @@ class AprilSurveyForm extends Component {
             notes,
             completedSurvey,
             error,
+            missingNovemberSurvey,
         } = this.state;
 
         const {
@@ -234,7 +245,7 @@ class AprilSurveyForm extends Component {
 
         const colonyLossReasonCheckboxInputs = this.makeMultipleChoiceInputs('colony_loss_reason', SPRING_COLONY_LOSS_REASONS);
 
-        const surveyForm = (
+        const surveyForm = missingNovemberSurvey ? null : (
             <>
                 <div className="title">{title}</div>
                 <form className="form" onSubmit={this.handleSubmit}>
