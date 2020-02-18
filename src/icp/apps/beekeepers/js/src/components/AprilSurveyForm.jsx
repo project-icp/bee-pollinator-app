@@ -17,6 +17,7 @@ class AprilSurveyForm extends Component {
         this.state = {
             // each form input corresponds to a state var
             num_colonies: '',
+            num_new_colonies: '0',
             colony_loss_reason_OTHER: '',
             colony_loss_reason_VARROA_MITES: false,
             colony_loss_reason_INADEQUETE_FOOD_STORES: false,
@@ -29,6 +30,7 @@ class AprilSurveyForm extends Component {
             completedSurvey: '',
             error: '',
             missingNovemberSurvey: false,
+            novemberSurvey: {},
         };
         this.multipleChoiceKeys = ['colony_loss_reason'];
         this.handleChange = this.handleChange.bind(this);
@@ -47,21 +49,29 @@ class AprilSurveyForm extends Component {
             },
         } = this.props;
         const previous_year = parseInt(month_year.slice(-4), 10) - 1;
-        if (!surveys.some(pastSurvey => pastSurvey.month_year === `11${previous_year}`)) {
+        const novemberSurvey = surveys.find(pastSurvey => pastSurvey.month_year === `11${previous_year}`);
+        if (!novemberSurvey) {
             this.setState({
                 error: `Please complete the November survey for ${previous_year} first.`,
                 missingNovemberSurvey: true,
             });
+        } else {
+            this.setState({ novemberSurvey });
         }
         if (completed) {
             getOrCreateSurveyRequest({
                 apiary,
                 id,
             }).then(({ data }) => {
+                let { num_new_colonies } = data.april;
+                if (num_new_colonies === null) {
+                    num_new_colonies = 0;
+                }
                 let newState = {
                     completedSurvey: data,
-                    num_colonies: data.num_colonies,
+                    num_colonies: data.num_colonies - num_new_colonies,
                     notes: data.april.notes,
+                    num_new_colonies,
                 };
                 this.multipleChoiceKeys.forEach((key) => {
                     if (data.april[key]) {
@@ -117,6 +127,7 @@ class AprilSurveyForm extends Component {
 
         const {
             num_colonies,
+            num_new_colonies,
             notes,
         } = this.state;
 
@@ -141,11 +152,11 @@ class AprilSurveyForm extends Component {
         /* eslint-enable react/destructuring-assignment */
 
         const form = {
-            num_colonies,
+            num_colonies: parseInt(num_colonies, 10) + parseInt(num_new_colonies, 10),
             apiary,
             month_year,
             survey_type: SURVEY_TYPE_APRIL,
-            april: { ...multipleChoiceState, notes },
+            april: { ...multipleChoiceState, notes, num_new_colonies },
         };
 
         getOrCreateSurveyRequest({ apiary, form })
@@ -188,11 +199,13 @@ class AprilSurveyForm extends Component {
     render() {
         const {
             num_colonies,
+            num_new_colonies,
             colony_loss_reason_OTHER,
             notes,
             completedSurvey,
             error,
             missingNovemberSurvey,
+            novemberSurvey,
         } = this.state;
 
         const {
@@ -251,7 +264,7 @@ class AprilSurveyForm extends Component {
                 <form className="form" onSubmit={this.handleSubmit}>
                     <div className="form__group">
                         <label htmlFor="num_colonies">
-                            How many colonies are in this apiary?
+                            {`You had ${novemberSurvey.num_colonies} colonies in November. How many of those currently remain? Required.`}
                         </label>
                         <input
                             type="number"
@@ -260,6 +273,23 @@ class AprilSurveyForm extends Component {
                             name="num_colonies"
                             onChange={this.handleChange}
                             value={num_colonies}
+                            disabled={!!completedSurvey}
+                            required
+                            min={0}
+                            max={novemberSurvey.num_colonies}
+                        />
+                        <label htmlFor="num_new_colonies">
+                            How many
+                            <strong> new </strong>
+                            colonies did you add to this apiary over the winter? Required.
+                        </label>
+                        <input
+                            type="number"
+                            className="form__control"
+                            id="num_new_colonies"
+                            name="num_new_colonies"
+                            onChange={this.handleChange}
+                            value={num_new_colonies}
                             disabled={!!completedSurvey}
                             required
                             min={0}
