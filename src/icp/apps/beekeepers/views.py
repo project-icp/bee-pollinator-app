@@ -134,7 +134,8 @@ def create_survey(request, apiary_id=None):
             "num_colonies": 3,
             "survey_type": "APRIL", // or "NOVEMBER" or "MONTHLY"
             "april": {              // Must be specified for "APRIL" surveys
-                "colony_loss_reason": ""
+                "colony_loss_reason": "",
+                "num_new_colonies": 1
             },
             "november" : {          // Must be specified for "NOVEMBER" surveys
                 ...

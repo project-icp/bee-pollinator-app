@@ -108,23 +108,28 @@ class AprilSurvey(models.Model):
     """
     A short survey taken in April by all users.
 
-    Has only one question:
+    Has two questions:
       - What do you think the most likely cause of colony loss was?
 
-    The answers can be:
-      - varroa mites
-      - inadequate food stores
-      - poor queens
-      - poor weather conditions
-      - colony too small in November
-      - pesticide exposure
-      - bear or natural disaster
-      - other (fillable field)
+        The answers can be:
+          - varroa mites
+          - inadequate food stores
+          - poor queens
+          - poor weather conditions
+          - colony too small in November
+          - pesticide exposure
+          - bear or natural disaster
+          - other (fillable field)
 
-    Multiple selections are possible, and will be separated by a semicolon.
-    Answers to "other" will be prefixed with OTHER- to indicate so. E.g.
+        Multiple selections are possible, and will be separated by a semicolon.
+        Answers to "other" will be prefixed with OTHER- to indicate so. E.g.
 
-    "VARROA_MITES;INADEQUATE_FOOD_STORES;OTHER-negligence"
+        "VARROA_MITES;INADEQUATE_FOOD_STORES;OTHER-negligence"
+
+      - How many new colonies did you add over the winter, since the November
+        survey?
+
+        The answer can be any positive integer, and defaults to 0.
     """
 
     survey = models.OneToOneField(
@@ -138,6 +143,10 @@ class AprilSurvey(models.Model):
         null=True,
         blank=True,
         help_text='Miscellaneous comments')
+    num_new_colonies = models.IntegerField(
+        null=True,
+        default=0,
+        help_text='Number of new colonies in this survey')
 
     def __unicode__(self):
         return unicode('{}:{}:{}'.format(
