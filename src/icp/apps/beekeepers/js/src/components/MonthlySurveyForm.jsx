@@ -360,6 +360,7 @@ class MonthlySurveyForm extends Component {
         const {
             apiary: { name },
             survey: { month_year, completed },
+            close,
         } = this.props;
 
         const userMessage = error.length ? (
@@ -460,6 +461,9 @@ class MonthlySurveyForm extends Component {
             <div className="authModal">
                 <div className="authModal__header">
                     <div>{name}</div>
+                    <button type="button" className="button" onClick={close} aria-label="Close dialog">
+                        &times;
+                    </button>
                 </div>
                 <div className="authModal__content">
                     {userMessage}

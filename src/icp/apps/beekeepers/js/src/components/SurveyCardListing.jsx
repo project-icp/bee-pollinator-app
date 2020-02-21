@@ -65,6 +65,7 @@ const SurveyCardListing = ({
                 )}
                 className="modal surveyModal"
                 modal
+                closeOnDocumentClick={false}
             >
                 {formComponent}
             </Popup>
