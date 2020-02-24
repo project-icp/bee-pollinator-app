@@ -15,7 +15,8 @@ import { SURVEY_TYPE_MONTHLY } from '../constants';
 import { Survey, Apiary } from '../propTypes';
 import {
     arrayToSemicolonDelimitedString,
-    getOrCreateSurveyRequest,
+    getSurveyRequest,
+    createSurveyRequest,
     toMonthNameYear,
 } from '../utils';
 
@@ -133,7 +134,7 @@ class MonthlySurveyForm extends Component {
 
         // Fetch and show data from the database for a completed survey
         if (id) {
-            getOrCreateSurveyRequest({ apiary, id })
+            getSurveyRequest({ apiary, id })
                 .then(({ data }) => {
                     const monthlies = data.monthlies.map((serverData, idx) => {
                         let clientData = prevMonthlies[idx];
@@ -174,7 +175,7 @@ class MonthlySurveyForm extends Component {
         // For a new survey, autofill select fields with most recent and complete survey data
         // Else, show a blank survey
         if (lastMonthlySurvey && !id) {
-            getOrCreateSurveyRequest({
+            getSurveyRequest({
                 apiary: lastMonthlySurvey.apiary,
                 id: lastMonthlySurvey.id,
             }).then(({ data }) => {
@@ -340,7 +341,7 @@ class MonthlySurveyForm extends Component {
             monthlies,
         };
 
-        getOrCreateSurveyRequest({ apiary, form })
+        createSurveyRequest({ apiary, form })
             .then(() => {
                 dispatch(fetchUserApiaries());
                 close();

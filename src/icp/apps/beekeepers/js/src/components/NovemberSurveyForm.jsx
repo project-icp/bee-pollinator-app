@@ -16,7 +16,9 @@ import {
 } from '../constants';
 import {
     arrayToSemicolonDelimitedString,
-    getOrCreateSurveyRequest,
+    getSurveyRequest,
+    createSurveyRequest,
+    updateSurveyRequest,
     toMonthNameYear,
 } from '../utils';
 import { Apiary, Survey } from '../propTypes';
@@ -97,7 +99,7 @@ class NovemberSurveyForm extends Component {
             },
         } = this.props;
         if (completed) {
-            getOrCreateSurveyRequest({
+            getSurveyRequest({
                 apiary,
                 id,
             }).then(({ data }) => {
@@ -116,13 +118,14 @@ class NovemberSurveyForm extends Component {
                         const keys = data.november[key].split(';')
                             .map(s => `${key}_${s}`);
                         newState = keys.reduce((acc, k) => {
-                            acc[k] = true;
                             // Other text input requires special handling
                             // to parse key name and capture value
                             if (k.includes('_OTHER-')) {
                                 const otherKey = k.split('-')[0];
                                 const otherValue = k.split('_OTHER-')[1];
                                 acc[otherKey] = otherValue;
+                            } else {
+                                acc[k] = true;
                             }
                             return acc;
                         }, newState);
@@ -178,13 +181,13 @@ class NovemberSurveyForm extends Component {
             survey: {
                 apiary,
                 month_year,
+                id,
             },
-            dispatch,
-            close,
         } = this.props;
 
         const {
             num_colonies,
+            completedSurvey,
         } = this.state;
 
         const multipleChoiceState = {};
@@ -217,19 +220,26 @@ class NovemberSurveyForm extends Component {
             november,
         };
 
-        getOrCreateSurveyRequest({ apiary, form })
-            .then(() => {
-                dispatch(fetchUserApiaries());
-                close();
-                dispatch(flashSuccessModal());
-            })
-            .catch(error => this.setState({ error: error.response.statusText }));
+        if (completedSurvey) {
+            updateSurveyRequest({ apiary, id, form })
+                .then(() => this.handleSuccess())
+                .catch(error => this.setState({ error: error.response.statusText }));
+        } else {
+            createSurveyRequest({ apiary, form })
+                .then(() => this.handleSuccess())
+                .catch(error => this.setState({ error: error.response.statusText }));
+        }
+    }
+
+    handleSuccess() {
+        const { dispatch, close } = this.props;
+        dispatch(fetchUserApiaries());
+        close();
+        dispatch(flashSuccessModal());
     }
 
     /* eslint-disable react/destructuring-assignment */
     makeMultipleChoiceInputs(groupName, options, tooltipDescriptions) {
-        const { completedSurvey } = this.state;
-
         return options.map((option, index) => {
             const key = `${groupName}_${option}`;
             const label = option.split('_').join(' ').toLowerCase();
@@ -248,7 +258,6 @@ class NovemberSurveyForm extends Component {
                         name={key}
                         checked={this.state[key]}
                         onChange={this.handleChange}
-                        disabled={!!completedSurvey}
                     />
                     <label htmlFor={key}>
                         {label}
@@ -260,8 +269,6 @@ class NovemberSurveyForm extends Component {
     }
 
     makeSeasonalInputs(groupName) {
-        const { completedSurvey } = this.state;
-
         return SEASONS.map((option) => {
             const key = `${groupName}_${option}`;
             const label = option.split('_').join(' ').toLowerCase();
@@ -277,7 +284,6 @@ class NovemberSurveyForm extends Component {
                         name={key}
                         checked={this.state[key]}
                         onChange={this.handleChange}
-                        disabled={!!completedSurvey}
                     />
                     <label htmlFor={key}>{label}</label>
                 </div>
@@ -313,42 +319,38 @@ class NovemberSurveyForm extends Component {
             </div>
         ) : null;
 
-        const submitButton = completedSurvey ? null
-            : (
-                <button
-                    type="submit"
-                    value="Submit"
-                    className="button--long"
-                >
-                    Submit
-                </button>
-            );
+        const submitButton = (
+            <button
+                type="submit"
+                value="Submit"
+                className="button--long"
+            >
+                Submit
+            </button>
+        );
 
         const title = completedSurvey
             ? `Survey results for ${toMonthNameYear(month_year)}`
             : `Survey for ${toMonthNameYear(month_year)}`;
 
-        const confirmationButton = completedSurvey
-            ? null
-            : (
-                <div className="form__group">
-                    <label htmlFor="confirmation">
-                        Have you provided all the information available for these
-                        colonies and are ready to submit the survey? Surveys cannot
-                        be edited after submission.
-                    </label>
-                    <input
-                        type="checkbox"
-                        className="form__control"
-                        id="confirmed"
-                        name="confirmed"
-                        required
-                    />
-                    <label htmlFor="confirmation">
-                        Yes
-                    </label>
-                </div>
-            );
+        const confirmationButton = (
+            <div className="form__group">
+                <label htmlFor="confirmation">
+                    Have you provided all the information available for these
+                    colonies and are ready to submit the survey?
+                </label>
+                <input
+                    type="checkbox"
+                    className="form__control"
+                    id="confirmed"
+                    name="confirmed"
+                    required
+                />
+                <label htmlFor="confirmation">
+                    Yes
+                </label>
+            </div>
+        );
 
         const miteManagementCheckboxInputs = this.makeMultipleChoiceInputs(
             'mite_management',
@@ -388,7 +390,6 @@ class NovemberSurveyForm extends Component {
                             name="varroa_check_method_OTHER"
                             value={varroa_check_method_OTHER}
                             onChange={this.handleChange}
-                            disabled={!!completedSurvey}
                         />
                     </div>
                 </div>
@@ -402,7 +403,6 @@ class NovemberSurveyForm extends Component {
                         value={varroa_manage_frequency}
                         onChange={this.handleChange}
                         className="form__control"
-                        disabled={!!completedSurvey}
                     >
                         <option value="NEVER">I did not</option>
                         <option value="ONCE">Once a year</option>
@@ -429,7 +429,6 @@ class NovemberSurveyForm extends Component {
                             name="num_colonies"
                             onChange={this.handleChange}
                             value={num_colonies}
-                            disabled={!!completedSurvey}
                             required
                             min={0}
                         />
@@ -444,7 +443,6 @@ class NovemberSurveyForm extends Component {
                                 value={harvested_honey}
                                 onChange={this.handleChange}
                                 className="form__control"
-                                disabled={!!completedSurvey}
                             >
                                 <option value="DID_NOT_HARVEST">Did not harvest</option>
                                 <option value="LESS_THAN_10">Less than 10 lbs</option>
@@ -479,7 +477,6 @@ class NovemberSurveyForm extends Component {
                                 name="small_hive_beetles"
                                 value={small_hive_beetles}
                                 onChange={this.handleChange}
-                                disabled={!!completedSurvey}
                             >
                                 <option key="true" value="true">Yes</option>
                                 <option key="false" value="false">No</option>
@@ -495,7 +492,6 @@ class NovemberSurveyForm extends Component {
                                 value={varroa_check_frequency}
                                 onChange={this.handleChange}
                                 className="form__control"
-                                disabled={!!completedSurvey}
                             >
                                 <option value="NEVER">I did not</option>
                                 <option value="ONCE">Once a year</option>
@@ -520,7 +516,6 @@ class NovemberSurveyForm extends Component {
                                     name="mite_management_OTHER"
                                     value={mite_management_OTHER}
                                     onChange={this.handleChange}
-                                    disabled={!!completedSurvey}
                                 />
                             </div>
                         </div>
@@ -534,7 +529,6 @@ class NovemberSurveyForm extends Component {
                                 name="all_colonies_treated"
                                 value={all_colonies_treated}
                                 onChange={this.handleChange}
-                                disabled={!!completedSurvey}
                             >
                                 <option key="true" value="true">Yes</option>
                                 <option key="false" value="false">No</option>
@@ -550,7 +544,6 @@ class NovemberSurveyForm extends Component {
                                 rows={2}
                                 value={notes || ''}
                                 onChange={this.handleChange}
-                                disabled={!!completedSurvey}
                             />
                         </div>
                         {confirmationButton}
