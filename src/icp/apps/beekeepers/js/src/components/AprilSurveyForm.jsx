@@ -13,6 +13,17 @@ import {
 } from '../utils';
 import { Apiary, Survey } from '../propTypes';
 
+const CAPITALIZATIONS = {
+    november: 'November',
+};
+
+const formatMultipleChoiceLabel = (option) => {
+    const lcLabel = option.split('_').join(' ').toLowerCase();
+    return Object.keys(CAPITALIZATIONS).reduce(
+        (acc, word) => acc.replace(word, CAPITALIZATIONS[word]), lcLabel,
+    );
+};
+
 class AprilSurveyForm extends Component {
     constructor(props) {
         super(props);
@@ -184,7 +195,7 @@ class AprilSurveyForm extends Component {
     makeMultipleChoiceInputs(groupName, options) {
         return options.map((option) => {
             const key = `${groupName}_${option}`;
-            const label = option.split('_').join(' ').toLowerCase();
+            const label = formatMultipleChoiceLabel(option);
             return (
                 <div
                     key={key}
