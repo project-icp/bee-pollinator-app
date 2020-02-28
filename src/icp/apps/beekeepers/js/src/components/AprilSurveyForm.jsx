@@ -22,7 +22,7 @@ class AprilSurveyForm extends Component {
             num_new_colonies: '0',
             colony_loss_reason_OTHER: '',
             colony_loss_reason_VARROA_MITES: false,
-            colony_loss_reason_INADEQUETE_FOOD_STORES: false,
+            colony_loss_reason_INADEQUATE_FOOD_STORES: false,
             colony_loss_reason_POOR_QUEENS: false,
             colony_loss_reason_POOR_WEATHER_CONDITIONS: false,
             colony_loss_reason_COLONY_TOO_SMALL_IN_NOVEMBER: false,
