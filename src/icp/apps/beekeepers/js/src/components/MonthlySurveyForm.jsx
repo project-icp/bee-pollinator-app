@@ -44,7 +44,7 @@ class MonthlySurveyForm extends Component {
             varroa_count_result: 0,
             varroa_treatment: '',
             colony_loss_reason_VARROA_MITES: false,
-            colony_loss_reason_INADEQUETE_FOOD_STORES: false,
+            colony_loss_reason_INADEQUATE_FOOD_STORES: false,
             colony_loss_reason_POOR_QUEENS: false,
             colony_loss_reason_POOR_WEATHER_CONDITIONS: false,
             colony_loss_reason_COLONY_TOO_SMALL_IN_NOVEMBER: false,
@@ -105,7 +105,7 @@ class MonthlySurveyForm extends Component {
                 reset: [
                     'colony_loss_reason',
                     'colony_loss_reason_VARROA_MITES',
-                    'colony_loss_reason_INADEQUETE_FOOD_STORES',
+                    'colony_loss_reason_INADEQUATE_FOOD_STORES',
                     'colony_loss_reason_POOR_QUEENS',
                     'colony_loss_reason_POOR_WEATHER_CONDITIONS',
                     'colony_loss_reason_COLONY_TOO_SMALL_IN_NOVEMBER',
