@@ -15,16 +15,7 @@ const GuestSurveyView = ({ dispatch }) => (
                 Our goal is to give beekeepers, gardeners, and growers detailed information about
                 the quality of their landscapes for bees, and site-specific recommendations for
                 land and bee management practices. But, to do this, we need your help, so we can
-                have data from many diverse landscapes! If you have a wild bee hotel and would like
-                to participate in our study,&nbsp;
-                <a
-                    href="http://beescape.org/wild-bees/"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                >
-                    please click here
-                </a>
-                . If you are a beekeeper, please follow the link below.
+                have data from many diverse landscapes!
             </div>
             <button
                 type="button"
