@@ -1,13 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-Vagrant.require_version ">= 1.6"
-
-if ["up", "provision", "status"].include?(ARGV.first)
-  require_relative "vagrant/ansible_galaxy_helper"
-
-  AnsibleGalaxyHelper.install_dependent_roles("deployment/ansible")
-end
+Vagrant.require_version ">= 2.1"
 
 ANSIBLE_GROUPS = {
   "app-servers" => [ "app" ],
@@ -32,10 +26,10 @@ else
   VAGRANT_NETWORK_OPTIONS = { auto_correct: false }
 end
 
-VAGRANTFILE_API_VERSION = "2"
+ANSIBLE_VERSION = "2.8.*"
 
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "ubuntu/trusty64"
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/ubuntu-14.04"
 
   # Wire up package caching:
   if Vagrant.has_plugin?("vagrant-cachier")
@@ -62,11 +56,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       guest: 5432,
       host: 5432
     }.merge(VAGRANT_NETWORK_OPTIONS)
-    # Pgweb
-    services.vm.network "forwarded_port", {
-      guest: 5433,
-      host: 5433
-    }.merge(VAGRANT_NETWORK_OPTIONS)
     # Redis
     services.vm.network "forwarded_port", {
       guest: 6379,
@@ -77,10 +66,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       v.memory = 1024
     end
 
-    services.vm.provision "ansible" do |ansible|
+    services.vm.provision "ansible_local" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.install = true
+      ansible.install_mode = "pip_args_only"
+      ansible.pip_args = "ansible==#{ANSIBLE_VERSION}"
       ansible.playbook = "deployment/ansible/services.yml"
+      ansible.galaxy_role_file = "deployment/ansible/roles.yml"
+      ansible.galaxy_roles_path = "deployment/ansible/roles"
+      ansible.galaxy_command = "sudo pip install urllib3[secure]==1.22.* --ignore-installed" \
+                               " && ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
       ansible.groups = ANSIBLE_GROUPS.merge(ANSIBLE_ENV_GROUPS)
-      ansible.raw_arguments = ["--timeout=60"]
     end
   end
 
@@ -99,10 +95,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       worker.vm.synced_folder data_dir, "/opt/icp-crop-data"
     end
 
-    worker.vm.provision "ansible" do |ansible|
+    worker.vm.provision "ansible_local" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.install = true
+      ansible.install_mode = "pip_args_only"
+      ansible.pip_args = "ansible==#{ANSIBLE_VERSION}"
       ansible.playbook = "deployment/ansible/workers.yml"
+      ansible.galaxy_role_file = "deployment/ansible/roles.yml"
+      ansible.galaxy_roles_path = "deployment/ansible/roles"
+      ansible.galaxy_command = "sudo pip install urllib3[secure]==1.22.* --ignore-installed" \
+                               " && ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
       ansible.groups = ANSIBLE_GROUPS.merge(ANSIBLE_ENV_GROUPS)
-      ansible.raw_arguments = ["--timeout=60"]
+      ansible.extra_vars = {
+        services_ip: ENV.fetch("ICP_SERVICES_IP", "33.33.34.30")
+      }
     end
 
     worker.vm.provision "shell", inline: "service celeryd restart >> /dev/null 2>&1", run: "always"
@@ -144,10 +150,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       v.memory = 1024
     end
 
-    app.vm.provision "ansible" do |ansible|
+    app.vm.provision "ansible_local" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.install = true
+      ansible.install_mode = "pip_args_only"
+      ansible.pip_args = "ansible==#{ANSIBLE_VERSION}"
       ansible.playbook = "deployment/ansible/app-servers.yml"
+      ansible.galaxy_role_file = "deployment/ansible/roles.yml"
+      ansible.galaxy_roles_path = "deployment/ansible/roles"
+      ansible.galaxy_command = "sudo pip install urllib3[secure]==1.22.* --ignore-installed" \
+                               " && ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
       ansible.groups = ANSIBLE_GROUPS.merge(ANSIBLE_ENV_GROUPS)
-      ansible.raw_arguments = ["--timeout=60"]
+      ansible.extra_vars = {
+        services_ip: ENV.fetch("ICP_SERVICES_IP", "33.33.34.30")
+      }
     end
   end
 end

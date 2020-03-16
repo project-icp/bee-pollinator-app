@@ -184,6 +184,8 @@ class Map extends Component {
     onMapZoom(event) {
         const { dispatch } = this.props;
         const zoom = event.target.getZoom();
+        const center = event.target.getCenter();
+        dispatch(setMapCenter([center.lat, center.lng]));
         dispatch(setMapZoom(zoom));
     }
 

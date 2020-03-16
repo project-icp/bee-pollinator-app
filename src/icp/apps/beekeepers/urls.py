@@ -21,6 +21,6 @@ urlpatterns = patterns(
     url(r'^apiary/(?P<apiary_id>[0-9]+)/survey/$',
         views.create_survey, name='survey-create'),
     url(r'^apiary/(?P<apiary_id>[0-9]+)/survey/(?P<survey_id>[0-9]+)/$',
-        views.get_survey, name='survey-get'),
+        views.get_or_update_survey, name='survey-get-or-update'),
     url(r'^', include(router.urls)),
 )

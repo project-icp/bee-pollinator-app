@@ -278,7 +278,31 @@ export function sortSurveysByMonthYearDescending(a, b) {
 }
 
 /**
- * Given an Apiary ID and, optionally, a Survey ID or form, returns a post or get request
+ * Given an Apiary ID a Survey ID, returns get request
+ *
+ * @param {number} apiary
+ * @param {number} id
+ */
+export function getSurveyRequest({ apiary, id }) {
+    return csrfRequest.get(`/beekeepers/apiary/${apiary}/survey/${id}/`);
+}
+
+/**
+ * Given an Apiary ID and a form, returns a post request
+ *
+ * @param {number} apiary
+ * @param {object} form
+ *      {
+ *          survey: {Survey},
+ *          ...form fields,
+ *      }
+ */
+export function createSurveyRequest({ apiary, form }) {
+    return csrfRequest.post(`/beekeepers/apiary/${apiary}/survey/`, form);
+}
+
+/**
+ * Given an Apiary ID, a Survey ID and a form, returns a put request
  *
  * @param {number} apiary
  * @param {number} id
@@ -288,12 +312,8 @@ export function sortSurveysByMonthYearDescending(a, b) {
  *          ...form fields,
  *      }
  */
-export function getOrCreateSurveyRequest({ apiary, id, form }) {
-    const request = id
-        ? csrfRequest.get(`/beekeepers/apiary/${apiary}/survey/${id}/`)
-        : csrfRequest.post(`/beekeepers/apiary/${apiary}/survey/`, form);
-
-    return request;
+export function updateSurveyRequest({ apiary, id, form }) {
+    return csrfRequest.put(`/beekeepers/apiary/${apiary}/survey/${id}/`, form);
 }
 
 /**

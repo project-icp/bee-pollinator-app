@@ -6,10 +6,23 @@ import { fetchUserApiaries, flashSuccessModal } from '../actions';
 import { SURVEY_TYPE_APRIL, SPRING_COLONY_LOSS_REASONS } from '../constants';
 import {
     arrayToSemicolonDelimitedString,
-    getOrCreateSurveyRequest,
+    createSurveyRequest,
+    getSurveyRequest,
     toMonthNameYear,
+    updateSurveyRequest,
 } from '../utils';
 import { Apiary, Survey } from '../propTypes';
+
+const CAPITALIZATIONS = {
+    november: 'November',
+};
+
+const formatMultipleChoiceLabel = (option) => {
+    const lcLabel = option.split('_').join(' ').toLowerCase();
+    return Object.keys(CAPITALIZATIONS).reduce(
+        (acc, word) => acc.replace(word, CAPITALIZATIONS[word]), lcLabel,
+    );
+};
 
 class AprilSurveyForm extends Component {
     constructor(props) {
@@ -17,9 +30,10 @@ class AprilSurveyForm extends Component {
         this.state = {
             // each form input corresponds to a state var
             num_colonies: '',
+            num_new_colonies: '0',
             colony_loss_reason_OTHER: '',
             colony_loss_reason_VARROA_MITES: false,
-            colony_loss_reason_INADEQUETE_FOOD_STORES: false,
+            colony_loss_reason_INADEQUATE_FOOD_STORES: false,
             colony_loss_reason_POOR_QUEENS: false,
             colony_loss_reason_POOR_WEATHER_CONDITIONS: false,
             colony_loss_reason_COLONY_TOO_SMALL_IN_NOVEMBER: false,
@@ -28,6 +42,8 @@ class AprilSurveyForm extends Component {
             notes: '',
             completedSurvey: '',
             error: '',
+            missingNovemberSurvey: false,
+            novemberSurvey: {},
         };
         this.multipleChoiceKeys = ['colony_loss_reason'];
         this.handleChange = this.handleChange.bind(this);
@@ -37,34 +53,52 @@ class AprilSurveyForm extends Component {
 
     componentDidMount() {
         const {
+            apiary: { surveys },
             survey: {
                 apiary,
                 id,
                 completed,
+                month_year,
             },
         } = this.props;
+        const previous_year = parseInt(month_year.slice(-4), 10) - 1;
+        const novemberSurvey = surveys.find(pastSurvey => pastSurvey.month_year === `11${previous_year}`);
+        if (!novemberSurvey) {
+            this.setState({
+                error: `Please complete the November survey for ${previous_year} first.`,
+                missingNovemberSurvey: true,
+            });
+        } else {
+            this.setState({ novemberSurvey });
+        }
         if (completed) {
-            getOrCreateSurveyRequest({
+            getSurveyRequest({
                 apiary,
                 id,
             }).then(({ data }) => {
+                let { num_new_colonies } = data.april;
+                if (num_new_colonies === null) {
+                    num_new_colonies = 0;
+                }
                 let newState = {
                     completedSurvey: data,
-                    num_colonies: data.num_colonies,
+                    num_colonies: data.num_colonies - num_new_colonies,
                     notes: data.april.notes,
+                    num_new_colonies,
                 };
                 this.multipleChoiceKeys.forEach((key) => {
                     if (data.april[key]) {
                         const keys = data.april[key].split(';')
                             .map(s => `${key}_${s}`);
                         newState = keys.reduce((acc, k) => {
-                            acc[k] = true;
                             // Other text input requires special handling
                             // to parse key name and capture value
                             if (k.includes('_OTHER-')) {
                                 const otherKey = k.split('-')[0];
                                 const otherValue = k.split('_OTHER-')[1];
                                 acc[otherKey] = otherValue;
+                            } else {
+                                acc[k] = true;
                             }
                             return acc;
                         }, newState);
@@ -100,14 +134,15 @@ class AprilSurveyForm extends Component {
             survey: {
                 apiary,
                 month_year,
+                id,
             },
-            dispatch,
-            close,
         } = this.props;
 
         const {
             num_colonies,
+            num_new_colonies,
             notes,
+            completedSurvey,
         } = this.state;
 
         const multipleChoiceState = {};
@@ -131,29 +166,36 @@ class AprilSurveyForm extends Component {
         /* eslint-enable react/destructuring-assignment */
 
         const form = {
-            num_colonies,
+            num_colonies: parseInt(num_colonies, 10) + parseInt(num_new_colonies, 10),
             apiary,
             month_year,
             survey_type: SURVEY_TYPE_APRIL,
-            april: { ...multipleChoiceState, notes },
+            april: { ...multipleChoiceState, notes, num_new_colonies },
         };
 
-        getOrCreateSurveyRequest({ apiary, form })
-            .then(() => {
-                dispatch(fetchUserApiaries());
-                close();
-                dispatch(flashSuccessModal());
-            })
-            .catch(error => this.setState({ error: error.response.statusText }));
+        if (completedSurvey) {
+            updateSurveyRequest({ apiary, id, form })
+                .then(() => this.handleSuccess())
+                .catch(error => this.setState({ error: error.response.statusText }));
+        } else {
+            createSurveyRequest({ apiary, form })
+                .then(() => this.handleSuccess())
+                .catch(error => this.setState({ error: error.response.statusText }));
+        }
+    }
+
+    handleSuccess() {
+        const { dispatch, close } = this.props;
+        dispatch(fetchUserApiaries());
+        close();
+        dispatch(flashSuccessModal());
     }
 
     /* eslint-disable react/destructuring-assignment */
     makeMultipleChoiceInputs(groupName, options) {
-        const { completedSurvey } = this.state;
-
         return options.map((option) => {
             const key = `${groupName}_${option}`;
-            const label = option.split('_').join(' ').toLowerCase();
+            const label = formatMultipleChoiceLabel(option);
             return (
                 <div
                     key={key}
@@ -164,9 +206,8 @@ class AprilSurveyForm extends Component {
                         className="form__control"
                         id={key}
                         name={key}
-                        checked={this.state[key]}
+                        checked={this.state[key] || false}
                         onChange={this.handleChange}
-                        disabled={!!completedSurvey}
                     />
                     <label htmlFor={key}>{label}</label>
                 </div>
@@ -178,15 +219,19 @@ class AprilSurveyForm extends Component {
     render() {
         const {
             num_colonies,
+            num_new_colonies,
             colony_loss_reason_OTHER,
             notes,
             completedSurvey,
             error,
+            missingNovemberSurvey,
+            novemberSurvey,
         } = this.state;
 
         const {
             apiary: { name },
             survey: { month_year },
+            close,
         } = this.props;
 
         const userMessage = error.length ? (
@@ -195,52 +240,48 @@ class AprilSurveyForm extends Component {
             </div>
         ) : null;
 
-        const submitButton = completedSurvey ? null
-            : (
-                <button
-                    type="submit"
-                    value="Submit"
-                    className="button--long"
-                >
-                    Submit
-                </button>
-            );
+        const submitButton = (
+            <button
+                type="submit"
+                value="Submit"
+                className="button--long"
+            >
+                Submit
+            </button>
+        );
 
         const title = completedSurvey
             ? `Survey results for ${toMonthNameYear(month_year)}`
             : `Survey for ${toMonthNameYear(month_year)}`;
 
-        const confirmationButton = completedSurvey
-            ? null
-            : (
-                <div className="form__group">
-                    <label htmlFor="confirmation">
-                        Have you provided all the information available for these
-                        colonies and are ready to submit the survey? Surveys cannot
-                        be edited after submission.
-                    </label>
-                    <input
-                        type="checkbox"
-                        className="form__control"
-                        id="confirmed"
-                        name="confirmed"
-                        required
-                    />
-                    <label htmlFor="confirmation">
-                        Yes
-                    </label>
-                </div>
-            );
+        const confirmationButton = (
+            <div className="form__group">
+                <label htmlFor="confirmation">
+                    Have you provided all the information available for these
+                    colonies and are ready to submit the survey?
+                </label>
+                <input
+                    type="checkbox"
+                    className="form__control"
+                    id="confirmed"
+                    name="confirmed"
+                    required
+                />
+                <label htmlFor="confirmation">
+                    Yes
+                </label>
+            </div>
+        );
 
         const colonyLossReasonCheckboxInputs = this.makeMultipleChoiceInputs('colony_loss_reason', SPRING_COLONY_LOSS_REASONS);
 
-        const surveyForm = (
+        const surveyForm = missingNovemberSurvey ? null : (
             <>
                 <div className="title">{title}</div>
                 <form className="form" onSubmit={this.handleSubmit}>
                     <div className="form__group">
                         <label htmlFor="num_colonies">
-                            How many colonies are in this apiary?
+                            {`You had ${novemberSurvey.num_colonies} colonies in November. How many of those currently remain? Required.`}
                         </label>
                         <input
                             type="number"
@@ -249,7 +290,22 @@ class AprilSurveyForm extends Component {
                             name="num_colonies"
                             onChange={this.handleChange}
                             value={num_colonies}
-                            disabled={!!completedSurvey}
+                            required
+                            min={0}
+                            max={novemberSurvey.num_colonies}
+                        />
+                        <label htmlFor="num_new_colonies">
+                            How many
+                            <strong> new </strong>
+                            colonies did you add to this apiary over the winter? Required.
+                        </label>
+                        <input
+                            type="number"
+                            className="form__control"
+                            id="num_new_colonies"
+                            name="num_new_colonies"
+                            onChange={this.handleChange}
+                            value={num_new_colonies}
                             required
                             min={0}
                         />
@@ -266,7 +322,6 @@ class AprilSurveyForm extends Component {
                             name="colony_loss_reason_OTHER"
                             value={colony_loss_reason_OTHER}
                             onChange={this.handleChange}
-                            disabled={!!completedSurvey}
                         />
                         <div className="form__group">
                             <label htmlFor="notes">
@@ -278,7 +333,6 @@ class AprilSurveyForm extends Component {
                                 rows={2}
                                 value={notes || ''}
                                 onChange={this.handleChange}
-                                disabled={!!completedSurvey}
                             />
                         </div>
                         {confirmationButton}
@@ -292,6 +346,9 @@ class AprilSurveyForm extends Component {
             <div className="authModal">
                 <div className="authModal__header">
                     <div>{name}</div>
+                    <button type="button" className="button" onClick={close} aria-label="Close dialog">
+                        &times;
+                    </button>
                 </div>
                 <div className="authModal__content">
                     {userMessage}

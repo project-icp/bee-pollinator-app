@@ -15,7 +15,8 @@ import { SURVEY_TYPE_MONTHLY } from '../constants';
 import { Survey, Apiary } from '../propTypes';
 import {
     arrayToSemicolonDelimitedString,
-    getOrCreateSurveyRequest,
+    getSurveyRequest,
+    createSurveyRequest,
     toMonthNameYear,
 } from '../utils';
 
@@ -43,7 +44,7 @@ class MonthlySurveyForm extends Component {
             varroa_count_result: 0,
             varroa_treatment: '',
             colony_loss_reason_VARROA_MITES: false,
-            colony_loss_reason_INADEQUETE_FOOD_STORES: false,
+            colony_loss_reason_INADEQUATE_FOOD_STORES: false,
             colony_loss_reason_POOR_QUEENS: false,
             colony_loss_reason_POOR_WEATHER_CONDITIONS: false,
             colony_loss_reason_COLONY_TOO_SMALL_IN_NOVEMBER: false,
@@ -104,7 +105,7 @@ class MonthlySurveyForm extends Component {
                 reset: [
                     'colony_loss_reason',
                     'colony_loss_reason_VARROA_MITES',
-                    'colony_loss_reason_INADEQUETE_FOOD_STORES',
+                    'colony_loss_reason_INADEQUATE_FOOD_STORES',
                     'colony_loss_reason_POOR_QUEENS',
                     'colony_loss_reason_POOR_WEATHER_CONDITIONS',
                     'colony_loss_reason_COLONY_TOO_SMALL_IN_NOVEMBER',
@@ -133,7 +134,7 @@ class MonthlySurveyForm extends Component {
 
         // Fetch and show data from the database for a completed survey
         if (id) {
-            getOrCreateSurveyRequest({ apiary, id })
+            getSurveyRequest({ apiary, id })
                 .then(({ data }) => {
                     const monthlies = data.monthlies.map((serverData, idx) => {
                         let clientData = prevMonthlies[idx];
@@ -174,7 +175,7 @@ class MonthlySurveyForm extends Component {
         // For a new survey, autofill select fields with most recent and complete survey data
         // Else, show a blank survey
         if (lastMonthlySurvey && !id) {
-            getOrCreateSurveyRequest({
+            getSurveyRequest({
                 apiary: lastMonthlySurvey.apiary,
                 id: lastMonthlySurvey.id,
             }).then(({ data }) => {
@@ -340,7 +341,7 @@ class MonthlySurveyForm extends Component {
             monthlies,
         };
 
-        getOrCreateSurveyRequest({ apiary, form })
+        createSurveyRequest({ apiary, form })
             .then(() => {
                 dispatch(fetchUserApiaries());
                 close();
@@ -360,6 +361,7 @@ class MonthlySurveyForm extends Component {
         const {
             apiary: { name },
             survey: { month_year, completed },
+            close,
         } = this.props;
 
         const userMessage = error.length ? (
@@ -460,6 +462,9 @@ class MonthlySurveyForm extends Component {
             <div className="authModal">
                 <div className="authModal__header">
                     <div>{name}</div>
+                    <button type="button" className="button" onClick={close} aria-label="Close dialog">
+                        &times;
+                    </button>
                 </div>
                 <div className="authModal__content">
                     {userMessage}

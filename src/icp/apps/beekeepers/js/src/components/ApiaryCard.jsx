@@ -16,7 +16,7 @@ import {
 } from '../actions';
 import { getMarkerClass } from '../utils';
 
-import CardButton from './CardButton';
+import { CardButtonWithText, CardButtonWithIcon } from './CardButton';
 import ScoresLabel from './ScoresLabel';
 
 class ApiaryCard extends Component {
@@ -95,10 +95,10 @@ class ApiaryCard extends Component {
             onFocus = () => {};
             readOnly = false;
             cardButton = (
-                <CardButton
-                    icon="check"
+                <CardButtonWithText
                     tooltip="Save apiary name"
                     onClick={this.onApiaryNameSave}
+                    text="Save"
                 />
             );
         } else if (isHovering) {
@@ -106,10 +106,10 @@ class ApiaryCard extends Component {
             onClick = this.enableEditing;
             onKeyPress = this.enableEditingOnEnter;
             cardButton = (
-                <CardButton
-                    icon="pencil"
+                <CardButtonWithText
                     tooltip="Edit apiary name"
                     onClick={this.enableEditing}
+                    text="Edit"
                 />
             );
         } else {
@@ -208,7 +208,7 @@ class ApiaryCard extends Component {
                             <div className="card__name">Error fetching apiary data</div>
                         </div>
                         <div className="card__buttons">
-                            <CardButton
+                            <CardButtonWithIcon
                                 icon="trash"
                                 filled
                                 tooltip="Delete apiary"
@@ -269,19 +269,19 @@ class ApiaryCard extends Component {
                         {cardName.cardButton}
                     </div>
                     <div className="card__buttons">
-                        <CardButton
+                        <CardButtonWithIcon
                             icon="star"
                             filled={starred}
                             tooltip="Mark apiary as important"
                             onClick={this.onStar}
                         />
-                        <CardButton
+                        <CardButtonWithIcon
                             icon="clipboard"
                             filled={surveyed}
                             tooltip="Include apiary in surveys"
                             onClick={this.onSurvey}
                         />
-                        <CardButton
+                        <CardButtonWithIcon
                             icon="trash"
                             filled
                             tooltip="Delete apiary"

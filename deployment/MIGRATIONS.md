@@ -38,8 +38,24 @@ After the key is added, confirm with:
 $ ssh-add -L
 ```
 
+Alternatively, you can add this configuration to your `~/.ssh/config`:
+
+```
+Host icp-staging
+   HostName monitoring.staging.app.pollinationmapper.org
+   User ubuntu
+   IdentityFile ~/.ssh/icp-stg.pem
+   ForwardAgent yes
+ ```
+
 ### SSH into Bastion
 
+If you set up your SSH with icp-staging, run:
+```bash
+$ ssh icp-staging
+```
+
+Otherwise, run:
 ```bash
 $ ssh -A -l ubuntu monitoring.icp.foo.com
 ```
@@ -51,7 +67,7 @@ The `-A`  enables forwarding of the authentication agent connection so that the 
 This is the step where you need access to the AWS Web Console to determine the private IP address of an application server. Once obtained:
 
 ```bash
-$ ssh 10.0.1.191
+$ ssh [private IP addess]
 ```
 
 ### Run Migrations

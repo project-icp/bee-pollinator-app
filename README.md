@@ -14,7 +14,7 @@ Production:
 
 ## Local Development
 
-A combination of Vagrant 2.1+ and Ansible 2.6+ is used to setup the development environment for this project. Running `vagrant box update` is recommended so you're on the latest version of the `ubuntu/trusty64` box.
+A combination of Vagrant 2.2+ and Ansible 2.8+ is used to setup the development environment for this project. Running `vagrant box update` is recommended so you're on the latest version of the `bento/ubuntu-14.04` box.
 
 The project consists of the following virtual machines:
 
@@ -25,7 +25,6 @@ The project consists of the following virtual machines:
 The `app` virtual machine contains an instance of the Django application, `services` contains:
 
 - PostgreSQL
-- Pgweb
 - Redis
 - Logstash
 - Kibana
@@ -110,15 +109,14 @@ envdir: fatal: unable to switch to directory /etc/icp.d/env: access denied
 
 The Vagrant configuration maps the following host ports to services running in the virtual machines.
 
-Service                | Port | URL
----------------------- | -----| ------------------------------------------------
-Django Web Application | 8000 | [http://localhost:8000](http://localhost:8000)
-Graphite Dashboard     | 8080 | [http://localhost:8080](http://localhost:8080)
-Kibana Dashboard       | 5601 | [http://localhost:5601](http://localhost:5601)
-PostgreSQL             | 5432 | `psql -h localhost`
-pgweb                  | 5433 | [http://localhost:5433](http://localhost:5433)
-Redis                  | 6379 | `redis-cli -h localhost 6379`
-Testem                 | 7357 | [http://localhost:7357](http://localhost:7357)
+| Service                | Port | URL                                            |
+| ---------------------- | ---- | ---------------------------------------------- |
+| Django Web Application | 8000 | [http://localhost:8000](http://localhost:8000) |
+| Graphite Dashboard     | 8080 | [http://localhost:8080](http://localhost:8080) |
+| Kibana Dashboard       | 5601 | [http://localhost:5601](http://localhost:5601) |
+| PostgreSQL             | 5432 | `psql -h localhost`                            |
+| Redis                  | 6379 | `redis-cli -h localhost 6379`                  |
+| Testem                 | 7357 | [http://localhost:7357](http://localhost:7357) |
 
 ### Caching
 

@@ -134,7 +134,8 @@ def create_survey(request, apiary_id=None):
             "num_colonies": 3,
             "survey_type": "APRIL", // or "NOVEMBER" or "MONTHLY"
             "april": {              // Must be specified for "APRIL" surveys
-                "colony_loss_reason": ""
+                "colony_loss_reason": "",
+                "num_new_colonies": 1
             },
             "november" : {          // Must be specified for "NOVEMBER" surveys
                 ...
@@ -159,16 +160,23 @@ def create_survey(request, apiary_id=None):
         return Response(serializer.data, status=201)
 
 
-@decorators.api_view(['GET'])
+@decorators.api_view(['GET', 'PUT'])
 @decorators.permission_classes((IsAuthenticated, ))
-def get_survey(request, apiary_id=None, survey_id=None):
-    """Retrieve a survey and its subsurvey."""
+def get_or_update_survey(request, apiary_id=None, survey_id=None):
+    """Retrieve or update a survey and its subsurvey."""
     survey = get_object_or_404(Survey,
                                apiary=apiary_id,
                                id=survey_id)
-    serializer = SurveyDetailSerializer(survey)
 
-    return Response(serializer.data)
+    if (request.method == 'GET'):
+        serializer = SurveyDetailSerializer(survey)
+    else:
+        data = request.data
+        serializer = SurveyDetailSerializer(survey, data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+    return Response(serializer.data, status=200)
 
 
 class UserSurveyViewSet(viewsets.ModelViewSet):

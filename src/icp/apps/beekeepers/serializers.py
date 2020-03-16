@@ -86,6 +86,31 @@ class SurveyDetailSerializer(ModelSerializer):
 
         return survey
 
+    @transaction.atomic
+    def update(self, survey, validated_data):
+        survey_type = validated_data['survey_type']
+        field = Survey.SUBSURVEY_FIELDS[survey_type]
+
+        survey.num_colonies = validated_data['num_colonies']
+
+        subdata = validated_data[field]
+        if survey_type == 'APRIL':
+            april = survey.april
+            for key, value in subdata.items():
+                setattr(april, key, value)
+            april.save()
+        elif survey_type == 'NOVEMBER':
+            november = survey.november
+            for key, value in subdata.items():
+                setattr(november, key, value)
+            november.save()
+        # Monthly surveys are not handled here as they are currently disabled.
+        # If they were to be enabled again, we'll have to augment this method
+        # with the ability to update Monthly surveys.
+
+        survey.save()
+        return survey
+
     def validate(self, data):
         """Ensure subsurvey field is specified for the survey type"""
         survey_type = data['survey_type']
