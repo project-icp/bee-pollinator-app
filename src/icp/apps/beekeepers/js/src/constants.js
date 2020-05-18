@@ -26,7 +26,7 @@ export const INDICATOR_DETAILS = {
         name: 'Insecticide load',
         scoreLabels: ['Insecticide'],
         shortLabel: 'Insecticide',
-        scoreStops: [0, 13, 26, 37, 208],
+        scoreStops: [0, 79, 159, 226, 1271],
     },
     floral_spring: {
         name: 'Spring Floral quality',
