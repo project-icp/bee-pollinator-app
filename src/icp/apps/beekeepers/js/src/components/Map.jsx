@@ -57,7 +57,7 @@ class Map extends Component {
 
     componentDidMount() {
         const { mapCenter, mapZoom, dispatch } = this.props;
-        const geocoderUrl = 'https://utility.arcgis.com/usrsvcs/appservices/OvpAtyJwoLLdQcLC/rest/services/World/GeocodeServer/';
+        const geocoderUrl = 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/';
         const map = this.mapRef.current.leafletElement;
         const geocoder = new esri.Geosearch({
             providers: [
