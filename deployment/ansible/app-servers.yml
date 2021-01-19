@@ -18,6 +18,7 @@
         warn: no
 
   roles:
+    - { role: "bee-pollinator.disable-esm" }
     - { role: "bee-pollinator.app" }
     - { role: "bee-pollinator.beekeepers" }
 
