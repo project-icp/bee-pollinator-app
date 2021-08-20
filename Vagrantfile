@@ -42,22 +42,22 @@ Vagrant.configure("2") do |config|
     services.vm.synced_folder "~/.aws", "/home/vagrant/.aws"
 
     # Graphite Web
-    services.vm.network "forwarded_port", {
+    services.vm.network "forwarded_port", **{
       guest: 8080,
       host: 8080
     }.merge(VAGRANT_NETWORK_OPTIONS)
     # Kibana
-    services.vm.network "forwarded_port", {
+    services.vm.network "forwarded_port", **{
       guest: 5601,
       host: 5601
     }.merge(VAGRANT_NETWORK_OPTIONS)
     # PostgreSQL
-    services.vm.network "forwarded_port", {
+    services.vm.network "forwarded_port", **{
       guest: 5432,
       host: 5432
     }.merge(VAGRANT_NETWORK_OPTIONS)
     # Redis
-    services.vm.network "forwarded_port", {
+    services.vm.network "forwarded_port", **{
       guest: 6379,
       host: 6379
     }.merge(VAGRANT_NETWORK_OPTIONS)
@@ -70,6 +70,7 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.install = true
       ansible.install_mode = "pip_args_only"
+      ansible.pip_install_cmd = "curl https://bootstrap.pypa.io/pip/2.7/get-pip.py | sudo python"
       ansible.pip_args = "ansible==#{ANSIBLE_VERSION}"
       ansible.playbook = "deployment/ansible/services.yml"
       ansible.galaxy_role_file = "deployment/ansible/roles.yml"
@@ -100,6 +101,7 @@ Vagrant.configure("2") do |config|
       ansible.install = true
       ansible.install_mode = "pip_args_only"
       ansible.pip_args = "ansible==#{ANSIBLE_VERSION}"
+      ansible.pip_install_cmd = "curl https://bootstrap.pypa.io/pip/2.7/get-pip.py | sudo python"
       ansible.playbook = "deployment/ansible/workers.yml"
       ansible.galaxy_role_file = "deployment/ansible/roles.yml"
       ansible.galaxy_roles_path = "deployment/ansible/roles"
@@ -129,17 +131,17 @@ Vagrant.configure("2") do |config|
     end
 
     # Django via Nginx/Gunicorn
-    app.vm.network "forwarded_port", {
+    app.vm.network "forwarded_port", **{
       guest: 80,
       host: 8000
     }.merge(VAGRANT_NETWORK_OPTIONS)
     # Livereload server
-    app.vm.network "forwarded_port", {
+    app.vm.network "forwarded_port", **{
       guest: 35729,
       host: 35729,
     }.merge(VAGRANT_NETWORK_OPTIONS)
     # Testem server
-    app.vm.network "forwarded_port", {
+    app.vm.network "forwarded_port", **{
       guest: 7358,
       host: 7358
     }.merge(VAGRANT_NETWORK_OPTIONS)
@@ -154,6 +156,7 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.install = true
       ansible.install_mode = "pip_args_only"
+      ansible.pip_install_cmd = "curl https://bootstrap.pypa.io/pip/2.7/get-pip.py | sudo python"
       ansible.pip_args = "ansible==#{ANSIBLE_VERSION}"
       ansible.playbook = "deployment/ansible/app-servers.yml"
       ansible.galaxy_role_file = "deployment/ansible/roles.yml"
