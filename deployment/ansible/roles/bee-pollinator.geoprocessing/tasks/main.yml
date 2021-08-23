@@ -2,9 +2,9 @@
 - name: Install scipy dependencies
   apt: pkg={{ item }} state=present
   with_items:
-    - "liblas-dev=1.7.*"
-    - "liblapack-dev=3.5.0*"
-    - "gfortran=4:4.8.2*"
+    - "liblas-dev=1.8.*"
+    - "liblapack-dev=3.6.0*"
+    - "gfortran=4:5.3.1*"
 
 - name: Install numpy
   pip: name=numpy version={{ numpy_version }}

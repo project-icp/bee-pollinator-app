@@ -1,5 +1,0 @@
----
-dependencies:
-  - { role: "azavea.relp" }
-  - { role: "bee-pollinator.elasticsearch" }
-  - { role: "azavea.logstash" }

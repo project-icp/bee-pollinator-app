@@ -14,7 +14,11 @@
   notify:
     - Restart icp-app
 
-- name: Configure service definition
-  template: src=upstart-app.conf.j2 dest=/etc/init/icp-app.conf
+- name: Configure Gunicorn service definition
+  template: src=systemd-app.service.j2
+            dest=/etc/systemd/system/icp-app.service
   notify:
     - Restart icp-app
+
+- name: Enable Gunicorn service
+  systemd: name=icp-app.service enabled=yes state=started daemon_reload=yes

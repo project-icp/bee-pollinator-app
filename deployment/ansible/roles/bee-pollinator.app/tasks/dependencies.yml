@@ -13,3 +13,9 @@
   when: "['packer'] | is_in(group_names)"
   notify:
     - Restart icp-app
+
+- name: Hack Python 2.7 to work with Ubuntu Xenial
+  replace:
+    path: /usr/local/lib/python2.7/dist-packages/django/contrib/gis/geos/libgeos.py
+    regexp: geos_version\(\)\.decode\(\)
+    replace: geos_version().split()[0].decode()
