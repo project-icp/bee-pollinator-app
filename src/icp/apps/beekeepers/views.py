@@ -26,6 +26,7 @@ from serializers import (
 from tasks import sample_at_point
 
 
+DATA_HOST = os.environ['BEEKEEPERS_DATA_HOST']
 DATA_BUCKET = os.environ['AWS_BEEKEEPERS_DATA_BUCKET']
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 DB = settings.DATABASES['default']
@@ -109,13 +110,14 @@ def fetch_data(request):
     for location in locations:
         all_location_data = {}
         for indicator in indicators:
-            s3_filename = '{}_{}.vrt'.format(indicator, forage_range)
-            s3_url = 's3://{}/{}/{}'.format(
+            web_filename = '{}_{}.vrt'.format(indicator, forage_range)
+            web_url = '{}/{}/{}/{}'.format(
+                DATA_HOST,
                 DATA_BUCKET,
                 forage_range,
-                s3_filename
+                web_filename
             )
-            data = sample_at_point(location, s3_url)
+            data = sample_at_point(location, web_url)
             all_location_data.update({indicator: data})
         resp.append(all_location_data)
 

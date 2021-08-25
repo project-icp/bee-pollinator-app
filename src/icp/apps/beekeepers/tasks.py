@@ -19,22 +19,21 @@ def sample_at_point(geom, raster_path):
     :type geom: Dict with lat and lon values, like {lat: float, lon: float}
     :type raster_path: String
     """
-    with gdal_configured_credentials():
-        try:
-            with rasterio.open(raster_path, mode='r') as src:
-                # Reproject latlon to coords in the same SRS as the
-                # target raster
-                to_proj = Proj(src.crs)
-                x, y = to_proj(geom['lng'], geom['lat'])
+    try:
+        with rasterio.open(raster_path, mode='r') as src:
+            # Reproject latlon to coords in the same SRS as the
+            # target raster
+            to_proj = Proj(src.crs)
+            x, y = to_proj(geom['lng'], geom['lat'])
 
-                # Sample the raster at the given coordinates
-                value_gen = src.sample([(x, y)], indexes=[1])
-                value = value_gen.next().item(0)
-        except rasterio.RasterioIOError as e:
-            return ({
-                "data": None,
-                "error": e.message
-            })
+            # Sample the raster at the given coordinates
+            value_gen = src.sample([(x, y)], indexes=[1])
+            value = value_gen.next().item(0)
+    except rasterio.RasterioIOError as e:
+        return ({
+            "data": None,
+            "error": e.message
+        })
 
     return ({
         "data": value,
